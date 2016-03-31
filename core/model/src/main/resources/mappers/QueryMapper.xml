@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.yaen.common.dal.mapper.QueryMapper">
+
+	<select id="selectIDsByBaseID" resultType="java.lang.Long" parameterType="org.yaen.common.dal.model.QueryModel">
+		SELECT
+		`ID`
+		FROM `${tableName}`
+		WHERE
+		`BASE_ID` = #{baseId,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectIDsByFromID" resultType="java.lang.Long" parameterType="org.yaen.common.dal.model.QueryModel">
+		SELECT
+		`ID`
+		FROM `${tableName}`
+		WHERE
+		`FROM_ID` = #{fromId,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectIDsByToID" resultType="java.lang.Long" parameterType="org.yaen.common.dal.model.QueryModel">
+		SELECT
+		`ID`
+		FROM `${tableName}`
+		WHERE
+		`TO_ID` = #{toId,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectIDsByColumns" resultType="java.lang.Long" parameterType="org.yaen.common.dal.model.QueryModel">
+		SELECT
+		`ID`
+		FROM `${tableName}`
+		<where>
+			<foreach collection="columns" index="index" item="info" open="" separator="AND" close="">
+				`${index}` = #{info}
+			</foreach>
+		</where>
+	</select>
+
+	<select id="selectIDsByWhereClause" resultType="java.lang.Long" parameterType="org.yaen.common.dal.model.QueryModel">
+		SELECT
+		`ID`
+		FROM `${tableName}`
+		<where>
+			${whereClause}
+		</where>
+	</select>
+
+</mapper>
