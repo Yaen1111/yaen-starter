@@ -16,4 +16,10 @@
 		</filters>
 	</build>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.yaen</groupId>
+			<artifactId>ark-common-dal</artifactId>
+		</dependency>
+	</dependencies>
 </project>

@@ -10,7 +10,7 @@
 	<context:annotation-config />
 
 	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.arkcore.common.dal" />
+	<context:component-scan base-package="org.yaen.ark.common.dal" />
 
 	<!-- 数据源配置 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">

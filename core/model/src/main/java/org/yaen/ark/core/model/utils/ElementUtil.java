@@ -8,12 +8,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yaen.spring.data.entities.BaseEntity;
+import org.yaen.ark.common.dal.models.ElementInfo;
+import org.yaen.ark.common.dal.models.ElementModel;
 import org.yaen.ark.core.model.annotations.ElementCopy;
 import org.yaen.ark.core.model.annotations.ElementData;
 import org.yaen.ark.core.model.annotations.ElementTable;
 import org.yaen.spring.common.exceptions.BizException;
-import org.yaen.spring.data.models.ElementInfo;
-import org.yaen.spring.data.models.ElementModel;
 import org.yaen.spring.common.utils.AssertUtil;
 import org.yaen.spring.common.utils.ReflectUtil;
 import org.yaen.spring.common.utils.StringUtil;
