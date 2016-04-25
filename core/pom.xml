@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>ark</artifactId>
+		<artifactId>yaen-ark</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ark-core</artifactId>
+	<artifactId>yaen-ark-core</artifactId>
 	<packaging>pom</packaging>
-	<name>ark-core</name>
+	<name>yaen-ark-core</name>
 
 	<modules>
 		<module>model</module>

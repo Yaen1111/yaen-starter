@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>ark-core</artifactId>
+		<artifactId>yaen-ark-core</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ark-core-model</artifactId>
-	<name>ark-core-model</name>
+	<artifactId>yaen-ark-core-model</artifactId>
+	<name>yaen-ark-core-model</name>
 
 	<build>
 		<filters>
@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>ark-common-dal</artifactId>
+			<artifactId>yaen-ark-common-dal</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>ark-core</artifactId>
+		<artifactId>yaen-ark-core</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ark-core-service</artifactId>
-	<name>ark-core-service</name>
+	<artifactId>yaen-ark-core-service</artifactId>
+	<name>yaen-ark-core-service</name>
 
 	<build>
 		<filters>
@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>ark-core-model</artifactId>
+			<artifactId>yaen-ark-core-model</artifactId>
 		</dependency>
 	</dependencies>
 </project>

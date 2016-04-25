@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>ark-biz</artifactId>
+		<artifactId>yaen-ark-biz</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ark-biz-implement</artifactId>
-	<name>ark-biz-implement</name>
+	<artifactId>yaen-ark-biz-implement</artifactId>
+	<name>yaen-ark-biz-implement</name>
 
 	<build>
 		<filters>
@@ -19,15 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>ark-core-service</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.yaen</groupId>
-			<artifactId>ark-corecif-service</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.yaen</groupId>
-			<artifactId>ark-corerbac-service</artifactId>
+			<artifactId>yaen-ark-biz-shared</artifactId>
 		</dependency>
 	</dependencies>
 </project>

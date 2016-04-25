@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>ark-common</artifactId>
+		<artifactId>yaen-ark-common</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ark-common-dal</artifactId>
+	<artifactId>yaen-ark-common-dal</artifactId>
 	<packaging>jar</packaging>
-	<name>ark-common-dal</name>
+	<name>yaen-ark-common-dal</name>
 
 	<build>
 		<filters>

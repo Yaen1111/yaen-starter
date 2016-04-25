@@ -3,17 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>ark-web</artifactId>
+		<artifactId>yaen-ark-web</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ark-web-home</artifactId>
-	<name>ark-web-home</name>
+	<artifactId>yaen-ark-web-home</artifactId>
+	<name>yaen-ark-web-home</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>ark-biz-shared</artifactId>
+			<artifactId>yaen-ark-biz-shared</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
@@ -30,6 +30,10 @@
 		<dependency>
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.yaen</groupId>
+			<artifactId>yaen-ark-biz-implement</artifactId>
 		</dependency>
 	</dependencies>
 	

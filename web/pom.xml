@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>ark</artifactId>
+		<artifactId>yaen-ark</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ark-web</artifactId>
+	<artifactId>yaen-ark-web</artifactId>
 	<packaging>pom</packaging>
-	<name>ark-web</name>
+	<name>yaen-ark-web</name>
 
 	<dependencies>
 

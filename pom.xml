@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>spring</artifactId>
-		<version>1.0.0-JDK18</version>
+		<artifactId>yaen-zero</artifactId>
+		<version>1.0.0-JDK18-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>ark</artifactId>
+	<artifactId>yaen-ark</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>ark</name>
+	<name>yaen-ark</name>
 
 	<properties>
 		<env>dev</env>
@@ -185,13 +185,14 @@
 			<artifactId>spring-test</artifactId>
 		</dependency>
 
+		<!-- org.yaen.zero -->
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>spring-common</artifactId>
+			<artifactId>yaen-zero-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>spring-data</artifactId>
+			<artifactId>yaen-zero-data</artifactId>
 		</dependency>
 		<!-- Persistence -->
 		<dependency>
@@ -216,41 +217,58 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- org.yaen.ark -->
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>ark-core-model</artifactId>
+				<artifactId>yaen-ark-core-model</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>ark-core-service</artifactId>
+				<artifactId>yaen-ark-core-service</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>ark-corecif-model</artifactId>
+				<artifactId>yaen-ark-corecif-model</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>ark-corecif-service</artifactId>
+				<artifactId>yaen-ark-corecif-service</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>ark-corerbac-model</artifactId>
+				<artifactId>yaen-ark-corerbac-model</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>ark-corerbac-service</artifactId>
+				<artifactId>yaen-ark-corerbac-service</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>ark-biz-shared</artifactId>
+				<artifactId>yaen-ark-biz-shared</artifactId>
 				<version>1.0.0-SNAPSHOT</version>
 			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-ark-common-dal</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-ark-biz-implement</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-ark-web-home</artifactId>
+				<version>1.0.0-SNAPSHOT</version>
+			</dependency>
+
 			<dependency>
 				<groupId>redis.clients</groupId>
 				<artifactId>jedis</artifactId>
@@ -269,12 +287,12 @@
 			<dependency>
 				<groupId>org.springframework.session</groupId>
 				<artifactId>spring-session</artifactId>
-				<version>1.1.0.BUILD-SNAPSHOT</version>
+				<version>1.0.2.RELEASE</version>
 			</dependency>
 			<dependency>
-				<groupId>org.yaen</groupId>
-				<artifactId>ark-common-dal</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<groupId>org.springframework.session</groupId>
+				<artifactId>spring-session-data-redis</artifactId>
+				<version>1.0.2.RELEASE</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -286,5 +304,6 @@
 		<module>corecif</module>
 		<module>corerbac</module>
 		<module>web</module>
+		<module>assembly</module>
 	</modules>
 </project>
