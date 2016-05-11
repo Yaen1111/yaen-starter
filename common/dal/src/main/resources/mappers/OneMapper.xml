@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.yaen.starter.common.dal.mappers.OneMapper">
+
+	<select id="selectByID" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.pos.OnePO">
+		SELECT
+		`ID`
+		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
+			`${info.columnName}`
+		</foreach>
+		FROM `${tableName}`
+		WHERE `ID` = #{id,jdbcType=BIGINT}
+	</select>
+
+	<insert id="insertByID" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.data.pos.OnePO">
+		INSERT INTO `${tableName}`
+		(
+		`ID`
+		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
+			`${info.columnName}`
+		</foreach>
+		)
+		VALUES
+		(
+		#{id}
+		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
+			#{info.value}
+		</foreach>
+		)
+	</insert>
+
+	<update id="updateByID" parameterType="org.yaen.starter.common.data.pos.OnePO">
+		UPDATE `${tableName}`
+		SET
+		<foreach collection="columns" index="index" item="info" open="" separator="," close="">
+			`${info.columnName}` = #{info.value}
+		</foreach>
+		WHERE `ID` = #{id,jdbcType=BIGINT}
+	</update>
+
+	<delete id="deleteByID" parameterType="org.yaen.starter.common.data.pos.OnePO">
+		DELETE FROM `${tableName}`
+		WHERE `ID` = #{id,jdbcType=BIGINT}
+	</delete>
+
+</mapper>

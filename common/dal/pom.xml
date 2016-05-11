@@ -17,4 +17,14 @@
 		</filters>
 	</build>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.yaen</groupId>
+			<artifactId>yaen-starter-common-data</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.yaen</groupId>
+			<artifactId>yaen-starter-common-util</artifactId>
+		</dependency>
+	</dependencies>
 </project>

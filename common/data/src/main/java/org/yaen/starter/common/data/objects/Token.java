@@ -1,0 +1,61 @@
+package org.yaen.starter.common.data.objects;
+
+import java.io.Serializable;
+
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * common token which send between systems, mostly for request and response
+ * 
+ * @author Yaen 2015年11月30日下午11:56:39
+ */
+public class Token implements Serializable {
+	private static final long serialVersionUID = 100100L;
+
+	/**
+	 * token code
+	 */
+	@Getter
+	@Setter
+	private String code = "";
+
+	/**
+	 * token message
+	 */
+	@Getter
+	@Setter
+	private String message = "";
+
+	/**
+	 * token timestamp
+	 */
+	@Getter
+	@Setter
+	private long timestamp = 0;
+
+	/**
+	 * token pager
+	 */
+	@Setter
+	private Pager pager;
+
+	/**
+	 * getter of pager, make new pager if null
+	 * 
+	 * @return
+	 */
+	public Pager getPager() {
+		if (this.pager == null)
+			this.pager = new Pager();
+		return pager;
+	}
+
+	/**
+	 * empty token with current timestamp
+	 */
+	public Token() {
+		this.timestamp = System.currentTimeMillis();
+	}
+
+}

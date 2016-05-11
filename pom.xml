@@ -2,13 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.yaen</groupId>
-	<artifactId>starter</artifactId>
+	<artifactId>yaen-starter</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
-	<name>org-yaen-starter</name>
-	<description>starter with spring framework 4.2 and jdk 1.8</description>
+	<name>yaen-starter</name>
+	<description>yaen starter with spring framework 4.2 and jdk 1.8</description>
 
 
 	<properties>
@@ -22,7 +22,7 @@
 		<slf4j.version>1.7.12</slf4j.version>
 		<mockito.version>1.10.19</mockito.version>
 		<powermock.version>1.6.2</powermock.version>
-		<boot.version>1.0.0-SNAPSHOT</boot.version>
+		<yaen-starter.version>1.0.0-SNAPSHOT</yaen-starter.version>
 		<hibernate.validator.version>4.2.0.Final</hibernate.validator.version>
 		<javax.validation.version>1.0.0.GA</javax.validation.version>
 
@@ -100,66 +100,81 @@
 				<scope>provided</scope>
 			</dependency>
 
-			<!-- com.zerosoft.boot -->
+			<!-- org.yaen.yaen-starter -->
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-core-model</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-common-data</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-core-service</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-core-model</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-biz-mall</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-core-service</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-biz-shared</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-corecif-service</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-common-dal</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-corerbac-service</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-biz-service</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-biz-mall</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-web-home</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-biz-shared</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-web-admin</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-common-dal</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-web-seller</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-biz-service</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-web-front</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-web-home</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-common-util</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-web-admin</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.zerosoft</groupId>
-				<artifactId>boot-common-data</artifactId>
-				<version>${boot.version}</version>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-web-seller</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-web-front</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-common-util</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-common-data</artifactId>
+				<version>${yaen-starter.version}</version>
 			</dependency>
 
 			<!-- Spring -->
@@ -1095,6 +1110,8 @@
 	<modules>
 		<module>common</module>
 		<module>core</module>
+		
+		
 		<module>biz</module>
 		<module>web</module>
 	</modules>

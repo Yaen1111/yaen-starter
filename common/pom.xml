@@ -11,10 +11,10 @@
 	<packaging>pom</packaging>
 	<name>yaen-starter-common</name>
 	<modules>
+		<module>data</module>
 		<module>util</module>
 		<module>dal</module>
 		<module>facade</module>
 		<module>integration</module>
-		
 	</modules>
 </project>
