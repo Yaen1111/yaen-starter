@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>yaen-ark-corerbac</artifactId>
+		<artifactId>yaen-starter-corerbac</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-ark-corerbac-service</artifactId>
-	<name>yaen-ark-corerbac-service</name>
+	<artifactId>yaen-starter-corerbac-service</artifactId>
+	<name>yaen-starter-corerbac-service</name>
 
 	<build>
 		<filters>
@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>yaen-ark-corerbac-model</artifactId>
+			<artifactId>yaen-starter-corerbac-model</artifactId>
 		</dependency>
 	</dependencies>
 </project>

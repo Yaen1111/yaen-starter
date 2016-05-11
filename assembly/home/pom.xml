@@ -3,23 +3,24 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>yaen-ark-biz</artifactId>
+		<artifactId>yaen-starterassembly</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-ark-biz-implement</artifactId>
-	<name>yaen-ark-biz-implement</name>
+	<artifactId>yaen-starter-assembly-home</artifactId>
+	<packaging>war</packaging>
+	<name>yaen-starter-assembly-home</name>
 
 	<build>
 		<filters>
-			<filter>../../${env}-config.properties</filter>
+			<filter>../${env}-config.properties</filter>
 		</filters>
 	</build>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>yaen-ark-biz-shared</artifactId>
+			<artifactId>yaen-starter-web-home</artifactId>
 		</dependency>
 	</dependencies>
 </project>

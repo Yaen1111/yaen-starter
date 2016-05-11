@@ -3,16 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>yaen-ark</artifactId>
+		<artifactId>yaen-starter</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-ark-biz</artifactId>
+	<artifactId>yaen-starter-biz</artifactId>
 	<packaging>pom</packaging>
-	<name>yaen-ark-biz</name>
+	<name>yaen-starter-biz</name>
 
 	<modules>
-		<module>implement</module>
+		<module>service</module>
 		<module>shared</module>
 	</modules>
 </project>

@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>yaen-ark-corecif</artifactId>
+		<artifactId>yaen-starter-corecif</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-ark-corecif-service</artifactId>
-	<name>yaen-ark-corecif-service</name>
+	<artifactId>yaen-starter-corecif-service</artifactId>
+	<name>yaen-starter-corecif-service</name>
 
 	<build>
 		<filters>
@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>yaen-ark-corecif-model</artifactId>
+			<artifactId>yaen-starter-corecif-model</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>yaen-ark-common</artifactId>
+		<artifactId>yaen-starter-common</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-ark-common-integration</artifactId>
-	<name>yaen-ark-common-integration</name>
+	<artifactId>yaen-starter-common-integration</artifactId>
+	<name>yaen-starter-common-integration</name>
 
 	<build>
 		<filters>

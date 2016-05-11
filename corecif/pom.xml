@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>yaen-ark</artifactId>
+		<artifactId>yaen-starter</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-ark-corecif</artifactId>
+	<artifactId>yaen-starter-corecif</artifactId>
 	<packaging>pom</packaging>
-	<name>yaen-ark-corecif</name>
+	<name>yaen-starter-corecif</name>
 
 	<modules>
 		<module>model</module>

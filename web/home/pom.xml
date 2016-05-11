@@ -3,17 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>yaen-ark-web</artifactId>
+		<artifactId>yaen-starter-web</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-ark-web-home</artifactId>
-	<name>yaen-ark-web-home</name>
+	<artifactId>yaen-starter-web-home</artifactId>
+	<name>yaen-starter-web-home</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>yaen-ark-biz-shared</artifactId>
+			<artifactId>yaen-starter-biz-shared</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>
@@ -33,7 +33,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>yaen-ark-biz-implement</artifactId>
+			<artifactId>yaen-starter-biz-service</artifactId>
 		</dependency>
 	</dependencies>
 	
