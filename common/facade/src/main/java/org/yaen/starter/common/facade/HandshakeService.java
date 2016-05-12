@@ -1,17 +1,17 @@
-package org.yaen.starter.common.data.facades;
+package org.yaen.starter.common.facade;
 
 import org.yaen.starter.common.data.objects.Request;
 import org.yaen.starter.common.data.objects.Response;
 
 /**
- * common service, mostly for test purpose
+ * hand shake service, for test purpose
  * 
  * @author Yaen 2015年11月30日下午11:49:06
  */
-public interface HandshakeFacade {
+public interface HandshakeService {
 
 	/**
-	 * hand shake service
+	 * hand shake facade
 	 * 
 	 * @param req
 	 * @return

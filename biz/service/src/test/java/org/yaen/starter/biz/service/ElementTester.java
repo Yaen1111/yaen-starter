@@ -13,7 +13,7 @@ import org.yaen.starter.core.model.elements.SubCode;
 
 /**
  * 
- * @author xl 2015年12月15日下午1:00:19
+ * @author Yaen 2015年12月15日下午1:00:19
  */
 @ContextConfiguration(locations = { "classpath:test-biz-spring.xml" })
 public class ElementTester extends AbstractJUnit4SpringContextTests {

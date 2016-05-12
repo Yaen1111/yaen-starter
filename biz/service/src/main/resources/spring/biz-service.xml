@@ -31,7 +31,7 @@
 	<!-- the follow is dubbo service -->
 
 	<!-- handshake service -->
-	<bean id="HandshakeService" class="org.yaen.starter.biz.service.HandshakeService" />
-	<dubbo:service interface="org.yaen.starter.common.data.facades.HandshakeFacade" ref="HandshakeService" />
+	<bean id="HandshakeService" class="org.yaen.starter.biz.service.impl.HandshakeServiceImpl" />
+	<dubbo:service interface="org.yaen.starter.common.facade.HandshakeService" ref="HandshakeService" />
 
 </beans>

@@ -1,25 +1,25 @@
 /**
  * 
  */
-package org.yaen.starter.common.integration;
+package org.yaen.starter.common.integration.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yaen.starter.common.data.facades.HandshakeFacade;
 import org.yaen.starter.common.data.objects.Request;
 import org.yaen.starter.common.data.objects.Response;
-
+import org.yaen.starter.common.facade.HandshakeService;
+import org.yaen.starter.common.integration.HandshakeFacadeClient;
 
 /**
  * facade client
  * 
- * @author xl 2015年12月2日下午10:58:19
+ * @author Yaen 2015年12月2日下午10:58:19
  */
 @Service
-public class HandshakeClient {
+public class HandshakeFacadeClientImpl implements HandshakeFacadeClient {
 
 	@Autowired
-	HandshakeFacade handshakeFacade;
+	HandshakeService handshakeFacade;
 
 	/**
 	 * facade handshake
@@ -27,6 +27,7 @@ public class HandshakeClient {
 	 * @param req
 	 * @return
 	 */
+	@Override
 	public Response Handshake(Request req) {
 		return handshakeFacade.Handshake(req);
 	}
