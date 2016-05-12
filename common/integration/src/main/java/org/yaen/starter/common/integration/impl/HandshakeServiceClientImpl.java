@@ -3,11 +3,9 @@
  */
 package org.yaen.starter.common.integration.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.data.objects.Request;
 import org.yaen.starter.common.data.objects.Response;
-import org.yaen.starter.common.facade.HandshakeService;
 import org.yaen.starter.common.integration.HandshakeServiceClient;
 
 /**

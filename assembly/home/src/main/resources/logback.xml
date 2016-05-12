@@ -131,57 +131,6 @@
 		</encoder>
 	</appender>
 
-	<appender name="common-util" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Encoding>UTF-8</Encoding>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/common-util_%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<maxHistory>5</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>100MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS},%-5level,%logger{72} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
-
-	<appender name="common-dal" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Encoding>UTF-8</Encoding>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/common-dal_%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<maxHistory>5</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>100MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS},%-5level,%logger{72} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
-
-	<appender name="common-integration" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Encoding>UTF-8</Encoding>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/common-integration_%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<maxHistory>5</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>100MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS},%-5level,%logger{72} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
-
 	<appender name="core-default" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<Encoding>UTF-8</Encoding>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -199,78 +148,10 @@
 		</encoder>
 	</appender>
 
-	<appender name="core-model" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Encoding>UTF-8</Encoding>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/core-model_%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<maxHistory>5</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>100MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS},%-5level,%logger{72} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
-
-	<appender name="core-service" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Encoding>UTF-8</Encoding>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/core-service_%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<maxHistory>5</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>100MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS},%-5level,%logger{72} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
-
 	<appender name="biz-default" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<Encoding>UTF-8</Encoding>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${log.dir}/biz-default_%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<maxHistory>5</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>100MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS},%-5level,%logger{72} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
-
-	<appender name="biz-shared" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Encoding>UTF-8</Encoding>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/biz-shared_%d{yyyy-MM-dd}.%i.log
-			</fileNamePattern>
-			<maxHistory>5</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>100MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS},%-5level,%logger{72} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
-
-	<appender name="biz-service" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<Encoding>UTF-8</Encoding>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/biz-service_%d{yyyy-MM-dd}.%i.log
 			</fileNamePattern>
 			<maxHistory>5</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -320,57 +201,15 @@
 		<appender-ref ref="error" />
 	</logger>
 
-	<logger name="starter.common.util" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="common-util" />
-		<appender-ref ref="error" />
-	</logger>
-
-	<logger name="starter.common.dal" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="common-dal" />
-		<appender-ref ref="error" />
-	</logger>
-
-	<logger name="starter.common.integration" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="common-integration" />
-		<appender-ref ref="error" />
-	</logger>
-
 	<logger name="starter.core" additivity="false">
 		<appender-ref ref="console" />
 		<appender-ref ref="core-default" />
 		<appender-ref ref="error" />
 	</logger>
 
-	<logger name="starter.core.model" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="core-model" />
-		<appender-ref ref="error" />
-	</logger>
-
-	<logger name="starter.core.service" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="core-service" />
-		<appender-ref ref="error" />
-	</logger>
-
 	<logger name="starter.biz" additivity="false">
 		<appender-ref ref="console" />
 		<appender-ref ref="biz-default" />
-		<appender-ref ref="error" />
-	</logger>
-
-	<logger name="starter.biz.shared" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="biz-shared" />
-		<appender-ref ref="error" />
-	</logger>
-
-	<logger name="starter.biz.service" additivity="false">
-		<appender-ref ref="console" />
-		<appender-ref ref="biz-service" />
 		<appender-ref ref="error" />
 	</logger>
 
