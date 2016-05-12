@@ -10,8 +10,10 @@
 	<name>yaen-starter</name>
 	<description>yaen starter with spring framework 4.2 and jdk 1.8</description>
 
-
 	<properties>
+		<!-- enviourment default to local, related to properties file -->
+		<env>local</env>
+
 		<!-- jdk version -->
 		<jdk.version>1.8</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +28,7 @@
 		<hibernate.validator.version>4.2.0.Final</hibernate.validator.version>
 		<javax.validation.version>1.0.0.GA</javax.validation.version>
 
+		<!-- other dependence -->
 		<jetty.version>8.1.5.v20120716</jetty.version>
 		<shiro.version>1.2.3</shiro.version>
 		<guava.version>18.0</guava.version>
@@ -39,7 +42,6 @@
 		<javax.servlet.jsp-api.version>2.3.1</javax.servlet.jsp-api.version>
 		<jstl.version>1.2</jstl.version>
 		<log4j.version>2.1</log4j.version>
-		<aopalliance.version>1.0</aopalliance.version>
 		<druid.version>1.0.15</druid.version>
 		<jedis.version>2.5.2</jedis.version>
 		<p6spy.version>2.1.1</p6spy.version>
@@ -75,8 +77,6 @@
 		<javamail.version>1.4.1</javamail.version>
 		<fastjson.version>1.2.6</fastjson.version>
 
-		<!-- enviourment default to local, related to properties file -->
-		<env>local</env>
 	</properties>
 
 	<dependencies>
@@ -580,22 +580,6 @@
 				<artifactId>validation-api</artifactId>
 				<version>${javax.validation.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>1.2.16</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>com.sun.jdmk</groupId>
-						<artifactId>jmxtools</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.sun.jmx</groupId>
-						<artifactId>jmxri</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
 
 			<!-- Lucene 管理 start -->
 			<dependency>
@@ -623,7 +607,12 @@
 				<artifactId>lucene-analyzers-common</artifactId>
 				<version>${lucene.version}</version>
 			</dependency>
-			<!-- Lucene 管理 end -->
+			<dependency>
+				<groupId>org.apache.lucene</groupId>
+				<artifactId>lucene-facet</artifactId>
+				<version>5.0.0</version>
+			</dependency>
+
 			<!-- Shiro 管理 start -->
 			<dependency>
 				<groupId>org.apache.shiro</groupId>
@@ -694,6 +683,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
 			<!-- httpclient全局版本 start -->
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
@@ -720,15 +710,14 @@
 				<artifactId>commons-httpclient</artifactId>
 				<version>3.0.1</version>
 			</dependency>
-			<!-- httpclient全局版本 end -->
-			<!-- commons管理 end -->
-			<!-- View管理 start -->
+
+			<!-- freemarker start -->
 			<dependency>
 				<groupId>org.freemarker</groupId>
 				<artifactId>freemarker</artifactId>
 				<version>${freemarker.version}</version>
 			</dependency>
-			<!-- View管理 end -->
+
 			<!-- Model管理 start -->
 			<dependency>
 				<groupId>cglib</groupId>
@@ -817,7 +806,7 @@
 				<artifactId>jmagick</artifactId>
 				<version>${jmagick.version}</version>
 			</dependency>
-			<!-- 水印管理 end -->
+
 			<!-- xml解析 start -->
 			<dependency>
 				<groupId>dom4j</groupId>
@@ -830,9 +819,6 @@
 				<artifactId>jdom</artifactId>
 				<version>${org.jdom}</version>
 			</dependency>
-			<!-- xml解析 end -->
-			<!-- Model管理 end -->
-
 
 			<!-- servlet -->
 			<dependency>
@@ -853,67 +839,6 @@
 				<version>${jstl.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>aopalliance</groupId>
-				<artifactId>aopalliance</artifactId>
-				<version>${aopalliance.version}</version>
-			</dependency>
-
-			<!-- 3rd party jar -->
-			<dependency>
-				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc14</artifactId>
-				<version>${oracle.driver.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>bitwalker</groupId>
-				<artifactId>UserAgentUtils</artifactId>
-				<version>1.13</version>
-			</dependency>
-			<dependency>
-				<groupId>com.cloopen</groupId>
-				<artifactId>rest</artifactId>
-				<version>2.6.3</version>
-			</dependency>
-
-			<!--微信支付app -->
-			<dependency>
-				<groupId>org.xmlpull</groupId>
-				<artifactId>xmlpull</artifactId>
-				<version>1.1.4</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.tencent</groupId>
-				<artifactId>tencent</artifactId>
-				<version>1.1.0</version>
-			</dependency>
-
-			<!-- ＱＱ第三方登录jar包 -->
-			<dependency>
-				<groupId>com.qq</groupId>
-				<artifactId>qq</artifactId>
-				<version>1.1.0</version>
-			</dependency>
-
-			<!--二维码生成工具 -->
-			<dependency>
-				<groupId>com.swetake</groupId>
-				<artifactId>swetake</artifactId>
-				<version>0.0.1</version>
-			</dependency>
-			<dependency>
-				<groupId>jasperreport</groupId>
-				<artifactId>jasperreport-theme</artifactId>
-				<version>5.2.0</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.lucene</groupId>
-				<artifactId>lucene-facet</artifactId>
-				<version>5.0.0</version>
-			</dependency>
 			<dependency>
 				<groupId>org.codehaus.groovy</groupId>
 				<artifactId>groovy-all</artifactId>
@@ -984,6 +909,57 @@
 				<artifactId>jsoup</artifactId>
 				<version>1.8.1</version>
 			</dependency>
+
+			<!-- 3rd party jar -->
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>ojdbc14</artifactId>
+				<version>${oracle.driver.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>bitwalker</groupId>
+				<artifactId>UserAgentUtils</artifactId>
+				<version>1.13</version>
+			</dependency>
+			<dependency>
+				<groupId>com.cloopen</groupId>
+				<artifactId>rest</artifactId>
+				<version>2.6.3</version>
+			</dependency>
+
+			<!--微信支付app -->
+			<dependency>
+				<groupId>org.xmlpull</groupId>
+				<artifactId>xmlpull</artifactId>
+				<version>1.1.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.tencent</groupId>
+				<artifactId>tencent</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+
+			<!-- ＱＱ第三方登录jar包 -->
+			<dependency>
+				<groupId>com.qq</groupId>
+				<artifactId>qq</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+
+			<!--二维码生成工具 -->
+			<dependency>
+				<groupId>com.swetake</groupId>
+				<artifactId>swetake</artifactId>
+				<version>0.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>jasperreport</groupId>
+				<artifactId>jasperreport-theme</artifactId>
+				<version>5.2.0</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -1110,8 +1086,8 @@
 	<modules>
 		<module>common</module>
 		<module>core</module>
-		
-		
+
+
 		<module>biz</module>
 		<module>web</module>
 	</modules>
