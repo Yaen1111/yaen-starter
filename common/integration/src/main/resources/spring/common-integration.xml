@@ -16,7 +16,7 @@
 	<context:component-scan base-package="org.yaen.starter.common.integration" />
 
 	<!-- dubbo name -->
-	<dubbo:application name="starterDubboConsumer" />
+	<!-- <dubbo:application name="starterDubboConsumer" /> -->
 
 	<!-- dubbo registry server address, allow multi-cast -->
 	<dubbo:registry address="${registry.address}" />
@@ -28,7 +28,7 @@
 	<!-- the follow is dubbo client, the id and interface should be same as provider -->
 
 	<!-- handshake client -->
-	<dubbo:reference id="HandshakeService" interface="org.yaen.starter.common.facade.HandshakeService" />
+	<!-- <dubbo:reference id="handshakeService" interface="org.yaen.starter.common.facade.HandshakeService" /> -->
 
 
 </beans>

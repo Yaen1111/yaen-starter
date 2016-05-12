@@ -8,18 +8,18 @@ import org.springframework.stereotype.Service;
 import org.yaen.starter.common.data.objects.Request;
 import org.yaen.starter.common.data.objects.Response;
 import org.yaen.starter.common.facade.HandshakeService;
-import org.yaen.starter.common.integration.HandshakeFacadeClient;
+import org.yaen.starter.common.integration.HandshakeServiceClient;
 
 /**
- * facade client
+ * service client
  * 
  * @author Yaen 2015年12月2日下午10:58:19
  */
 @Service
-public class HandshakeFacadeClientImpl implements HandshakeFacadeClient {
+public class HandshakeServiceClientImpl implements HandshakeServiceClient {
 
-	@Autowired
-	HandshakeService handshakeFacade;
+	// @Autowired
+	// HandshakeService handshakeService;
 
 	/**
 	 * facade handshake
@@ -29,7 +29,8 @@ public class HandshakeFacadeClientImpl implements HandshakeFacadeClient {
 	 */
 	@Override
 	public Response Handshake(Request req) {
-		return handshakeFacade.Handshake(req);
+		return null;
+		// return handshakeService.Handshake(req);
 	}
 
 }

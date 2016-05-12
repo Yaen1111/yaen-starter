@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.biz.service;
+package org.yaen.starter.test.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -10,12 +10,11 @@ import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.core.model.elements.SubCode;
 
-
 /**
  * 
  * @author Yaen 2015年12月15日下午1:00:19
  */
-@ContextConfiguration(locations = { "classpath:test-biz-spring.xml" })
+@ContextConfiguration(locations = { "classpath:spring/test-service.xml" })
 public class ElementTester extends AbstractJUnit4SpringContextTests {
 	//
 	// @Autowired

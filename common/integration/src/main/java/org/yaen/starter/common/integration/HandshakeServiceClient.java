@@ -10,6 +10,6 @@ import org.yaen.starter.common.facade.HandshakeService;
  * 
  * @author Yaen 2016年5月12日下午2:01:42
  */
-public interface HandshakeFacadeClient extends HandshakeService {
+public interface HandshakeServiceClient extends HandshakeService {
 
 }

@@ -9,6 +9,26 @@
 	<!-- allow annotation like @Service -->
 	<context:annotation-config />
 
+	<!-- auto load config -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+		lazy-init="false">
+		<property name="order" value="1"></property>
+		<property name="ignoreUnresolvablePlaceholders" value="true"></property>
+		<property name="ignoreResourceNotFound" value="true"></property>
+		<property name="location">
+			<value>classpath*:jdbc.properties</value>
+		</property>
+	</bean>
+
+	<!-- use default if not given, usefull for starter only project -->
+	<bean id="propertyConfigurerDefault" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+		lazy-init="false">
+		<property name="order" value="9"></property>
+		<property name="location">
+			<value>classpath:/spring/jdbc-default.properties</value>
+		</property>
+	</bean>
+
 	<!-- scan for component like @Service -->
 	<context:component-scan base-package="org.yaen.starter.common.dal" />
 
