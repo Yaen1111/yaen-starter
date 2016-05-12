@@ -11,7 +11,7 @@
 	<context:annotation-config />
 
 	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.arkweb" />
+	<context:component-scan base-package="org.yaen.starter.web.home" />
 
 
 	<!-- allow annotation like @Controller -->

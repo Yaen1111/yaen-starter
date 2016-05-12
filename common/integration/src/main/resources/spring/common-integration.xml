@@ -13,10 +13,10 @@
 	<context:annotation-config />
 
 	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.arkweb" />
+	<context:component-scan base-package="org.yaen.starter.common.integration" />
 
 	<!-- dubbo name -->
-	<dubbo:application name="arkwebDubboConsumer" />
+	<dubbo:application name="starterDubboConsumer" />
 
 	<!-- dubbo registry server address, allow multi-cast -->
 	<dubbo:registry address="${registry.address}" />
@@ -28,7 +28,7 @@
 	<!-- the follow is dubbo client, the id and interface should be same as provider -->
 
 	<!-- handshake client -->
-	<dubbo:reference id="HandshakeService" interface="org.yaen.arkcommon.facades.HandshakeFacade">
+	<dubbo:reference id="HandshakeService" interface="org.yaen.starter.common.data.facades.HandshakeFacade">
 	</dubbo:reference>
 
 </beans>

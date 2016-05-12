@@ -13,10 +13,10 @@
 	<context:annotation-config />
 
 	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.arkcore.biz.service.implement" />
+	<context:component-scan base-package="org.yaen.starter.biz.service" />
 
 	<!-- dubbo name -->
-	<dubbo:application name="arkcoreDubboProvider" />
+	<dubbo:application name="starterDubboProvider" />
 
 	<!-- dubbo registry server address, allow multi cast -->
 	<dubbo:registry address="${registry.address}" />
@@ -31,7 +31,7 @@
 	<!-- the follow is dubbo service -->
 
 	<!-- handshake service -->
-	<bean id="HandshakeService" class="org.yaen.arkcore.biz.service.implement.HandshakeService" />
-	<dubbo:service interface="org.yaen.arkcommon.facades.HandshakeFacade" ref="HandshakeService" />
+	<bean id="HandshakeService" class="org.yaen.starter.biz.service.HandshakeService" />
+	<dubbo:service interface="org.yaen.starter.common.data.facades.HandshakeFacade" ref="HandshakeService" />
 
 </beans>

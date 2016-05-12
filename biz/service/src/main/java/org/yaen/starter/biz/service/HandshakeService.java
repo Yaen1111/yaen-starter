@@ -15,7 +15,8 @@ import org.yaen.starter.common.data.objects.Response;
 public class HandshakeService implements HandshakeFacade {
 
 	/**
-	 * @see org.yaen.arkcore.common.service.facade.HandshakeFacade#Handshake(org.yaen.arkcore.org.yaen.arkcommon.objects.data.CommonRequest)
+	 * 
+	 * @see org.yaen.starter.common.data.facades.HandshakeFacade#Handshake(org.yaen.starter.common.data.objects.Request)
 	 */
 	@Override
 	public Response Handshake(Request req) {

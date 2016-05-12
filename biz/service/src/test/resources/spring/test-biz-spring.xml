@@ -16,9 +16,9 @@
 	<!-- for unit test, need import all required xml -->
 	<import resource="classpath*:/spring/common-*.xml" />
 	<import resource="classpath*:/spring/core-*.xml" />
-	<import resource="classpath:/spring/biz-cif.xml" />
-	<import resource="classpath:/spring/biz-rbac.xml" />
-	<import resource="classpath:biz-service-implement-test.xml" />
+	<import resource="classpath*:/spring/biz-cif.xml" />
+	<import resource="classpath*:/spring/biz-rbac.xml" />
+	<import resource="classpath:/spring/biz-service-test.xml" />
 
 
 	<!-- <import resource="classpath*:sqlmapper/*"/> -->

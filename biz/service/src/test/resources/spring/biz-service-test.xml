@@ -14,6 +14,6 @@
 
 	<!-- scan for component like @Service -->
 	<!-- scan for all components -->
-	<context:component-scan base-package="org.yaen.arkcore.biz.service.implement" />
+	<context:component-scan base-package="org.yaen.starter.biz.service" />
 
 </beans>

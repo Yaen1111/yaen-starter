@@ -10,6 +10,6 @@
 	<context:annotation-config />
 
 	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.arkcore.core.service" />
+	<context:component-scan base-package="org.yaen.starter.core.service" />
 
 </beans>

@@ -11,26 +11,6 @@
 	<packaging>pom</packaging>
 	<name>yaen-starter-web</name>
 
-	<dependencies>
-
-		<!-- servlet -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-		</dependency>
-
-		<!-- Template engine -->
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-tools</artifactId>
-		</dependency>
-
-	</dependencies>
-
 	<modules>
 		<module>home</module>
 	</modules>
