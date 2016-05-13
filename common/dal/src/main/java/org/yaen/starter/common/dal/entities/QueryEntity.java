@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.common.dal.models;
+package org.yaen.starter.common.dal.entities;
 
 import java.util.Map;
 
@@ -15,7 +15,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class QueryModel {
+public class QueryEntity {
 
 	private long id;
 

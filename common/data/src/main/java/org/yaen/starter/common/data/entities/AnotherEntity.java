@@ -1,24 +1,24 @@
 /**
  * 
  */
-package org.yaen.starter.common.data.pos;
+package org.yaen.starter.common.data.entities;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yaen.starter.common.data.annotations.OneTable;
-import org.yaen.starter.common.data.entities.BaseEntity;
+import org.yaen.starter.common.data.models.BaseModel;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * another PO(persistent object) which can contain another object, which must
+ * another entity(persistent object) which can contain another object, which must
  * have an "id" field of type bigint
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */
-public class AnotherPO extends OnePO {
+public class AnotherEntity extends OneEntity {
 	private static final long serialVersionUID = 100111L;
 
 	/**
@@ -26,12 +26,12 @@ public class AnotherPO extends OnePO {
 	 */
 	@Getter
 	@Setter
-	private BaseEntity another;
+	private BaseModel another;
 
 	/**
 	 * bridge id to another
 	 * 
-	 * @see org.yaen.starter.common.data.pos.OnePO#getId()
+	 * @see org.yaen.starter.common.data.entities.OneEntity#getId()
 	 */
 	@Override
 	public long getId() {
@@ -41,7 +41,7 @@ public class AnotherPO extends OnePO {
 	/**
 	 * bridge id to another
 	 * 
-	 * @see org.yaen.starter.common.data.pos.OnePO#setId(long)
+	 * @see org.yaen.starter.common.data.entities.OneEntity#setId(long)
 	 */
 	@Override
 	public void setId(long id) {
@@ -51,7 +51,7 @@ public class AnotherPO extends OnePO {
 	/**
 	 * get table name of another
 	 * 
-	 * @see org.yaen.starter.common.data.pos.OnePO#getTableName()
+	 * @see org.yaen.starter.common.data.entities.OneEntity#getTableName()
 	 */
 	@Override
 	public String getTableName() {
@@ -79,12 +79,12 @@ public class AnotherPO extends OnePO {
 	/**
 	 * get columns of another
 	 * 
-	 * @see org.yaen.starter.common.data.pos.OnePO#getColumns()
+	 * @see org.yaen.starter.common.data.entities.OneEntity#getColumns()
 	 */
 	@Override
-	public Map<String, OneColumnPO> getColumns() throws Exception {
+	public Map<String, OneColumnEntity> getColumns() throws Exception {
 		// use local var to modify
-		Map<String, OneColumnPO> col = new LinkedHashMap<String, OneColumnPO>();
+		Map<String, OneColumnEntity> col = new LinkedHashMap<String, OneColumnEntity>();
 
 		try {
 			// try get column info
@@ -109,7 +109,7 @@ public class AnotherPO extends OnePO {
 	 * 
 	 * @param another
 	 */
-	public AnotherPO(BaseEntity another) {
+	public AnotherEntity(BaseModel another) {
 		super();
 
 		if (another == null)

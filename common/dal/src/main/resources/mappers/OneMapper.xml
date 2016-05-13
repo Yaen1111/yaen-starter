@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.yaen.starter.common.dal.mappers.OneMapper">
 
-	<select id="selectByID" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.pos.OnePO">
+	<select id="selectByID" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		SELECT
 		`ID`
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
@@ -12,7 +12,7 @@
 		WHERE `ID` = #{id,jdbcType=BIGINT}
 	</select>
 
-	<insert id="insertByID" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.data.pos.OnePO">
+	<insert id="insertByID" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		INSERT INTO `${tableName}`
 		(
 		`ID`
@@ -29,7 +29,7 @@
 		)
 	</insert>
 
-	<update id="updateByID" parameterType="org.yaen.starter.common.data.pos.OnePO">
+	<update id="updateByID" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		UPDATE `${tableName}`
 		SET
 		<foreach collection="columns" index="index" item="info" open="" separator="," close="">
@@ -38,7 +38,7 @@
 		WHERE `ID` = #{id,jdbcType=BIGINT}
 	</update>
 
-	<delete id="deleteByID" parameterType="org.yaen.starter.common.data.pos.OnePO">
+	<delete id="deleteByID" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		DELETE FROM `${tableName}`
 		WHERE `ID` = #{id,jdbcType=BIGINT}
 	</delete>

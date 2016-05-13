@@ -12,13 +12,13 @@ import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.yaen.starter.common.dal.entities.QueryEntity;
 import org.yaen.starter.common.dal.mappers.QueryMapper;
-import org.yaen.starter.common.dal.models.QueryModel;
-import org.yaen.starter.common.data.entities.AttributeEntity;
-import org.yaen.starter.common.data.entities.BaseEntity;
-import org.yaen.starter.common.data.entities.RelationEntity;
-import org.yaen.starter.common.data.pos.AnotherPO;
-import org.yaen.starter.common.data.pos.OneColumnPO;
+import org.yaen.starter.common.data.entities.AnotherEntity;
+import org.yaen.starter.common.data.entities.OneColumnEntity;
+import org.yaen.starter.common.data.models.AttributeModel;
+import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.common.data.models.RelationModel;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.StringUtil;
 
@@ -41,15 +41,15 @@ public class OneQueryService implements QueryService {
 	 * @throws Exception
 	 */
 	@Override
-	public <T_ATTR extends AttributeEntity> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
+	public <T_ATTR extends AttributeModel> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
 			throws Exception {
 		Assert.notNull(attribute);
 
 		// get another po
-		AnotherPO po = new AnotherPO(attribute);
+		AnotherEntity po = new AnotherEntity(attribute);
 
 		// need event engine
-		QueryModel model = new QueryModel();
+		QueryEntity model = new QueryEntity();
 		model.setTableName(po.getTableName());
 
 		// set given base id
@@ -61,18 +61,18 @@ public class OneQueryService implements QueryService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationFrom(org.yaen.starter.common.data.entities.RelationEntity,
+	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationFrom(org.yaen.starter.common.data.models.RelationModel,
 	 *      long)
 	 */
 	@Override
-	public <T_REL extends RelationEntity> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception {
+	public <T_REL extends RelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception {
 		Assert.notNull(rel);
 
 		// get another po
-		AnotherPO po = new AnotherPO(rel);
+		AnotherEntity po = new AnotherEntity(rel);
 
 		// need event engine
-		QueryModel model = new QueryModel();
+		QueryEntity model = new QueryEntity();
 		model.setTableName(po.getTableName());
 
 		// set given base id
@@ -84,18 +84,18 @@ public class OneQueryService implements QueryService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationTo(org.yaen.starter.common.data.entities.RelationEntity,
+	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationTo(org.yaen.starter.common.data.models.RelationModel,
 	 *      long)
 	 */
 	@Override
-	public <T_REL extends RelationEntity> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception {
+	public <T_REL extends RelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception {
 		Assert.notNull(rel);
 
 		// get another po
-		AnotherPO po = new AnotherPO(rel);
+		AnotherEntity po = new AnotherEntity(rel);
 
 		// need event engine
-		QueryModel model = new QueryModel();
+		QueryEntity model = new QueryEntity();
 		model.setTableName(po.getTableName());
 
 		// set given base id
@@ -107,35 +107,35 @@ public class OneQueryService implements QueryService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByFieldName(org.yaen.starter.common.data.entities.BaseEntity,
+	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByFieldName(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.lang.String)
 	 */
 	@Override
-	public <T extends BaseEntity> List<Long> SelectIDsByFieldName(T entity, String fieldName) throws Exception {
+	public <T extends BaseModel> List<Long> SelectIDsByFieldName(T model, String fieldName) throws Exception {
 		List<String> list = new ArrayList<String>();
 		list.add(fieldName);
-		return this.SelectIDsByFieldNameList(entity, list);
+		return this.SelectIDsByFieldNameList(model, list);
 	}
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByFieldNameList(org.yaen.starter.common.data.entities.BaseEntity,
+	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByFieldNameList(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.util.List)
 	 */
 	@Override
-	public <T extends BaseEntity> List<Long> SelectIDsByFieldNameList(T entity, List<String> fieldNameList)
+	public <T extends BaseModel> List<Long> SelectIDsByFieldNameList(T model, List<String> fieldNameList)
 			throws Exception {
-		Assert.notNull(entity);
+		Assert.notNull(model);
 		Assert.notNull(fieldNameList);
 
 		// get another po
-		AnotherPO po = new AnotherPO(entity);
+		AnotherEntity po = new AnotherEntity(model);
 
 		// make event model
-		QueryModel model = new QueryModel();
+		QueryEntity query = new QueryEntity();
 
 		// set table name
-		model.setTableName(po.getTableName());
+		query.setTableName(po.getTableName());
 
 		// make columns
 		{
@@ -143,76 +143,76 @@ public class OneQueryService implements QueryService {
 
 			for (String fieldname : fieldNameList) {
 
-				OneColumnPO info = po.getColumns().get(fieldname);
+				OneColumnEntity info = po.getColumns().get(fieldname);
 				columns.put(info.getColumnName(), info.getValue());
 			}
 
-			model.setColumns(columns);
+			query.setColumns(columns);
 		}
 
 		// call mapper
-		return mapper.selectIDsByColumns(model);
+		return mapper.selectIDsByColumns(query);
 	}
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByAllField(org.yaen.starter.common.data.entities.BaseEntity)
+	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByAllField(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
-	public <T extends BaseEntity> List<Long> SelectIDsByAllField(T entity) throws Exception {
-		Assert.notNull(entity);
+	public <T extends BaseModel> List<Long> SelectIDsByAllField(T model) throws Exception {
+		Assert.notNull(model);
 
 		// get another po
-		AnotherPO po = new AnotherPO(entity);
+		AnotherEntity po = new AnotherEntity(model);
 
 		// make event model
-		QueryModel model = new QueryModel();
+		QueryEntity query = new QueryEntity();
 
 		// set table name
-		model.setTableName(po.getTableName());
+		query.setTableName(po.getTableName());
 
 		// make columns
 		{
 			Map<String, Object> columns = new HashMap<String, Object>();
 
 			// add columns if not id and is not null
-			for (Entry<String, OneColumnPO> entry : po.getColumns().entrySet()) {
+			for (Entry<String, OneColumnEntity> entry : po.getColumns().entrySet()) {
 				if (!StringUtil.like(entry.getKey(), "id") && entry.getValue().getValue() != null) {
 					columns.put(entry.getValue().getColumnName(), entry.getValue().getValue());
 				}
 			}
 
-			model.setColumns(columns);
+			query.setColumns(columns);
 		}
 
 		// call mapper
-		return mapper.selectIDsByColumns(model);
+		return mapper.selectIDsByColumns(query);
 	}
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByWhereClause(org.yaen.starter.common.data.entities.BaseEntity,
+	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByWhereClause(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.lang.String)
 	 */
 	@Override
-	public <T extends BaseEntity> List<Long> SelectIDsByWhereClause(T entity, String whereClause) throws Exception {
-		Assert.notNull(entity);
+	public <T extends BaseModel> List<Long> SelectIDsByWhereClause(T model, String whereClause) throws Exception {
+		Assert.notNull(model);
 		Assert.notNull(whereClause);
 
 		// get another po
-		AnotherPO po = new AnotherPO(entity);
+		AnotherEntity po = new AnotherEntity(model);
 
 		// make event model
-		QueryModel model = new QueryModel();
+		QueryEntity query = new QueryEntity();
 
 		// set table name
-		model.setTableName(po.getTableName());
+		query.setTableName(po.getTableName());
 
 		// set where clause
-		model.setWhereClause(whereClause);
+		query.setWhereClause(whereClause);
 
 		// call mapper
-		return mapper.selectIDsByWhereClause(model);
+		return mapper.selectIDsByWhereClause(query);
 	}
 
 }

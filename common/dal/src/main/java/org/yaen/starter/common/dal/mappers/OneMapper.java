@@ -3,7 +3,7 @@ package org.yaen.starter.common.dal.mappers;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-import org.yaen.starter.common.data.pos.OnePO;
+import org.yaen.starter.common.data.entities.OneEntity;
 
 
 /**
@@ -14,12 +14,12 @@ import org.yaen.starter.common.data.pos.OnePO;
 @Repository
 public interface OneMapper {
 
-	public Map<String, Object> selectByID(OnePO po) throws Exception;
+	public Map<String, Object> selectByID(OneEntity po) throws Exception;
 
-	public int insertByID(OnePO po) throws Exception;
+	public int insertByID(OneEntity po) throws Exception;
 
-	public int updateByID(OnePO po) throws Exception;
+	public int updateByID(OneEntity po) throws Exception;
 
-	public int deleteByID(OnePO po) throws Exception;
+	public int deleteByID(OneEntity po) throws Exception;
 
 }

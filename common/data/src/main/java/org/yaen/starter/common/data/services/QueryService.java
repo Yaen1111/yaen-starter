@@ -5,9 +5,9 @@ package org.yaen.starter.common.data.services;
 
 import java.util.List;
 
-import org.yaen.starter.common.data.entities.AttributeEntity;
-import org.yaen.starter.common.data.entities.BaseEntity;
-import org.yaen.starter.common.data.entities.RelationEntity;
+import org.yaen.starter.common.data.models.AttributeModel;
+import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.common.data.models.RelationModel;
 
 /**
  * query service for most search operation
@@ -24,7 +24,7 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T_ATTR extends AttributeEntity> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
+	public <T_ATTR extends AttributeModel> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
 			throws Exception;
 
 	/**
@@ -35,7 +35,7 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T_REL extends RelationEntity> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception;
+	public <T_REL extends RelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception;
 
 	/**
 	 * select relation ids by to id
@@ -45,50 +45,50 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T_REL extends RelationEntity> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception;
+	public <T_REL extends RelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception;
 
 	/**
-	 * select ids by field name, the value is the given value in the entity and
+	 * select ids by field name, the value is the given value in the model and
 	 * use equal
 	 * 
-	 * @param entity
+	 * @param model
 	 * @param fieldName
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseEntity> List<Long> SelectIDsByFieldName(T entity, String fieldName) throws Exception;
+	public <T extends BaseModel> List<Long> SelectIDsByFieldName(T model, String fieldName) throws Exception;
 
 	/**
-	 * select ids by field name list, the value is the given value in the entity
+	 * select ids by field name list, the value is the given value in the model
 	 * and use equal
 	 * 
-	 * @param entity
+	 * @param model
 	 * @param fieldNameList
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseEntity> List<Long> SelectIDsByFieldNameList(T entity, List<String> fieldNameList)
+	public <T extends BaseModel> List<Long> SelectIDsByFieldNameList(T model, List<String> fieldNameList)
 			throws Exception;
 
 	/**
 	 * select ids by all none-null field, the value is the given value in the
-	 * entity
+	 * model
 	 * 
-	 * @param entity
+	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseEntity> List<Long> SelectIDsByAllField(T entity) throws Exception;
+	public <T extends BaseModel> List<Long> SelectIDsByAllField(T model) throws Exception;
 
 	/**
 	 * select ids by given sql, starting with where, can include order, group,
 	 * and having clause
 	 * 
-	 * @param entity
+	 * @param model
 	 * @param whereClause
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseEntity> List<Long> SelectIDsByWhereClause(T entity, String whereClause) throws Exception;
+	public <T extends BaseModel> List<Long> SelectIDsByWhereClause(T model, String whereClause) throws Exception;
 
 }

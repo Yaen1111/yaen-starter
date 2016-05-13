@@ -7,9 +7,9 @@ import java.util.Date;
 
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.Virtual;
-import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.common.data.services.EntityService;
+import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.DateUtil;
 
 import lombok.Getter;
@@ -22,7 +22,7 @@ import lombok.ToString;
  * @author Yaen 2016年1月4日下午8:35:55
  */
 @ToString
-public abstract class BaseElement implements BaseEntity {
+public abstract class BaseElement implements BaseModel {
 	private static final long serialVersionUID = 101L;
 
 	/**
@@ -81,40 +81,40 @@ public abstract class BaseElement implements BaseEntity {
 	}
 
 	@Virtual
-	public void BeforeSelect(EntityService service) throws Exception {
+	public void BeforeSelect(ModelService service) throws Exception {
 	}
 
 	@Virtual
-	public void AfterSelect(EntityService service) throws Exception {
+	public void AfterSelect(ModelService service) throws Exception {
 	}
 
 	@Virtual
-	public void BeforeInsert(EntityService service) throws Exception {
+	public void BeforeInsert(ModelService service) throws Exception {
 		// set cdate, udate
 		this.cdate = DateUtil.getNow();
 		this.udate = this.cdate;
 	}
 
 	@Virtual
-	public void AfterInsert(EntityService service) throws Exception {
+	public void AfterInsert(ModelService service) throws Exception {
 	}
 
 	@Virtual
-	public void BeforeUpdate(EntityService service) throws Exception {
+	public void BeforeUpdate(ModelService service) throws Exception {
 		// set udate
 		this.udate = DateUtil.getNow();
 	}
 
 	@Virtual
-	public void AfterUpdate(EntityService service) throws Exception {
+	public void AfterUpdate(ModelService service) throws Exception {
 	}
 
 	@Virtual
-	public void BeforeDelete(EntityService service) throws Exception {
+	public void BeforeDelete(ModelService service) throws Exception {
 	}
 
 	@Virtual
-	public void AfterDelete(EntityService service) throws Exception {
+	public void AfterDelete(ModelService service) throws Exception {
 	}
 
 }

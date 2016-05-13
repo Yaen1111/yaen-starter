@@ -3,7 +3,7 @@ package org.yaen.starter.common.dal.mappers;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.yaen.starter.common.dal.models.QueryModel;
+import org.yaen.starter.common.dal.entities.QueryEntity;
 
 /**
  * event mapper for event engine
@@ -21,7 +21,7 @@ public interface QueryMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Long> selectIDsByBaseID(QueryModel model) throws Exception;
+	public List<Long> selectIDsByBaseID(QueryEntity model) throws Exception;
 
 	/**
 	 * get id list by relation from id, usually is the child/person
@@ -30,7 +30,7 @@ public interface QueryMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Long> selectIDsByFromID(QueryModel model) throws Exception;
+	public List<Long> selectIDsByFromID(QueryEntity model) throws Exception;
 
 	/**
 	 * get id list by relation from id, usually is the parent/org
@@ -39,7 +39,7 @@ public interface QueryMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Long> selectIDsByToID(QueryModel model) throws Exception;
+	public List<Long> selectIDsByToID(QueryEntity model) throws Exception;
 
 	/**
 	 * get id list by given column and value
@@ -48,7 +48,7 @@ public interface QueryMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Long> selectIDsByColumns(QueryModel model) throws Exception;
+	public List<Long> selectIDsByColumns(QueryEntity model) throws Exception;
 
 	/**
 	 * get id list by given where clause
@@ -57,6 +57,6 @@ public interface QueryMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Long> selectIDsByWhereClause(QueryModel model) throws Exception;
+	public List<Long> selectIDsByWhereClause(QueryEntity model) throws Exception;
 
 }

@@ -5,10 +5,10 @@ package org.yaen.starter.core.model.elements;
 
 import org.springframework.util.Assert;
 import org.yaen.starter.common.data.annotations.OneData;
-import org.yaen.starter.common.data.entities.AttributeEntity;
-import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.common.data.services.EntityService;
+import org.yaen.starter.common.data.models.AttributeModel;
+import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.common.data.services.ModelService;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,7 +21,7 @@ import lombok.ToString;
  * @author Yaen 2016年1月4日下午8:40:03
  */
 @ToString(callSuper = true)
-public abstract class AttributeElement extends BaseElement implements AttributeEntity {
+public abstract class AttributeElement extends BaseElement implements AttributeModel {
 	private static final long serialVersionUID = -4376824168382204889L;
 
 	/**
@@ -36,14 +36,14 @@ public abstract class AttributeElement extends BaseElement implements AttributeE
 	 * the base element
 	 */
 	@Getter
-	private BaseEntity base;
+	private BaseModel base;
 
 	/**
 	 * construct a attribute element
 	 * 
 	 * @param base
 	 */
-	public AttributeElement(BaseEntity base) {
+	public AttributeElement(BaseModel base) {
 		super();
 
 		Assert.notNull(base);
@@ -56,14 +56,14 @@ public abstract class AttributeElement extends BaseElement implements AttributeE
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.elements.BaseElement#AfterSelect(org.yaen.spring.common.services.EntityService)
+	 * @see org.yaen.starter.core.model.elements.BaseElement#AfterSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public void AfterSelect(EntityService service) throws Exception {
+	public void AfterSelect(ModelService service) throws Exception {
 		super.AfterSelect(service);
 
 		if (this.baseID > 0) {
-			service.selectEntity(this.base, this.baseID);
+			service.selectModel(this.base, this.baseID);
 		}
 	}
 

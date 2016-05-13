@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.common.data.pos;
+package org.yaen.starter.common.data.entities;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -16,12 +16,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * one PO(persistent object) for all crud operation, all po has to inherit this
+ * one entity(persistent object) for all crud operation, all po has to inherit this
  * one
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */
-public class OnePO implements Serializable {
+public class OneEntity implements Serializable {
 	private static final long serialVersionUID = 100110L;
 
 	/**
@@ -66,7 +66,7 @@ public class OnePO implements Serializable {
 	/**
 	 * columns, with key of field name
 	 */
-	protected Map<String, OneColumnPO> columns;
+	protected Map<String, OneColumnEntity> columns;
 
 	/**
 	 * getter of columns. get all field and value
@@ -75,9 +75,9 @@ public class OnePO implements Serializable {
 	 * @throws Exception
 	 */
 	@Virtual
-	public Map<String, OneColumnPO> getColumns() throws Exception {
+	public Map<String, OneColumnEntity> getColumns() throws Exception {
 		// use local var to modify
-		Map<String, OneColumnPO> col = new LinkedHashMap<String, OneColumnPO>();
+		Map<String, OneColumnEntity> col = new LinkedHashMap<String, OneColumnEntity>();
 
 		try {
 			// try get column info
@@ -104,7 +104,7 @@ public class OnePO implements Serializable {
 	 * @param one
 	 * @param clazz
 	 */
-	protected void getOneColumnInfo(Map<String, OneColumnPO> columns, Object one, Class<?> clazz) throws Exception {
+	protected void getOneColumnInfo(Map<String, OneColumnEntity> columns, Object one, Class<?> clazz) throws Exception {
 		if (clazz == null)
 			return;
 
@@ -133,7 +133,7 @@ public class OnePO implements Serializable {
 					column_name = field.getName().toUpperCase();
 				}
 
-				OneColumnPO info = new OneColumnPO();
+				OneColumnEntity info = new OneColumnEntity();
 				info.setColumnName(column_name);
 				info.setValue(field.get(one));
 				info.setDataType(data.DataType());
@@ -144,7 +144,7 @@ public class OnePO implements Serializable {
 			} else {
 				// no data, use field name
 				String column_name = field.getName().toUpperCase();
-				OneColumnPO info = new OneColumnPO();
+				OneColumnEntity info = new OneColumnEntity();
 				info.setColumnName(column_name);
 				info.setValue(field.get(one));
 				info.setField(field);

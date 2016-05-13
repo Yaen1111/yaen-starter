@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.yaen.starter.common.data.exceptions.BizException;
-import org.yaen.starter.common.data.services.EntityService;
+import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.core.model.elements.SubCode;
 
 /**
@@ -15,7 +15,7 @@ import org.yaen.starter.core.model.elements.SubCode;
 public class OneTester extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
-	private EntityService service;
+	private ModelService service;
 
 	@org.junit.BeforeClass
 	public static void BeforeClass() {
@@ -44,7 +44,7 @@ public class OneTester extends AbstractJUnit4SpringContextTests {
 
 			SubCode code = new SubCode();
 
-			service.selectEntity(code, 2);
+			service.selectModel(code, 2);
 
 			System.out.println("------------");
 			System.out.println("------------");
@@ -56,18 +56,18 @@ public class OneTester extends AbstractJUnit4SpringContextTests {
 			code.setTitle("ti6");
 			code.setIntvalue(556);
 
-			service.updateEntity(code);
+			service.updateModel(code);
 
 			System.out.println("update done");
 
 			code.setId(0);
 			code.setFamily("new");
-			service.insertEntity(code);
+			service.insertModel(code);
 
 			System.out.println("insert done");
 
 			code.setId(3);
-			service.deleteEntity(code);
+			service.deleteModel(code);
 
 			System.out.println("delete done");
 

@@ -15,26 +15,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.yaen.starter.common.dal.mappers.OneMapper;
 import org.yaen.starter.common.dal.mappers.ZeroMapper;
-import org.yaen.starter.common.data.entities.BaseEntity;
+import org.yaen.starter.common.data.entities.AnotherEntity;
+import org.yaen.starter.common.data.entities.MyDescribeEntity;
+import org.yaen.starter.common.data.entities.OneColumnEntity;
+import org.yaen.starter.common.data.entities.OneEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.BizException;
-import org.yaen.starter.common.data.pos.AnotherPO;
-import org.yaen.starter.common.data.pos.MyDescribePO;
-import org.yaen.starter.common.data.pos.OneColumnPO;
-import org.yaen.starter.common.data.pos.OnePO;
-import org.yaen.starter.common.data.services.EntityService;
+import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.StringUtil;
 import org.yaen.starter.core.model.elements.BaseElement;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 /**
- * one entity service for most operation
+ * one model service for most operation
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
 @Service
-public class OneEntityService implements EntityService {
+public class OneEntityService implements ModelService {
 
 	@Autowired
 	private OneMapper oneMapper;
@@ -47,9 +47,9 @@ public class OneEntityService implements EntityService {
 	 * 
 	 * @throws Exception
 	 */
-	protected void CreateTable(OnePO po) throws Exception {
+	protected void CreateTable(OneEntity po) throws Exception {
 
-		List<MyDescribePO> describes = null;
+		List<MyDescribeEntity> describes = null;
 
 		// describe table, if table not exists, throw exception
 		try {
@@ -74,10 +74,10 @@ public class OneEntityService implements EntityService {
 
 			// exists, try to check column type and missed column
 			// loop every element, and add/mod if not suitable
-			for (Entry<String, OneColumnPO> entry : po.getColumns().entrySet()) {
+			for (Entry<String, OneColumnEntity> entry : po.getColumns().entrySet()) {
 				boolean exists = false;
 
-				for (MyDescribePO describe : describes) {
+				for (MyDescribeEntity describe : describes) {
 					if (StringUtil.like(describe.getMyField(), entry.getValue().getColumnName())) {
 
 						exists = true;
@@ -121,13 +121,13 @@ public class OneEntityService implements EntityService {
 	}
 
 	/**
-	 * inner select entity
+	 * inner select model
 	 * 
-	 * @param entity
+	 * @param model
 	 * @param id
 	 * @throws Exception
 	 */
-	protected <T extends BaseEntity> boolean innerSelectEntity(T entity, OnePO po) throws Exception {
+	protected <T extends BaseModel> boolean innerSelectModel(T model, OneEntity po) throws Exception {
 
 		// call mapper
 		Map<String, Object> map = oneMapper.selectByID(po);
@@ -138,19 +138,19 @@ public class OneEntityService implements EntityService {
 		}
 
 		// set id
-		entity.setId(po.getId());
+		model.setId(po.getId());
 
 		// map column to field
-		Map<String, OneColumnPO> columns = po.getColumns();
+		Map<String, OneColumnEntity> columns = po.getColumns();
 
 		for (String key : columns.keySet()) {
-			OneColumnPO info = columns.get(key);
+			OneColumnEntity info = columns.get(key);
 			Field field = info.getField();
 
 			Object value = map.get(info.getColumnName());
 
 			// set value of any type
-			field.set(entity, value);
+			field.set(model, value);
 		}
 
 		return true;
@@ -158,22 +158,22 @@ public class OneEntityService implements EntityService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.EntityService#selectEntity(org.yaen.starter.common.data.entities.BaseEntity,
+	 * @see org.yaen.starter.common.data.services.ModelService#selectModel(org.yaen.starter.common.data.models.BaseModel,
 	 *      long)
 	 */
 	@Override
-	public <T extends BaseEntity> void selectEntity(T entity, long id) throws Exception {
-		Assert.notNull(entity);
+	public <T extends BaseModel> void selectModel(T model, long id) throws Exception {
+		Assert.notNull(model);
 
 		// get another po
-		AnotherPO po = new AnotherPO(entity);
+		AnotherEntity po = new AnotherEntity(model);
 
 		this.CreateTable(po);
 
 		// set given id
 		po.setId(id);
 
-		boolean exists = this.innerSelectEntity(entity, po);
+		boolean exists = this.innerSelectModel(model, po);
 
 		if (!exists) {
 			// not exists
@@ -183,21 +183,21 @@ public class OneEntityService implements EntityService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.EntityService#selectEntityList(org.yaen.starter.common.data.entities.BaseEntity,
+	 * @see org.yaen.starter.common.data.services.ModelService#selectModelList(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.util.List)
 	 */
 	@Override
-	public <T extends BaseEntity> List<T> selectEntityList(T entity, List<Long> ids) throws Exception {
-		Assert.notNull(entity);
+	public <T extends BaseModel> List<T> selectModelList(T model, List<Long> ids) throws Exception {
+		Assert.notNull(model);
 
 		List<T> list = new ArrayList<T>();
 
 		if (ids != null) {
 			for (Long id : ids) {
 				@SuppressWarnings("unchecked")
-				T attr = (T) entity.clone();
+				T attr = (T) model.clone();
 
-				this.selectEntity(attr, id);
+				this.selectModel(attr, id);
 				list.add(attr);
 			}
 		}
@@ -207,17 +207,17 @@ public class OneEntityService implements EntityService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.EntityService#insertEntity(org.yaen.starter.common.data.entities.BaseEntity)
+	 * @see org.yaen.starter.common.data.services.ModelService#insertModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
-	public <T extends BaseEntity> long insertEntity(T entity) throws Exception {
-		Assert.notNull(entity);
+	public <T extends BaseModel> long insertModel(T model) throws Exception {
+		Assert.notNull(model);
 
 		// trigger before insert
-		entity.BeforeInsert(this);
+		model.BeforeInsert(this);
 
 		// get another po
-		AnotherPO po = new AnotherPO(entity);
+		AnotherEntity po = new AnotherEntity(model);
 
 		// create table if not exists
 		this.CreateTable(po);
@@ -230,38 +230,38 @@ public class OneEntityService implements EntityService {
 			throw new BizException("insert failed");
 		}
 
-		// id already set into po and bridged to entity
+		// id already set into po and bridged to model
 
 		// trigger after insert
-		entity.AfterInsert(this);
+		model.AfterInsert(this);
 
-		return entity.getId();
+		return model.getId();
 	}
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.EntityService#updateEntity(org.yaen.starter.common.data.entities.BaseEntity)
+	 * @see org.yaen.starter.common.data.services.ModelService#updateModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
-	public <T extends BaseEntity> void updateEntity(T entity) throws Exception {
-		Assert.notNull(entity);
+	public <T extends BaseModel> void updateModel(T model) throws Exception {
+		Assert.notNull(model);
 
 		// trigger before update
-		entity.BeforeUpdate(this);
+		model.BeforeUpdate(this);
 
 		// get another po
-		AnotherPO po = new AnotherPO(entity);
+		AnotherEntity po = new AnotherEntity(model);
 
 		// create table if not exists
 		this.CreateTable(po);
 
 		// try get old one
-		BaseEntity old;
+		BaseModel old;
 
 		{
-			old = (BaseEntity) entity.clone();
+			old = (BaseModel) model.clone();
 
-			Boolean exists = this.innerSelectEntity(old, po);
+			Boolean exists = this.innerSelectModel(old, po);
 
 			if (!exists) {
 				// already exists, throw
@@ -278,22 +278,22 @@ public class OneEntityService implements EntityService {
 		}
 
 		// trigger after update
-		entity.AfterUpdate(this);
+		model.AfterUpdate(this);
 	}
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.EntityService#deleteEntity(org.yaen.starter.common.data.entities.BaseEntity)
+	 * @see org.yaen.starter.common.data.services.ModelService#deleteModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
-	public <T extends BaseEntity> void deleteEntity(T entity) throws Exception {
-		Assert.notNull(entity);
+	public <T extends BaseModel> void deleteModel(T model) throws Exception {
+		Assert.notNull(model);
 
 		// trigger before delete
-		entity.BeforeDelete(this);
+		model.BeforeDelete(this);
 
 		// get another po
-		AnotherPO po = new AnotherPO(entity);
+		AnotherEntity po = new AnotherEntity(model);
 
 		// create table if not exists
 		this.CreateTable(po);
@@ -302,9 +302,9 @@ public class OneEntityService implements EntityService {
 		BaseElement old;
 
 		{
-			old = (BaseElement) entity.clone();
+			old = (BaseElement) model.clone();
 
-			Boolean exists = this.innerSelectEntity(old, po);
+			Boolean exists = this.innerSelectModel(old, po);
 
 			if (!exists) {
 				// not exists, throw
@@ -321,7 +321,7 @@ public class OneEntityService implements EntityService {
 		}
 
 		// trigger after delete
-		entity.AfterDelete(this);
+		model.AfterDelete(this);
 	}
 
 }

@@ -3,8 +3,8 @@ package org.yaen.starter.common.dal.mappers;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.yaen.starter.common.data.pos.MyDescribePO;
-import org.yaen.starter.common.data.pos.OnePO;
+import org.yaen.starter.common.data.entities.MyDescribeEntity;
+import org.yaen.starter.common.data.entities.OneEntity;
 
 /**
  * zero mapper for table create
@@ -21,7 +21,7 @@ public interface ZeroMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public int createTable(OnePO po) throws Exception;
+	public int createTable(OneEntity po) throws Exception;
 
 	/**
 	 * get table columns info by given table name
@@ -30,7 +30,7 @@ public interface ZeroMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MyDescribePO> describeTable(OnePO po) throws Exception;
+	public List<MyDescribeEntity> describeTable(OneEntity po) throws Exception;
 
 	/**
 	 * add given column, usually is in the last
@@ -39,7 +39,7 @@ public interface ZeroMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public int addColumn(OnePO po) throws Exception;
+	public int addColumn(OneEntity po) throws Exception;
 
 	/**
 	 * modify given column, usually is in the last
@@ -48,6 +48,6 @@ public interface ZeroMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public int modifyColumn(OnePO po) throws Exception;
+	public int modifyColumn(OneEntity po) throws Exception;
 
 }

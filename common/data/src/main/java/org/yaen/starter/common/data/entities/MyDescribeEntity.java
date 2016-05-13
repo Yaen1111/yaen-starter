@@ -1,19 +1,19 @@
 /**
  * 
  */
-package org.yaen.starter.common.data.pos;
+package org.yaen.starter.common.data.entities;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * describe po for mysql desc result
+ * describe entity for mysql desc result
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */
 @Getter
 @Setter
-public class MyDescribePO {
+public class MyDescribeEntity {
 
 	private String myField;
 

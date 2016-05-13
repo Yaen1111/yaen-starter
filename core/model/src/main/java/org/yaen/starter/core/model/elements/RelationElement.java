@@ -7,10 +7,10 @@ import java.util.Date;
 
 import org.springframework.util.Assert;
 import org.yaen.starter.common.data.annotations.OneData;
-import org.yaen.starter.common.data.entities.BaseEntity;
-import org.yaen.starter.common.data.entities.RelationEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.common.data.services.EntityService;
+import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.common.data.models.RelationModel;
+import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.DateUtil;
 
 import lombok.AccessLevel;
@@ -24,7 +24,7 @@ import lombok.ToString;
  * @author Yaen 2016年1月4日下午8:40:03
  */
 @ToString(callSuper = true)
-public abstract class RelationElement extends BaseElement implements RelationEntity {
+public abstract class RelationElement extends BaseElement implements RelationModel {
 	private static final long serialVersionUID = -8496063090342655991L;
 
 	/**
@@ -47,13 +47,13 @@ public abstract class RelationElement extends BaseElement implements RelationEnt
 	 * the from entity, usually is the child
 	 */
 	@Getter
-	private BaseEntity fromEntity;
+	private BaseModel fromEntity;
 
 	/**
 	 * the to entity, usually is the parent
 	 */
 	@Getter
-	private BaseEntity toEntity;
+	private BaseModel toEntity;
 
 	/**
 	 * the date from, if not set, use now
@@ -77,7 +77,7 @@ public abstract class RelationElement extends BaseElement implements RelationEnt
 	 * @param fromEntity
 	 * @param toEntity
 	 */
-	public RelationElement(BaseEntity fromEntity, BaseEntity toEntity) {
+	public RelationElement(BaseModel fromEntity, BaseModel toEntity) {
 		super();
 
 		Assert.notNull(fromEntity);
@@ -93,19 +93,19 @@ public abstract class RelationElement extends BaseElement implements RelationEnt
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.elements.BaseElement#AfterSelect(org.yaen.spring.common.services.EntityService)
+	 * @see org.yaen.starter.core.model.elements.BaseElement#AfterSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public void AfterSelect(EntityService service) throws Exception {
+	public void AfterSelect(ModelService service) throws Exception {
 		super.AfterSelect(service);
 
 		// select element
 		if (this.fromId > 0) {
-			service.selectEntity(this.fromEntity, this.fromId);
+			service.selectModel(this.fromEntity, this.fromId);
 		}
 
 		if (this.toId > 0) {
-			service.selectEntity(this.toEntity, this.toId);
+			service.selectModel(this.toEntity, this.toId);
 		}
 	}
 
@@ -113,7 +113,7 @@ public abstract class RelationElement extends BaseElement implements RelationEnt
 	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeInsert()
 	 */
 	@Override
-	public void BeforeInsert(EntityService service) throws Exception {
+	public void BeforeInsert(ModelService service) throws Exception {
 		super.BeforeInsert(service);
 
 		// set date from to now if not given

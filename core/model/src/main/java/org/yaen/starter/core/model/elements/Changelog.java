@@ -9,7 +9,7 @@ import org.yaen.starter.common.data.annotations.OneCopy;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.common.data.services.EntityService;
+import org.yaen.starter.common.data.services.ModelService;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -83,10 +83,10 @@ public class Changelog extends BaseElement {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeInsert(org.yaen.starter.common.data.services.EntityService)
+	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public void BeforeInsert(EntityService service) throws Exception {
+	public void BeforeInsert(ModelService service) throws Exception {
 		super.BeforeInsert(service);
 
 		// set update date
@@ -95,19 +95,19 @@ public class Changelog extends BaseElement {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeUpdate(org.yaen.starter.common.data.services.EntityService)
+	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public void BeforeUpdate(EntityService service) throws Exception {
+	public void BeforeUpdate(ModelService service) throws Exception {
 		throw new Exception("change document can not update");
 	}
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeDelete(org.yaen.starter.common.data.services.EntityService)
+	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeDelete(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public void BeforeDelete(EntityService service) throws Exception {
+	public void BeforeDelete(ModelService service) throws Exception {
 		throw new Exception("change document can not delete");
 	}
 
