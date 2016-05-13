@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.test.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +12,7 @@ import org.yaen.starter.core.model.elements.SubCode;
  * @author Yaen 2015年12月15日下午1:00:19
  */
 @ContextConfiguration(locations = { "classpath:spring/test-service.xml" })
-public class ElementTester extends AbstractJUnit4SpringContextTests {
-	//
-	// @Autowired
-	// private ElementMapper mapper;
+public class OneTester extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
 	private EntityService service;

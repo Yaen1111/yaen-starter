@@ -33,7 +33,7 @@
 		<shiro.version>1.2.3</shiro.version>
 		<guava.version>18.0</guava.version>
 		<poi.version>3.12</poi.version>
-		<lucene.version>5.0.0</lucene.version>
+		<lucene.version>4.8.0</lucene.version>
 		<assertj.version>1.6.1</assertj.version>
 		<freemarker.version>2.3.20</freemarker.version>
 		<junit.version>4.12</junit.version>
@@ -907,56 +907,6 @@
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
 				<version>1.8.1</version>
-			</dependency>
-
-			<!-- 3rd party jar -->
-			<dependency>
-				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc14</artifactId>
-				<version>${oracle.driver.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>bitwalker</groupId>
-				<artifactId>UserAgentUtils</artifactId>
-				<version>1.13</version>
-			</dependency>
-			<dependency>
-				<groupId>com.cloopen</groupId>
-				<artifactId>rest</artifactId>
-				<version>2.6.3</version>
-			</dependency>
-
-			<!--微信支付app -->
-			<dependency>
-				<groupId>org.xmlpull</groupId>
-				<artifactId>xmlpull</artifactId>
-				<version>1.1.4</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.tencent</groupId>
-				<artifactId>tencent</artifactId>
-				<version>1.1.0</version>
-			</dependency>
-
-			<!-- ＱＱ第三方登录jar包 -->
-			<dependency>
-				<groupId>com.qq</groupId>
-				<artifactId>qq</artifactId>
-				<version>1.1.0</version>
-			</dependency>
-
-			<!--二维码生成工具 -->
-			<dependency>
-				<groupId>com.swetake</groupId>
-				<artifactId>swetake</artifactId>
-				<version>0.0.1</version>
-			</dependency>
-			<dependency>
-				<groupId>jasperreport</groupId>
-				<artifactId>jasperreport-theme</artifactId>
-				<version>5.2.0</version>
 			</dependency>
 
 		</dependencies>

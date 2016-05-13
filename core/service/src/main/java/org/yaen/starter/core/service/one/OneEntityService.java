@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.core.service.elements;
+package org.yaen.starter.core.service.one;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -29,12 +29,12 @@ import org.yaen.starter.core.model.elements.BaseElement;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 /**
- * element entity service for most operation
+ * one entity service for most operation
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
 @Service
-public class ElementEntityService implements EntityService {
+public class OneEntityService implements EntityService {
 
 	@Autowired
 	private OneMapper oneMapper;

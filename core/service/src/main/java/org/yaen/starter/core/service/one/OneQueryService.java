@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.core.service.elements;
+package org.yaen.starter.core.service.one;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,12 +23,12 @@ import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.StringUtil;
 
 /**
- * element event service for most operation
+ * one event service for most operation
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
 @Service
-public class ElementQueryService implements QueryService {
+public class OneQueryService implements QueryService {
 
 	@Autowired
 	private QueryMapper mapper;
