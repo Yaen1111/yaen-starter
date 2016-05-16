@@ -3,7 +3,7 @@
 <configuration>
 	<!-- 配置插件 -->
 	<properties>
-		<property name="dialect" value="${jdbc.dialect}" />
-		<property name="dataBaseType" value="${jdbc.dataBaseType}" />
+		<property name="dialect" value="${config.jdbc.dialect}" />
+		<property name="dataBaseType" value="${config.jdbc.dataBaseType}" />
 	</properties>
 </configuration>

@@ -6,26 +6,16 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+	<!-- only called by starter-only project, others should ignore this one -->
+
 	<!-- allow annotation like @Service -->
 	<context:annotation-config />
 
 	<!-- auto load config -->
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
 		lazy-init="false">
-		<property name="order" value="1"></property>
-		<property name="ignoreUnresolvablePlaceholders" value="true"></property>
-		<property name="ignoreResourceNotFound" value="true"></property>
 		<property name="location">
-			<value>classpath*:/config/jdbc.properties</value>
-		</property>
-	</bean>
-
-	<!-- use default if not given, usefull for starter only project -->
-	<bean id="propertyConfigurerDefault" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-		lazy-init="false">
-		<property name="order" value="9"></property>
-		<property name="location">
-			<value>classpath:/config/jdbc-default.properties</value>
+			<value>classpath:/config/jdbc.properties</value>
 		</property>
 	</bean>
 
@@ -63,18 +53,13 @@
 
 	<!-- MyBatis配置 -->
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+		<property name="configLocation" value="classpath:/config/mybatis-config.xml"></property>
 		<property name="dataSource" ref="dataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="org.yaen.starter.common.dal.models" />
+		<property name="typeAliasesPackage" value="org.yaen.starter.common.dal.entities" />
 		<!-- 显式指定Mapper文件位置 -->
-		<property name="mapperLocations" value="classpath*:mappers/*Mapper.xml" />
+		<property name="mapperLocations" value="classpath*:/mappers/*Mapper.xml" />
 	</bean>
-
-	<!-- 事务管理器配置 <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> <property 
-		name="dataSource" ref="dataSource" /> </bean> -->
-
-	<!-- 使用annotation定义事务 <tx:annotation-driven transaction-manager="transactionManager" /> -->
 
 	<!-- 扫描basePackage下所有接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

@@ -7,6 +7,8 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
+			<!-- for starter only project, need starter-*.xml -->
+			classpath*:/spring/starter-*.xml,
 			classpath*:/spring/common-*.xml,
 			classpath*:/spring/core-*.xml,
 			classpath*:/spring/biz-*.xml

@@ -918,8 +918,8 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>**/*.xml</include>
-					<include>config/jdbc-default.properties</include>
+					<include>spring/**/*.*</include>
+					<include>config/**/*.*</include>
 				</includes>
 				<filtering>true</filtering>
 			</resource>
@@ -930,7 +930,8 @@
 					<include>**/*.*</include>
 				</includes>
 				<excludes>
-					<exclude>**/*.xml</exclude>
+					<exclude>spring/**/*.*</exclude>
+					<exclude>config/**/*.*</exclude>
 				</excludes>
 				<filtering>false</filtering>
 			</resource>
