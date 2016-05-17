@@ -4,17 +4,17 @@
 package org.yaen.starter.common.data.exceptions;
 
 /**
- * biz(business) layer exception
+ * core layer exception
  * 
  * @author Yaen 2016年1月13日下午7:31:52
  */
-public class BizException extends Exception {
-	private static final long serialVersionUID = -4511287732017780755L;
-
+public class CoreException extends Exception {
+	private static final long serialVersionUID = -7710308700640697529L;
+	
 	/**
 	 * create an empty biz exception
 	 */
-	public BizException() {
+	public CoreException() {
 		super();
 	}
 
@@ -24,7 +24,7 @@ public class BizException extends Exception {
 	 * @param enableSuppression
 	 * @param writableStackTrace
 	 */
-	public BizException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public CoreException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
@@ -32,21 +32,21 @@ public class BizException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public BizException(String message, Throwable cause) {
+	public CoreException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
-	public BizException(String message) {
+	public CoreException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public BizException(Throwable cause) {
+	public CoreException(Throwable cause) {
 		super(cause);
 	}
 

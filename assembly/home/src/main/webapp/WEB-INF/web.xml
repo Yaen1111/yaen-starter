@@ -7,11 +7,14 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			<!-- for starter only project, need starter-*.xml -->
-			classpath*:/spring/starter-*.xml,
 			classpath*:/spring/common-*.xml,
 			classpath*:/spring/core-*.xml,
-			classpath*:/spring/biz-*.xml
+			classpath*:/spring/biz-*.xml,
+			classpath*:/spring/dubbo-*.xml,
+			<!-- for starter only project, need starter-common-*.xml -->
+			classpath*:/spring/starter-common-*.xml
+			<!-- for starter only project, need starter-dubbo-*.xml -->
+			<!-- classpath*:/spring/starter-dubbo-*.xml -->
 		</param-value>
 	</context-param>
 

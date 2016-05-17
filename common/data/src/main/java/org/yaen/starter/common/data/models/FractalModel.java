@@ -11,8 +11,8 @@ package org.yaen.starter.common.data.models;
 public interface FractalModel extends BaseModel {
 
 	/**
-	 * get the parent entity
+	 * get the base model
 	 */
-	public BaseModel getParent();
+	public BaseModel getBase();
 
 }

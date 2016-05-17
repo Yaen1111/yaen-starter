@@ -20,11 +20,11 @@ import org.yaen.starter.common.data.entities.MyDescribeEntity;
 import org.yaen.starter.common.data.entities.OneColumnEntity;
 import org.yaen.starter.common.data.entities.OneEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.common.data.exceptions.BizException;
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.one.BaseOne;
+import org.yaen.starter.core.model.one.OneModel;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
@@ -43,8 +43,7 @@ public class OneModelService implements ModelService {
 	private ZeroMapper zeroMapper;
 
 	/**
-	 * create table if not exists, or alter table if columns differs, using
-	 * given one entity
+	 * create table if not exists, or alter table if columns differs, using given one entity
 	 * 
 	 * @throws Exception
 	 */
@@ -102,8 +101,8 @@ public class OneModelService implements ModelService {
 							}
 
 							if (!StringUtil.like(type, describe.getMyType())) {
-								// TODO
-								//entity.setModifyFieldName(entry.getKey());
+								// column type changed, try to modify
+								entity.setModifiedFieldName(entry.getKey());
 								zeroMapper.modifyColumn(entity);
 							}
 						}
@@ -114,8 +113,7 @@ public class OneModelService implements ModelService {
 
 				if (!exists) {
 					// no column, try to add one
-					// TODO
-					//entity.setAddFieldName(entry.getKey());
+					entity.setAddedFieldName(entry.getKey());
 					zeroMapper.addColumn(entity);
 				}
 			} // for
@@ -180,7 +178,21 @@ public class OneModelService implements ModelService {
 
 		if (!exists) {
 			// not exists
-			throw new BizException("data not exist");
+			throw new CoreException("data not exist");
+		}
+	}
+
+	/**
+	 * @see org.yaen.starter.common.data.services.ModelService#trySelectModel(org.yaen.starter.common.data.models.BaseModel,
+	 *      long)
+	 */
+	@Override
+	public <T extends BaseModel> boolean trySelectModel(T model, long id) throws Exception {
+		try {
+			this.selectModel(model, id);
+			return true;
+		} catch (CoreException ce) {
+			return false;
 		}
 	}
 
@@ -230,7 +242,7 @@ public class OneModelService implements ModelService {
 
 		if (ret <= 0) {
 			// execute fail
-			throw new BizException("insert failed");
+			throw new CoreException("insert failed");
 		}
 
 		// id already set into entity and bridged to model
@@ -268,7 +280,7 @@ public class OneModelService implements ModelService {
 
 			if (!exists) {
 				// already exists, throw
-				throw new BizException("data not exists");
+				throw new CoreException("data not exists");
 			}
 		}
 
@@ -277,7 +289,7 @@ public class OneModelService implements ModelService {
 
 		if (ret <= 0) {
 			// execute fail
-			throw new BizException("update failed");
+			throw new CoreException("update failed");
 		}
 
 		// trigger after update
@@ -302,16 +314,16 @@ public class OneModelService implements ModelService {
 		this.CreateTable(entity);
 
 		// try get old one
-		BaseOne old;
+		OneModel old;
 
 		{
-			old = (BaseOne) model.clone();
+			old = (OneModel) model.clone();
 
 			Boolean exists = this.innerSelectModel(old, entity);
 
 			if (!exists) {
 				// not exists, throw
-				throw new BizException("data not exists");
+				throw new CoreException("data not exists");
 			}
 		}
 
@@ -320,7 +332,7 @@ public class OneModelService implements ModelService {
 
 		if (ret <= 0) {
 			// execute fail
-			throw new BizException("delete failed");
+			throw new CoreException("delete failed");
 		}
 
 		// trigger after delete

@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.yaen.starter.common.data.annotations.OneData;
+import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.Virtual;
 
@@ -16,8 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * one entity(persistent object) for all crud operation, all entity has to inherit this
- * one
+ * one entity(persistent object) for all crud operation, all entity has to inherit this one
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */
@@ -29,11 +29,13 @@ public class OneEntity implements Serializable {
 	 */
 	@Getter
 	@Setter
+	@OneIgnore
 	private long id;
 
 	/**
 	 * the table name, if null, use class name instead
 	 */
+	@OneIgnore
 	protected String tableName;
 
 	/**
@@ -66,6 +68,7 @@ public class OneEntity implements Serializable {
 	/**
 	 * columns, with key of field name
 	 */
+	@OneIgnore
 	protected Map<String, OneColumnEntity> columns;
 
 	/**
@@ -81,7 +84,7 @@ public class OneEntity implements Serializable {
 
 		try {
 			// try get column info
-			this.getOneColumnInfo(col, this, this.getClass());
+			this.fetchOneColumnInfo(col, this, this.getClass());
 		} catch (Exception ex) {
 			// just throw out
 			throw ex;
@@ -98,13 +101,30 @@ public class OneEntity implements Serializable {
 	}
 
 	/**
-	 * get one columns
+	 * the modified field name
+	 */
+	@Getter
+	@Setter
+	@OneIgnore
+	private String modifiedFieldName;
+
+	/**
+	 * the added field name
+	 */
+	@Getter
+	@Setter
+	@OneIgnore
+	private String addedFieldName;
+
+	/**
+	 * fetch one column info
 	 * 
 	 * @param model
 	 * @param one
 	 * @param clazz
 	 */
-	protected void getOneColumnInfo(Map<String, OneColumnEntity> columns, Object one, Class<?> clazz) throws Exception {
+	protected void fetchOneColumnInfo(Map<String, OneColumnEntity> columns, Object one, Class<?> clazz)
+			throws Exception {
 		if (clazz == null)
 			return;
 
@@ -112,7 +132,7 @@ public class OneEntity implements Serializable {
 		Class<?> superclazz = clazz.getSuperclass();
 
 		if (superclazz != null) {
-			this.getOneColumnInfo(columns, one, superclazz);
+			this.fetchOneColumnInfo(columns, one, superclazz);
 		}
 
 		// get all private fields
@@ -124,34 +144,39 @@ public class OneEntity implements Serializable {
 
 			// get all element annotation
 			OneData data = field.getAnnotation(OneData.class);
+			OneIgnore ignore = field.getAnnotation(OneIgnore.class);
 
-			// add columns
-			if (data != null) {
-				// add data field
-				String column_name = data.FieldName();
-				if ((column_name == null || column_name.trim().isEmpty())) {
-					column_name = field.getName().toUpperCase();
+			// ignore
+			if (ignore == null) {
+
+				// add columns
+				if (data != null) {
+					// add data field
+					String column_name = data.FieldName();
+					if ((column_name == null || column_name.trim().isEmpty())) {
+						column_name = field.getName().toUpperCase();
+					}
+
+					OneColumnEntity info = new OneColumnEntity();
+					info.setColumnName(column_name);
+					info.setValue(field.get(one));
+					info.setDataType(data.DataType());
+					info.setDataSize(data.DataSize());
+					info.setField(field);
+
+					columns.put(field.getName(), info);
+				} else {
+					// no data, use field name
+					String column_name = field.getName().toUpperCase();
+					OneColumnEntity info = new OneColumnEntity();
+					info.setColumnName(column_name);
+					info.setValue(field.get(one));
+					info.setField(field);
+
+					columns.put(field.getName(), info);
 				}
-
-				OneColumnEntity info = new OneColumnEntity();
-				info.setColumnName(column_name);
-				info.setValue(field.get(one));
-				info.setDataType(data.DataType());
-				info.setDataSize(data.DataSize());
-				info.setField(field);
-
-				columns.put(field.getName(), info);
-			} else {
-				// no data, use field name
-				String column_name = field.getName().toUpperCase();
-				OneColumnEntity info = new OneColumnEntity();
-				info.setColumnName(column_name);
-				info.setValue(field.get(one));
-				info.setField(field);
-
-				columns.put(field.getName(), info);
-			}
-		}
+			} // ignore
+		} // for
 	}
 
 }

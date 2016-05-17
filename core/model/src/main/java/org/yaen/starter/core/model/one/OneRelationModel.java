@@ -5,12 +5,14 @@ package org.yaen.starter.core.model.one;
 
 import java.util.Date;
 
-import org.springframework.util.Assert;
 import org.yaen.starter.common.data.annotations.OneData;
+import org.yaen.starter.common.data.annotations.OneIgnore;
+import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.models.RelationModel;
 import org.yaen.starter.common.data.services.ModelService;
+import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 
 import lombok.AccessLevel;
@@ -24,7 +26,8 @@ import lombok.ToString;
  * @author Yaen 2016年1月4日下午8:40:03
  */
 @ToString(callSuper = true)
-public abstract class RelationOne extends BaseOne implements RelationModel {
+@OneTable(TableName = "ONE_RELATION")
+public class OneRelationModel extends OneModel implements RelationModel {
 	private static final long serialVersionUID = -8496063090342655991L;
 
 	/**
@@ -44,16 +47,18 @@ public abstract class RelationOne extends BaseOne implements RelationModel {
 	private long toId;
 
 	/**
-	 * the from entity, usually is the child
+	 * the from model, usually is the child
 	 */
 	@Getter
-	private BaseModel fromEntity;
+	@OneIgnore
+	private BaseModel fromModel;
 
 	/**
-	 * the to entity, usually is the parent
+	 * the to model, usually is the parent
 	 */
 	@Getter
-	private BaseModel toEntity;
+	@OneIgnore
+	private BaseModel toModel;
 
 	/**
 	 * the date from, if not set, use now
@@ -74,26 +79,26 @@ public abstract class RelationOne extends BaseOne implements RelationModel {
 	/**
 	 * construct a relation entity
 	 * 
-	 * @param fromEntity
-	 * @param toEntity
+	 * @param fromModel
+	 * @param toModel
 	 */
-	public RelationOne(BaseModel fromEntity, BaseModel toEntity) {
+	public OneRelationModel(OneModel fromModel, OneModel toModel) {
 		super();
 
-		Assert.notNull(fromEntity);
-		Assert.notNull(toEntity);
+		AssertUtil.notNull(fromModel);
+		AssertUtil.notNull(toModel);
 
 		// set object
-		this.fromEntity = fromEntity;
-		this.toEntity = toEntity;
+		this.fromModel = fromModel;
+		this.toModel = toModel;
 
 		// set id
-		this.fromId = this.fromEntity.getId();
-		this.toId = this.toEntity.getId();
+		this.fromId = this.fromModel.getId();
+		this.toId = this.toModel.getId();
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.one.BaseOne#AfterSelect(org.yaen.ModelService.common.services.EntityService)
+	 * @see org.yaen.starter.core.model.one.OneModel#AfterSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
 	public void AfterSelect(ModelService service) throws Exception {
@@ -101,16 +106,17 @@ public abstract class RelationOne extends BaseOne implements RelationModel {
 
 		// select element
 		if (this.fromId > 0) {
-			service.selectModel(this.fromEntity, this.fromId);
+			service.selectModel(this.fromModel, this.fromId);
 		}
 
 		if (this.toId > 0) {
-			service.selectModel(this.toEntity, this.toId);
+			service.selectModel(this.toModel, this.toId);
 		}
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeInsert()
+	 * 
+	 * @see org.yaen.starter.core.model.one.OneModel#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public void BeforeInsert(ModelService service) throws Exception {

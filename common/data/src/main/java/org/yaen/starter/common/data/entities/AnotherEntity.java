@@ -88,7 +88,7 @@ public class AnotherEntity extends OneEntity {
 
 		try {
 			// try get column info
-			this.getOneColumnInfo(col, this.another, this.another.getClass());
+			this.fetchOneColumnInfo(col, this.another, this.another.getClass());
 		} catch (Exception ex) {
 			// just throw out
 			throw ex;

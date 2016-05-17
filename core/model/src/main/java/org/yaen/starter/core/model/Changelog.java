@@ -10,7 +10,7 @@ import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.core.model.one.BaseOne;
+import org.yaen.starter.core.model.one.OneModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ import lombok.ToString;
  */
 @ToString(callSuper = true)
 @OneTable(TableName = "ARK_CHANGELOG")
-public class Changelog extends BaseOne {
+public class Changelog extends OneModel {
 	private static final long serialVersionUID = -606829448983274029L;
 
 	/**
@@ -37,7 +37,7 @@ public class Changelog extends BaseOne {
 	@Getter
 	@Setter
 	@OneCopy(Prefix = "BEFORE")
-	private BaseOne elementBefore;
+	private OneModel elementBefore;
 
 	/**
 	 * the element after change, if delete, null
@@ -45,7 +45,7 @@ public class Changelog extends BaseOne {
 	@Getter
 	@Setter
 	@OneCopy(Prefix = "AFTER")
-	private BaseOne elementAfter;
+	private OneModel elementAfter;
 
 	/**
 	 * the update date of the change document
@@ -84,7 +84,7 @@ public class Changelog extends BaseOne {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
+	 * @see org.yaen.starter.core.model.one.OneModel#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public void BeforeInsert(ModelService service) throws Exception {
@@ -96,7 +96,7 @@ public class Changelog extends BaseOne {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
+	 * @see org.yaen.starter.core.model.one.OneModel#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public void BeforeUpdate(ModelService service) throws Exception {
@@ -105,7 +105,7 @@ public class Changelog extends BaseOne {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeDelete(org.yaen.starter.common.data.services.ModelService)
+	 * @see org.yaen.starter.core.model.one.OneModel#BeforeDelete(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public void BeforeDelete(ModelService service) throws Exception {

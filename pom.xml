@@ -10,6 +10,25 @@
 	<name>yaen-starter</name>
 	<description>yaen starter with spring framework 4.2 and jdk 1.8</description>
 
+	<modules>
+		<module>common</module>
+		<module>core</module>
+		<module>biz</module>
+		<module>web</module>
+		<module>test</module>
+	</modules>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<url>http://192.168.188.102:8081/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://192.168.188.102:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<properties>
 		<!-- enviourment default to local, related to properties file -->
 		<env>local</env>
@@ -83,7 +102,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>
@@ -916,24 +934,22 @@
 		<resources>
 			<!-- resources with filter -->
 			<resource>
+				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>spring/**/*.*</include>
-					<include>config/**/*.*</include>
 				</includes>
-				<filtering>true</filtering>
 			</resource>
 			<!-- resources without filter -->
 			<resource>
+				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>**/*.*</include>
 				</includes>
 				<excludes>
 					<exclude>spring/**/*.*</exclude>
-					<exclude>config/**/*.*</exclude>
 				</excludes>
-				<filtering>false</filtering>
 			</resource>
 		</resources>
 		<pluginManagement>
@@ -1033,24 +1049,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<modules>
-		<module>common</module>
-		<module>core</module>
-		<module>biz</module>
-		<module>web</module>
-		<module>test</module>
-	</modules>
-
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<url>http://192.168.188.102:8081/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<url>http://192.168.188.102:8081/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 </project>

@@ -9,10 +9,17 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd 
 		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<!-- allow annotation like @Service -->
-	<context:annotation-config />
+	<!-- dubbo registry server address, allow multi-cast -->
+	<dubbo:registry address="${registry.address}" />
 
-	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.starter.biz.service" />
+	<!-- this is dubbo consumer, care retries -->
+	<dubbo:consumer check="false" timeout="6000" retries="0" />
+
+
+	<!-- the follow is dubbo client, the id and interface should be same as provider -->
+
+	<!-- handshake client -->
+	<!-- <dubbo:reference id="handshakeService" interface="org.yaen.starter.common.facade.HandshakeService" /> -->
+
 
 </beans>

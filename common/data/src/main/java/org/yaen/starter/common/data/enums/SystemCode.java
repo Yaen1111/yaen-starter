@@ -10,10 +10,10 @@ import lombok.Getter;
  * 
  * <pre>
  * format: ABCCDD
- * A: code type: E = error, W = warning, M = message, T = type enum
- * B: business: 0 = framework/common, 9 = user define
- * CC: code group
- * DD: code item
+ * A: code type, E = error, W = warning, M = message, T = type enum
+ * B: system type, 0 = default/starter/common, 9 = user define
+ * CC: code group, can be letter
+ * DD: code item, can be letter
  * </pre>
  * 
  * @author Yaen 2016年1月13日上午11:52:48
@@ -45,7 +45,7 @@ public enum SystemCode {
 	 * system type
 	 */
 	/** gender */
-	T00001("MALE"), T00002("FEMALE"), T00099("UNKNOWN"),
+	T00001("MALE"), T00002("FEMALE"), T00000("UNKNOWN"),
 
 	;
 

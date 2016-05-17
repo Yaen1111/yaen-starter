@@ -6,6 +6,7 @@ package org.yaen.starter.core.model.one;
 import java.util.Date;
 
 import org.yaen.starter.common.data.annotations.OneData;
+import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.Virtual;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.models.BaseModel;
@@ -17,12 +18,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * base element for elements
+ * one model for base objects
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
-@ToString
-public abstract class BaseOne implements BaseModel {
+@ToString(callSuper = true)
+@OneTable(TableName = "ONE")
+public class OneModel implements BaseModel {
 	private static final long serialVersionUID = 101L;
 
 	/**
@@ -63,12 +65,12 @@ public abstract class BaseOne implements BaseModel {
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.TEXT, FieldName = "SYS_PLOG")
-	private Date plog;
+	private String plog;
 
 	/**
 	 * constructor
 	 */
-	public BaseOne() {
+	public OneModel() {
 		this.id = 0;
 	}
 
@@ -101,7 +103,7 @@ public abstract class BaseOne implements BaseModel {
 
 	@Virtual
 	public void BeforeUpdate(ModelService service) throws Exception {
-		// set udate
+		// set udate date
 		this.udate = DateUtil.getNow();
 	}
 

@@ -15,13 +15,23 @@ import org.yaen.starter.common.data.models.BaseModel;
 public interface ModelService {
 
 	/**
-	 * select model by id
+	 * select model by id, and update model object with data
 	 * 
 	 * @param model
 	 * @param id
 	 * @throws Exception
 	 */
 	public <T extends BaseModel> void selectModel(T model, long id) throws Exception;
+
+	/**
+	 * try select model, return false if not exists
+	 * 
+	 * @param model
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public <T extends BaseModel> boolean trySelectModel(T model, long id) throws Exception;
 
 	/**
 	 * select model list by given id list

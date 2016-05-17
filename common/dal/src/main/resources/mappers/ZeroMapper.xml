@@ -33,7 +33,7 @@
 		ALTER TABLE `${tableName}`
 		ADD COLUMN
 		<foreach collection="columns" index="index" item="info" open="" separator="" close="">
-			<if test="index == addFieldName">
+			<if test="index == addedFieldName">
 				`${info.columnName}`
 				${info.dataType}
 				<if test="info.dataSize !=0">(${info.dataSize})</if>
@@ -46,7 +46,7 @@
 		ALTER TABLE `${tableName}`
 		MODIFY COLUMN
 		<foreach collection="columns" index="index" item="info" open="" separator="" close="">
-			<if test="index == modifyFieldName">
+			<if test="index == modifiedFieldName">
 				`${info.columnName}`
 				${info.dataType}
 				<if test="info.dataSize !=0">(${info.dataSize})</if>

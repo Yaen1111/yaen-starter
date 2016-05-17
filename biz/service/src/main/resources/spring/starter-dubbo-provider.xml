@@ -9,10 +9,23 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd 
 		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-	<!-- allow annotation like @Service -->
-	<context:annotation-config />
+	<!-- dubbo name -->
+	<dubbo:application name="starterDubboProvider" />
 
-	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.starter.biz.service" />
+	<!-- dubbo registry server address, allow multi cast -->
+	<dubbo:registry address="${registry.address}" />
+
+	<!-- this is dubbo provider -->
+	<dubbo:provider timeout="6000" />
+
+	<!-- dubbo provider local port -->
+	<dubbo:protocol name="dubbo" port="${dubbo.port}" />
+
+
+	<!-- the follow is dubbo service -->
+
+	<!-- handshake service -->
+	<bean id="HandshakeService" class="org.yaen.starter.biz.service.impl.HandshakeServiceImpl" />
+	<dubbo:service interface="org.yaen.starter.common.facade.HandshakeService" ref="HandshakeService" />
 
 </beans>

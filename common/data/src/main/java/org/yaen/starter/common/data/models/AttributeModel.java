@@ -11,8 +11,8 @@ package org.yaen.starter.common.data.models;
 public interface AttributeModel extends BaseModel {
 
 	/**
-	 * get the base entity
+	 * get the parent entity
 	 */
-	public BaseModel getBase();
+	public BaseModel getParent();
 
 }

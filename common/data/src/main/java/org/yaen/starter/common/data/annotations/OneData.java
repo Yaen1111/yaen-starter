@@ -18,10 +18,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface OneData {
-	
+
 	/**
 	 * the data field/column name, if not set, default to the field name
-	 * 
 	 * 
 	 * @return
 	 */
@@ -30,17 +29,15 @@ public @interface OneData {
 	/**
 	 * the datatype, usually int, bigint, string/varchar, date, time, datetime, etc
 	 * 
-	 * 
 	 * @return
 	 */
 	String DataType() default "STRING";
-	
+
 	/**
 	 * the data size if need, 0 for default
-	 * 
 	 * 
 	 * @return
 	 */
 	int DataSize() default 0;
-	
+
 }

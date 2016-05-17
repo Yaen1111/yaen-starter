@@ -1,21 +1,28 @@
-package org.yaen.starter.test.service;
+package org.yaen.starter.test.service.all;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.yaen.starter.biz.shared.objects.PartyDTO;
+import org.yaen.starter.biz.shared.objects.UserDTO;
+import org.yaen.starter.biz.shared.services.PartyService;
+import org.yaen.starter.biz.shared.services.UserService;
 import org.yaen.starter.common.data.exceptions.BizException;
-import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.core.model.SubCode;
+import org.yaen.starter.common.data.exceptions.CommonException;
+import org.yaen.starter.common.data.exceptions.CoreException;
 
 /**
  * 
  * @author Yaen 2015年12月15日下午1:00:19
  */
-@ContextConfiguration(locations = { "classpath:spring/test-service.xml" })
-public class OneTester extends AbstractJUnit4SpringContextTests {
+@ContextConfiguration(locations = { "classpath:/spring/test-service.xml" })
+public class AllTester extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
-	private ModelService service;
+	PartyService partyService;
+
+	@Autowired
+	UserService userService;
 
 	@org.junit.BeforeClass
 	public static void BeforeClass() {
@@ -41,38 +48,33 @@ public class OneTester extends AbstractJUnit4SpringContextTests {
 		System.out.println("------------");
 
 		try {
+			// create one party
+			PartyDTO dto = new PartyDTO();
+			dto.setPartyName("Linda");
+			dto.setPartyRoleType("admin2");
+			dto.setPartyType("PERSON");
 
-			SubCode code = new SubCode();
+			long partyid = partyService.RegisterNewParty(dto);
 
-			service.selectModel(code, 2);
+			System.out.println(partyid);
 
-			System.out.println("------------");
-			System.out.println("------------");
-			System.out.println(code);
-			System.out.println("------------");
-			System.out.println("------------");
+			// create user by given party
+			UserDTO dto2 = new UserDTO();
+			dto2.setUserID(partyid);
+			dto2.setUserName("Linda");
+			dto2.setPasswordSalt("123");
+			dto2.setPasswordHash("321");
 
-			code.setName("the4");
-			code.setTitle("ti6");
-			code.setIntvalue(556);
+			long userid = userService.RegisterNewUser(dto2);
 
-			service.updateModel(code);
+			System.out.println(userid);
 
-			System.out.println("update done");
-
-			code.setId(0);
-			code.setFamily("new");
-			service.insertModel(code);
-
-			System.out.println("insert done");
-
-			code.setId(3);
-			service.deleteModel(code);
-
-			System.out.println("delete done");
-
-		} catch (BizException cex) {
-			System.out.println(cex);
+		} catch (CommonException ex) {
+			System.out.println(ex);
+		} catch (CoreException ex) {
+			System.out.println(ex);
+		} catch (BizException ex) {
+			System.out.println(ex);
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
