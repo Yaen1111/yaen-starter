@@ -1,4 +1,4 @@
-package org.yaen.starter.common.util;
+package org.yaen.starter.common.util.utils;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;

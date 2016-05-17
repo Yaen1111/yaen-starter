@@ -1,12 +1,12 @@
 /**
  * 
  */
-package org.yaen.starter.core.model.elements;
+package org.yaen.starter.core.model;
 
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.core.model.elements.NameElement;
+import org.yaen.starter.core.model.NamedOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ import lombok.ToString;
  */
 @ToString(callSuper = true)
 @OneTable(TableName = "ARK_SUBCODE")
-public class SubCode extends NameElement {
+public class SubCode extends NamedOne {
 	private static final long serialVersionUID = -1638352121549503589L;
 
 	/**

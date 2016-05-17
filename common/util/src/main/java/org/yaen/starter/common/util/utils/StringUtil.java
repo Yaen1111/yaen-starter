@@ -1,4 +1,4 @@
-package org.yaen.starter.common.util;
+package org.yaen.starter.common.util.utils;
 
 import org.apache.commons.lang3.StringUtils;
 

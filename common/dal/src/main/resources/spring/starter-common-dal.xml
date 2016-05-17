@@ -11,14 +11,6 @@
 	<!-- allow annotation like @Service -->
 	<context:annotation-config />
 
-	<!-- auto load config -->
-	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-		lazy-init="false">
-		<property name="location">
-			<value>classpath:/config/jdbc.properties</value>
-		</property>
-	</bean>
-
 	<!-- scan for component like @Service -->
 	<context:component-scan base-package="org.yaen.starter.common.dal" />
 
@@ -53,7 +45,7 @@
 
 	<!-- MyBatis配置 -->
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="configLocation" value="classpath:/config/mybatis-config.xml"></property>
+		<property name="configLocation" value="classpath:/spring/mybatis-config.xml"></property>
 		<property name="dataSource" ref="dataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
 		<property name="typeAliasesPackage" value="org.yaen.starter.common.dal.entities" />

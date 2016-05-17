@@ -20,7 +20,7 @@ import org.yaen.starter.common.data.models.AttributeModel;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.models.RelationModel;
 import org.yaen.starter.common.data.services.QueryService;
-import org.yaen.starter.common.util.StringUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 
 /**
  * one event service for most operation

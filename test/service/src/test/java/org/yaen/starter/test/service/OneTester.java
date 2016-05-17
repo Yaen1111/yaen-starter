@@ -5,7 +5,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.core.model.elements.SubCode;
+import org.yaen.starter.core.model.SubCode;
 
 /**
  * 

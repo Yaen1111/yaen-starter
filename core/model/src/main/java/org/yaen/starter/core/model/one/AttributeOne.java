@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.core.model.elements;
+package org.yaen.starter.core.model.one;
 
 import org.springframework.util.Assert;
 import org.yaen.starter.common.data.annotations.OneData;
@@ -21,7 +21,7 @@ import lombok.ToString;
  * @author Yaen 2016年1月4日下午8:40:03
  */
 @ToString(callSuper = true)
-public abstract class AttributeElement extends BaseElement implements AttributeModel {
+public abstract class AttributeOne extends BaseOne implements AttributeModel {
 	private static final long serialVersionUID = -4376824168382204889L;
 
 	/**
@@ -43,7 +43,7 @@ public abstract class AttributeElement extends BaseElement implements AttributeM
 	 * 
 	 * @param base
 	 */
-	public AttributeElement(BaseModel base) {
+	public AttributeOne(BaseModel base) {
 		super();
 
 		Assert.notNull(base);
@@ -56,7 +56,7 @@ public abstract class AttributeElement extends BaseElement implements AttributeM
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.elements.BaseElement#AfterSelect(org.yaen.ModelService.common.services.EntityService)
+	 * @see org.yaen.starter.core.model.one.BaseOne#AfterSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
 	public void AfterSelect(ModelService service) throws Exception {

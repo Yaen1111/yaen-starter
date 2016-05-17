@@ -23,8 +23,8 @@ import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.common.util.StringUtil;
-import org.yaen.starter.core.model.elements.BaseElement;
+import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.one.BaseOne;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
@@ -34,7 +34,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
  * @author Yaen 2016年1月4日下午8:35:55
  */
 @Service
-public class OneEntityService implements ModelService {
+public class OneModelService implements ModelService {
 
 	@Autowired
 	private OneMapper oneMapper;
@@ -43,17 +43,18 @@ public class OneEntityService implements ModelService {
 	private ZeroMapper zeroMapper;
 
 	/**
-	 * create table if not exists, or alter table if columns differs
+	 * create table if not exists, or alter table if columns differs, using
+	 * given one entity
 	 * 
 	 * @throws Exception
 	 */
-	protected void CreateTable(OneEntity po) throws Exception {
+	protected void CreateTable(OneEntity entity) throws Exception {
 
 		List<MyDescribeEntity> describes = null;
 
 		// describe table, if table not exists, throw exception
 		try {
-			describes = zeroMapper.describeTable(po);
+			describes = zeroMapper.describeTable(entity);
 		} catch (BadSqlGrammarException ex) {
 			Throwable ex2 = ex.getCause();
 
@@ -68,13 +69,13 @@ public class OneEntityService implements ModelService {
 		// check table exists
 		if (describes == null) {
 			// not exists, create new table
-			zeroMapper.createTable(po);
+			zeroMapper.createTable(entity);
 
 		} else {
 
 			// exists, try to check column type and missed column
 			// loop every element, and add/mod if not suitable
-			for (Entry<String, OneColumnEntity> entry : po.getColumns().entrySet()) {
+			for (Entry<String, OneColumnEntity> entry : entity.getColumns().entrySet()) {
 				boolean exists = false;
 
 				for (MyDescribeEntity describe : describes) {
@@ -101,8 +102,9 @@ public class OneEntityService implements ModelService {
 							}
 
 							if (!StringUtil.like(type, describe.getMyType())) {
-								// model.setModifyFieldName(entry.getKey());
-								zeroMapper.modifyColumn(po);
+								// TODO
+								//entity.setModifyFieldName(entry.getKey());
+								zeroMapper.modifyColumn(entity);
 							}
 						}
 
@@ -112,8 +114,9 @@ public class OneEntityService implements ModelService {
 
 				if (!exists) {
 					// no column, try to add one
-					// model.setAddFieldName(entry.getKey());
-					zeroMapper.addColumn(po);
+					// TODO
+					//entity.setAddFieldName(entry.getKey());
+					zeroMapper.addColumn(entity);
 				}
 			} // for
 		} // describes == null
@@ -127,10 +130,10 @@ public class OneEntityService implements ModelService {
 	 * @param id
 	 * @throws Exception
 	 */
-	protected <T extends BaseModel> boolean innerSelectModel(T model, OneEntity po) throws Exception {
+	protected <T extends BaseModel> boolean innerSelectModel(T model, OneEntity entity) throws Exception {
 
 		// call mapper
-		Map<String, Object> map = oneMapper.selectByID(po);
+		Map<String, Object> map = oneMapper.selectByID(entity);
 
 		// check existence
 		if (map == null) {
@@ -138,10 +141,10 @@ public class OneEntityService implements ModelService {
 		}
 
 		// set id
-		model.setId(po.getId());
+		model.setId(entity.getId());
 
 		// map column to field
-		Map<String, OneColumnEntity> columns = po.getColumns();
+		Map<String, OneColumnEntity> columns = entity.getColumns();
 
 		for (String key : columns.keySet()) {
 			OneColumnEntity info = columns.get(key);
@@ -165,15 +168,15 @@ public class OneEntityService implements ModelService {
 	public <T extends BaseModel> void selectModel(T model, long id) throws Exception {
 		Assert.notNull(model);
 
-		// get another po
-		AnotherEntity po = new AnotherEntity(model);
+		// get another entity
+		AnotherEntity entity = new AnotherEntity(model);
 
-		this.CreateTable(po);
+		this.CreateTable(entity);
 
 		// set given id
-		po.setId(id);
+		entity.setId(id);
 
-		boolean exists = this.innerSelectModel(model, po);
+		boolean exists = this.innerSelectModel(model, entity);
 
 		if (!exists) {
 			// not exists
@@ -216,21 +219,21 @@ public class OneEntityService implements ModelService {
 		// trigger before insert
 		model.BeforeInsert(this);
 
-		// get another po
-		AnotherEntity po = new AnotherEntity(model);
+		// get another entity
+		AnotherEntity entity = new AnotherEntity(model);
 
 		// create table if not exists
-		this.CreateTable(po);
+		this.CreateTable(entity);
 
 		// insert the given element
-		int ret = oneMapper.insertByID(po);
+		int ret = oneMapper.insertByID(entity);
 
 		if (ret <= 0) {
 			// execute fail
 			throw new BizException("insert failed");
 		}
 
-		// id already set into po and bridged to model
+		// id already set into entity and bridged to model
 
 		// trigger after insert
 		model.AfterInsert(this);
@@ -249,11 +252,11 @@ public class OneEntityService implements ModelService {
 		// trigger before update
 		model.BeforeUpdate(this);
 
-		// get another po
-		AnotherEntity po = new AnotherEntity(model);
+		// get another entity
+		AnotherEntity entity = new AnotherEntity(model);
 
 		// create table if not exists
-		this.CreateTable(po);
+		this.CreateTable(entity);
 
 		// try get old one
 		BaseModel old;
@@ -261,7 +264,7 @@ public class OneEntityService implements ModelService {
 		{
 			old = (BaseModel) model.clone();
 
-			Boolean exists = this.innerSelectModel(old, po);
+			Boolean exists = this.innerSelectModel(old, entity);
 
 			if (!exists) {
 				// already exists, throw
@@ -270,7 +273,7 @@ public class OneEntityService implements ModelService {
 		}
 
 		// update the given element
-		int ret = oneMapper.updateByID(po);
+		int ret = oneMapper.updateByID(entity);
 
 		if (ret <= 0) {
 			// execute fail
@@ -292,19 +295,19 @@ public class OneEntityService implements ModelService {
 		// trigger before delete
 		model.BeforeDelete(this);
 
-		// get another po
-		AnotherEntity po = new AnotherEntity(model);
+		// get another entity
+		AnotherEntity entity = new AnotherEntity(model);
 
 		// create table if not exists
-		this.CreateTable(po);
+		this.CreateTable(entity);
 
 		// try get old one
-		BaseElement old;
+		BaseOne old;
 
 		{
-			old = (BaseElement) model.clone();
+			old = (BaseOne) model.clone();
 
-			Boolean exists = this.innerSelectModel(old, po);
+			Boolean exists = this.innerSelectModel(old, entity);
 
 			if (!exists) {
 				// not exists, throw
@@ -313,7 +316,7 @@ public class OneEntityService implements ModelService {
 		}
 
 		// delete the given element
-		int ret = oneMapper.deleteByID(po);
+		int ret = oneMapper.deleteByID(entity);
 
 		if (ret <= 0) {
 			// execute fail

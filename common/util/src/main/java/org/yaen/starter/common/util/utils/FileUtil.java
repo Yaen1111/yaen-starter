@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.common.util;
+package org.yaen.starter.common.util.utils;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

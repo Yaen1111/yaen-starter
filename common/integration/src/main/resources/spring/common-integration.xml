@@ -15,9 +15,6 @@
 	<!-- scan for component like @Service -->
 	<context:component-scan base-package="org.yaen.starter.common.integration" />
 
-	<!-- dubbo name -->
-	<!-- <dubbo:application name="starterDubboConsumer" /> -->
-
 	<!-- dubbo registry server address, allow multi-cast -->
 	<dubbo:registry address="${registry.address}" />
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.core.model.elements;
+package org.yaen.starter.core.model.one;
 
 import org.springframework.util.Assert;
 import org.yaen.starter.common.data.models.BaseModel;
@@ -17,7 +17,7 @@ import lombok.ToString;
  * @author Yaen 2016年1月4日下午8:35:55
  */
 @ToString
-public abstract class FractalElement extends BaseElement implements FractalModel {
+public abstract class FractalOne extends BaseOne implements FractalModel {
 	private static final long serialVersionUID = 3470410424680588725L;
 	
 	@Getter
@@ -26,7 +26,7 @@ public abstract class FractalElement extends BaseElement implements FractalModel
 	/**
 	 * fractal element
 	 */
-	public FractalElement(BaseModel parent) {
+	public FractalOne(BaseModel parent) {
 		Assert.notNull(parent);
 
 		this.parent = parent;
@@ -34,7 +34,7 @@ public abstract class FractalElement extends BaseElement implements FractalModel
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeSelect(org.yaen.ModelService.common.services.EntityService)
+	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
 	public void BeforeSelect(ModelService service) throws Exception {
@@ -45,7 +45,7 @@ public abstract class FractalElement extends BaseElement implements FractalModel
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeInsert()
+	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeInsert()
 	 */
 	@Override
 	public void BeforeInsert(ModelService service) throws Exception {
@@ -59,7 +59,7 @@ public abstract class FractalElement extends BaseElement implements FractalModel
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeUpdate(org.yaen.ModelService.common.services.EntityService)
+	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeUpdate(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
 	public void BeforeUpdate(ModelService service) throws Exception {

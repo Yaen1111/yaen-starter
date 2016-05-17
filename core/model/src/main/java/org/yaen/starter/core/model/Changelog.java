@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.core.model.elements;
+package org.yaen.starter.core.model;
 
 import java.util.Date;
 
@@ -10,6 +10,7 @@ import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.services.ModelService;
+import org.yaen.starter.core.model.one.BaseOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,7 @@ import lombok.ToString;
  */
 @ToString(callSuper = true)
 @OneTable(TableName = "ARK_CHANGELOG")
-public class Changelog extends BaseElement {
+public class Changelog extends BaseOne {
 	private static final long serialVersionUID = -606829448983274029L;
 
 	/**
@@ -36,7 +37,7 @@ public class Changelog extends BaseElement {
 	@Getter
 	@Setter
 	@OneCopy(Prefix = "BEFORE")
-	private BaseElement elementBefore;
+	private BaseOne elementBefore;
 
 	/**
 	 * the element after change, if delete, null
@@ -44,7 +45,7 @@ public class Changelog extends BaseElement {
 	@Getter
 	@Setter
 	@OneCopy(Prefix = "AFTER")
-	private BaseElement elementAfter;
+	private BaseOne elementAfter;
 
 	/**
 	 * the update date of the change document
@@ -83,7 +84,7 @@ public class Changelog extends BaseElement {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
+	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public void BeforeInsert(ModelService service) throws Exception {
@@ -95,7 +96,7 @@ public class Changelog extends BaseElement {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
+	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public void BeforeUpdate(ModelService service) throws Exception {
@@ -104,7 +105,7 @@ public class Changelog extends BaseElement {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.core.model.elements.BaseElement#BeforeDelete(org.yaen.starter.common.data.services.ModelService)
+	 * @see org.yaen.starter.core.model.one.BaseOne#BeforeDelete(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public void BeforeDelete(ModelService service) throws Exception {

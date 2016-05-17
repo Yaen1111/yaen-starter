@@ -17,7 +17,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.WebUtils;
-import org.yaen.starter.common.util.StringUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 
 /**
  * web util, extends spring web utils

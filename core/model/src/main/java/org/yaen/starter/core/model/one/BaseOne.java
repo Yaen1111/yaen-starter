@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.core.model.elements;
+package org.yaen.starter.core.model.one;
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ import org.yaen.starter.common.data.annotations.Virtual;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.common.util.DateUtil;
+import org.yaen.starter.common.util.utils.DateUtil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +22,7 @@ import lombok.ToString;
  * @author Yaen 2016年1月4日下午8:35:55
  */
 @ToString
-public abstract class BaseElement implements BaseModel {
+public abstract class BaseOne implements BaseModel {
 	private static final long serialVersionUID = 101L;
 
 	/**
@@ -68,7 +68,7 @@ public abstract class BaseElement implements BaseModel {
 	/**
 	 * constructor
 	 */
-	public BaseElement() {
+	public BaseOne() {
 		this.id = 0;
 	}
 

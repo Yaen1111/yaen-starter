@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * one entity(persistent object) for all crud operation, all po has to inherit this
+ * one entity(persistent object) for all crud operation, all entity has to inherit this
  * one
  * 
  * @author Yaen 2016年1月6日下午7:57:22
