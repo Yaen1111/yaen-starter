@@ -22,29 +22,23 @@ import lombok.ToString;
 public class Party extends OneModel {
 	private static final long serialVersionUID = -709733522935110043L;
 
-	/**
-	 * the party type, usually is org/person
-	 */
+	/** the party type, usually is org/person */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
 	private String partyType;
 
-	/**
-	 * the party name
-	 */
+	/** the party name */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 100)
 	private String partyName;
 
-	/**
-	 * the outer resource, in some case, we may need the ref to other system
-	 */
+	/** the reference resource, in some case, we may need the reference to other system */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 100)
-	private String outerResource;
+	private String referenceResource;
 
 	/**
 	 * constructor

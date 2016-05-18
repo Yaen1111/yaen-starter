@@ -12,7 +12,7 @@
 	<name>yaen-starter-biz</name>
 
 	<modules>
-		<module>service</module>
 		<module>shared</module>
+		<module>implement</module>
 	</modules>
 </project>

@@ -3,7 +3,7 @@ package org.yaen.starter.biz.shared.services;
 import org.yaen.starter.biz.shared.objects.UserDTO;
 
 /**
- * rbac service
+ * user service
  * 
  * @author Yaen 2016年5月17日下午3:58:01
  */

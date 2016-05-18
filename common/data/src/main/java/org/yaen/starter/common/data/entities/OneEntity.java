@@ -11,7 +11,6 @@ import java.util.Map;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
-import org.yaen.starter.common.data.annotations.Virtual;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -77,7 +76,6 @@ public class OneEntity implements Serializable {
 	 * @return
 	 * @throws Exception
 	 */
-	@Virtual
 	public Map<String, OneColumnEntity> getColumns() throws Exception {
 		// use local var to modify
 		Map<String, OneColumnEntity> col = new LinkedHashMap<String, OneColumnEntity>();
@@ -166,14 +164,14 @@ public class OneEntity implements Serializable {
 
 					columns.put(field.getName(), info);
 				} else {
-					// no data, use field name
-					String column_name = field.getName().toUpperCase();
-					OneColumnEntity info = new OneColumnEntity();
-					info.setColumnName(column_name);
-					info.setValue(field.get(one));
-					info.setField(field);
+					// // no data, not included
+					// String column_name = field.getName().toUpperCase();
+					// OneColumnEntity info = new OneColumnEntity();
+					// info.setColumnName(column_name);
+					// info.setValue(field.get(one));
+					// info.setField(field);
 
-					columns.put(field.getName(), info);
+					// columns.put(field.getName(), info);
 				}
 			} // ignore
 		} // for

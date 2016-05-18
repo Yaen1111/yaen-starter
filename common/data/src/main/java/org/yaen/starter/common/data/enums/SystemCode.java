@@ -45,13 +45,28 @@ public enum SystemCode {
 	 * system type
 	 */
 	/** gender */
-	T00001("MALE"), T00002("FEMALE"), T00000("UNKNOWN"),
+	T0GEMA("MALE"), T0GEFE("FEMALE"), T0GE00("UNKNOWN"),
 
 	;
 
 	/** title */
 	@Getter
 	private final String title;
+
+	/** title */
+	@Getter
+	private final String description;
+
+	/**
+	 * constructor
+	 * 
+	 * @param title
+	 * @param description
+	 */
+	private SystemCode(String title, String description) {
+		this.title = title;
+		this.description = description;
+	}
 
 	/**
 	 * constructor
@@ -60,15 +75,16 @@ public enum SystemCode {
 	 */
 	private SystemCode(String title) {
 		this.title = title;
+		this.description = "";
 	}
 
 	/**
-	 * get code object
+	 * parse code object
 	 * 
 	 * @param code
 	 * @return
 	 */
-	public static SystemCode getSystemCode(String code) {
+	public static SystemCode parseSystemCode(String code) {
 		try {
 			return SystemCode.valueOf(code);
 		} catch (IllegalArgumentException ex) {

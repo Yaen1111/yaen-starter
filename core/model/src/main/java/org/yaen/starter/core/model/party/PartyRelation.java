@@ -22,9 +22,7 @@ import lombok.ToString;
 public class PartyRelation extends OneRelationModel {
 	private static final long serialVersionUID = -4458934767334916729L;
 
-	/**
-	 * the party relation type(code)
-	 */
+	/** the party relation type(code) */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)

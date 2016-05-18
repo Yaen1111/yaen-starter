@@ -22,9 +22,7 @@ import lombok.ToString;
 public class OneFractalModel extends OneModel implements FractalModel {
 	private static final long serialVersionUID = 3470410424680588725L;
 
-	/**
-	 * the base model
-	 */
+	/** the base model */
 	@Getter
 	@OneIgnore
 	private OneModel base;
@@ -45,24 +43,34 @@ public class OneFractalModel extends OneModel implements FractalModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public void BeforeSelect(ModelService service) throws Exception {
-		super.BeforeSelect(service);
+	public boolean BeforeSelect(ModelService service) throws Exception {
+		if (super.BeforeSelect(service)) {
 
-		// need to select base
-		service.selectModel(this.base, this.getId());
+			// need to select base
+			service.selectModel(this.base, this.getId());
+
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeInsert()
 	 */
 	@Override
-	public void BeforeInsert(ModelService service) throws Exception {
-		super.BeforeInsert(service);
+	public boolean BeforeInsert(ModelService service) throws Exception {
+		if (super.BeforeInsert(service)) {
 
-		// insert parent if not
-		if (this.base.getId() == 0) {
-			service.insertModel(this.base);
-			this.setId(this.base.getId());
+			// insert parent if not
+			if (this.base.getId() == 0) {
+				service.insertModel(this.base);
+				this.setId(this.base.getId());
+			}
+
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -70,11 +78,16 @@ public class OneFractalModel extends OneModel implements FractalModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeUpdate(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public void BeforeUpdate(ModelService service) throws Exception {
-		super.BeforeUpdate(service);
+	public boolean BeforeUpdate(ModelService service) throws Exception {
+		if (super.BeforeUpdate(service)) {
 
-		// update parent
-		service.updateModel(base);
+			// update parent
+			service.updateModel(base);
+
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

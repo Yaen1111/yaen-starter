@@ -22,25 +22,19 @@ import lombok.ToString;
 public class User extends OneModel {
 	private static final long serialVersionUID = -709733522935110043L;
 
-	/**
-	 * user name of the user, used for login
-	 */
+	/** user name of the user, used for login */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
 	private String userName;
 
-	/**
-	 * password salt
-	 */
+	/** password salt */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 64)
 	private String passwordSalt;
 
-	/**
-	 * password hashed by salt
-	 */
+	/** password hashed by salt */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 64)

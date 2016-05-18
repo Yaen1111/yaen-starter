@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.yaen.starter.common.dal.mappers.OneMapper;
 import org.yaen.starter.common.dal.mappers.ZeroMapper;
 import org.yaen.starter.common.data.entities.AnotherEntity;
@@ -23,6 +22,7 @@ import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
+import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.one.OneModel;
 
@@ -164,7 +164,7 @@ public class OneModelService implements ModelService {
 	 */
 	@Override
 	public <T extends BaseModel> void selectModel(T model, long id) throws Exception {
-		Assert.notNull(model);
+		AssertUtil.notNull(model);
 
 		// get another entity
 		AnotherEntity entity = new AnotherEntity(model);
@@ -203,7 +203,7 @@ public class OneModelService implements ModelService {
 	 */
 	@Override
 	public <T extends BaseModel> List<T> selectModelList(T model, List<Long> ids) throws Exception {
-		Assert.notNull(model);
+		AssertUtil.notNull(model);
 
 		List<T> list = new ArrayList<T>();
 
@@ -226,7 +226,7 @@ public class OneModelService implements ModelService {
 	 */
 	@Override
 	public <T extends BaseModel> long insertModel(T model) throws Exception {
-		Assert.notNull(model);
+		AssertUtil.notNull(model);
 
 		// trigger before insert
 		model.BeforeInsert(this);
@@ -259,7 +259,7 @@ public class OneModelService implements ModelService {
 	 */
 	@Override
 	public <T extends BaseModel> void updateModel(T model) throws Exception {
-		Assert.notNull(model);
+		AssertUtil.notNull(model);
 
 		// trigger before update
 		model.BeforeUpdate(this);
@@ -302,7 +302,7 @@ public class OneModelService implements ModelService {
 	 */
 	@Override
 	public <T extends BaseModel> void deleteModel(T model) throws Exception {
-		Assert.notNull(model);
+		AssertUtil.notNull(model);
 
 		// trigger before delete
 		model.BeforeDelete(this);

@@ -23,57 +23,43 @@ import lombok.ToString;
 public class UserInfoEx extends OneFractalModel {
 	private static final long serialVersionUID = 8955391077702613155L;
 
-	/**
-	 * the true name of user
-	 */
+	/** the true name of user */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
 	private String trueName;
 
-	/**
-	 * the gender of user
-	 */
+	/** the gender of user */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
 	private String gender;
 
-	/**
-	 * mobile phone
-	 */
+	/** mobile phone */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
 	private String mobilePhone;
 
-	/**
-	 * fixed phone
-	 */
+	/** fixed phone */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
 	private String fixedPhone;
 
-	/**
-	 * email address, only one
-	 */
+	/** email address, only one */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 100)
 	private String email;
 
-	/**
-	 * idcard type, usually is credential card
-	 */
+	/** idcard type, usually is credential card */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
 	private String idcardType;
 
-	/**
-	 * idcard number
-	 */
+	/** idcard number */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)

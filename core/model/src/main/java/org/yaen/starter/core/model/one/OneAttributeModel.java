@@ -23,17 +23,13 @@ import lombok.ToString;
 public class OneAttributeModel extends OneModel implements AttributeModel {
 	private static final long serialVersionUID = -4376824168382204889L;
 
-	/**
-	 * the parent id
-	 */
+	/** the parent id */
 	@Getter(AccessLevel.PROTECTED)
 	@Setter(AccessLevel.PROTECTED)
 	@OneData(DataType = DataTypes.BIGINT, FieldName = "PARENT_ID")
 	private long parentID;
 
-	/**
-	 * the parent model
-	 */
+	/** the parent model */
 	@Getter
 	@OneIgnore
 	private OneModel parent;
@@ -59,12 +55,16 @@ public class OneAttributeModel extends OneModel implements AttributeModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#AfterSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public void AfterSelect(ModelService service) throws Exception {
-		super.AfterSelect(service);
+	public boolean AfterSelect(ModelService service) throws Exception {
+		if (super.AfterSelect(service)) {
 
-		// this maybe changed, reload parent
-		if (this.parentID > 0) {
-			service.selectModel(this.parent, this.parentID);
+			// this maybe changed, reload parent
+			if (this.parentID > 0) {
+				service.selectModel(this.parent, this.parentID);
+			}
+			return true;
+		} else {
+			return false;
 		}
 	}
 

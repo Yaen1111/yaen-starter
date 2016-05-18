@@ -30,47 +30,35 @@ import lombok.ToString;
 public class OneRelationModel extends OneModel implements RelationModel {
 	private static final long serialVersionUID = -8496063090342655991L;
 
-	/**
-	 * the from element id
-	 */
+	/** the from element id */
 	@Getter(AccessLevel.PROTECTED)
 	@Setter(AccessLevel.PROTECTED)
 	@OneData(DataType = DataTypes.BIGINT, FieldName = "FROM_ID")
 	private long fromId;
 
-	/**
-	 * the to element id
-	 */
+	/** the to element id */
 	@Getter(AccessLevel.PROTECTED)
 	@Setter(AccessLevel.PROTECTED)
 	@OneData(DataType = DataTypes.BIGINT, FieldName = "TO_ID")
 	private long toId;
 
-	/**
-	 * the from model, usually is the child
-	 */
+	/** the from model, usually is the child */
 	@Getter
 	@OneIgnore
 	private BaseModel fromModel;
 
-	/**
-	 * the to model, usually is the parent
-	 */
+	/** the to model, usually is the parent */
 	@Getter
 	@OneIgnore
 	private BaseModel toModel;
 
-	/**
-	 * the date from, if not set, use now
-	 */
+	/** the date from, if not set, use now */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "FROM_DATE")
 	private Date fromDate;
 
-	/**
-	 * the date to, if not set, use infinite
-	 */
+	/** the date to, if not set, use infinite */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "TO_DATE")
@@ -101,16 +89,21 @@ public class OneRelationModel extends OneModel implements RelationModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#AfterSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public void AfterSelect(ModelService service) throws Exception {
-		super.AfterSelect(service);
+	public boolean AfterSelect(ModelService service) throws Exception {
+		if (super.AfterSelect(service)) {
 
-		// select element
-		if (this.fromId > 0) {
-			service.selectModel(this.fromModel, this.fromId);
-		}
+			// select element
+			if (this.fromId > 0) {
+				service.selectModel(this.fromModel, this.fromId);
+			}
 
-		if (this.toId > 0) {
-			service.selectModel(this.toModel, this.toId);
+			if (this.toId > 0) {
+				service.selectModel(this.toModel, this.toId);
+			}
+
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -119,16 +112,21 @@ public class OneRelationModel extends OneModel implements RelationModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public void BeforeInsert(ModelService service) throws Exception {
-		super.BeforeInsert(service);
+	public boolean BeforeInsert(ModelService service) throws Exception {
+		if (super.BeforeInsert(service)) {
 
-		// set date from to now if not given
-		if (this.fromDate == null)
-			this.fromDate = DateUtil.getNow();
+			// set date from to now if not given
+			if (this.fromDate == null)
+				this.fromDate = DateUtil.getNow();
 
-		// set date to to infinite if not given
-		if (this.toDate == null)
-			this.toDate = DateUtil.getInfinite();
+			// set date to to infinite if not given
+			if (this.toDate == null)
+				this.toDate = DateUtil.getInfinite();
+
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

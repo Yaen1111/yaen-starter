@@ -22,9 +22,7 @@ import lombok.ToString;
 public class PartyFractal extends OneFractalModel {
 	private static final long serialVersionUID = -7283963978173189572L;
 
-	/**
-	 * the true name
-	 */
+	/** the true name */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 100)

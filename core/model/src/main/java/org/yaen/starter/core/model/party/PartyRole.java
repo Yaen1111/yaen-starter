@@ -22,9 +22,7 @@ import lombok.ToString;
 public class PartyRole extends OneAttributeModel {
 	private static final long serialVersionUID = 1743340074473975732L;
 
-	/**
-	 * the party role type(code)
-	 */
+	/** the party role type(code) */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)

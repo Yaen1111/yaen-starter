@@ -12,6 +12,6 @@
 	<name>yaen-starter-test</name>
 
 	<modules>
-		<module>service</module>
+		<module>test</module>
 	</modules>
 </project>

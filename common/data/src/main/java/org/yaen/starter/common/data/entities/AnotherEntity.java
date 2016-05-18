@@ -49,7 +49,7 @@ public class AnotherEntity extends OneEntity {
 	};
 
 	/**
-	 * get table name of another
+	 * getter for table name of another
 	 * 
 	 * @see org.yaen.starter.common.data.entities.OneEntity#getTableName()
 	 */
@@ -77,7 +77,7 @@ public class AnotherEntity extends OneEntity {
 	}
 
 	/**
-	 * get columns of another
+	 * getter for columns of another
 	 * 
 	 * @see org.yaen.starter.common.data.entities.OneEntity#getColumns()
 	 */

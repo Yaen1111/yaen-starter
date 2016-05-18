@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>yaen-starter-biz-service</artifactId>
+			<artifactId>yaen-starter-biz-implement</artifactId>
 		</dependency>
 
 		<dependency>

@@ -7,7 +7,6 @@ import java.util.Date;
 
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
-import org.yaen.starter.common.data.annotations.Virtual;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
@@ -27,17 +26,13 @@ import lombok.ToString;
 public class OneModel implements BaseModel {
 	private static final long serialVersionUID = 101L;
 
-	/**
-	 * the primary key of id
-	 */
+	/** the primary key of id */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.BIGINT, FieldName = "ID")
 	private long id;
 
-	/**
-	 * the create date time of the record
-	 */
+	/** the create date time of the record */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "SYS_CDATE")
@@ -51,17 +46,13 @@ public class OneModel implements BaseModel {
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "SYS_UDATE")
 	private Date udate;
 
-	/**
-	 * the last patch date time of the record
-	 */
+	/** the last patch date time of the record */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "SYS_PDATE")
 	private Date pdate;
 
-	/**
-	 * the patch log of the record, should use append
-	 */
+	/** the patch log of the record, should use append */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.TEXT, FieldName = "SYS_PLOG")
@@ -82,41 +73,43 @@ public class OneModel implements BaseModel {
 		return super.clone();
 	}
 
-	@Virtual
-	public void BeforeSelect(ModelService service) throws Exception {
+	public boolean BeforeSelect(ModelService service) throws Exception {
+		return true;
 	}
 
-	@Virtual
-	public void AfterSelect(ModelService service) throws Exception {
+	public boolean AfterSelect(ModelService service) throws Exception {
+		return true;
 	}
 
-	@Virtual
-	public void BeforeInsert(ModelService service) throws Exception {
+	public boolean BeforeInsert(ModelService service) throws Exception {
 		// set cdate, udate
 		this.cdate = DateUtil.getNow();
 		this.udate = this.cdate;
+
+		return true;
 	}
 
-	@Virtual
-	public void AfterInsert(ModelService service) throws Exception {
+	public boolean AfterInsert(ModelService service) throws Exception {
+		return true;
 	}
 
-	@Virtual
-	public void BeforeUpdate(ModelService service) throws Exception {
+	public boolean BeforeUpdate(ModelService service) throws Exception {
 		// set udate date
 		this.udate = DateUtil.getNow();
+
+		return true;
 	}
 
-	@Virtual
-	public void AfterUpdate(ModelService service) throws Exception {
+	public boolean AfterUpdate(ModelService service) throws Exception {
+		return true;
 	}
 
-	@Virtual
-	public void BeforeDelete(ModelService service) throws Exception {
+	public boolean BeforeDelete(ModelService service) throws Exception {
+		return true;
 	}
 
-	@Virtual
-	public void AfterDelete(ModelService service) throws Exception {
+	public boolean AfterDelete(ModelService service) throws Exception {
+		return true;
 	}
 
 }

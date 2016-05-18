@@ -159,7 +159,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-biz-service</artifactId>
+				<artifactId>yaen-starter-biz-implement</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
