@@ -6,6 +6,7 @@ package org.yaen.starter.core.model.one;
 import java.util.Date;
 
 import org.yaen.starter.common.data.annotations.OneData;
+import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.models.BaseModel;
@@ -25,6 +26,12 @@ import lombok.ToString;
 @OneTable(TableName = "ONE")
 public class OneModel implements BaseModel {
 	private static final long serialVersionUID = 101L;
+
+	/** save change log or not, default to false */
+	@Getter
+	@Setter
+	@OneIgnore
+	private boolean saveChangeLog = false;
 
 	/** the primary key of id */
 	@Getter

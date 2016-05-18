@@ -16,12 +16,15 @@ import org.yaen.starter.common.data.entities.MyDescribeEntity;
 import org.yaen.starter.common.data.entities.OneColumnEntity;
 import org.yaen.starter.common.data.entities.OneEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
+import org.yaen.starter.common.data.enums.SqlTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.OperationCancelledException;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.one.OneModel;
+import org.yaen.starter.core.model.log.Changelog;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
@@ -119,13 +122,26 @@ public class OneModelService implements ModelService {
 	}
 
 	/**
-	 * inner select model
+	 * inner select model, no triggers
 	 * 
 	 * @param model
 	 * @param id
+	 * @param entity
+	 * @return
 	 * @throws Exception
 	 */
-	protected <T extends BaseModel> boolean innerSelectModel(T model, OneEntity entity) throws Exception {
+	protected <T extends BaseModel> boolean innerSelectModel(T model, long id, OneEntity entity) throws Exception {
+
+		// get another entity if not
+		if (entity == null) {
+			entity = new AnotherEntity(model);
+
+			// create table if not exists
+			this.CreateTable(entity);
+		}
+
+		// set id
+		entity.setId(id);
 
 		// call mapper
 		Map<String, Object> map = oneMapper.selectByID(entity);
@@ -155,7 +171,123 @@ public class OneModelService implements ModelService {
 	}
 
 	/**
+	 * inner insert, no triggers, no change log
 	 * 
+	 * @param model
+	 * @param entity
+	 * @throws Exception
+	 */
+	protected <T extends BaseModel> void innerInsertModel(T model, OneEntity entity) throws Exception {
+
+		// get another entity if not
+		if (entity == null) {
+			entity = new AnotherEntity(model);
+
+			// create table if not exists
+			this.CreateTable(entity);
+		}
+
+		// insert the given element
+		int ret = oneMapper.insertByID(entity);
+
+		if (ret <= 0) {
+			// execute fail
+			throw new CoreException("insert failed");
+		}
+
+		// id already set into entity and bridged to model
+	}
+
+	/**
+	 * inner update, no trigger, no change log
+	 * 
+	 * @param model
+	 * @param entity
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T extends BaseModel> T innerUpdateModel(T model, OneEntity entity) throws Exception {
+
+		// get another entity if not
+		if (entity == null) {
+			entity = new AnotherEntity(model);
+
+			// create table if not exists
+			this.CreateTable(entity);
+		}
+
+		// try get old one if need
+		T old = null;
+
+		if (model.isSaveChangeLog()) {
+
+			old = (T) model.clone();
+
+			boolean exists = this.innerSelectModel(old, model.getId(), entity);
+
+			if (!exists) {
+				// not exists, throw
+				throw new DataNotExistsException("data for update not exists");
+			}
+		}
+
+		// update the given element
+		int ret = oneMapper.updateByID(entity);
+
+		if (ret <= 0) {
+			// execute fail
+			throw new CoreException("update failed");
+		}
+
+		return old;
+	}
+
+	/**
+	 * inner delete, no trigger, no change log
+	 * 
+	 * @param model
+	 * @param entity
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T extends BaseModel> T innerDeleteModel(T model, OneEntity entity) throws Exception {
+
+		// get another entity if not
+		if (entity == null) {
+			entity = new AnotherEntity(model);
+
+			// create table if not exists
+			this.CreateTable(entity);
+		}
+
+		// try get old one if need
+		T old = null;
+
+		if (model.isSaveChangeLog()) {
+			old = (T) model.clone();
+
+			boolean exists = this.innerSelectModel(old, model.getId(), entity);
+
+			if (!exists) {
+				// not exists, throw
+				throw new DataNotExistsException("data for delete not exists");
+			}
+		}
+
+		// delete the given element
+		int ret = oneMapper.deleteByID(entity);
+
+		if (ret <= 0) {
+			// execute fail
+			throw new CoreException("delete failed");
+		}
+
+		return old;
+	}
+
+	/**
 	 * @see org.yaen.starter.common.data.services.ModelService#selectModel(org.yaen.starter.common.data.models.BaseModel,
 	 *      long)
 	 */
@@ -163,20 +295,24 @@ public class OneModelService implements ModelService {
 	public <T extends BaseModel> void selectModel(T model, long id) throws Exception {
 		AssertUtil.notNull(model);
 
-		// get another entity
-		AnotherEntity entity = new AnotherEntity(model);
+		// trigger before select
+		if (model.BeforeSelect(this)) {
 
-		this.CreateTable(entity);
+			boolean exists = this.innerSelectModel(model, id, null);
 
-		// set given id
-		entity.setId(id);
+			if (!exists) {
+				// not exists
+				throw new DataNotExistsException("data for select not exists");
+			}
 
-		boolean exists = this.innerSelectModel(model, entity);
+			// trigger after select
+			model.AfterSelect(this);
 
-		if (!exists) {
-			// not exists
-			throw new CoreException("data not exist");
+		} else {
+			// select canceled
+			throw new OperationCancelledException("select cancelled by trigger");
 		}
+
 	}
 
 	/**
@@ -188,13 +324,14 @@ public class OneModelService implements ModelService {
 		try {
 			this.selectModel(model, id);
 			return true;
-		} catch (CoreException ce) {
+		} catch (DataNotExistsException ex) {
+			return false;
+		} catch (OperationCancelledException ex) {
 			return false;
 		}
 	}
 
 	/**
-	 * 
 	 * @see org.yaen.starter.common.data.services.ModelService#selectModelList(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.util.List)
 	 */
@@ -209,8 +346,9 @@ public class OneModelService implements ModelService {
 				@SuppressWarnings("unchecked")
 				T attr = (T) model.clone();
 
-				this.selectModel(attr, id);
-				list.add(attr);
+				if (this.trySelectModel(attr, id)) {
+					list.add(attr);
+				}
 			}
 		}
 
@@ -218,7 +356,6 @@ public class OneModelService implements ModelService {
 	}
 
 	/**
-	 * 
 	 * @see org.yaen.starter.common.data.services.ModelService#insertModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
@@ -226,32 +363,28 @@ public class OneModelService implements ModelService {
 		AssertUtil.notNull(model);
 
 		// trigger before insert
-		model.BeforeInsert(this);
+		if (model.BeforeInsert(this)) {
 
-		// get another entity
-		AnotherEntity entity = new AnotherEntity(model);
+			// inner insert
+			this.innerInsertModel(model, null);
 
-		// create table if not exists
-		this.CreateTable(entity);
+			// save change log
+			if (model.isSaveChangeLog()) {
+				Changelog logmodel = new Changelog(SqlTypes.INSERT, null, model);
+				logmodel.BeforeInsert(this);
+				this.innerInsertModel(logmodel, null);
+			}
 
-		// insert the given element
-		int ret = oneMapper.insertByID(entity);
+			// id already set into entity and bridged to model
 
-		if (ret <= 0) {
-			// execute fail
-			throw new CoreException("insert failed");
+			// trigger after insert
+			model.AfterInsert(this);
 		}
-
-		// id already set into entity and bridged to model
-
-		// trigger after insert
-		model.AfterInsert(this);
 
 		return model.getId();
 	}
 
 	/**
-	 * 
 	 * @see org.yaen.starter.common.data.services.ModelService#updateModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
@@ -259,42 +392,24 @@ public class OneModelService implements ModelService {
 		AssertUtil.notNull(model);
 
 		// trigger before update
-		model.BeforeUpdate(this);
+		if (model.BeforeUpdate(this)) {
 
-		// get another entity
-		AnotherEntity entity = new AnotherEntity(model);
+			// update model and return old one if need
+			T old = this.innerUpdateModel(model, null);
 
-		// create table if not exists
-		this.CreateTable(entity);
-
-		// try get old one
-		BaseModel old;
-
-		{
-			old = (BaseModel) model.clone();
-
-			Boolean exists = this.innerSelectModel(old, entity);
-
-			if (!exists) {
-				// already exists, throw
-				throw new CoreException("data not exists");
+			// save change log
+			if (model.isSaveChangeLog()) {
+				Changelog logmodel = new Changelog(SqlTypes.UPDATE, old, model);
+				logmodel.BeforeInsert(this);
+				this.innerInsertModel(logmodel, null);
 			}
+
+			// trigger after update
+			model.AfterUpdate(this);
 		}
-
-		// update the given element
-		int ret = oneMapper.updateByID(entity);
-
-		if (ret <= 0) {
-			// execute fail
-			throw new CoreException("update failed");
-		}
-
-		// trigger after update
-		model.AfterUpdate(this);
 	}
 
 	/**
-	 * 
 	 * @see org.yaen.starter.common.data.services.ModelService#deleteModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
@@ -302,38 +417,21 @@ public class OneModelService implements ModelService {
 		AssertUtil.notNull(model);
 
 		// trigger before delete
-		model.BeforeDelete(this);
+		if (model.BeforeDelete(this)) {
 
-		// get another entity
-		AnotherEntity entity = new AnotherEntity(model);
+			// try get old one
+			T old = this.innerDeleteModel(model, null);
 
-		// create table if not exists
-		this.CreateTable(entity);
-
-		// try get old one
-		OneModel old;
-
-		{
-			old = (OneModel) model.clone();
-
-			Boolean exists = this.innerSelectModel(old, entity);
-
-			if (!exists) {
-				// not exists, throw
-				throw new CoreException("data not exists");
+			// save change log
+			if (model.isSaveChangeLog()) {
+				Changelog logmodel = new Changelog(SqlTypes.DELETE, old, null);
+				logmodel.BeforeInsert(this);
+				this.innerInsertModel(logmodel, null);
 			}
+
+			// trigger after delete
+			model.AfterDelete(this);
 		}
-
-		// delete the given element
-		int ret = oneMapper.deleteByID(entity);
-
-		if (ret <= 0) {
-			// execute fail
-			throw new CoreException("delete failed");
-		}
-
-		// trigger after delete
-		model.AfterDelete(this);
 	}
 
 }

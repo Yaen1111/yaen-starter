@@ -5,6 +5,7 @@ package org.yaen.starter.common.data.models;
 
 import java.io.Serializable;
 
+import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.services.ModelService;
 
 /**
@@ -12,19 +13,21 @@ import org.yaen.starter.common.data.services.ModelService;
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
-public interface BaseModel extends Cloneable, Serializable {
+public interface BaseModel extends BaseEntity, Cloneable, Serializable {
 
 	/**
-	 * get the primary key of id
-	 */
-	public long getId();
-
-	/**
-	 * set the primary key of id
+	 * get save change log flag
 	 * 
-	 * @param id
+	 * @return
 	 */
-	public void setId(long id);
+	public boolean isSaveChangeLog();
+
+	/**
+	 * set save change log flag
+	 * 
+	 * @param saveChangeLog
+	 */
+	public void setSaveChangeLog(boolean saveChangeLog);
 
 	/**
 	 * @see java.lang.Object#clone()

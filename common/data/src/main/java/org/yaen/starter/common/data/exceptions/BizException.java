@@ -12,13 +12,6 @@ public class BizException extends Exception {
 	private static final long serialVersionUID = -4511287732017780755L;
 
 	/**
-	 * create an empty biz exception
-	 */
-	public BizException() {
-		super();
-	}
-
-	/**
 	 * @param message
 	 * @param cause
 	 * @param enableSuppression

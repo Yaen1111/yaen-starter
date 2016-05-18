@@ -1,15 +1,12 @@
-/**
- * 
- */
 package org.yaen.starter.common.data.exceptions;
 
 /**
- * common layer exception
+ * data not exists
  * 
  * @author Yaen 2016年1月13日下午7:31:52
  */
-public class CommonException extends Exception {
-	private static final long serialVersionUID = -3212540352141901386L;
+public class DataNotExistsException extends Exception {
+	private static final long serialVersionUID = 8154004478287341494L;
 
 	/**
 	 * @param message
@@ -17,7 +14,8 @@ public class CommonException extends Exception {
 	 * @param enableSuppression
 	 * @param writableStackTrace
 	 */
-	public CommonException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public DataNotExistsException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
@@ -25,21 +23,21 @@ public class CommonException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public CommonException(String message, Throwable cause) {
+	public DataNotExistsException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
-	public CommonException(String message) {
+	public DataNotExistsException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public CommonException(Throwable cause) {
+	public DataNotExistsException(Throwable cause) {
 		super(cause);
 	}
 

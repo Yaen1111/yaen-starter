@@ -10,13 +10,6 @@ package org.yaen.starter.common.data.exceptions;
  */
 public class CoreException extends Exception {
 	private static final long serialVersionUID = -7710308700640697529L;
-	
-	/**
-	 * create an empty biz exception
-	 */
-	public CoreException() {
-		super();
-	}
 
 	/**
 	 * @param message

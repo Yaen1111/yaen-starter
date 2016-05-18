@@ -3,14 +3,15 @@
  */
 package org.yaen.starter.common.data.entities;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.yaen.starter.common.data.annotations.OneCopy;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
+import org.yaen.starter.common.data.annotations.OneTableHandler;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,20 +21,20 @@ import lombok.Setter;
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */
-public class OneEntity implements Serializable {
+public class OneEntity implements BaseEntity {
 	private static final long serialVersionUID = 100110L;
 
-	/**
-	 * the primary key
-	 */
+	/** the actual entity, maybe self */
+	@OneIgnore
+	protected BaseEntity entity;
+
+	/** the primary key */
 	@Getter
 	@Setter
 	@OneIgnore
 	private long id;
 
-	/**
-	 * the table name, if null, use class name instead
-	 */
+	/** the table name, if null, use class name instead */
 	@OneIgnore
 	protected String tableName;
 
@@ -46,16 +47,23 @@ public class OneEntity implements Serializable {
 		// use local var to modify
 		String name = "";
 
-		OneTable table = this.getClass().getAnnotation(OneTable.class);
+		// try get interface
+		if (this.entity instanceof OneTableHandler) {
 
-		// get table name from one table
-		if (table != null) {
-			name = table.TableName();
+			name = ((OneTableHandler) this.entity).getTableName();
+		} else {
+			// try get annotation
+			OneTable table = this.entity.getClass().getAnnotation(OneTable.class);
+
+			// get table name from one table
+			if (table != null) {
+				name = table.TableName();
+			}
 		}
 
 		// default to class name if empty
 		if (name == null || name.trim().isEmpty()) {
-			name = this.getClass().getSimpleName().toUpperCase();
+			name = this.entity.getClass().getSimpleName().toUpperCase();
 		}
 
 		// set to member
@@ -82,7 +90,7 @@ public class OneEntity implements Serializable {
 
 		try {
 			// try get column info
-			this.fetchOneColumnInfo(col, this, this.getClass());
+			this.fetchOneColumnInfo(col, this.entity, this.entity.getClass());
 		} catch (Exception ex) {
 			// just throw out
 			throw ex;
@@ -98,21 +106,24 @@ public class OneEntity implements Serializable {
 		return this.columns;
 	}
 
-	/**
-	 * the modified field name
-	 */
+	/** the modified field name */
 	@Getter
 	@Setter
 	@OneIgnore
 	private String modifiedFieldName;
 
-	/**
-	 * the added field name
-	 */
+	/** the added field name */
 	@Getter
 	@Setter
 	@OneIgnore
 	private String addedFieldName;
+
+	/**
+	 * construct one entity of self
+	 */
+	public OneEntity() {
+		this.entity = this;
+	}
 
 	/**
 	 * fetch one column info
@@ -142,6 +153,7 @@ public class OneEntity implements Serializable {
 
 			// get all element annotation
 			OneData data = field.getAnnotation(OneData.class);
+			OneCopy copy = field.getAnnotation(OneCopy.class);
 			OneIgnore ignore = field.getAnnotation(OneIgnore.class);
 
 			// ignore
@@ -163,15 +175,28 @@ public class OneEntity implements Serializable {
 					info.setField(field);
 
 					columns.put(field.getName(), info);
-				} else {
-					// // no data, not included
-					// String column_name = field.getName().toUpperCase();
-					// OneColumnEntity info = new OneColumnEntity();
-					// info.setColumnName(column_name);
-					// info.setValue(field.get(one));
-					// info.setField(field);
+				} else if (copy != null) {
+					// add copy
+					String prefix = copy.Prefix();
 
-					// columns.put(field.getName(), info);
+					// get copy entity, and do only if the entity is not null
+					BaseEntity copyentity = (BaseEntity) field.get(one);
+					if (copyentity != null) {
+						AnotherEntity another = new AnotherEntity(copyentity);
+						Map<String, OneColumnEntity> copycolumns = another.getColumns();
+
+						// copy all columns with prefix
+						for (String copykey : copycolumns.keySet()) {
+
+							OneColumnEntity info = copycolumns.get(copykey);
+							info.setColumnName(prefix + info.getColumnName());
+
+							columns.put(prefix + copykey, info);
+						}
+					}
+
+				} else {
+					// nothing is set, ignore
 				}
 			} // ignore
 		} // for

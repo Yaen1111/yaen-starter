@@ -12,13 +12,6 @@ public class WebException extends Exception {
 	private static final long serialVersionUID = -702765520278340647L;
 
 	/**
-	 * create an empty biz exception
-	 */
-	public WebException() {
-		super();
-	}
-
-	/**
 	 * @param message
 	 * @param cause
 	 * @param enableSuppression
