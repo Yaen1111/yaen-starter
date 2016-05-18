@@ -9,8 +9,7 @@ import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.common.data.models.BaseModel;
-import org.yaen.starter.common.data.models.RelationModel;
+import org.yaen.starter.common.data.models.BaseRelationModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
@@ -27,7 +26,7 @@ import lombok.ToString;
  */
 @ToString(callSuper = true)
 @OneTable(TableName = "ONE_RELATION")
-public class OneRelationModel extends OneModel implements RelationModel {
+public class OneRelationModel extends OneModel implements BaseRelationModel {
 	private static final long serialVersionUID = -8496063090342655991L;
 
 	/** the from element id */
@@ -45,12 +44,12 @@ public class OneRelationModel extends OneModel implements RelationModel {
 	/** the from model, usually is the child */
 	@Getter
 	@OneIgnore
-	private BaseModel fromModel;
+	private OneModel fromModel;
 
 	/** the to model, usually is the parent */
 	@Getter
 	@OneIgnore
-	private BaseModel toModel;
+	private OneModel toModel;
 
 	/** the date from, if not set, use now */
 	@Getter

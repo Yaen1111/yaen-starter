@@ -25,7 +25,7 @@
 	<!-- the follow is dubbo service -->
 
 	<!-- handshake service -->
-	<bean id="HandshakeService" class="org.yaen.starter.biz.service.impl.HandshakeServiceImpl" />
+	<bean id="HandshakeService" class="org.yaen.starter.biz.implement.facades.impl.HandshakeServiceImpl" />
 	<dubbo:service interface="org.yaen.starter.common.facade.HandshakeService" ref="HandshakeService" />
 
 </beans>

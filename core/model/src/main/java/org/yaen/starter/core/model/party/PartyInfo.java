@@ -13,25 +13,25 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * party fractal, 1:1
+ * party extra info, 1:1
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @ToString(callSuper = true)
-@OneTable(TableName = "PARTY_FRACTAL")
-public class PartyFractal extends OneFractalModel {
+@OneTable(TableName = "PARTY_INFO")
+public class PartyInfo extends OneFractalModel {
 	private static final long serialVersionUID = -7283963978173189572L;
 
 	/** the true name */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 100)
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 200)
 	private String trueName;
 
 	/**
 	 * constructor
 	 */
-	public PartyFractal(Party party) {
+	public PartyInfo(Party party) {
 		super(party);
 	}
 

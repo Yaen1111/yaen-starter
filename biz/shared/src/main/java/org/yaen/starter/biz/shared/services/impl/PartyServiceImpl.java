@@ -1,4 +1,4 @@
-package org.yaen.starter.biz.implement.services;
+package org.yaen.starter.biz.shared.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,6 @@ public class PartyServiceImpl implements PartyService {
 		if (dto.getPartyID() > 0) {
 			party.setId(dto.getPartyID());
 		}
-		party.setPartyName(dto.getPartyName());
 		party.setPartyType(dto.getPartyType());
 		long partyid = modelService.insertModel(party);
 

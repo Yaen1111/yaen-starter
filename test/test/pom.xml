@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>yaen-starter-test-test</artifactId>
-	<name>yaen-starter-test-service</name>
+	<name>yaen-starter-test-test</name>
 
 	<build>
 		<filters>

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.core.service.one;
 
 import java.util.ArrayList;
@@ -11,15 +8,15 @@ import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.yaen.starter.common.dal.entities.QueryEntity;
 import org.yaen.starter.common.dal.mappers.QueryMapper;
 import org.yaen.starter.common.data.entities.AnotherEntity;
 import org.yaen.starter.common.data.entities.OneColumnEntity;
-import org.yaen.starter.common.data.models.AttributeModel;
+import org.yaen.starter.common.data.models.BaseAttributeModel;
 import org.yaen.starter.common.data.models.BaseModel;
-import org.yaen.starter.common.data.models.RelationModel;
+import org.yaen.starter.common.data.models.BaseRelationModel;
 import org.yaen.starter.common.data.services.QueryService;
+import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 
 /**
@@ -41,9 +38,9 @@ public class OneQueryService implements QueryService {
 	 * @throws Exception
 	 */
 	@Override
-	public <T_ATTR extends AttributeModel> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
+	public <T_ATTR extends BaseAttributeModel> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
 			throws Exception {
-		Assert.notNull(attribute);
+		AssertUtil.notNull(attribute);
 
 		// get another po
 		AnotherEntity po = new AnotherEntity(attribute);
@@ -61,12 +58,12 @@ public class OneQueryService implements QueryService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationFrom(org.yaen.starter.common.data.models.RelationModel,
+	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationFrom(org.yaen.starter.common.data.models.BaseRelationModel,
 	 *      long)
 	 */
 	@Override
-	public <T_REL extends RelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception {
-		Assert.notNull(rel);
+	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception {
+		AssertUtil.notNull(rel);
 
 		// get another po
 		AnotherEntity po = new AnotherEntity(rel);
@@ -84,12 +81,12 @@ public class OneQueryService implements QueryService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationTo(org.yaen.starter.common.data.models.RelationModel,
+	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationTo(org.yaen.starter.common.data.models.BaseRelationModel,
 	 *      long)
 	 */
 	@Override
-	public <T_REL extends RelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception {
-		Assert.notNull(rel);
+	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception {
+		AssertUtil.notNull(rel);
 
 		// get another po
 		AnotherEntity po = new AnotherEntity(rel);
@@ -125,8 +122,8 @@ public class OneQueryService implements QueryService {
 	@Override
 	public <T extends BaseModel> List<Long> SelectIDsByFieldNameList(T model, List<String> fieldNameList)
 			throws Exception {
-		Assert.notNull(model);
-		Assert.notNull(fieldNameList);
+		AssertUtil.notNull(model);
+		AssertUtil.notNull(fieldNameList);
 
 		// get another po
 		AnotherEntity po = new AnotherEntity(model);
@@ -160,7 +157,7 @@ public class OneQueryService implements QueryService {
 	 */
 	@Override
 	public <T extends BaseModel> List<Long> SelectIDsByAllField(T model) throws Exception {
-		Assert.notNull(model);
+		AssertUtil.notNull(model);
 
 		// get another po
 		AnotherEntity po = new AnotherEntity(model);
@@ -196,8 +193,8 @@ public class OneQueryService implements QueryService {
 	 */
 	@Override
 	public <T extends BaseModel> List<Long> SelectIDsByWhereClause(T model, String whereClause) throws Exception {
-		Assert.notNull(model);
-		Assert.notNull(whereClause);
+		AssertUtil.notNull(model);
+		AssertUtil.notNull(whereClause);
 
 		// get another po
 		AnotherEntity po = new AnotherEntity(model);

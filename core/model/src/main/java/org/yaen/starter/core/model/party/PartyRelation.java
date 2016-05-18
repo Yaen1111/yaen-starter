@@ -25,7 +25,7 @@ public class PartyRelation extends OneRelationModel {
 	/** the party relation type(code) */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20,  FieldName = "PARTY_RELATION_TYPE")
 	private String partyRelationType;
 
 	/**

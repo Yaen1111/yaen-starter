@@ -19,8 +19,8 @@ import lombok.ToString;
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @ToString(callSuper = true)
-@OneTable(TableName = "USER_INFO_EX")
-public class UserInfoEx extends OneFractalModel {
+@OneTable(TableName = "USER_INFO")
+public class UserInfo extends OneFractalModel {
 	private static final long serialVersionUID = 8955391077702613155L;
 
 	/** the true name of user */
@@ -38,13 +38,13 @@ public class UserInfoEx extends OneFractalModel {
 	/** mobile phone */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50)
 	private String mobilePhone;
 
 	/** fixed phone */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50)
 	private String fixedPhone;
 
 	/** email address, only one */
@@ -62,13 +62,13 @@ public class UserInfoEx extends OneFractalModel {
 	/** idcard number */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50)
 	private String idcardNumber;
 
 	/**
 	 * constructor
 	 */
-	public UserInfoEx(Party party) {
+	public UserInfo(Party party) {
 		super(party);
 	}
 

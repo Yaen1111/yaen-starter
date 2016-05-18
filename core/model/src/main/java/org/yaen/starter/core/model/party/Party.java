@@ -25,19 +25,13 @@ public class Party extends OneModel {
 	/** the party type, usually is org/person */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20, FieldName = "PARTY_TYPE")
 	private String partyType;
-
-	/** the party name */
-	@Getter
-	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 100)
-	private String partyName;
 
 	/** the reference resource, in some case, we may need the reference to other system */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 100)
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50, FieldName = "REFERENCE_RESOURCE")
 	private String referenceResource;
 
 	/**

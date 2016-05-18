@@ -8,7 +8,7 @@ package org.yaen.starter.common.data.models;
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
-public interface FractalModel extends BaseModel {
+public interface BaseFractalModel extends BaseModel {
 
 	/**
 	 * get the base model

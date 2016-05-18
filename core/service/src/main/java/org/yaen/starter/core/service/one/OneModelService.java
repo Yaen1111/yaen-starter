@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.core.service.one;
 
 import java.lang.reflect.Field;

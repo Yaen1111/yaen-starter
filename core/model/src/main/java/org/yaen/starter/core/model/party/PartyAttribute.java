@@ -13,7 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * party attribute, 1:N
+ * party attribute, simple key-value, 1:N
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
@@ -22,11 +22,23 @@ import lombok.ToString;
 public class PartyAttribute extends OneAttributeModel {
 	private static final long serialVersionUID = 2310601189439211189L;
 
-	/** the attribute1 */
+	/** the attribute name */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50)
-	private String attr1;
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50, FieldName = "ATTRIBUTE_NAME")
+	private String attributeName;
+
+	/** the attribute group */
+	@Getter
+	@Setter
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50, FieldName = "ATTRIBUTE_GROUP")
+	private String attributeGroup;
+
+	/** the attribute value */
+	@Getter
+	@Setter
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 200, FieldName = "ATTRIBUTE_VALUE")
+	private String attributeValue;
 
 	/**
 	 * constructor

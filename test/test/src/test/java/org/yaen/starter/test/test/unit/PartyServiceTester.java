@@ -1,7 +1,6 @@
 package org.yaen.starter.test.test.unit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.yaen.starter.biz.shared.objects.PartyDTO;
@@ -9,8 +8,6 @@ import org.yaen.starter.biz.shared.services.PartyService;
 import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.core.model.ark.SubCode;
 
 /**
  * 
@@ -35,7 +32,6 @@ public class PartyServiceTester extends AbstractJUnit4SpringContextTests {
 
 		try {
 			PartyDTO dto = new PartyDTO();
-			dto.setPartyName("John");
 			dto.setPartyRoleType("admin2");
 			dto.setPartyType("PERSON");
 

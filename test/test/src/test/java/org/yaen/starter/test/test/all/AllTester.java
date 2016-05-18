@@ -50,7 +50,6 @@ public class AllTester extends AbstractJUnit4SpringContextTests {
 		try {
 			// create one party
 			PartyDTO dto = new PartyDTO();
-			dto.setPartyName("Linda");
 			dto.setPartyRoleType("admin2");
 			dto.setPartyType("PERSON");
 

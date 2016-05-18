@@ -5,9 +5,9 @@ package org.yaen.starter.common.data.services;
 
 import java.util.List;
 
-import org.yaen.starter.common.data.models.AttributeModel;
+import org.yaen.starter.common.data.models.BaseAttributeModel;
 import org.yaen.starter.common.data.models.BaseModel;
-import org.yaen.starter.common.data.models.RelationModel;
+import org.yaen.starter.common.data.models.BaseRelationModel;
 
 /**
  * query service for most search operation
@@ -24,7 +24,7 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T_ATTR extends AttributeModel> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
+	public <T_ATTR extends BaseAttributeModel> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
 			throws Exception;
 
 	/**
@@ -35,7 +35,7 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T_REL extends RelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception;
+	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception;
 
 	/**
 	 * select relation ids by to id
@@ -45,7 +45,7 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T_REL extends RelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception;
+	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception;
 
 	/**
 	 * select ids by field name, the value is the given value in the model and

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.biz.implement.facades;
+package org.yaen.starter.biz.implement.facades.impl;
 
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.data.objects.Request;

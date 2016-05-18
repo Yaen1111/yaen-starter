@@ -1,4 +1,4 @@
-package org.yaen.starter.biz.implement.services;
+package org.yaen.starter.biz.shared.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

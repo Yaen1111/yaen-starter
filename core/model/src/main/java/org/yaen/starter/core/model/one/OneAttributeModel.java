@@ -4,7 +4,7 @@ import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.common.data.models.AttributeModel;
+import org.yaen.starter.common.data.models.BaseAttributeModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 
@@ -20,7 +20,7 @@ import lombok.ToString;
  */
 @ToString(callSuper = true)
 @OneTable(TableName = "ONE_ATTRIBUTE")
-public class OneAttributeModel extends OneModel implements AttributeModel {
+public class OneAttributeModel extends OneModel implements BaseAttributeModel {
 	private static final long serialVersionUID = -4376824168382204889L;
 
 	/** the parent id */

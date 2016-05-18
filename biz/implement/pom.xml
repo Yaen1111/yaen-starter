@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>yaen-starter-biz-implement</artifactId>
-	<name>yaen-starter-biz-service</name>
+	<name>yaen-starter-biz-implement</name>
 
 	<build>
 		<filters>

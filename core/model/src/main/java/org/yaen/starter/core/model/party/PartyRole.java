@@ -25,7 +25,7 @@ public class PartyRole extends OneAttributeModel {
 	/** the party role type(code) */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20,  FieldName = "PARTY_ROLE_TYPE")
 	private String partyRoleType;
 
 	/**
