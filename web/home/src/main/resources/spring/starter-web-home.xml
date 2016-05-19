@@ -30,24 +30,6 @@
 	</bean>
 
 	<!-- velocity view resolver -->
-	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-		<property name="velocityProperties">
-			<props>
-				<prop key="input.encoding">UTF-8</prop>
-				<prop key="output.encoding">UTF-8</prop>
-				<prop key="velocimacro.library">macro.vm</prop>
-				<prop key="parser.pool.size">200</prop>
-			</props>
-		</property>
-		<property name="resourceLoaderPath" value="/WEB-INF/views/common/,/WEB-INF/views/home/" />
-	</bean>
-
-	<bean id="stringUtilsTool" class="org.apache.commons.lang3.StringUtils" />
-	<bean id="arrayUtilsTool" class="org.apache.commons.lang3.ArrayUtils" />
-	<bean id="dateTool" class="org.apache.velocity.tools.generic.DateTool" />
-	<bean id="numberTool" class="org.apache.velocity.tools.generic.NumberTool" />
-	<bean id="shiroTool" class="com.xianglin.xlnodeweb.web.home.shiro.Permission" />
-
 	<bean id="velocityViewResolver" class="org.yaen.starter.web.home.views.ExtendVelocityLayoutViewResolver">
 		<property name="order" value="2" />
 		<property name="cache" value="false" />
@@ -71,9 +53,26 @@
 		</property>
 	</bean>
 
-	<!-- multi part resolver -->
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding">UTF-8</prop>
+				<prop key="velocimacro.library">macro.vm</prop>
+				<prop key="parser.pool.size">200</prop>
+			</props>
+		</property>
+		<property name="resourceLoaderPath" value="/WEB-INF/views/common/,/WEB-INF/views/home/" />
+	</bean>
+
+	<bean id="stringUtilsTool" class="org.apache.commons.lang3.StringUtils" />
+	<bean id="arrayUtilsTool" class="org.apache.commons.lang3.ArrayUtils" />
+	<bean id="dateTool" class="org.apache.velocity.tools.generic.DateTool" />
+	<bean id="numberTool" class="org.apache.velocity.tools.generic.NumberTool" />
+	<bean id="shiroTool" class="com.xianglin.xlnodeweb.web.home.shiro.Permission" />
+
+	<!-- multipart resolver, mostly for upload -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<!-- 设置上传文件的最大尺寸为10MB -->
 		<property name="maxUploadSize">
 			<value>10485760</value>
 		</property>
@@ -84,14 +83,14 @@
 
 	<!-- interceptors in order -->
 	<mvc:interceptors>
-		<!-- session interceptor, read/write session from redis -->
+		<!-- session interceptor, may use different repository for sessions -->
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/resources/**" />
 			<beans:bean id="sessionInterceptor" class="org.yaen.starter.web.home.interceptors.SessionInterceptor">
-				<property name="sessionRepository" ref="sessionRepository" />
-				<property name="sessionContext" ref="sessionContext" />
 				<property name="sessionMaxInactiveIntervalInSeconds" value="${session.max.inactive.interval.in.seconds}" />
+				<property name="cookieContext" ref="cookieContext" />
+				<property name="sessionRepository" ref="sessionRepository" />
 			</beans:bean>
 		</mvc:interceptor>
 
@@ -104,6 +103,22 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
+	<!-- use cookie for session context -->
+	<bean id="cookieContext" class="org.yaen.starter.web.home.sessions.CookieContext">
+		<property name="cookieName" value="${session.cookie.name}" />
+		<property name="cookieDomain" value="${session.cookie.domain}" />
+		<property name="cookiePath" value="${session.cookie.path}" />
+		<property name="cookieHttpOnly" value="${session.cookie.httponly}" />
+		<property name="cookieSecure" value="${session.cookie.secure}" />
+		<property name="cookieMaxAge" value="${session.cookie.maxage}" />
+	</bean>
+
+	<!-- session repository -->
+
+	<!-- use this for local session -->
+	<!-- <bean id="sessionRepository" class="org.springframework.session.MapSessionRepository" /> -->
+
+	<!-- use this for redis session -->
 	<bean id="sessionRepository" class="org.springframework.session.data.redis.RedisOperationsSessionRepository">
 		<constructor-arg index="0">
 			<bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
@@ -114,16 +129,6 @@
 				<property name="port" value="${session.redis.port}" />
 			</bean>
 		</constructor-arg>
-	</bean>
-
-	<!-- use cookie for session context -->
-	<bean id="sessionContext" class="org.yaen.starter.web.home.contexts.CookieSessionContext">
-		<property name="cookieName" value="${session.cookie.name}" />
-		<property name="cookieDomain" value="${session.cookie.domain}" />
-		<property name="cookiePath" value="${session.cookie.path}" />
-		<property name="cookieHttpOnly" value="${session.cookie.httponly}" />
-		<property name="cookieSecure" value="${session.cookie.secure}" />
-		<property name="cookieMaxAge" value="${session.cookie.maxage}" />
 	</bean>
 
 </beans>

@@ -1,35 +1,35 @@
 /**
  * 
  */
-package org.yaen.starter.web.home.contexts;
+package org.yaen.starter.web.home.sessions;
 
 import org.springframework.session.ExpiringSession;
 
 /**
- * thread local session, only for single controller life cycle use
+ * thread local session storage, only for single controller life cycle use
  * 
  * @author Yaen 2016年5月19日下午6:42:54
  */
-public class LocalSessionContext {
+public class SessionStorage {
 
 	/** ThreadLocal */
 	private static ThreadLocal<ExpiringSession> context = new ThreadLocal<ExpiringSession>();
 
 	/**
-	 * get session
+	 * get local session
 	 * 
 	 * @return
 	 */
-	public static ExpiringSession getSession() {
+	public static ExpiringSession getLocalSession() {
 		return context.get();
 	}
 
 	/**
-	 * set session
+	 * set local session
 	 * 
 	 * @param session
 	 */
-	public static void setSession(ExpiringSession session) {
+	public static void setLocalSession(ExpiringSession session) {
 		context.set(session);
 	}
 

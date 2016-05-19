@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.contexts;
+package org.yaen.starter.web.home.sessions;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ import lombok.Setter;
  * 
  * @author Yaen 2016年5月19日下午4:32:07
  */
-public class CookieSessionContext {
+public class CookieContext {
 
 	/** cookie name, default to SESSIONID */
 	@Getter
