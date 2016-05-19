@@ -11,11 +11,14 @@
 	<context:annotation-config />
 
 	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.starter.web.home" />
+	<context:component-scan base-package="org.yaen.starter.web.wechat" />
 
-
-	<!-- allow annotation like @Controller -->
-	<mvc:annotation-driven />
+	<!-- mvc request/response -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 
 	<!-- something need for @Mapping ? -->
 	<mvc:default-servlet-handler />
@@ -36,23 +39,16 @@
 				<prop key="input.encoding">UTF-8</prop>
 				<prop key="output.encoding">UTF-8</prop>
 				<prop key="velocimacro.library">macro.vm</prop>
-				<prop key="parser.pool.size">200</prop>
 			</props>
 		</property>
 		<property name="resourceLoaderPath" value="/WEB-INF/views/common/,/WEB-INF/views/home/" />
 	</bean>
 
-	<bean id="stringUtilsTool" class="org.apache.commons.lang3.StringUtils" />
-	<bean id="arrayUtilsTool" class="org.apache.commons.lang3.ArrayUtils" />
-	<bean id="dateTool" class="org.apache.velocity.tools.generic.DateTool" />
-	<bean id="numberTool" class="org.apache.velocity.tools.generic.NumberTool" />
-	<bean id="shiroTool" class="com.xianglin.xlnodeweb.web.home.shiro.Permission" />
-
 	<bean id="velocityViewResolver" class="org.yaen.starter.web.home.views.ExtendVelocityLayoutViewResolver">
 		<property name="order" value="2" />
 		<property name="cache" value="false" />
 		<property name="prefix" value="" />
-		<property name="suffix" value=".vm" />
+		<property name="suffix" value=".html" />
 		<property name="contentType" value="text/html;charset=utf-8" />
 		<property name="exposeRequestAttributes" value="true" />
 		<property name="exposeSessionAttributes" value="true" />
@@ -60,15 +56,6 @@
 		<property name="layoutKey" value="layout" />
 		<property name="layoutUrl" value="layout.vm" />
 		<property name="screenContentKey" value="screen_content" />
-		<property name="toolsMap">
-			<map>
-				<entry key="stringUtils" value-ref="stringUtilsTool" />
-				<entry key="arrayUtils" value-ref="arrayUtilsTool" />
-				<entry key="dateTool" value-ref="dateTool" />
-				<entry key="numberTool" value-ref="numberTool" />
-				<entry key="shiro" value-ref="shiroTool" />
-			</map>
-		</property>
 	</bean>
 
 	<!-- multi part resolver -->
@@ -84,46 +71,12 @@
 
 	<!-- interceptors in order -->
 	<mvc:interceptors>
-		<!-- session interceptor, read/write session from redis -->
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/resources/**" />
-			<beans:bean id="sessionInterceptor" class="org.yaen.starter.web.home.interceptors.SessionInterceptor">
-				<property name="sessionRepository" ref="sessionRepository" />
-				<property name="sessionContext" ref="sessionContext" />
-				<property name="sessionMaxInactiveIntervalInSeconds" value="${session.max.inactive.interval.in.seconds}" />
-			</beans:bean>
-		</mvc:interceptor>
-
-		<!-- starter interceptor, dummy login handler -->
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/resources/**" />
-			<beans:bean id="weixinAuthInterceptor" class="org.yaen.starter.web.home.interceptors.StarterInterceptor">
+			<beans:bean id="weixinAuthInterceptor" class="org.yaen.starter.web.wechat.interceptors.StarterWechatInterceptor">
 			</beans:bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
-
-	<bean id="sessionRepository" class="org.springframework.session.data.redis.RedisOperationsSessionRepository">
-		<constructor-arg index="0">
-			<bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-				<constructor-arg index="0">
-					<bean class="redis.clients.jedis.JedisPoolConfig" />
-				</constructor-arg>
-				<property name="hostName" value="${session.redis.host}" />
-				<property name="port" value="${session.redis.port}" />
-			</bean>
-		</constructor-arg>
-	</bean>
-
-	<!-- use cookie for session context -->
-	<bean id="sessionContext" class="org.yaen.starter.web.home.contexts.CookieSessionContext">
-		<property name="cookieName" value="${session.cookie.name}" />
-		<property name="cookieDomain" value="${session.cookie.domain}" />
-		<property name="cookiePath" value="${session.cookie.path}" />
-		<property name="cookieHttpOnly" value="${session.cookie.httponly}" />
-		<property name="cookieSecure" value="${session.cookie.secure}" />
-		<property name="cookieMaxAge" value="${session.cookie.maxage}" />
-	</bean>
 
 </beans>
