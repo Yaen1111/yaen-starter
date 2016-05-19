@@ -220,7 +220,7 @@ public class OneModelService implements ModelService {
 		// try get old one if need
 		T old = null;
 
-		if (model.isSaveChangeLog()) {
+		if (model.isEnableChangeLog()) {
 
 			old = (T) model.clone();
 
@@ -265,7 +265,7 @@ public class OneModelService implements ModelService {
 		// try get old one if need
 		T old = null;
 
-		if (model.isSaveChangeLog()) {
+		if (model.isEnableChangeLog()) {
 			old = (T) model.clone();
 
 			boolean exists = this.innerSelectModel(old, model.getId(), entity);
@@ -369,7 +369,7 @@ public class OneModelService implements ModelService {
 			this.innerInsertModel(model, null);
 
 			// save change log
-			if (model.isSaveChangeLog()) {
+			if (model.isEnableChangeLog()) {
 				Changelog logmodel = new Changelog(SqlTypes.INSERT, null, model);
 				logmodel.BeforeInsert(this);
 				this.innerInsertModel(logmodel, null);
@@ -398,7 +398,7 @@ public class OneModelService implements ModelService {
 			T old = this.innerUpdateModel(model, null);
 
 			// save change log
-			if (model.isSaveChangeLog()) {
+			if (model.isEnableChangeLog()) {
 				Changelog logmodel = new Changelog(SqlTypes.UPDATE, old, model);
 				logmodel.BeforeInsert(this);
 				this.innerInsertModel(logmodel, null);
@@ -423,7 +423,7 @@ public class OneModelService implements ModelService {
 			T old = this.innerDeleteModel(model, null);
 
 			// save change log
-			if (model.isSaveChangeLog()) {
+			if (model.isEnableChangeLog()) {
 				Changelog logmodel = new Changelog(SqlTypes.DELETE, old, null);
 				logmodel.BeforeInsert(this);
 				this.innerInsertModel(logmodel, null);

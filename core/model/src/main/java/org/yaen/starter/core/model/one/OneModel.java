@@ -27,11 +27,11 @@ import lombok.ToString;
 public class OneModel implements BaseModel {
 	private static final long serialVersionUID = 101L;
 
-	/** save change log or not, default to false */
+	/** enable change log or not, default to false */
 	@Getter
 	@Setter
 	@OneIgnore
-	private boolean saveChangeLog = false;
+	private boolean enableChangeLog = false;
 
 	/** the primary key of id */
 	@Getter

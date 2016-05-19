@@ -5,8 +5,8 @@ package org.yaen.starter.common.data.exceptions;
  * 
  * @author Yaen 2016年1月13日下午7:31:52
  */
-public class OperationCancelledException extends Exception {
-	private static final long serialVersionUID = 8154004478287341494L;
+public class OperationCancelledException extends CoreException {
+	private static final long serialVersionUID = -2869692681784416785L;
 
 	/**
 	 * @param message

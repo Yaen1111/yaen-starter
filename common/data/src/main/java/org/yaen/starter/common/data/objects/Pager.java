@@ -16,23 +16,17 @@ import lombok.Setter;
 public class Pager implements Serializable {
 	private static final long serialVersionUID = -6042765037026590908L;
 
-	/**
-	 * total item, set by user
-	 */
+	/** total item, set by user */
 	@Getter
 	@Setter
 	private int totalItem = 0;
 
-	/**
-	 * items per page, default to 10
-	 */
+	/** items per page, default to 10 */
 	@Getter
 	@Setter
 	private int itemPerPage = 10;
 
-	/**
-	 * current page, should not
-	 */
+	/** current page, should not */
 	@Getter
 	@Setter
 	private int currentPage = 0;

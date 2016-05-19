@@ -12,16 +12,12 @@ import lombok.Setter;
 public class RequestT2<T1, T2> extends Request {
 	private static final long serialVersionUID = -557931216018852895L;
 
-	/**
-	 * the inner item 1
-	 */
+	/** the inner item 1 */
 	@Getter
 	@Setter
 	private T1 item1;
 
-	/**
-	 * the inner item 2
-	 */
+	/** the inner item 2 */
 	@Getter
 	@Setter
 	private T2 item2;

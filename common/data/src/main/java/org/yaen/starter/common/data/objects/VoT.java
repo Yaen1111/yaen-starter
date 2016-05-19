@@ -14,10 +14,8 @@ import lombok.Setter;
  */
 public class VoT<T> extends Vo {
 	private static final long serialVersionUID = 1130011306921457863L;
-	
-	/**
-	 * the item of vo
-	 */
+
+	/** the item of vo */
 	@Getter
 	@Setter
 	private T item;

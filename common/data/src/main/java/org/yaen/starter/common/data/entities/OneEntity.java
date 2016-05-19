@@ -17,12 +17,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * one entity(persistent object) for all crud operation, all entity has to inherit this one
+ * one entity(persistent object) for all crud operation, all entity has to inherit this one. if can not inherite this
+ * one, try use another entity to hold other object as entity.
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */
 public class OneEntity implements BaseEntity {
-	private static final long serialVersionUID = 100110L;
+	private static final long serialVersionUID = 218626629147397851L;
 
 	/** the actual entity, maybe self */
 	@OneIgnore

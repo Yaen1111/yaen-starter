@@ -6,12 +6,13 @@ package org.yaen.starter.common.data.entities;
 import org.yaen.starter.common.data.exceptions.CoreException;
 
 /**
- * another entity(persistent object) which can contain another object, which must have an "id" field of type bigint
+ * another entity(persistent object) which can contain another object, which must implement BaseEntity and have an "id"
+ * field of type long
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */
 public class AnotherEntity extends OneEntity {
-	private static final long serialVersionUID = 100111L;
+	private static final long serialVersionUID = -7232516405181212096L;
 
 	/**
 	 * bridge id to entity
@@ -39,11 +40,11 @@ public class AnotherEntity extends OneEntity {
 	 * @param another
 	 * @throws CoreException
 	 */
-	public AnotherEntity(BaseEntity another) throws CoreException {
+	public AnotherEntity(BaseEntity another) {
 		super();
 
 		if (another == null)
-			throw new CoreException("another should not be null");
+			throw new IllegalArgumentException("another entity should not be null");
 
 		this.entity = another;
 	}

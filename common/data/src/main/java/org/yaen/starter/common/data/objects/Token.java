@@ -11,32 +11,24 @@ import lombok.Setter;
  * @author Yaen 2015年11月30日下午11:56:39
  */
 public class Token implements Serializable {
-	private static final long serialVersionUID = 100100L;
+	private static final long serialVersionUID = -5838918950786836805L;
 
-	/**
-	 * token code
-	 */
+	/** token code */
 	@Getter
 	@Setter
 	private String code = "";
 
-	/**
-	 * token message
-	 */
+	/** token message */
 	@Getter
 	@Setter
 	private String message = "";
 
-	/**
-	 * token timestamp
-	 */
+	/** token timestamp */
 	@Getter
 	@Setter
 	private long timestamp = 0;
 
-	/**
-	 * token pager
-	 */
+	/** token pager */
 	@Setter
 	private Pager pager;
 

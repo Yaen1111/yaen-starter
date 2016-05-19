@@ -16,18 +16,18 @@ import org.yaen.starter.common.data.services.ModelService;
 public interface BaseModel extends BaseEntity, Cloneable, Serializable {
 
 	/**
-	 * get save change log flag
+	 * get enable change log flag
 	 * 
 	 * @return
 	 */
-	public boolean isSaveChangeLog();
+	public boolean isEnableChangeLog();
 
 	/**
-	 * set save change log flag
+	 * set enable change log flag
 	 * 
 	 * @param saveChangeLog
 	 */
-	public void setSaveChangeLog(boolean saveChangeLog);
+	public void setEnableChangeLog(boolean enableChangeLog);
 
 	/**
 	 * @see java.lang.Object#clone()

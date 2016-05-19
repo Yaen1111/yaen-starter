@@ -45,7 +45,7 @@ public class OneTester extends AbstractJUnit4SpringContextTests {
 		try {
 
 			SubCode code = new SubCode();
-			code.setSaveChangeLog(true);
+			code.setEnableChangeLog(true);
 
 			if (service.trySelectModel(code, 2)) {
 

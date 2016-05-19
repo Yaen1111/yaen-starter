@@ -5,7 +5,7 @@ package org.yaen.starter.common.data.exceptions;
  * 
  * @author Yaen 2016年1月13日下午7:31:52
  */
-public class DataNotExistsException extends Exception {
+public class DataNotExistsException extends CoreException {
 	private static final long serialVersionUID = 8154004478287341494L;
 
 	/**

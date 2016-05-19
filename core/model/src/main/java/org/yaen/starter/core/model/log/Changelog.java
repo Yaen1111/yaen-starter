@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.core.model.log;
 
 import org.yaen.starter.common.data.annotations.OneCopy;
@@ -119,7 +116,7 @@ public class Changelog extends OneModel implements OneTableHandler {
 		try {
 			AnotherEntity another = new AnotherEntity(this.beforeModel == null ? this.afterModel : this.beforeModel);
 			name = another.getTableName();
-		} catch (CoreException ex) {
+		} catch (RuntimeException ex) {
 			name = "UNKNOWN";
 		}
 
