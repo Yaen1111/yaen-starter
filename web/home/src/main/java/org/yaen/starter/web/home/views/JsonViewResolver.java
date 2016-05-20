@@ -19,10 +19,14 @@ import lombok.Setter;
  */
 public class JsonViewResolver implements ViewResolver, Ordered {
 
+	/** order of resolver, small is higher */
 	@Getter
 	@Setter
 	private int order = Ordered.HIGHEST_PRECEDENCE;
 
+	/**
+	 * @see org.springframework.web.servlet.ViewResolver#resolveViewName(java.lang.String, java.util.Locale)
+	 */
 	@Override
 	public View resolveViewName(String viewName, Locale locale) throws Exception {
 		if (StringUtil.equals("json", viewName)) {

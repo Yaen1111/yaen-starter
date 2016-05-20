@@ -25,7 +25,7 @@
 	<!-- resource for css/js/image, enable cache -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
-	<!-- json view resolver, for view name of json, return json string as view -->
+	<!-- json view resolver, for view name of json, return "json" string as view -->
 	<bean id="jsonViewResolver" class="org.yaen.starter.web.home.views.JsonViewResolver">
 		<property name="order" value="1" />
 	</bean>
@@ -63,6 +63,7 @@
 				<prop key="parser.pool.size">200</prop>
 			</props>
 		</property>
+		<!-- all vm file should be found in these folders -->
 		<property name="resourceLoaderPath" value="/WEB-INF/views/common/,/WEB-INF/views/home/" />
 	</bean>
 
