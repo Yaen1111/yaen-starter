@@ -5,6 +5,12 @@ package org.yaen.starter.web.home.utils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -118,7 +124,62 @@ public class WebUtil extends WebUtils {
 	 * @return
 	 */
 	public static String getClientIp(HttpServletRequest request) {
-		return request.getRemoteAddr();
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+			ip = request.getRemoteAddr();
+
+			// if is client is self, get local ip from inet info
+			if (ip == "127.0.0.1") {
+				try {
+					InetAddress inet = null;
+					inet = InetAddress.getLocalHost();
+					ip = inet.getHostAddress();
+				} catch (UnknownHostException e) {
+					// ignore exception
+				}
+			}
+		}
+
+		// if is multi agent, the first ip is real one, seperated by commer
+		if (ip != null && ip.indexOf(",") > 0) {
+			ip = ip.substring(0, ip.indexOf(","));
+		}
+		return ip;
+	}
+
+	/**
+	 * get server ip by local interface
+	 * 
+	 * @return
+	 * @throws SocketException
+	 */
+	public static String getServerIp() throws SocketException {
+		String serverIp = "";
+		Enumeration<NetworkInterface> en = null;
+
+		// get all net
+		en = NetworkInterface.getNetworkInterfaces();
+		while (en.hasMoreElements()) {
+			NetworkInterface network = en.nextElement();
+			Enumeration<InetAddress> enAddr = network.getInetAddresses();
+			while (enAddr.hasMoreElements()) {
+				InetAddress addr = enAddr.nextElement();
+				if (addr instanceof Inet4Address) {
+					if (addr.getHostAddress() != "127.0.0.1") {
+						serverIp = addr.getHostAddress();
+						break;
+					}
+				}
+			}
+		}
+
+		return serverIp;
 	}
 
 	/**

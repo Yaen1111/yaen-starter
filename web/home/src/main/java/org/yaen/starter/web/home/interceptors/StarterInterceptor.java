@@ -26,6 +26,7 @@ public class StarterInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		// call super
 		if (super.preHandle(request, response, handler)) {
 
 			log.debug("preHandle, ip={}, uri={}", WebUtil.getClientIp(request), request.getRequestURI());
@@ -59,6 +60,8 @@ public class StarterInterceptor extends HandlerInterceptorAdapter {
 			ModelAndView modelAndView) throws Exception {
 
 		// after controller done, but before view
+
+		// call super
 		super.postHandle(request, response, handler, modelAndView);
 	}
 
@@ -70,7 +73,12 @@ public class StarterInterceptor extends HandlerInterceptorAdapter {
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 
-		// after controller and view, may handle exception
+		// after controller and view, handle exception
+		if (ex != null) {
+			log.error("exception", ex);
+		}
+
+		// call super
 		super.afterCompletion(request, response, handler, ex);
 	}
 }

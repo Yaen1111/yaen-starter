@@ -26,12 +26,13 @@
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<!-- json view resolver, for view name of json, return "json" string as view -->
-	<bean id="jsonViewResolver" class="org.yaen.starter.web.home.views.JsonViewResolver">
+	<bean id="jsonViewResolver" class="org.yaen.starter.web.home.modelandviews.JsonViewResolver">
 		<property name="order" value="1" />
+		<property name="viewFilter" value="json" />
 	</bean>
 
 	<!-- velocity view resolver, find file in given folder with .vm, the controller just return the path/filename -->
-	<bean id="velocityViewResolver" class="org.yaen.starter.web.home.views.ExtendVelocityLayoutViewResolver">
+	<bean id="velocityViewResolver" class="org.yaen.starter.web.home.modelandviews.ExtendVelocityLayoutViewResolver">
 		<property name="order" value="2" />
 		<property name="cache" value="false" />
 		<property name="prefix" value="" />

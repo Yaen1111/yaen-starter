@@ -953,6 +953,7 @@
 				<directory>src/main/resources</directory>
 				<includes>
 					<include>spring/**/*.*</include>
+					<include>logback.xml</include>
 				</includes>
 			</resource>
 			<!-- resources without filter -->
@@ -964,6 +965,7 @@
 				</includes>
 				<excludes>
 					<exclude>spring/**/*.*</exclude>
+					<exclude>logback.xml</exclude>
 				</excludes>
 			</resource>
 		</resources>

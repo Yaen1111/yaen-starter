@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.views;
+package org.yaen.starter.web.home.modelandviews;
 
 import java.util.HashMap;
 import java.util.Map;
