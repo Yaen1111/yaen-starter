@@ -4,13 +4,132 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	default-autowire="byName">
 
-	<!-- allow annotation like @Service -->
+	<!-- pcweb using velocity template -->
+
+	<!-- allow annotation like @Service, only in this file -->
 	<context:annotation-config />
 
-	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.starter.web.pcweb" />
+	<!-- scan for component like @Service, only in this file -->
+	<context:component-scan base-package="org.yaen.starter.web.home" />
+
+	<!-- allow annotation like @Controller, only in this file -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- resource for css/js/image, enable cache -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<!-- json view resolver, for view name of json, return json string as view -->
+	<bean id="jsonViewResolver" class="org.yaen.starter.web.home.views.JsonViewResolver">
+		<property name="order" value="1" />
+	</bean>
+
+	<!-- velocity view resolver, find file in given folder with .vm, the controller just return the path/filename -->
+	<bean id="velocityViewResolver" class="org.yaen.starter.web.home.views.ExtendVelocityLayoutViewResolver">
+		<property name="order" value="2" />
+		<property name="cache" value="false" />
+		<property name="prefix" value="" />
+		<property name="suffix" value=".vm" />
+		<property name="contentType" value="text/html;charset=utf-8" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="layoutKey" value="layout" />
+		<property name="layoutUrl" value="layout.vm" />
+		<property name="screenContentKey" value="screen_content" />
+		<property name="toolsMap">
+			<map>
+				<entry key="stringUtils" value-ref="stringUtilsTool" />
+				<entry key="arrayUtils" value-ref="arrayUtilsTool" />
+				<entry key="dateTool" value-ref="dateTool" />
+				<entry key="numberTool" value-ref="numberTool" />
+				<!-- <entry key="shiro" value-ref="shiroTool" /> -->
+			</map>
+		</property>
+	</bean>
+
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding">UTF-8</prop>
+				<prop key="velocimacro.library">macro.vm</prop>
+				<prop key="parser.pool.size">200</prop>
+			</props>
+		</property>
+		<property name="resourceLoaderPath" value="/WEB-INF/views/common/,/WEB-INF/views/home/" />
+	</bean>
+
+	<bean id="stringUtilsTool" class="org.apache.commons.lang3.StringUtils" />
+	<bean id="arrayUtilsTool" class="org.apache.commons.lang3.ArrayUtils" />
+	<bean id="dateTool" class="org.apache.velocity.tools.generic.DateTool" />
+	<bean id="numberTool" class="org.apache.velocity.tools.generic.NumberTool" />
+	<!-- <bean id="shiroTool" class="com.xianglin.xlnodeweb.web.home.shiro.Permission" /> -->
+
+	<!-- multipart resolver, mostly for upload -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>10485760</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+
+	<!-- interceptors in order -->
+	<mvc:interceptors>
+		<!-- session interceptor, may use different repository for sessions -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resources/**" />
+			<beans:bean id="sessionInterceptor" class="org.yaen.starter.web.home.interceptors.SessionInterceptor">
+				<property name="sessionMaxInactiveIntervalInSeconds" value="${session.max.inactive.interval.in.seconds}" />
+				<property name="cookieContext" ref="cookieContext" />
+				<property name="sessionRepository" ref="sessionRepository" />
+			</beans:bean>
+		</mvc:interceptor>
+
+		<!-- starter interceptor, dummy login handler -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/resources/**" />
+			<beans:bean id="weixinAuthInterceptor" class="org.yaen.starter.web.home.interceptors.StarterInterceptor">
+			</beans:bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- use cookie for session context -->
+	<bean id="cookieContext" class="org.yaen.starter.web.home.contexts.CookieContext">
+		<property name="cookieName" value="${session.cookie.name}" />
+		<property name="cookieDomain" value="${session.cookie.domain}" />
+		<property name="cookiePath" value="${session.cookie.path}" />
+		<property name="cookieHttpOnly" value="${session.cookie.httponly}" />
+		<property name="cookieSecure" value="${session.cookie.secure}" />
+		<property name="cookieMaxAge" value="${session.cookie.maxage}" />
+	</bean>
+
+	<!-- session repository -->
+
+	<!-- use this for local session -->
+	<bean id="sessionRepository" class="org.springframework.session.MapSessionRepository" />
+
+	<!-- use this for redis session -->
+	<!--<bean id="sessionRepository" class="org.springframework.session.data.redis.RedisOperationsSessionRepository"> -->
+	<!-- <constructor-arg index="0"> -->
+	<!-- <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"> -->
+	<!-- <constructor-arg index="0"> -->
+	<!-- <bean class="redis.clients.jedis.JedisPoolConfig" /> -->
+	<!-- </constructor-arg> -->
+	<!-- <property name="hostName" value="${session.redis.host}" /> -->
+	<!-- <property name="port" value="${session.redis.port}" /> -->
+	<!-- </bean> -->
+	<!-- </constructor-arg> -->
+	<!--</bean> -->
 
 </beans>

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * starter controller, mostly for sample
@@ -28,7 +27,7 @@ public class StarterController {
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@RequestMapping("/index.html")
 	public String index(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		return "index";
 	}
