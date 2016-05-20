@@ -4,27 +4,23 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	default-autowire="byName">
 
-	<!-- allow annotation like @Service -->
-	<context:annotation-config />
-
-	<!-- scan for component like @Service -->
-	<context:component-scan base-package="org.yaen.starter.web.home" />
-
+	<!-- pcweb using velocity template -->
 
 	<!-- allow annotation like @Controller -->
-	<mvc:annotation-driven />
-
-	<!-- something need for @Mapping ? -->
-	<mvc:default-servlet-handler />
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 
 	<!-- resource for css/js/image, enable cache -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 
-	<!-- json view resolver -->
+	<!-- json view resolver, for view name of json, return json string as view -->
 	<bean id="jsonViewResolver" class="org.yaen.starter.web.home.views.JsonViewResolver">
 		<property name="order" value="1" />
 	</bean>
@@ -48,7 +44,7 @@
 				<entry key="arrayUtils" value-ref="arrayUtilsTool" />
 				<entry key="dateTool" value-ref="dateTool" />
 				<entry key="numberTool" value-ref="numberTool" />
-				<entry key="shiro" value-ref="shiroTool" />
+				<!-- <entry key="shiro" value-ref="shiroTool" /> -->
 			</map>
 		</property>
 	</bean>
@@ -69,7 +65,7 @@
 	<bean id="arrayUtilsTool" class="org.apache.commons.lang3.ArrayUtils" />
 	<bean id="dateTool" class="org.apache.velocity.tools.generic.DateTool" />
 	<bean id="numberTool" class="org.apache.velocity.tools.generic.NumberTool" />
-	<bean id="shiroTool" class="com.xianglin.xlnodeweb.web.home.shiro.Permission" />
+	<!-- <bean id="shiroTool" class="com.xianglin.xlnodeweb.web.home.shiro.Permission" /> -->
 
 	<!-- multipart resolver, mostly for upload -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -104,7 +100,7 @@
 	</mvc:interceptors>
 
 	<!-- use cookie for session context -->
-	<bean id="cookieContext" class="org.yaen.starter.web.home.sessions.CookieContext">
+	<bean id="cookieContext" class="org.yaen.starter.web.home.contexts.CookieContext">
 		<property name="cookieName" value="${session.cookie.name}" />
 		<property name="cookieDomain" value="${session.cookie.domain}" />
 		<property name="cookiePath" value="${session.cookie.path}" />
@@ -116,19 +112,19 @@
 	<!-- session repository -->
 
 	<!-- use this for local session -->
-	<!-- <bean id="sessionRepository" class="org.springframework.session.MapSessionRepository" /> -->
+	<bean id="sessionRepository" class="org.springframework.session.MapSessionRepository" />
 
 	<!-- use this for redis session -->
-	<bean id="sessionRepository" class="org.springframework.session.data.redis.RedisOperationsSessionRepository">
-		<constructor-arg index="0">
-			<bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-				<constructor-arg index="0">
-					<bean class="redis.clients.jedis.JedisPoolConfig" />
-				</constructor-arg>
-				<property name="hostName" value="${session.redis.host}" />
-				<property name="port" value="${session.redis.port}" />
-			</bean>
-		</constructor-arg>
-	</bean>
+	<!--<bean id="sessionRepository" class="org.springframework.session.data.redis.RedisOperationsSessionRepository"> -->
+	<!-- <constructor-arg index="0"> -->
+	<!-- <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"> -->
+	<!-- <constructor-arg index="0"> -->
+	<!-- <bean class="redis.clients.jedis.JedisPoolConfig" /> -->
+	<!-- </constructor-arg> -->
+	<!-- <property name="hostName" value="${session.redis.host}" /> -->
+	<!-- <property name="port" value="${session.redis.port}" /> -->
+	<!-- </bean> -->
+	<!-- </constructor-arg> -->
+	<!--</bean> -->
 
 </beans>

@@ -28,8 +28,8 @@ public class StarterController {
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "index", method = RequestMethod.GET)
-	public void index(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public String index(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		return "index";
 	}
 }

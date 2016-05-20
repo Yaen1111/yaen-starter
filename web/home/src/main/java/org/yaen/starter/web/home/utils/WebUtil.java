@@ -24,6 +24,7 @@ public class WebUtil extends WebUtils {
 
 	/** JSON_MIME_TYPE */
 	private static final String MIME_TYPE_JSON = "application/json;charset=UTF-8";
+	private static final String MIME_TYPE_HTML = "text/html;charset=UTF-8";
 
 	/**
 	 * get header by given name with default value
@@ -169,6 +170,17 @@ public class WebUtil extends WebUtils {
 	}
 
 	/**
+	 * write html to response
+	 * 
+	 * @param response
+	 * @param message
+	 * @throws IOException
+	 */
+	public static void writeHtmlToResponse(HttpServletResponse response, String message) throws IOException {
+		writeToResponse(response, message, MIME_TYPE_HTML);
+	}
+
+	/**
 	 * write json to response
 	 * 
 	 * @param response
@@ -177,6 +189,17 @@ public class WebUtil extends WebUtils {
 	 */
 	public static void writeJsonToResponse(HttpServletResponse response, String message) throws IOException {
 		writeToResponse(response, message, MIME_TYPE_JSON);
+	}
+
+	/**
+	 * write refresh to response
+	 * 
+	 * @param response
+	 * @param redirectURL
+	 * @throws IOException
+	 */
+	public static void writeRefreshToResponse(HttpServletResponse response) throws IOException {
+		response.sendRedirect("");
 	}
 
 }

@@ -8,8 +8,8 @@ import org.springframework.session.SessionRepository;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.web.home.sessions.CookieContext;
-import org.yaen.starter.web.home.sessions.SessionStorage;
+import org.yaen.starter.web.home.contexts.CookieContext;
+import org.yaen.starter.web.home.contexts.LocalStorageContext;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +73,7 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 			}
 
 			// save session in local storage
-			SessionStorage.setLocalSession(session);
+			LocalStorageContext.setSession(session);
 			log.debug("save session in local storage");
 
 			return true;
@@ -91,7 +91,7 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		// get session from thread local
-		ExpiringSession session = SessionStorage.getLocalSession();
+		ExpiringSession session = LocalStorageContext.getSession();
 		log.debug("get session from local storage:{}", session);
 
 		// deal session if any
@@ -133,7 +133,7 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 
 		// delete local
-		SessionStorage.setLocalSession(null);
+		LocalStorageContext.setSession(null);
 
 		// call super
 		super.afterCompletion(request, response, handler, ex);

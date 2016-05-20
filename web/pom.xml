@@ -13,21 +13,20 @@
 
 	<modules>
 		<module>home</module>
+		<module>pcweb</module>
 		<module>wechat</module>
 	</modules>
 
 	<dependencies>
 
-		<!-- jsp provided -->
+		<!-- servlet provided -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>javax.servlet.jsp-api</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 	</dependencies>

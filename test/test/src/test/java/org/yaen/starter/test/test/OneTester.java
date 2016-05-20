@@ -1,20 +1,18 @@
-package org.yaen.starter.test.test.unit;
+package org.yaen.starter.test.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.core.model.ark.SubCode;
+import org.yaen.starter.test.test.tester.UnitTester;
 
 /**
  * 
  * @author Yaen 2015年12月15日下午1:00:19
  */
-@ContextConfiguration(locations = { "classpath:/spring/test-test.xml" })
-public class OneTester extends AbstractJUnit4SpringContextTests {
+public class OneTester extends UnitTester {
 
 	@Autowired
 	private ModelService service;

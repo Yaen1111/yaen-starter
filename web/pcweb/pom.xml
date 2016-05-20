@@ -3,12 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.yaen</groupId>
-		<artifactId>yaen-starter-biz</artifactId>
+		<artifactId>yaen-starter-web</artifactId>
 		<version>1.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-starter-biz-implement</artifactId>
-	<name>yaen-starter-biz-implement</name>
+	<artifactId>yaen-starter-web-pcweb</artifactId>
+	<name>yaen-starter-web-pcweb</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.yaen</groupId>
+			<artifactId>yaen-starter-web-home</artifactId>
+		</dependency>
+
+	</dependencies>
 
 	<build>
 		<filters>
@@ -16,15 +24,4 @@
 		</filters>
 	</build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.yaen</groupId>
-			<artifactId>yaen-starter-biz-shared</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.yaen</groupId>
-			<artifactId>yaen-starter-biz-wechat</artifactId>
-		</dependency>
-	</dependencies>
 </project>

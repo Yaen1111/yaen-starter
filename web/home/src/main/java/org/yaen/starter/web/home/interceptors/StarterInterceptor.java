@@ -3,8 +3,10 @@ package org.yaen.starter.web.home.interceptors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.session.ExpiringSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.yaen.starter.web.home.contexts.LocalStorageContext;
 import org.yaen.starter.web.home.utils.WebUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,18 @@ public class StarterInterceptor extends HandlerInterceptorAdapter {
 		if (super.preHandle(request, response, handler)) {
 
 			log.debug("preHandle, ip={}, uri={}", WebUtil.getClientIp(request), request.getRequestURI());
+
+			// get session
+			ExpiringSession session = LocalStorageContext.getSession();
+
+			log.debug("preHandle, session={}", session);
+
+			// if session is null, need refresh page
+			if (session == null) {
+				String message = "<div style='font-size:30px'>session not exists</div>";
+				WebUtil.writeHtmlToResponse(response, message);
+				return false;
+			}
 
 			// return false for end of response (like auth failed), and need set response
 

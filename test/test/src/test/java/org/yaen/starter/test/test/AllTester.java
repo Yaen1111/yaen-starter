@@ -1,23 +1,38 @@
-package org.yaen.starter.test.test.unit;
+package org.yaen.starter.test.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.yaen.starter.biz.shared.objects.PartyDTO;
+import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.biz.shared.services.PartyService;
+import org.yaen.starter.biz.shared.services.UserService;
 import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.test.test.tester.UnitTester;
 
 /**
  * 
  * @author Yaen 2015年12月15日下午1:00:19
  */
-@ContextConfiguration(locations = { "classpath:/spring/test-test.xml" })
-public class PartyServiceTester extends AbstractJUnit4SpringContextTests {
+public class AllTester extends UnitTester {
 
 	@Autowired
-	private PartyService partyService;
+	PartyService partyService;
+
+	@Autowired
+	UserService userService;
+
+	@org.junit.BeforeClass
+	public static void BeforeClass() {
+		// before all test, only once
+		System.out.println("------beforeclass------");
+	}
+
+	@org.junit.Before
+	public void Before() {
+		// before each test
+		System.out.println("------before------");
+	}
 
 	/*
 	 * unit test
@@ -31,6 +46,7 @@ public class PartyServiceTester extends AbstractJUnit4SpringContextTests {
 		System.out.println("------------");
 
 		try {
+			// create one party
 			PartyDTO dto = new PartyDTO();
 			dto.setPartyRoleType("admin2");
 			dto.setPartyType("PERSON");
@@ -38,6 +54,17 @@ public class PartyServiceTester extends AbstractJUnit4SpringContextTests {
 			long partyid = partyService.RegisterNewParty(dto);
 
 			System.out.println(partyid);
+
+			// create user by given party
+			UserDTO dto2 = new UserDTO();
+			dto2.setUserID(partyid);
+			dto2.setUserName("Linda");
+			dto2.setPasswordSalt("123");
+			dto2.setPasswordHash("321");
+
+			long userid = userService.RegisterNewUser(dto2);
+
+			System.out.println(userid);
 
 		} catch (CommonException ex) {
 			System.out.println(ex);
@@ -53,6 +80,18 @@ public class PartyServiceTester extends AbstractJUnit4SpringContextTests {
 		System.out.println("------------");
 		System.out.println("------------");
 		System.out.println("------------");
+	}
+
+	@org.junit.After
+	public void After() {
+		// after each test
+		System.out.println("------after------");
+	}
+
+	@org.junit.AfterClass
+	public static void AfterClass() {
+		// after all test, only once
+		System.out.println("------afterclass------");
 	}
 
 }

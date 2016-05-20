@@ -12,6 +12,6 @@
 	<name>yaen-starter-assembly</name>
 
 	<modules>
-		<module>home</module>
+		<module>pcweb</module>
 	</modules>
 </project>
