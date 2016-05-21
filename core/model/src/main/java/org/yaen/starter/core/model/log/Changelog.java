@@ -10,6 +10,7 @@ import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.one.OneModel;
 
 import lombok.Getter;
@@ -77,7 +78,7 @@ public class Changelog extends OneModel implements OneTableHandler {
 		case SqlTypes.UPDATE:
 			AssertUtil.notNull(beforeModel);
 			AssertUtil.notNull(afterModel);
-			AssertUtil.isTrue(beforeModel.getClass().getName() == afterModel.getClass().getName(),
+			AssertUtil.isTrue(StringUtil.equals(beforeModel.getClass().getName(), afterModel.getClass().getName()),
 					"the before and after should be the same model");
 			break;
 		default:

@@ -33,16 +33,16 @@ public class StarterController {
 	private UserService userService;
 
 	/**
-	 * index show fixed page
+	 * welcome show fixed page
 	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("/index.html")
-	public String index(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		return "index";
+	@RequestMapping("/welcome.html")
+	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		return new ModelAndView("welcome", "welcome", "welcome content");
 	}
 
 	/**
@@ -56,16 +56,12 @@ public class StarterController {
 	@RequestMapping("/model.html")
 	public ModelAndView model(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		Map<String, Object> model = new HashMap<String, Object>();
 		UserDTO user = new UserDTO();
-		user.setUserName("username");
-		user.setTrueName("truename");
+		user.setUserName("John");
+		user.setTrueName("John Smith");
 
-		model.put("user", user);
-
-		return new ModelAndView("model", model);
+		return new ModelAndView("model", "user", user);
 	}
-	
 
 	/**
 	 * json, show model content

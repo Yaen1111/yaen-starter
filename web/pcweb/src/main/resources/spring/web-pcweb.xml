@@ -22,6 +22,9 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
+	<!-- default home page, need controller to handle this -->
+	<mvc:view-controller path="/" view-name="index.html" />
+
 	<!-- resource for css/js/image, enable cache -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 

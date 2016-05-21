@@ -21,22 +21,7 @@ public class StringUtil extends StringUtils {
 			return true;
 		}
 
-		return s1.trim().compareToIgnoreCase(s2.trim()) == 0;
-	}
-
-	/**
-	 * s1 is the same as s2, case sensitive and care space
-	 * 
-	 * @param s1
-	 * @param s2
-	 * @return
-	 */
-	public static boolean sameAs(String s1, String s2) {
-		if (s1 == null) {
-			return s2 == null;
-		} else {
-			return s1.compareTo(s2) == 0;
-		}
+		return StringUtil.equalsIgnoreCase(s1.trim(), s2.trim());
 	}
 
 	/**

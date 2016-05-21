@@ -124,18 +124,19 @@ public class WebUtil extends WebUtils {
 	 * @return
 	 */
 	public static String getClientIp(HttpServletRequest request) {
+		// get ip in order
 		String ip = request.getHeader("x-forwarded-for");
-		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+		if (StringUtil.isBlank(ip) || StringUtil.equalsIgnoreCase(ip, "unknown")) {
 			ip = request.getHeader("Proxy-Client-IP");
 		}
-		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+		if (StringUtil.isBlank(ip) || StringUtil.equalsIgnoreCase(ip, "unknown")) {
 			ip = request.getHeader("WL-Proxy-Client-IP");
 		}
-		if (ip == null || ip.length() == 0 || ip.equalsIgnoreCase("unknown")) {
+		if (StringUtil.isBlank(ip) || StringUtil.equalsIgnoreCase(ip, "unknown")) {
 			ip = request.getRemoteAddr();
 
 			// if is client is self, get local ip from inet info
-			if (ip == "127.0.0.1") {
+			if (StringUtil.equals(ip, "127.0.0.1")) {
 				try {
 					InetAddress inet = null;
 					inet = InetAddress.getLocalHost();
@@ -171,7 +172,7 @@ public class WebUtil extends WebUtils {
 			while (enAddr.hasMoreElements()) {
 				InetAddress addr = enAddr.nextElement();
 				if (addr instanceof Inet4Address) {
-					if (addr.getHostAddress() != "127.0.0.1") {
+					if (!StringUtil.equals(addr.getHostAddress(), "127.0.0.1")) {
 						serverIp = addr.getHostAddress();
 						break;
 					}
