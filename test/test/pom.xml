@@ -26,10 +26,6 @@
 			<groupId>org.yaen</groupId>
 			<artifactId>yaen-starter-web-home</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.yaen</groupId>
-			<artifactId>yaen-starter-web-wechat</artifactId>
-		</dependency>
 
 		<!-- Test -->
 		<dependency>

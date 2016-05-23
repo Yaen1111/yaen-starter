@@ -13,8 +13,10 @@
 
 	<modules>
 		<module>home</module>
-		<module>pcweb</module>
-		<module>wechat</module>
+		<module>json</module>
+		<module>velocity</module>
+		<module>freemarker</module>
+		<module>jsp</module>
 	</modules>
 
 	<dependencies>

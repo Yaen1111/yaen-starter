@@ -173,12 +173,22 @@
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-web-pcweb</artifactId>
+				<artifactId>yaen-starter-web-json</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-web-wechat</artifactId>
+				<artifactId>yaen-starter-web-velocity</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-web-freemarker</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-web-jsp</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 

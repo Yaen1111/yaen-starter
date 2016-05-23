@@ -12,7 +12,9 @@
 	<name>yaen-starter-assembly</name>
 
 	<modules>
-		<module>pcweb</module>
-		<module>wechat</module>
+		<module>json</module>
+		<module>velocity</module>
+		<module>freemarker</module>
+		<module>jsp</module>
 	</modules>
 </project>
