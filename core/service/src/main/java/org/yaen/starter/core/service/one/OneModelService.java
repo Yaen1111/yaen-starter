@@ -53,7 +53,7 @@ public class OneModelService implements ModelService {
 
 		// describe table, if table not exists, throw exception
 		try {
-			describes = zeroMapper.describeTable(entity);
+			describes = zeroMapper.describeTable(entity.getTableName());
 		} catch (BadSqlGrammarException ex) {
 			Throwable ex2 = ex.getCause();
 

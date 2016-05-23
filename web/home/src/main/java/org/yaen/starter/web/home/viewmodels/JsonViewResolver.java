@@ -1,4 +1,4 @@
-package org.yaen.starter.web.json.modelandviews;
+package org.yaen.starter.web.home.viewmodels;
 
 import java.util.Locale;
 

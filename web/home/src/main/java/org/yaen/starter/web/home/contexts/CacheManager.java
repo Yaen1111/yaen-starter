@@ -1,53 +1,129 @@
-package org.yaen.starter.web.home.utils;
+package org.yaen.starter.web.home.contexts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.session.ExpiringSession;
+import org.yaen.starter.web.home.utils.SerializeUtil;
 
+import lombok.Setter;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 /**
- * 缓存操作工具类
+ * session manager, support session and redis global session
  * 
- * @author Yaen
- *
+ * @author Yaen 2016年5月19日下午6:42:54
  */
 public class CacheManager {
 
-	public static final Logger logger = LoggerFactory
-			.getLogger(CacheManager.class);
+	/** session key */
+	public static final String SESSION_KEY = "session";
 
+	/** session id key */
+	public static final String SESSION_ID_KEY = "sessionid";
+
+	/** the jedis pool bean */
+	@Setter
 	private JedisPool cacheJedisPool;
 
+	/** the global name space in redis */
+	@Setter
 	private String namespace = "";
 
-	public String hset(final String hashKey, final String fieldValue,
-			final String value, final int seconds) {
-		String result = this.execute(new RedisOperation<String>() {
+	/** ThreadLocal */
+	private static ThreadLocal<Map<String, Object>> local = new ThreadLocal<Map<String, Object>>() {
+		@Override
+		protected java.util.Map<String, Object> initialValue() {
+			return new HashMap<String, Object>();
+		};
+	};
+
+	/**
+	 * redis execute agent
+	 * 
+	 * @param <T>
+	 * @author Yaen 2016年5月23日下午8:37:28
+	 */
+	private interface RedisOperation<T> {
+		T execute(Jedis jedis);
+	}
+
+	/**
+	 * get local object by key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public static Object getLocal(String key) {
+		return local.get().get(key);
+	}
+
+	/**
+	 * put local object by key, set value to null to delete
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public static void putLocal(String key, Object value) {
+		local.get().put(key, value);
+	}
+
+	/**
+	 * get local session
+	 * 
+	 * @return
+	 */
+	public static ExpiringSession getLocalSession() {
+		return (ExpiringSession) getLocal(SESSION_KEY);
+	}
+
+	/**
+	 * set local session
+	 * 
+	 * @param sessionId
+	 */
+	public static void setLocalSession(ExpiringSession session) {
+		putLocal(SESSION_KEY, session);
+	}
+
+	/**
+	 * set field by hashkey
+	 * 
+	 * @param hashKey
+	 * @param fieldValue
+	 * @param value
+	 * @param seconds
+	 * @return
+	 */
+	public String hset(final String hashKey, final String fieldValue, final String value, final int seconds) {
+		return this.execute(new RedisOperation<String>() {
 			@Override
 			public String execute(Jedis jedis) {
 				Long reply = jedis.hset(hashKey, fieldValue, value);
 				Long reply_ex = jedis.expire(hashKey, seconds);
-				if (1L == reply && 1L == reply_ex) {
+				if (reply == 1L && reply_ex == 1L) {
 					return "OK";
 				}
 				return null;
-
 			}
-
 		});
-		return result;
 	}
 
+	/**
+	 * get all value by haskey
+	 * 
+	 * @param hashkey
+	 * @return
+	 */
 	public List<String> hgetAll(final String hashkey) {
 
-		List<String> result = this.execute(new RedisOperation<List<String>>() {
+		return this.execute(new RedisOperation<List<String>>() {
 			List<String> list = new ArrayList<String>();
 
 			@Override
@@ -61,11 +137,15 @@ public class CacheManager {
 			}
 
 		});
-		return result;
 	}
 
+	/**
+	 * delete value by hashkey
+	 * 
+	 * @param hashKey
+	 */
 	public void hdel(final String hashKey) {
-		String s = this.execute(new RedisOperation<String>() {
+		this.execute(new RedisOperation<String>() {
 
 			@Override
 			public String execute(Jedis jedis) {
@@ -135,7 +215,7 @@ public class CacheManager {
 
 			});
 			result = SerializeUtil.unserialize(bytes);
-		} catch (Exception e) { 
+		} catch (Exception e) {
 			result = null;
 		}
 
@@ -184,7 +264,6 @@ public class CacheManager {
 			result = operation.execute(jedis);
 		} catch (Exception e) {
 			returnBrokenResource(cacheJedisPool, jedis);
-			logger.error("redis operate error!", e);
 			throw new RuntimeException(e);
 		} finally {
 			returnResource(cacheJedisPool, jedis);
@@ -238,22 +317,4 @@ public class CacheManager {
 		}
 	}
 
-	public void setCacheJedisPool(JedisPool cacheJedisPool) {
-		this.cacheJedisPool = cacheJedisPool;
-	}
-
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
-	}
-
-	/**
-	 * redis 操作接口
-	 * 
-	 * @author alex
-	 *
-	 * @param <T>
-	 */
-	private interface RedisOperation<T> {
-		T execute(Jedis jedis);
-	}
 }

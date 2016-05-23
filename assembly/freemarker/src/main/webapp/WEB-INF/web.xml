@@ -12,6 +12,7 @@
 			classpath*:/spring/core-*.xml,
 			classpath*:/spring/biz-*.xml,
 			classpath*:/spring/dubbo-*.xml,
+			classpath*:/spring/web-*.xml,
 			<!-- for starter only project, need starter-common-*.xml -->
 			classpath*:/spring/starter-common-*.xml
 			<!-- for starter only project, need starter-dubbo-*.xml -->
@@ -48,7 +49,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath*:/spring/web-freemarker.xml</param-value>
+			<param-value>/WEB-INF/spring-servlet.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

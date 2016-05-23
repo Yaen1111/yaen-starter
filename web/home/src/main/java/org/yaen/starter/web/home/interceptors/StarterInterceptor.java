@@ -3,10 +3,11 @@ package org.yaen.starter.web.home.interceptors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.ExpiringSession;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.yaen.starter.web.home.contexts.LocalStorageContext;
+import org.yaen.starter.web.home.contexts.SessionManager;
 import org.yaen.starter.web.home.utils.WebUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class StarterInterceptor extends HandlerInterceptorAdapter {
+
+	@Autowired
+	private SessionManager sessionManager;
 
 	/**
 	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(javax.servlet.http.HttpServletRequest,
@@ -32,7 +36,7 @@ public class StarterInterceptor extends HandlerInterceptorAdapter {
 			log.debug("preHandle, ip={}, uri={}", WebUtil.getClientIp(request), request.getRequestURI());
 
 			// get session
-			ExpiringSession session = LocalStorageContext.getSession();
+			ExpiringSession session = sessionManager.getLocalSession();
 
 			log.debug("preHandle, session={}", session);
 

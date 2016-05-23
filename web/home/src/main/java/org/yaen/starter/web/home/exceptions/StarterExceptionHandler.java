@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
-import org.yaen.starter.web.home.modelandviews.ErrorModelAndView;
 import org.yaen.starter.web.home.utils.WebUtil;
+import org.yaen.starter.web.home.viewmodels.ErrorModelAndView;
 
 import lombok.extern.slf4j.Slf4j;
 

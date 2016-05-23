@@ -1,4 +1,4 @@
-package org.yaen.starter.web.velocity.modelandviews;
+package org.yaen.starter.web.home.viewmodels;
 
 import java.util.HashMap;
 import java.util.Map;

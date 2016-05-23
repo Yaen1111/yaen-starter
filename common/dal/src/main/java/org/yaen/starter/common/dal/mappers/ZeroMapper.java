@@ -2,6 +2,7 @@ package org.yaen.starter.common.dal.mappers;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.yaen.starter.common.data.entities.MyDescribeEntity;
 import org.yaen.starter.common.data.entities.OneEntity;
@@ -24,13 +25,21 @@ public interface ZeroMapper {
 	public int createTable(OneEntity po) throws Exception;
 
 	/**
-	 * get table columns info by given table name
+	 * show all tables
 	 * 
-	 * @param po
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MyDescribeEntity> describeTable(OneEntity po) throws Exception;
+	public List<String> showTables() throws Exception;
+
+	/**
+	 * get table columns info by given table name
+	 * 
+	 * @param tablename
+	 * @return
+	 * @throws Exception
+	 */
+	public List<MyDescribeEntity> describeTable(@Param("tableName") String tableName) throws Exception;
 
 	/**
 	 * add given column, usually is in the last

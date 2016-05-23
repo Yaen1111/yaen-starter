@@ -7,13 +7,13 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	default-autowire="byName">
 
-	<!-- web using html and json -->
+	<!-- web using freemarker template -->
 
 	<!-- allow annotation like @Service, only in this file -->
 	<context:annotation-config />
 
 	<!-- scan for component like @Service, only in this file -->
-	<context:component-scan base-package="org.yaen.starter.web.home,org.yaen.starter.web.json" />
+	<context:component-scan base-package="org.yaen.starter.web" />
 
 	<!-- mvc request/response, only in this file -->
 	<mvc:annotation-driven>
@@ -27,12 +27,6 @@
 
 	<!-- resource for css/js/image, enable cache -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
-
-	<!-- json view resolver, for wechat, all is json -->
-	<bean id="jsonViewResolver" class="org.yaen.starter.web.json.modelandviews.JsonViewResolver">
-		<property name="order" value="1" />
-		<property name="viewFilter" value="*" />
-	</bean>
 
 	<!-- multi part resolver -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -52,46 +46,15 @@
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/resources/**" />
 			<beans:bean id="sessionInterceptor" class="org.yaen.starter.web.home.interceptors.SessionInterceptor">
-				<property name="sessionMaxInactiveIntervalInSeconds" value="${session.max.inactive.interval.in.seconds}" />
-				<property name="cookieContext" ref="cookieContext" />
-				<property name="sessionRepository" ref="sessionRepository" />
 			</beans:bean>
 		</mvc:interceptor>
 
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/resources/**" />
-			<beans:bean id="weixinAuthInterceptor" class="org.yaen.starter.web.json.interceptors.StarterJsonInterceptor">
+			<beans:bean id="weixinAuthInterceptor" class="org.yaen.starter.web.home.interceptors.StarterInterceptor">
 			</beans:bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
-
-	<!-- use cookie for session context -->
-	<bean id="cookieContext" class="org.yaen.starter.web.home.contexts.CookieContext">
-		<property name="cookieName" value="${session.cookie.name}" />
-		<property name="cookieDomain" value="${session.cookie.domain}" />
-		<property name="cookiePath" value="${session.cookie.path}" />
-		<property name="cookieHttpOnly" value="${session.cookie.httponly}" />
-		<property name="cookieSecure" value="${session.cookie.secure}" />
-		<property name="cookieMaxAge" value="${session.cookie.maxage}" />
-	</bean>
-
-	<!-- session repository -->
-
-	<!-- use this for local session -->
-	<bean id="sessionRepository" class="org.springframework.session.MapSessionRepository" />
-
-	<!-- use this for redis session -->
-	<!--<bean id="sessionRepository" class="org.springframework.session.data.redis.RedisOperationsSessionRepository"> -->
-	<!-- <constructor-arg index="0"> -->
-	<!-- <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"> -->
-	<!-- <constructor-arg index="0"> -->
-	<!-- <bean class="redis.clients.jedis.JedisPoolConfig" /> -->
-	<!-- </constructor-arg> -->
-	<!-- <property name="hostName" value="${session.redis.host}" /> -->
-	<!-- <property name="port" value="${session.redis.port}" /> -->
-	<!-- </bean> -->
-	<!-- </constructor-arg> -->
-	<!--</bean> -->
 
 </beans>

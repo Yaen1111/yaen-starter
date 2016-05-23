@@ -13,10 +13,6 @@
 
 	<modules>
 		<module>home</module>
-		<module>json</module>
-		<module>velocity</module>
-		<module>freemarker</module>
-		<module>jsp</module>
 	</modules>
 
 	<dependencies>

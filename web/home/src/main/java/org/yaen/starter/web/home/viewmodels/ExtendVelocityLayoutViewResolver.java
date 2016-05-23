@@ -1,11 +1,10 @@
-package org.yaen.starter.web.velocity.modelandviews;
+package org.yaen.starter.web.home.viewmodels;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
 import org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver;
-import org.yaen.starter.web.velocity.modelandviews.ExtendVelocityLayoutView;
 
 import lombok.Setter;
 

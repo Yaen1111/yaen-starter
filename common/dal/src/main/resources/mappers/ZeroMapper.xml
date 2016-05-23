@@ -10,7 +10,11 @@
 		<result column="Extra" property="myExtra" jdbcType="VARCHAR" />
 	</resultMap>
 
-	<select id="describeTable" resultMap="DescribeMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<select id="showTables" resultType="java.lang.String">
+		SHOW TABLES
+	</select>
+
+	<select id="describeTable" resultMap="DescribeMap" parameterType="java.lang.String">
 		DESC ${tableName}
 	</select>
 

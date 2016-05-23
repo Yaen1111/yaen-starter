@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.web.home.modelandviews;
+package org.yaen.starter.web.home.viewmodels;
 
 import org.springframework.web.servlet.ModelAndView;
 

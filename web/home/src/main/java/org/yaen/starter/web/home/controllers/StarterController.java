@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.biz.shared.services.UserService;
+import org.yaen.starter.web.home.viewmodels.ViewModel;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,11 +54,15 @@ public class StarterController {
 	@RequestMapping("/model.html")
 	public ModelAndView model(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+		ViewModel model = new ViewModel();
+
 		UserDTO user = new UserDTO();
 		user.setUserName("John");
 		user.setTrueName("John Smith");
 
-		return new ModelAndView("model", "user", user);
+		model.addAttribute("user", user);
+
+		return model.asJson();
 	}
 
 	/**

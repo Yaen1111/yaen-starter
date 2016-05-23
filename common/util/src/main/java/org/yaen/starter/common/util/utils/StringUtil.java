@@ -25,6 +25,16 @@ public class StringUtil extends StringUtils {
 	}
 
 	/**
+	 * any type to string
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public static String toString(Object o) {
+		return o == null ? "" : o.toString();
+	}
+
+	/**
 	 * to lower, null = ""
 	 * 
 	 * @param s

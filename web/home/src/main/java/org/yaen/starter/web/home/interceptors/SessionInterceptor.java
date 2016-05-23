@@ -3,15 +3,13 @@ package org.yaen.starter.web.home.interceptors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.ExpiringSession;
-import org.springframework.session.SessionRepository;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.web.home.contexts.CookieContext;
-import org.yaen.starter.web.home.contexts.LocalStorageContext;
+import org.yaen.starter.web.home.contexts.SessionManager;
 
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,17 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SessionInterceptor extends HandlerInterceptorAdapter {
 
-	/** session max age */
-	@Setter
-	private int sessionMaxInactiveIntervalInSeconds = 108000;
-
-	/** session client, save session id */
-	@Setter
-	private CookieContext cookieContext;
-
-	/** session repository, save session content */
-	@Setter
-	private SessionRepository<ExpiringSession> sessionRepository;
+	@Autowired
+	private SessionManager sessionManager;
 
 	/**
 	 * pre, init session
@@ -49,31 +38,30 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 			ExpiringSession session = null;
 
 			// get session id from cookie
-			String sessionId = this.cookieContext.getSessionId(request);
+			String sessionId = sessionManager.getSessionIdFromCookie(request);
 			log.debug("get session context id:{}", sessionId);
 
 			// get session from repository
 			if (StringUtil.isNotEmpty(sessionId)) {
-				session = sessionRepository.getSession(sessionId);
+				session = sessionManager.getGlobalSession(sessionId);
 				log.debug("get session:{}", session);
 			}
 
 			// check expire
 			if (session != null && session.isExpired()) {
-				this.sessionRepository.delete(session.getId());
+				sessionManager.deleteGlobalSession(session.getId());
 				log.debug("session expired, deleted! sessionId:{}", session.getId());
 				session = null;
 			}
 
 			// create session if not exists
 			if (session == null) {
-				session = this.sessionRepository.createSession();
-				session.setMaxInactiveIntervalInSeconds(this.sessionMaxInactiveIntervalInSeconds);
+				session = sessionManager.createGlobalSession();
 				log.debug("session created! sessionId:{}", session.getId());
 			}
 
 			// save session in local storage
-			LocalStorageContext.setSession(session);
+			sessionManager.setLocalSession(session);
 			log.debug("save session in local storage");
 
 			return true;
@@ -91,7 +79,7 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		// get session from thread local
-		ExpiringSession session = LocalStorageContext.getSession();
+		ExpiringSession session = sessionManager.getLocalSession();
 		log.debug("get session from local storage:{}", session);
 
 		// deal session if any
@@ -100,19 +88,18 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 			// save or delete session, as may be changed by controller
 			if (session.isExpired()) {
 				// delete session
-				this.sessionRepository.delete(session.getId());
+				sessionManager.deleteGlobalSession(session.getId());
 
 				// delete cookie due to expired
-				this.cookieContext.setSessionId(response, session.getId(), true);
+				sessionManager.setSessionIdToCookie(response, session.getId(), true);
 
 				log.debug("session expired, deleted! sessionId:{}", session.getId());
 			} else {
 				// save session
-				session.setMaxInactiveIntervalInSeconds(this.sessionMaxInactiveIntervalInSeconds);
-				this.sessionRepository.save(session);
+				sessionManager.saveGlobalSession(session);
 
 				// save to cookie
-				this.cookieContext.setSessionId(response, session.getId(), false);
+				sessionManager.setSessionIdToCookie(response, session.getId(), false);
 
 				log.debug("session saved");
 			}
@@ -133,7 +120,7 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 
 		// delete local
-		LocalStorageContext.setSession(null);
+		sessionManager.deleteLocalSession();
 
 		// call super
 		super.afterCompletion(request, response, handler, ex);
