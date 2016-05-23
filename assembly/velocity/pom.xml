@@ -20,7 +20,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>yaen-starter-web-velocity</artifactId>
+			<artifactId>yaen-starter-web-home</artifactId>
 		</dependency>
 	</dependencies>
 </project>

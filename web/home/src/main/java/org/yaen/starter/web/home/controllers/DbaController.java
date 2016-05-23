@@ -7,10 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.yaen.starter.common.dal.mappers.ZeroMapper;
+import org.yaen.starter.common.data.entities.MyDescribeEntity;
 import org.yaen.starter.web.home.viewmodels.ViewModel;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class DbaController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/showtables.html")
+	@RequestMapping("/showtables")
 	public ModelAndView showTables(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ViewModel model = new ViewModel();
@@ -46,7 +47,30 @@ public class DbaController {
 
 		model.addAttribute("tableNames", tableNames);
 
-		return model.asView("showtables");
+		return model.asView("/dba/showtables");
+	}
+
+	/**
+	 * show tables
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/describetable/{tableName}")
+	public ModelAndView describeTable(@PathVariable(value = "tableName") String tableName, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		ViewModel model = new ViewModel();
+		model.setTitle("DBA");
+
+		List<MyDescribeEntity> columns = zero.describeTable(tableName);
+
+		model.addAttribute("tableName", tableName);
+		model.addAttribute("columns", columns);
+
+		return model.asView("/dba/describetable");
 	}
 
 }
