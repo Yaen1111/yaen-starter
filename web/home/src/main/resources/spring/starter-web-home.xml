@@ -13,6 +13,9 @@
 	<!-- scan for component like @Service -->
 	<context:component-scan base-package="org.yaen.starter.web.home" />
 
+	<!-- common exception resolver -->
+	<bean id="exceptionResolver" class="org.yaen.starter.web.home.exceptions.StarterExceptionHandler" />
+
 	<!-- init session manager -->
 	<bean id="sessionManager" class="org.yaen.starter.web.home.contexts.impl.StandAloneSessionManager">
 		<property name="cookieName" value="${session.cookie.name}" />

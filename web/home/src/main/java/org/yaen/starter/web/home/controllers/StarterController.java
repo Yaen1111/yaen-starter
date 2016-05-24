@@ -1,18 +1,15 @@
 package org.yaen.starter.web.home.controllers;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.yaen.starter.biz.shared.objects.UserDTO;
-import org.yaen.starter.biz.shared.services.UserService;
 import org.yaen.starter.web.home.viewmodels.ViewModel;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/starter")
 public class StarterController {
 
-	@Autowired
-	private UserService userService;
-
 	/**
-	 * welcome show fixed page
+	 * welcome show fixed page, using default servlet and modelandview
 	 * 
 	 * @param request
 	 * @param response
@@ -44,7 +38,7 @@ public class StarterController {
 	}
 
 	/**
-	 * model and view, show model content
+	 * use spring model, recommanded way
 	 * 
 	 * @param request
 	 * @param response
@@ -52,9 +46,7 @@ public class StarterController {
 	 * @throws IOException
 	 */
 	@RequestMapping("/model.html")
-	public ModelAndView model(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-		ViewModel model = new ViewModel();
+	public String model(Model model) throws IOException {
 
 		UserDTO user = new UserDTO();
 		user.setUserName("John");
@@ -62,27 +54,30 @@ public class StarterController {
 
 		model.addAttribute("user", user);
 
-		return model.asJson();
+		return "model";
 	}
 
 	/**
-	 * json, show model content
+	 * using customer view model
 	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("/json.json")
-	public ModelAndView json(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@RequestMapping("/model2.html")
+	public ModelAndView viewModel() throws IOException {
 
-		Map<String, Object> model = new HashMap<String, Object>();
+		ViewModel model = new ViewModel();
+
 		UserDTO user = new UserDTO();
 		user.setUserName("username");
 		user.setTrueName("truename");
 
-		model.put("user", user);
+		model.addAttribute("user", user);
 
-		return new ModelAndView("json", model);
+		model.setTitle("model2");
+
+		return model.asView("model2");
 	}
 }

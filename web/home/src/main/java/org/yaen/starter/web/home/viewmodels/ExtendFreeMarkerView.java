@@ -12,11 +12,20 @@ import java.util.Map;
  */
 public class ExtendFreeMarkerView extends FreeMarkerView {
 
-	private static final String CONTEXT_PATH = "base";
-
+	/**
+	 * add some common model
+	 * 
+	 * @see org.springframework.web.servlet.view.freemarker.FreeMarkerView#exposeHelpers(java.util.Map,
+	 *      javax.servlet.http.HttpServletRequest)
+	 */
 	@Override
 	protected void exposeHelpers(Map<String, Object> model, HttpServletRequest request) throws Exception {
-		model.put(CONTEXT_PATH, request.getContextPath());
+
+		// add base to model
+		model.putIfAbsent("base", request.getContextPath());
+		// ensure title is not null
+		model.putIfAbsent("title", "");
+
 		super.exposeHelpers(model, request);
 	}
 }
