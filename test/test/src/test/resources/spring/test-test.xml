@@ -14,12 +14,11 @@
 
 	<!-- scan for component like @Service -->
 	<!-- scan for all components -->
-	<context:component-scan base-package="org.yaen.starter.test.service" />
+	<context:component-scan base-package="org.yaen.starter.test.test" />
 
 	<!-- for unit test, need import all required xml -->
-	<import resource="classpath*:/spring/common-*.xml" />
-	<import resource="classpath*:/spring/core-*.xml" />
-	<import resource="classpath*:/spring/biz-*.xml" />
 	<import resource="classpath*:/spring/starter-common-*.xml" />
+	<import resource="classpath*:/spring/starter-core-*.xml" />
+	<import resource="classpath*:/spring/starter-biz-*.xml" />
 
 </beans>
