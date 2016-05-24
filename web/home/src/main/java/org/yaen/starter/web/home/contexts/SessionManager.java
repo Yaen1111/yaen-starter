@@ -1,65 +1,23 @@
 package org.yaen.starter.web.home.contexts;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.session.ExpiringSession;
-import org.springframework.session.SessionRepository;
-import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.web.home.utils.WebUtil;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
- * session manager, manager full session life cycle, including cookie, global session(server side or redis), local
- * session
+ * session manager interface, manager full session life cycle, including cookie, global session, local session
+ * 
+ * <p>
+ * implements:
+ * <p>
+ * StandAloneSessionManager: server side session manager, only support one server
+ * <p>
+ * RedisSessionManager: using redis, support cluster of servers
  * 
  * @author Yaen 2016年5月19日下午6:42:54
  */
-public class SessionManager {
-
-	/** cookie name, default to SESSIONID */
-	@Getter
-	@Setter
-	private String cookieName = "SESSIONID";
-
-	/** cookie domain */
-	@Getter
-	@Setter
-	private String cookieDomain = "";
-
-	/** cookie path, / for all */
-	@Getter
-	@Setter
-	private String cookiePath = "/";
-
-	/** cookie http only */
-	@Getter
-	@Setter
-	private boolean cookieHttpOnly = true;
-
-	/** cookie use secure */
-	@Getter
-	@Setter
-	private boolean cookieSecure = true;
-
-	/** cookie max age, -1 for infinite */
-	@Getter
-	@Setter
-	private int cookieMaxAge = -1;
-
-	/** session max age */
-	@Setter
-	private int sessionMaxInactiveIntervalInSeconds = 108000;
-
-	/** session repository, save session content */
-	@Setter
-	private SessionRepository<ExpiringSession> sessionRepository;
-
-	/** ThreadLocal */
-	private static ThreadLocal<ExpiringSession> local = new ThreadLocal<ExpiringSession>();
+public interface SessionManager {
 
 	/**
 	 * get session id from cookie
@@ -67,9 +25,7 @@ public class SessionManager {
 	 * @param request
 	 * @return
 	 */
-	public String getSessionIdFromCookie(HttpServletRequest request) {
-		return WebUtil.getCookieValue(request, cookieName, null);
-	}
+	public String getSessionIdFromCookie(HttpServletRequest request);
 
 	/**
 	 * set session id into cookie
@@ -78,65 +34,26 @@ public class SessionManager {
 	 * @param sessionId
 	 * @param expired
 	 */
-	public void setSessionIdToCookie(HttpServletResponse response, String sessionId, boolean expired) {
-		Cookie cookie = new Cookie(this.cookieName, sessionId);
-
-		if (StringUtil.isNotEmpty(this.cookieDomain)) {
-			cookie.setDomain(this.cookieDomain);
-		}
-
-		if (StringUtil.isNotEmpty(this.cookiePath)) {
-			cookie.setPath(this.cookiePath);
-		} else {
-			cookie.setPath("/");
-		}
-
-		if (this.cookieHttpOnly) {
-			cookie.setHttpOnly(true);
-		} else {
-			cookie.setHttpOnly(false);
-		}
-
-		if (this.cookieSecure) {
-			cookie.setSecure(true);
-		} else {
-			cookie.setSecure(false);
-		}
-
-		// if expired, delete cookie
-		if (expired) {
-			cookie.setMaxAge(0);
-		} else {
-			cookie.setMaxAge(this.cookieMaxAge);
-		}
-
-		response.addCookie(cookie);
-	}
+	public void setSessionIdToCookie(HttpServletResponse response, String sessionId, boolean expired);
 
 	/**
 	 * get local session
 	 * 
 	 * @return
 	 */
-	public ExpiringSession getLocalSession() {
-		return local.get();
-	}
+	public ExpiringSession getLocalSession();
 
 	/**
 	 * set local session
 	 * 
 	 * @param sessionId
 	 */
-	public void setLocalSession(ExpiringSession session) {
-		local.set(session);
-	}
+	public void setLocalSession(ExpiringSession session);
 
 	/**
 	 * delete local session, just set to null
 	 */
-	public void deleteLocalSession() {
-		local.set(null);
-	}
+	public void deleteLocalSession();
 
 	/**
 	 * get global session by id
@@ -144,37 +61,26 @@ public class SessionManager {
 	 * @param sessionId
 	 * @return
 	 */
-	public ExpiringSession getGlobalSession(String sessionId) {
-		return this.sessionRepository.getSession(sessionId);
-	}
+	public ExpiringSession getGlobalSession(String sessionId);
 
 	/**
 	 * save global session
 	 * 
 	 * @param session
 	 */
-	public void saveGlobalSession(ExpiringSession session) {
-		session.setMaxInactiveIntervalInSeconds(this.sessionMaxInactiveIntervalInSeconds);
-		this.sessionRepository.save(session);
-	}
+	public void saveGlobalSession(ExpiringSession session);
 
 	/**
 	 * delete global session by id
 	 * 
 	 * @param sessionId
 	 */
-	public void deleteGlobalSession(String sessionId) {
-		this.sessionRepository.delete(sessionId);
-	}
+	public void deleteGlobalSession(String sessionId);
 
 	/**
 	 * create global session
 	 * 
 	 * @return
 	 */
-	public ExpiringSession createGlobalSession() {
-		ExpiringSession session = this.sessionRepository.createSession();
-		session.setMaxInactiveIntervalInSeconds(this.sessionMaxInactiveIntervalInSeconds);
-		return session;
-	}
+	public ExpiringSession createGlobalSession();
 }

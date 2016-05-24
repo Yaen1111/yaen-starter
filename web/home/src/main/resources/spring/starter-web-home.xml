@@ -14,7 +14,7 @@
 	<context:component-scan base-package="org.yaen.starter.web.home" />
 
 	<!-- init session manager -->
-	<bean id="sessionManager" class="org.yaen.starter.web.home.contexts.SessionManager">
+	<bean id="sessionManager" class="org.yaen.starter.web.home.contexts.impl.StandAloneSessionManager">
 		<property name="cookieName" value="${session.cookie.name}" />
 		<property name="cookieDomain" value="${session.cookie.domain}" />
 		<property name="cookiePath" value="${session.cookie.path}" />
@@ -22,23 +22,6 @@
 		<property name="cookieSecure" value="${session.cookie.secure}" />
 		<property name="cookieMaxAge" value="${session.cookie.maxage}" />
 		<property name="sessionMaxInactiveIntervalInSeconds" value="${session.max.inactive.interval.in.seconds}" />
-		<property name="sessionRepository" ref="sessionRepository" />
 	</bean>
-
-	<!-- use this for local session -->
-	<bean id="sessionRepository" class="org.springframework.session.MapSessionRepository" />
-
-	<!-- use this for redis session -->
-	<!-- <bean id="sessionRepository" class="org.springframework.session.data.redis.RedisOperationsSessionRepository"> -->
-	<!-- <constructor-arg index="0"> -->
-	<!-- <bean class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"> -->
-	<!-- <constructor-arg index="0"> -->
-	<!-- <bean class="redis.clients.jedis.JedisPoolConfig" /> -->
-	<!-- </constructor-arg> -->
-	<!-- <property name="hostName" value="${session.redis.host}" /> -->
-	<!-- <property name="port" value="${session.redis.port}" /> -->
-	<!-- </bean> -->
-	<!-- </constructor-arg> -->
-	<!-- </bean> -->
 
 </beans>
