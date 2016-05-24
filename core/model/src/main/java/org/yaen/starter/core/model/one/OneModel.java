@@ -3,6 +3,11 @@
  */
 package org.yaen.starter.core.model.one;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 
 import org.yaen.starter.common.data.annotations.OneData;
@@ -16,12 +21,14 @@ import org.yaen.starter.common.util.utils.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * one model for base objects
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
+@Slf4j
 @ToString(callSuper = true)
 @OneTable(TableName = "ONE")
 public class OneModel implements BaseModel {
@@ -78,6 +85,29 @@ public class OneModel implements BaseModel {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
+	}
+
+	/**
+	 * @throws IOException
+	 * @see org.yaen.starter.common.data.models.BaseModel#deepClone()
+	 */
+	@Override
+	public Object deepClone() throws IOException {
+		// serialize to stream
+		ByteArrayOutputStream bo = new ByteArrayOutputStream();
+		ObjectOutputStream oo = new ObjectOutputStream(bo);
+		oo.writeObject(this);
+
+		ByteArrayInputStream bi = new ByteArrayInputStream(bo.toByteArray());
+		ObjectInputStream oi = new ObjectInputStream(bi);
+		try {
+			return oi.readObject();
+		} catch (ClassNotFoundException e) {
+			// should not got here
+			log.error("deep clone failed", e);
+			return null;
+		}
+
 	}
 
 	public boolean BeforeSelect(ModelService service) throws Exception {

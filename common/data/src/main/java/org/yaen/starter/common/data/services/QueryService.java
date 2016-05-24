@@ -11,6 +11,8 @@ import org.yaen.starter.common.data.models.BaseRelationModel;
 
 /**
  * query service for most search operation
+ * <p>
+ * all result is id list, and then can page in application level
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
@@ -35,7 +37,8 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception;
+	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId)
+			throws Exception;
 
 	/**
 	 * select relation ids by to id
@@ -48,8 +51,7 @@ public interface QueryService {
 	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception;
 
 	/**
-	 * select ids by field name, the value is the given value in the model and
-	 * use equal
+	 * select ids by field name, the value is the given value in the model and use equal
 	 * 
 	 * @param model
 	 * @param fieldName
@@ -59,8 +61,7 @@ public interface QueryService {
 	public <T extends BaseModel> List<Long> SelectIDsByFieldName(T model, String fieldName) throws Exception;
 
 	/**
-	 * select ids by field name list, the value is the given value in the model
-	 * and use equal
+	 * select ids by field name list, the value is the given value in the model and use equal
 	 * 
 	 * @param model
 	 * @param fieldNameList
@@ -71,8 +72,7 @@ public interface QueryService {
 			throws Exception;
 
 	/**
-	 * select ids by all none-null field, the value is the given value in the
-	 * model
+	 * select ids by all none-null field, the value is the given value in the model
 	 * 
 	 * @param model
 	 * @return
@@ -81,8 +81,7 @@ public interface QueryService {
 	public <T extends BaseModel> List<Long> SelectIDsByAllField(T model) throws Exception;
 
 	/**
-	 * select ids by given sql, starting with where, can include order, group,
-	 * and having clause
+	 * select ids by given sql, starting with where, can include order, group, and having clause
 	 * 
 	 * @param model
 	 * @param whereClause

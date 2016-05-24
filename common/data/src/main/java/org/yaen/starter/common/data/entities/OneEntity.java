@@ -5,6 +5,7 @@ package org.yaen.starter.common.data.entities;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.yaen.starter.common.data.annotations.OneCopy;
@@ -118,6 +119,12 @@ public class OneEntity implements BaseEntity {
 	@Setter
 	@OneIgnore
 	private String addedFieldName;
+
+	/** the id list for batch select */
+	@Getter
+	@Setter
+	@OneIgnore
+	private List<Long> ids;
 
 	/**
 	 * construct one entity of self

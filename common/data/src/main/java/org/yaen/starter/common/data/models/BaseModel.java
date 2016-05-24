@@ -3,6 +3,7 @@
  */
 package org.yaen.starter.common.data.models;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import org.yaen.starter.common.data.entities.BaseEntity;
@@ -33,6 +34,13 @@ public interface BaseModel extends BaseEntity, Cloneable, Serializable {
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone() throws CloneNotSupportedException;
+
+	/**
+	 * deep clone a object, just use serialize and deserialize
+	 * 
+	 * @return
+	 */
+	public Object deepClone() throws IOException;
 
 	/**
 	 * triggers, can be trigger chain

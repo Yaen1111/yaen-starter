@@ -12,6 +12,19 @@
 		WHERE `ID` = #{id,jdbcType=BIGINT}
 	</select>
 
+	<select id="selectByIDs" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+		SELECT
+		`ID`
+		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
+			`${info.columnName}`
+		</foreach>
+		FROM `${tableName}`
+		WHERE `ID` IN
+		<foreach collection="ids" index="index" item="id2" open="(" separator="," close=")">
+			`${id2,jdbcType=BIGINT}`
+		</foreach>
+	</select>
+
 	<insert id="insertByID" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		INSERT INTO `${tableName}`
 		(
@@ -33,7 +46,8 @@
 		UPDATE `${tableName}`
 		SET
 		<foreach collection="columns" index="index" item="info" open="" separator="," close="">
-			`${info.columnName}` = #{info.value}
+			`${info.columnName}` =
+			#{info.value}
 		</foreach>
 		WHERE `ID` = #{id,jdbcType=BIGINT}
 	</update>

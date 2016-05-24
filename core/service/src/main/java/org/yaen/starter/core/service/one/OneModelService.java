@@ -151,8 +151,8 @@ public class OneModelService implements ModelService {
 			return false;
 		}
 
-		// set id
-		model.setId(entity.getId());
+		// set id again
+		model.setId(id);
 
 		// map column to field
 		Map<String, OneColumnEntity> columns = entity.getColumns();
@@ -168,6 +168,72 @@ public class OneModelService implements ModelService {
 		}
 
 		return true;
+	}
+
+	/**
+	 * inner select model list, no triggers, origin model is not changed
+	 * 
+	 * @param model
+	 * @param ids
+	 * @param entity
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T extends BaseModel> List<T> innerSelectModelList(T model, List<Long> ids, OneEntity entity)
+			throws Exception {
+
+		// get another entity if not
+		if (entity == null) {
+			entity = new AnotherEntity(model);
+
+			// create table if not exists
+			this.CreateTable(entity);
+		}
+
+		// set id list
+		entity.setIds(ids);
+
+		// call mapper
+		List<Map<String, Object>> maps = oneMapper.selectByIDs(entity);
+
+		// check existence
+		if (maps == null) {
+			return null;
+		}
+
+		List<T> list = new ArrayList<T>(maps.size());
+
+		// make models
+		for (Map<String, Object> map : maps) {
+
+			// create new model
+			T newmodel = (T) model.clone();
+
+			// set id from map
+			Long newid = (Long) map.get("id");
+			if (newid != null) {
+
+				newmodel.setId(newid);
+
+				// map column to field
+				Map<String, OneColumnEntity> columns = entity.getColumns();
+
+				for (String key : columns.keySet()) {
+					OneColumnEntity info = columns.get(key);
+					Field field = info.getField();
+
+					Object value = map.get(info.getColumnName());
+
+					// set value of any type
+					field.set(newmodel, value);
+				}
+
+				list.add(newmodel);
+			}
+		}
+
+		return list;
 	}
 
 	/**
@@ -221,7 +287,7 @@ public class OneModelService implements ModelService {
 		T old = null;
 
 		if (model.isEnableChangeLog()) {
-
+			// clone to old
 			old = (T) model.clone();
 
 			boolean exists = this.innerSelectModel(old, model.getId(), entity);
@@ -266,6 +332,7 @@ public class OneModelService implements ModelService {
 		T old = null;
 
 		if (model.isEnableChangeLog()) {
+			// clone to old
 			old = (T) model.clone();
 
 			boolean exists = this.innerSelectModel(old, model.getId(), entity);
@@ -338,21 +405,24 @@ public class OneModelService implements ModelService {
 	@Override
 	public <T extends BaseModel> List<T> selectModelList(T model, List<Long> ids) throws Exception {
 		AssertUtil.notNull(model);
+		AssertUtil.notNull(ids);
 
-		List<T> list = new ArrayList<T>();
+		// trigger before select, only once is ok
+		if (model.BeforeSelect(this)) {
 
-		if (ids != null) {
-			for (Long id : ids) {
-				@SuppressWarnings("unchecked")
-				T attr = (T) model.clone();
+			List<T> list = this.innerSelectModelList(model, ids, null);
 
-				if (this.trySelectModel(attr, id)) {
-					list.add(attr);
-				}
+			// trigger after select each
+			for (int i = 0; i < list.size(); i++) {
+				list.get(i).AfterSelect(this);
 			}
-		}
 
-		return list;
+			return list;
+
+		} else {
+			// select canceled
+			throw new OperationCancelledException("select cancelled by trigger");
+		}
 	}
 
 	/**

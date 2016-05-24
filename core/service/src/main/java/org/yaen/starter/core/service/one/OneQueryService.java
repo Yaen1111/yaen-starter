@@ -28,7 +28,7 @@ import org.yaen.starter.common.util.utils.StringUtil;
 public class OneQueryService implements QueryService {
 
 	@Autowired
-	private QueryMapper mapper;
+	private QueryMapper queryMapper;
 
 	/**
 	 * select ids by base id
@@ -53,7 +53,7 @@ public class OneQueryService implements QueryService {
 		model.setBaseId(baseId);
 
 		// call event
-		return mapper.selectIDsByBaseID(model);
+		return queryMapper.selectIDsByBaseID(model);
 	}
 
 	/**
@@ -62,7 +62,8 @@ public class OneQueryService implements QueryService {
 	 *      long)
 	 */
 	@Override
-	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId) throws Exception {
+	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId)
+			throws Exception {
 		AssertUtil.notNull(rel);
 
 		// get another po
@@ -76,7 +77,7 @@ public class OneQueryService implements QueryService {
 		model.setFromId(fromId);
 
 		// call event
-		return mapper.selectIDsByFromID(model);
+		return queryMapper.selectIDsByFromID(model);
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class OneQueryService implements QueryService {
 		model.setFromId(toId);
 
 		// call event
-		return mapper.selectIDsByToID(model);
+		return queryMapper.selectIDsByToID(model);
 	}
 
 	/**
@@ -148,7 +149,7 @@ public class OneQueryService implements QueryService {
 		}
 
 		// call mapper
-		return mapper.selectIDsByColumns(query);
+		return queryMapper.selectIDsByColumns(query);
 	}
 
 	/**
@@ -183,7 +184,7 @@ public class OneQueryService implements QueryService {
 		}
 
 		// call mapper
-		return mapper.selectIDsByColumns(query);
+		return queryMapper.selectIDsByColumns(query);
 	}
 
 	/**
@@ -209,7 +210,7 @@ public class OneQueryService implements QueryService {
 		query.setWhereClause(whereClause);
 
 		// call mapper
-		return mapper.selectIDsByWhereClause(query);
+		return queryMapper.selectIDsByWhereClause(query);
 	}
 
 }
