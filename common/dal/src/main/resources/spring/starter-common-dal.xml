@@ -6,7 +6,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<!-- only called by starter-only project, others should ignore this one -->
+	<!-- allow annotation like @Service -->
+	<context:annotation-config />
+
+	<!-- scan for component like @Service -->
+	<context:component-scan base-package="org.yaen.starter.common.dal" />
 
 	<!-- 数据源配置 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
@@ -39,7 +43,7 @@
 
 	<!-- MyBatis配置 -->
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="configLocation" value="classpath:/spring/starter-mybatis-config.xml"></property>
+		<property name="configLocation" value="classpath:/spring/mybatis-config.xml"></property>
 		<property name="dataSource" ref="dataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
 		<property name="typeAliasesPackage" value="org.yaen.starter.common.dal.entities" />

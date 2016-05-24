@@ -4,18 +4,14 @@
 	version="2.5">
 	<display-name>starter-wechat</display-name>
 
-	<!-- context config, need scan all components. starter may need special starter-??-*.xml -->
+	<!-- context config, need scan all components. -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath*:/spring/common-*.xml,
-			classpath*:/spring/core-*.xml,
-			classpath*:/spring/biz-*.xml,
-			classpath*:/spring/dubbo-*.xml,
-			classpath*:/spring/web-*.xml,
-			<!-- for starter only project, need starter-common-*.xml -->
-			classpath*:/spring/starter-common-*.xml
-			<!-- for starter only project, need starter-dubbo-*.xml -->
+			classpath*:/spring/starter-common-*.xml,
+			classpath*:/spring/starter-core-*.xml,
+			classpath*:/spring/starter-biz-*.xml,
+			classpath*:/spring/starter-web-*.xml
 			<!-- classpath*:/spring/starter-dubbo-*.xml -->
 		</param-value>
 	</context-param>
