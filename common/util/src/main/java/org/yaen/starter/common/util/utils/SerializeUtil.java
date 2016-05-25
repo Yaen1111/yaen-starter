@@ -6,11 +6,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * serialize and unserialize
+ * serialize and deserialize
  * 
  * @author Yaen 2016年5月13日下午2:59:20
  */
 public class SerializeUtil {
+
+	/**
+	 * serialize object
+	 * 
+	 * @param object
+	 * @return
+	 */
 	public static byte[] serialize(Object object) {
 		if (object == null) {
 			return null;
@@ -29,7 +36,13 @@ public class SerializeUtil {
 		}
 	}
 
-	public static Object unserialize(byte[] bytes) {
+	/**
+	 * deserialize object
+	 * 
+	 * @param bytes
+	 * @return
+	 */
+	public static Object deserialize(byte[] bytes) {
 		if (bytes == null) {
 			return null;
 		}

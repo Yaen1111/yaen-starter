@@ -8,13 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.session.ExpiringSession;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.web.home.contexts.SessionManager;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +24,6 @@ import lombok.Setter;
  */
 public class ViewModel implements Model {
 
-	@Autowired
-	private SessionManager sessionManager;
-
 	/** the json view name */
 	private static final String JSON_VIEW_NAME = "json";
 
@@ -37,20 +32,13 @@ public class ViewModel implements Model {
 	@Setter
 	private String title;
 
-	/** the session object */
-	private ExpiringSession session;
-
 	/**
-	 * getter for session
+	 * get shiro user
 	 * 
 	 * @return
 	 */
-	public ExpiringSession getSession() {
-		// get session from local storage if not
-		if (this.session == null) {
-			this.session = sessionManager.getLocalSession();
-		}
-		return session;
+	public Subject getUser() {
+		return SecurityUtils.getSubject();
 	}
 
 	/** the inner hash map */
@@ -132,7 +120,7 @@ public class ViewModel implements Model {
 	public Map<String, Object> asMap() {
 		// add fixed item
 		this.map.put("title", this.title);
-		this.map.put("session", this.session);
+		this.map.put("user", this.getUser());
 
 		return this.map;
 	}

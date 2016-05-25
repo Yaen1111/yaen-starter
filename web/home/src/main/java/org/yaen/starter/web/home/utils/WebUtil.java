@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.util.WebUtils;
 import org.yaen.starter.common.util.utils.StringUtil;
 
@@ -31,6 +33,15 @@ public class WebUtil extends WebUtils {
 	/** JSON_MIME_TYPE */
 	private static final String MIME_TYPE_JSON = "application/json;charset=UTF-8";
 	private static final String MIME_TYPE_HTML = "text/html;charset=UTF-8";
+
+	/**
+	 * get current shiro user
+	 * 
+	 * @return
+	 */
+	public static Subject getUser() {
+		return SecurityUtils.getSubject();
+	}
 
 	/**
 	 * get header by given name with default value
