@@ -15,10 +15,19 @@ public class ShiroCredentials implements Serializable {
 	private static final long serialVersionUID = 2591810641949952332L;
 
 	/** hashed password */
-	@NonNull
 	private String passwordHash;
 
 	/** password salt */
-	@NonNull
 	private String salt;
+
+	/**
+	 * constructor
+	 * 
+	 * @param passwordHash
+	 * @param salt
+	 */
+	public ShiroCredentials(String passwordHash, String salt) {
+		this.passwordHash = passwordHash;
+		this.salt = salt;
+	}
 }

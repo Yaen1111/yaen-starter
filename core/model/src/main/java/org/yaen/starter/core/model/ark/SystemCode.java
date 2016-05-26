@@ -84,7 +84,7 @@ public class SystemCode extends OneModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeInsert(ModelService service) throws Exception {
+	public boolean BeforeInsert(ModelService service) throws CoreException {
 		if (super.BeforeInsert(service)) {
 
 			// format code
@@ -100,7 +100,7 @@ public class SystemCode extends OneModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeUpdate(ModelService service) throws Exception {
+	public boolean BeforeUpdate(ModelService service) throws CoreException {
 		if (super.BeforeUpdate(service)) {
 
 			// format code

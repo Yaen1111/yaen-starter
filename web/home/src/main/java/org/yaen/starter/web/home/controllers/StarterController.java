@@ -34,7 +34,7 @@ public class StarterController {
 	 */
 	@RequestMapping("/welcome.html")
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		return new ModelAndView("welcome", "welcome", "welcome content");
+		return new ModelAndView("starter/welcome", "welcome", "welcome content");
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class StarterController {
 
 		model.addAttribute("user", user);
 
-		return "model";
+		return "starter/model";
 	}
 
 	/**
@@ -78,6 +78,6 @@ public class StarterController {
 
 		model.setTitle("model2");
 
-		return model.asView("model2");
+		return model.asView("starter/model2");
 	}
 }

@@ -41,7 +41,7 @@ public class StarterExceptionHandler implements HandlerExceptionResolver {
 
 		log.error(sb.toString(), ex);
 
-		return new ModelAndView("error", "error", ex);
+		return new ModelAndView("error/error", "error", ex);
 	}
 
 }

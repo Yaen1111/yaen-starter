@@ -15,6 +15,14 @@ public class ShiroPrincipal implements Serializable {
 	private static final long serialVersionUID = 2591810631949952332L;
 
 	/** user name */
-	@NonNull
 	private String username;
+
+	/**
+	 * constructor
+	 * 
+	 * @param username
+	 */
+	public ShiroPrincipal(String username) {
+		this.username = username;
+	}
 }

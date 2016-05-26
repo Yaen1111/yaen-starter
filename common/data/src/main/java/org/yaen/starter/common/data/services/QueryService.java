@@ -5,6 +5,7 @@ package org.yaen.starter.common.data.services;
 
 import java.util.List;
 
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseAttributeModel;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.models.BaseRelationModel;
@@ -27,7 +28,7 @@ public interface QueryService {
 	 * @throws Exception
 	 */
 	public <T_ATTR extends BaseAttributeModel> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
-			throws Exception;
+			throws CoreException;
 
 	/**
 	 * select relation ids by from id
@@ -38,7 +39,7 @@ public interface QueryService {
 	 * @throws Exception
 	 */
 	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId)
-			throws Exception;
+			throws CoreException;
 
 	/**
 	 * select relation ids by to id
@@ -48,7 +49,8 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId) throws Exception;
+	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId)
+			throws CoreException;
 
 	/**
 	 * select ids by field name, the value is the given value in the model and use equal
@@ -58,7 +60,7 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> List<Long> SelectIDsByFieldName(T model, String fieldName) throws Exception;
+	public <T extends BaseModel> List<Long> SelectIDsByFieldName(T model, String fieldName) throws CoreException;
 
 	/**
 	 * select ids by field name list, the value is the given value in the model and use equal
@@ -69,7 +71,7 @@ public interface QueryService {
 	 * @throws Exception
 	 */
 	public <T extends BaseModel> List<Long> SelectIDsByFieldNameList(T model, List<String> fieldNameList)
-			throws Exception;
+			throws CoreException;
 
 	/**
 	 * select ids by all none-null field, the value is the given value in the model
@@ -78,7 +80,7 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> List<Long> SelectIDsByAllField(T model) throws Exception;
+	public <T extends BaseModel> List<Long> SelectIDsByAllField(T model) throws CoreException;
 
 	/**
 	 * select ids by given sql, starting with where, can include order, group, and having clause
@@ -88,6 +90,6 @@ public interface QueryService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> List<Long> SelectIDsByWhereClause(T model, String whereClause) throws Exception;
+	public <T extends BaseModel> List<Long> SelectIDsByWhereClause(T model, String whereClause) throws CoreException;
 
 }

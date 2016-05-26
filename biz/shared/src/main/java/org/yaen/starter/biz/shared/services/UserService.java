@@ -1,6 +1,7 @@
 package org.yaen.starter.biz.shared.services;
 
 import org.yaen.starter.biz.shared.objects.UserDTO;
+import org.yaen.starter.common.data.exceptions.BizException;
 
 /**
  * user service
@@ -15,5 +16,9 @@ public interface UserService {
 	 * @param user
 	 * @return
 	 */
-	long RegisterNewUser(UserDTO dto) throws Exception;
+	long RegisterNewUser(UserDTO dto) throws BizException;
+
+	void Login(UserDTO dto) throws BizException;
+
+	void Logout(UserDTO dto) throws BizException;
 }

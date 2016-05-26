@@ -24,10 +24,10 @@ public class ShiroCredentialsMatcher extends SimpleCredentialsMatcher {
 
 		// get user credentials from info, this is stored account info
 		// TODO
-		String password = (String) this.getCredentials(info);
+		ShiroCredentials credentials = (ShiroCredentials) this.getCredentials(info);
 
 		// check
-		if (StringUtil.equalsIgnoreCase(String.copyValueOf(userToken.getPassword()), password)) {
+		if (StringUtil.equalsIgnoreCase(String.copyValueOf(userToken.getPassword()), credentials.getPasswordHash())) {
 			return true;
 		}
 

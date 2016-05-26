@@ -14,6 +14,7 @@ import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.DateUtil;
@@ -110,15 +111,15 @@ public class OneModel implements BaseModel {
 
 	}
 
-	public boolean BeforeSelect(ModelService service) throws Exception {
+	public boolean BeforeSelect(ModelService service) throws CoreException {
 		return true;
 	}
 
-	public boolean AfterSelect(ModelService service) throws Exception {
+	public boolean AfterSelect(ModelService service) throws CoreException {
 		return true;
 	}
 
-	public boolean BeforeInsert(ModelService service) throws Exception {
+	public boolean BeforeInsert(ModelService service) throws CoreException {
 		// set cdate, udate
 		this.cdate = DateUtil.getNow();
 		this.udate = this.cdate;
@@ -126,26 +127,26 @@ public class OneModel implements BaseModel {
 		return true;
 	}
 
-	public boolean AfterInsert(ModelService service) throws Exception {
+	public boolean AfterInsert(ModelService service) throws CoreException {
 		return true;
 	}
 
-	public boolean BeforeUpdate(ModelService service) throws Exception {
+	public boolean BeforeUpdate(ModelService service) throws CoreException {
 		// set udate date
 		this.udate = DateUtil.getNow();
 
 		return true;
 	}
 
-	public boolean AfterUpdate(ModelService service) throws Exception {
+	public boolean AfterUpdate(ModelService service) throws CoreException {
 		return true;
 	}
 
-	public boolean BeforeDelete(ModelService service) throws Exception {
+	public boolean BeforeDelete(ModelService service) throws CoreException {
 		return true;
 	}
 
-	public boolean AfterDelete(ModelService service) throws Exception {
+	public boolean AfterDelete(ModelService service) throws CoreException {
 		return true;
 	}
 

@@ -130,44 +130,48 @@ public class OneModelService implements ModelService {
 	 * @return
 	 * @throws Exception
 	 */
-	protected <T extends BaseModel> boolean innerSelectModel(T model, long id, OneEntity entity) throws Exception {
+	protected <T extends BaseModel> boolean innerSelectModel(T model, long id, OneEntity entity) throws CoreException {
 
-		// get another entity if not
-		if (entity == null) {
-			entity = new AnotherEntity(model);
+		try {
+			// get another entity if not
+			if (entity == null) {
+				entity = new AnotherEntity(model);
 
-			// create table if not exists
-			this.CreateTable(entity);
+				// create table if not exists
+				this.CreateTable(entity);
+			}
+
+			// set id
+			entity.setId(id);
+
+			// call mapper
+			Map<String, Object> map = oneMapper.selectByID(entity);
+
+			// check existence
+			if (map == null) {
+				return false;
+			}
+
+			// set id again
+			model.setId(id);
+
+			// map column to field
+			Map<String, OneColumnEntity> columns = entity.getColumns();
+
+			for (String key : columns.keySet()) {
+				OneColumnEntity info = columns.get(key);
+				Field field = info.getField();
+
+				Object value = map.get(info.getColumnName());
+
+				// set value of any type
+				field.set(model, value);
+			}
+
+			return true;
+		} catch (Exception ex) {
+			throw new CoreException(ex);
 		}
-
-		// set id
-		entity.setId(id);
-
-		// call mapper
-		Map<String, Object> map = oneMapper.selectByID(entity);
-
-		// check existence
-		if (map == null) {
-			return false;
-		}
-
-		// set id again
-		model.setId(id);
-
-		// map column to field
-		Map<String, OneColumnEntity> columns = entity.getColumns();
-
-		for (String key : columns.keySet()) {
-			OneColumnEntity info = columns.get(key);
-			Field field = info.getField();
-
-			Object value = map.get(info.getColumnName());
-
-			// set value of any type
-			field.set(model, value);
-		}
-
-		return true;
 	}
 
 	/**
@@ -181,59 +185,62 @@ public class OneModelService implements ModelService {
 	 */
 	@SuppressWarnings("unchecked")
 	protected <T extends BaseModel> List<T> innerSelectModelList(T model, List<Long> ids, OneEntity entity)
-			throws Exception {
+			throws CoreException {
 
-		// get another entity if not
-		if (entity == null) {
-			entity = new AnotherEntity(model);
+		try {
+			// get another entity if not
+			if (entity == null) {
+				entity = new AnotherEntity(model);
 
-			// create table if not exists
-			this.CreateTable(entity);
-		}
-
-		// set id list
-		entity.setIds(ids);
-
-		// call mapper
-		List<Map<String, Object>> maps = oneMapper.selectByIDs(entity);
-
-		// check existence
-		if (maps == null) {
-			return null;
-		}
-
-		List<T> list = new ArrayList<T>(maps.size());
-
-		// make models
-		for (Map<String, Object> map : maps) {
-
-			// create new model
-			T newmodel = (T) model.clone();
-
-			// set id from map
-			Long newid = (Long) map.get("id");
-			if (newid != null) {
-
-				newmodel.setId(newid);
-
-				// map column to field
-				Map<String, OneColumnEntity> columns = entity.getColumns();
-
-				for (String key : columns.keySet()) {
-					OneColumnEntity info = columns.get(key);
-					Field field = info.getField();
-
-					Object value = map.get(info.getColumnName());
-
-					// set value of any type
-					field.set(newmodel, value);
-				}
-
-				list.add(newmodel);
+				// create table if not exists
+				this.CreateTable(entity);
 			}
-		}
 
-		return list;
+			// set id list
+			entity.setIds(ids);
+
+			// call mapper
+			List<Map<String, Object>> maps = oneMapper.selectByIDs(entity);
+
+			// check existence
+			if (maps == null) {
+				return null;
+			}
+
+			List<T> list = new ArrayList<T>(maps.size());
+
+			// make models
+			for (Map<String, Object> map : maps) {
+
+				// create new model
+				T newmodel = (T) model.clone();
+
+				// set id from map
+				Long newid = (Long) map.get("id");
+				if (newid != null) {
+
+					newmodel.setId(newid);
+
+					// map column to field
+					Map<String, OneColumnEntity> columns = entity.getColumns();
+
+					for (String key : columns.keySet()) {
+						OneColumnEntity info = columns.get(key);
+						Field field = info.getField();
+
+						Object value = map.get(info.getColumnName());
+
+						// set value of any type
+						field.set(newmodel, value);
+					}
+
+					list.add(newmodel);
+				}
+			}
+			return list;
+		} catch (Exception ex) {
+			throw new CoreException(ex);
+		}
 	}
 
 	/**
@@ -243,25 +250,29 @@ public class OneModelService implements ModelService {
 	 * @param entity
 	 * @throws Exception
 	 */
-	protected <T extends BaseModel> void innerInsertModel(T model, OneEntity entity) throws Exception {
+	protected <T extends BaseModel> void innerInsertModel(T model, OneEntity entity) throws CoreException {
+		try {
+			// get another entity if not
+			if (entity == null) {
+				entity = new AnotherEntity(model);
 
-		// get another entity if not
-		if (entity == null) {
-			entity = new AnotherEntity(model);
+				// create table if not exists
+				this.CreateTable(entity);
+			}
 
-			// create table if not exists
-			this.CreateTable(entity);
+			// insert the given element
+			int ret = oneMapper.insertByID(entity);
+
+			if (ret <= 0) {
+				// execute fail
+				throw new CoreException("insert failed");
+			}
+
+			// id already set into entity and bridged to model
+
+		} catch (Exception ex) {
+			throw new CoreException(ex);
 		}
-
-		// insert the given element
-		int ret = oneMapper.insertByID(entity);
-
-		if (ret <= 0) {
-			// execute fail
-			throw new CoreException("insert failed");
-		}
-
-		// id already set into entity and bridged to model
 	}
 
 	/**
@@ -273,40 +284,45 @@ public class OneModelService implements ModelService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T extends BaseModel> T innerUpdateModel(T model, OneEntity entity) throws Exception {
+	protected <T extends BaseModel> T innerUpdateModel(T model, OneEntity entity) throws CoreException {
+		try {
 
-		// get another entity if not
-		if (entity == null) {
-			entity = new AnotherEntity(model);
+			// get another entity if not
+			if (entity == null) {
+				entity = new AnotherEntity(model);
 
-			// create table if not exists
-			this.CreateTable(entity);
-		}
-
-		// try get old one if need
-		T old = null;
-
-		if (model.isEnableChangeLog()) {
-			// clone to old
-			old = (T) model.clone();
-
-			boolean exists = this.innerSelectModel(old, model.getId(), entity);
-
-			if (!exists) {
-				// not exists, throw
-				throw new DataNotExistsException("data for update not exists");
+				// create table if not exists
+				this.CreateTable(entity);
 			}
+
+			// try get old one if need
+			T old = null;
+
+			if (model.isEnableChangeLog()) {
+				// clone to old
+				old = (T) model.clone();
+
+				boolean exists = this.innerSelectModel(old, model.getId(), entity);
+
+				if (!exists) {
+					// not exists, throw
+					throw new DataNotExistsException("data for update not exists");
+				}
+			}
+
+			// update the given element
+			int ret = oneMapper.updateByID(entity);
+
+			if (ret <= 0) {
+				// execute fail
+				throw new CoreException("update failed");
+			}
+
+			return old;
+
+		} catch (Exception ex) {
+			throw new CoreException(ex);
 		}
-
-		// update the given element
-		int ret = oneMapper.updateByID(entity);
-
-		if (ret <= 0) {
-			// execute fail
-			throw new CoreException("update failed");
-		}
-
-		return old;
 	}
 
 	/**
@@ -318,40 +334,44 @@ public class OneModelService implements ModelService {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T extends BaseModel> T innerDeleteModel(T model, OneEntity entity) throws Exception {
+	protected <T extends BaseModel> T innerDeleteModel(T model, OneEntity entity) throws CoreException {
+		try {
+			// get another entity if not
+			if (entity == null) {
+				entity = new AnotherEntity(model);
 
-		// get another entity if not
-		if (entity == null) {
-			entity = new AnotherEntity(model);
-
-			// create table if not exists
-			this.CreateTable(entity);
-		}
-
-		// try get old one if need
-		T old = null;
-
-		if (model.isEnableChangeLog()) {
-			// clone to old
-			old = (T) model.clone();
-
-			boolean exists = this.innerSelectModel(old, model.getId(), entity);
-
-			if (!exists) {
-				// not exists, throw
-				throw new DataNotExistsException("data for delete not exists");
+				// create table if not exists
+				this.CreateTable(entity);
 			}
+
+			// try get old one if need
+			T old = null;
+
+			if (model.isEnableChangeLog()) {
+				// clone to old
+				old = (T) model.clone();
+
+				boolean exists = this.innerSelectModel(old, model.getId(), entity);
+
+				if (!exists) {
+					// not exists, throw
+					throw new DataNotExistsException("data for delete not exists");
+				}
+			}
+
+			// delete the given element
+			int ret = oneMapper.deleteByID(entity);
+
+			if (ret <= 0) {
+				// execute fail
+				throw new CoreException("delete failed");
+			}
+
+			return old;
+
+		} catch (Exception ex) {
+			throw new CoreException(ex);
 		}
-
-		// delete the given element
-		int ret = oneMapper.deleteByID(entity);
-
-		if (ret <= 0) {
-			// execute fail
-			throw new CoreException("delete failed");
-		}
-
-		return old;
 	}
 
 	/**
@@ -359,7 +379,7 @@ public class OneModelService implements ModelService {
 	 *      long)
 	 */
 	@Override
-	public <T extends BaseModel> void selectModel(T model, long id) throws Exception {
+	public <T extends BaseModel> void selectModel(T model, long id) throws CoreException {
 		AssertUtil.notNull(model);
 
 		// trigger before select
@@ -387,7 +407,7 @@ public class OneModelService implements ModelService {
 	 *      long)
 	 */
 	@Override
-	public <T extends BaseModel> boolean trySelectModel(T model, long id) throws Exception {
+	public <T extends BaseModel> boolean trySelectModel(T model, long id) throws CoreException {
 		try {
 			this.selectModel(model, id);
 			return true;
@@ -403,7 +423,7 @@ public class OneModelService implements ModelService {
 	 *      java.util.List)
 	 */
 	@Override
-	public <T extends BaseModel> List<T> selectModelList(T model, List<Long> ids) throws Exception {
+	public <T extends BaseModel> List<T> selectModelList(T model, List<Long> ids) throws CoreException {
 		AssertUtil.notNull(model);
 		AssertUtil.notNull(ids);
 
@@ -429,7 +449,7 @@ public class OneModelService implements ModelService {
 	 * @see org.yaen.starter.common.data.services.ModelService#insertModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
-	public <T extends BaseModel> long insertModel(T model) throws Exception {
+	public <T extends BaseModel> long insertModel(T model) throws CoreException {
 		AssertUtil.notNull(model);
 
 		// trigger before insert
@@ -458,7 +478,7 @@ public class OneModelService implements ModelService {
 	 * @see org.yaen.starter.common.data.services.ModelService#updateModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
-	public <T extends BaseModel> void updateModel(T model) throws Exception {
+	public <T extends BaseModel> void updateModel(T model) throws CoreException {
 		AssertUtil.notNull(model);
 
 		// trigger before update
@@ -483,7 +503,7 @@ public class OneModelService implements ModelService {
 	 * @see org.yaen.starter.common.data.services.ModelService#deleteModel(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
-	public <T extends BaseModel> void deleteModel(T model) throws Exception {
+	public <T extends BaseModel> void deleteModel(T model) throws CoreException {
 		AssertUtil.notNull(model);
 
 		// trigger before delete

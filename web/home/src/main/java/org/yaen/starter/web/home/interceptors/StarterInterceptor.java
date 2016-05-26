@@ -28,12 +28,10 @@ public class StarterInterceptor extends HandlerInterceptorAdapter {
 		// call super
 		if (super.preHandle(request, response, handler)) {
 
-			log.debug("preHandle, ip={}, uri={}", WebUtil.getClientIp(request), request.getRequestURI());
-
 			// get user
 			Subject user = WebUtil.getUser();
 
-			log.debug("preHandle, user={}", user);
+			log.trace("preHandle, ip={}, uri={}, user={}", WebUtil.getClientIp(request), request.getRequestURI(), user);
 
 			// return true for next step
 			return true;

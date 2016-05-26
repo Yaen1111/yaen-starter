@@ -18,7 +18,7 @@ import lombok.ToString;
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @ToString(callSuper = true)
-@OneTable(TableName = "PARTY_INFO")
+@OneTable(TableName = "ZP_PARTY_INFO")
 public class PartyInfo extends OneFractalModel {
 	private static final long serialVersionUID = -7283963978173189572L;
 

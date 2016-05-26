@@ -5,6 +5,7 @@ package org.yaen.starter.common.data.services;
 
 import java.util.List;
 
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
 
 /**
@@ -21,7 +22,7 @@ public interface ModelService {
 	 * @param id
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> void selectModel(T model, long id) throws Exception;
+	public <T extends BaseModel> void selectModel(T model, long id) throws CoreException;
 
 	/**
 	 * try select model, return false if not exists
@@ -31,7 +32,7 @@ public interface ModelService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> boolean trySelectModel(T model, long id) throws Exception;
+	public <T extends BaseModel> boolean trySelectModel(T model, long id) throws CoreException;
 
 	/**
 	 * select model list by given id list
@@ -41,7 +42,7 @@ public interface ModelService {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> List<T> selectModelList(T model, List<Long> ids) throws Exception;
+	public <T extends BaseModel> List<T> selectModelList(T model, List<Long> ids) throws CoreException;
 
 	/**
 	 * insert model
@@ -49,7 +50,7 @@ public interface ModelService {
 	 * @param model
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> long insertModel(T model) throws Exception;
+	public <T extends BaseModel> long insertModel(T model) throws CoreException;
 
 	/**
 	 * update model
@@ -57,7 +58,7 @@ public interface ModelService {
 	 * @param model
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> void updateModel(T model) throws Exception;
+	public <T extends BaseModel> void updateModel(T model) throws CoreException;
 
 	/**
 	 * delete model
@@ -65,6 +66,6 @@ public interface ModelService {
 	 * @param model
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> void deleteModel(T model) throws Exception;
+	public <T extends BaseModel> void deleteModel(T model) throws CoreException;
 
 }

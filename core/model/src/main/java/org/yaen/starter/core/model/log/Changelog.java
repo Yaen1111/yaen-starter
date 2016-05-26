@@ -95,7 +95,7 @@ public class Changelog extends OneModel implements OneTableHandler {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeUpdate(ModelService service) throws Exception {
+	public boolean BeforeUpdate(ModelService service) throws CoreException {
 		throw new CoreException("change document can not be updated");
 	}
 
@@ -103,7 +103,7 @@ public class Changelog extends OneModel implements OneTableHandler {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeDelete(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeDelete(ModelService service) throws Exception {
+	public boolean BeforeDelete(ModelService service) throws CoreException {
 		throw new CoreException("change document can not be deleted");
 	}
 

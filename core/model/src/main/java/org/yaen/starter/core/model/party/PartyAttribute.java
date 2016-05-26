@@ -18,7 +18,7 @@ import lombok.ToString;
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @ToString(callSuper = true)
-@OneTable(TableName = "PARTY_ATTRIBUTE")
+@OneTable(TableName = "ZP_PARTY_ATTRIBUTE")
 public class PartyAttribute extends OneAttributeModel {
 	private static final long serialVersionUID = 2310601189439211189L;
 

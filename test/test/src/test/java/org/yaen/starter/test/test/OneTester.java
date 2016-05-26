@@ -74,11 +74,7 @@ public class OneTester extends UnitTester {
 
 			// System.out.println("delete done");
 
-		} catch (CommonException ex) {
-			System.out.println(ex);
 		} catch (CoreException ex) {
-			System.out.println(ex);
-		} catch (BizException ex) {
 			System.out.println(ex);
 		} catch (Exception ex) {
 			System.out.println(ex);

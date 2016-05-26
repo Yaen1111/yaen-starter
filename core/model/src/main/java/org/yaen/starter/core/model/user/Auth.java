@@ -14,7 +14,7 @@ import lombok.ToString;
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @ToString(callSuper = true)
-@OneTable(TableName = "AUTH")
+@OneTable(TableName = "ZU_AUTH")
 public class Auth extends OneModel {
 	private static final long serialVersionUID = -709733522935110043L;
 

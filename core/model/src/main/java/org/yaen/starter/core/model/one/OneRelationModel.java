@@ -9,6 +9,7 @@ import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseRelationModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -88,7 +89,7 @@ public class OneRelationModel extends OneModel implements BaseRelationModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#AfterSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public boolean AfterSelect(ModelService service) throws Exception {
+	public boolean AfterSelect(ModelService service) throws CoreException {
 		if (super.AfterSelect(service)) {
 
 			// select element
@@ -111,7 +112,7 @@ public class OneRelationModel extends OneModel implements BaseRelationModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeInsert(ModelService service) throws Exception {
+	public boolean BeforeInsert(ModelService service) throws CoreException {
 		if (super.BeforeInsert(service)) {
 
 			// set date from to now if not given

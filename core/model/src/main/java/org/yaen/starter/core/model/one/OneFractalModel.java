@@ -5,6 +5,7 @@ package org.yaen.starter.core.model.one;
 
 import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseFractalModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -43,7 +44,7 @@ public class OneFractalModel extends OneModel implements BaseFractalModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeSelect(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public boolean BeforeSelect(ModelService service) throws Exception {
+	public boolean BeforeSelect(ModelService service) throws CoreException {
 		if (super.BeforeSelect(service)) {
 
 			// need to select base
@@ -59,7 +60,7 @@ public class OneFractalModel extends OneModel implements BaseFractalModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeInsert()
 	 */
 	@Override
-	public boolean BeforeInsert(ModelService service) throws Exception {
+	public boolean BeforeInsert(ModelService service) throws CoreException {
 		if (super.BeforeInsert(service)) {
 
 			// insert parent if not
@@ -78,7 +79,7 @@ public class OneFractalModel extends OneModel implements BaseFractalModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeUpdate(org.yaen.ModelService.common.services.EntityService)
 	 */
 	@Override
-	public boolean BeforeUpdate(ModelService service) throws Exception {
+	public boolean BeforeUpdate(ModelService service) throws CoreException {
 		if (super.BeforeUpdate(service)) {
 
 			// update parent

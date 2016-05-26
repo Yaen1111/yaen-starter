@@ -14,7 +14,7 @@ import lombok.ToString;
  * @author Yaen 2016年5月17日下午2:44:19
  */
 @ToString(callSuper = true)
-@OneTable(TableName = "ROLE_AUTH")
+@OneTable(TableName = "ZU_ROLE_AUTH")
 public class RoleAuth extends OneRelationModel {
 	private static final long serialVersionUID = -4458934767334916729L;
 

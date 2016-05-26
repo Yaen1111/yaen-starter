@@ -90,13 +90,7 @@ public class OneEntity implements BaseEntity {
 		// use local var to modify
 		Map<String, OneColumnEntity> col = new LinkedHashMap<String, OneColumnEntity>();
 
-		try {
-			// try get column info
-			this.fetchOneColumnInfo(col, this.entity, this.entity.getClass());
-		} catch (Exception ex) {
-			// just throw out
-			throw ex;
-		}
+		this.fetchOneColumnInfo(col, this.entity, this.entity.getClass());
 
 		// remove id, as is primary key
 		col.remove("id");

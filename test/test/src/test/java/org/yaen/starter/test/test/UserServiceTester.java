@@ -39,10 +39,6 @@ public class UserServiceTester extends UnitTester {
 
 			System.out.println(userid);
 
-		} catch (CommonException ex) {
-			System.out.println(ex);
-		} catch (CoreException ex) {
-			System.out.println(ex);
 		} catch (BizException ex) {
 			System.out.println(ex);
 		} catch (Exception ex) {
