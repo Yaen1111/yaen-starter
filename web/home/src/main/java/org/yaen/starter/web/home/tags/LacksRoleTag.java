@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.freemarker;
+package org.yaen.starter.web.home.tags;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ public class LacksRoleTag extends RoleTag {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.web.home.freemarker.RoleTag#showTagBody(java.lang.String)
+	 * @see org.yaen.starter.web.home.tags.RoleTag#showTagBody(java.lang.String)
 	 */
 	@Override
 	protected boolean showTagBody(String roleName) {

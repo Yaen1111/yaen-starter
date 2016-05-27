@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * serialize and deserialize
+ * serialize and deserialize to byte, the serialized byte contains class info
  * 
  * @author Yaen 2016年5月13日下午2:59:20
  */

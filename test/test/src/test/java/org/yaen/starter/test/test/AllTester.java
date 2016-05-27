@@ -47,24 +47,24 @@ public class AllTester extends UnitTester {
 
 		try {
 			// create one party
-			PartyDTO dto = new PartyDTO();
-			dto.setPartyRoleType("admin2");
-			dto.setPartyType("PERSON");
+			PartyDTO party = new PartyDTO();
+			party.setPartyRoleType("admin2");
+			party.setPartyType("PERSON");
 
-			long partyid = partyService.RegisterNewParty(dto);
+			long partyid = partyService.RegisterNewParty(party);
 
 			System.out.println(partyid);
 
 			// create user by given party
-			UserDTO dto2 = new UserDTO();
-			dto2.setUserID(partyid);
-			dto2.setUserName("Linda");
-			dto2.setPasswordSalt("123");
-			dto2.setPasswordHash("321");
+			UserDTO user = new UserDTO();
+			user.setUserID(partyid);
+			user.setUserName("Linda");
+			user.setPasswordSalt("123");
+			user.setPasswordHash("321");
 
-			long userid = userService.RegisterNewUser(dto2);
+			userService.registerNewUser(user);
 
-			System.out.println(userid);
+			System.out.println(user.getUserID());
 
 		} catch (CommonException ex) {
 			System.out.println(ex);

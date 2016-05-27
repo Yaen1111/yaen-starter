@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.freemarker;
+package org.yaen.starter.web.home.tags;
 
 import java.io.IOException;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class UserTag extends SecureTag {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.web.home.freemarker.SecureTag#render(freemarker.core.Environment, java.util.Map,
+	 * @see org.yaen.starter.web.home.tags.SecureTag#render(freemarker.core.Environment, java.util.Map,
 	 *      freemarker.template.TemplateDirectiveBody)
 	 */
 	@SuppressWarnings("rawtypes")

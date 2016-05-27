@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.freemarker;
+package org.yaen.starter.web.home.tags;
 
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
@@ -28,7 +28,7 @@ public abstract class PermissionTag extends SecureTag {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.web.home.freemarker.SecureTag#verifyParameters(java.util.Map)
+	 * @see org.yaen.starter.web.home.tags.SecureTag#verifyParameters(java.util.Map)
 	 */
 	@Override
 	protected void verifyParameters(Map params) throws TemplateModelException {
@@ -41,7 +41,7 @@ public abstract class PermissionTag extends SecureTag {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.web.home.freemarker.SecureTag#render(freemarker.core.Environment, java.util.Map,
+	 * @see org.yaen.starter.web.home.tags.SecureTag#render(freemarker.core.Environment, java.util.Map,
 	 *      freemarker.template.TemplateDirectiveBody)
 	 */
 	@Override

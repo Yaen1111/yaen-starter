@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.freemarker;
+package org.yaen.starter.web.home.tags;
 
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
@@ -27,7 +27,7 @@ public abstract class RoleTag extends SecureTag {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.web.home.freemarker.SecureTag#render(freemarker.core.Environment, java.util.Map,
+	 * @see org.yaen.starter.web.home.tags.SecureTag#render(freemarker.core.Environment, java.util.Map,
 	 *      freemarker.template.TemplateDirectiveBody)
 	 */
 	@Override

@@ -1,8 +1,6 @@
 package org.yaen.starter.test.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.yaen.starter.common.data.exceptions.BizException;
-import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.core.model.ark.SubCode;

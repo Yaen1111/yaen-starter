@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.controllers;
+package org.yaen.starter.web.home.controllers.starter;
 
 import java.util.List;
 
@@ -14,16 +14,13 @@ import org.yaen.starter.common.dal.mappers.ZeroMapper;
 import org.yaen.starter.common.data.entities.MyDescribeEntity;
 import org.yaen.starter.web.home.viewmodels.ViewModel;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * dba controller, mostly like show table info
  * 
  * @author Yaen 2016年5月19日下午2:28:18
  */
-@Slf4j
 @Controller
-@RequestMapping("/dba")
+@RequestMapping("/starter/dba")
 public class DbaController {
 
 	@Autowired
@@ -47,7 +44,7 @@ public class DbaController {
 
 		model.addAttribute("tableNames", tableNames);
 
-		return model.asView("/dba/showtables");
+		return model.asView("/starter/dba/showtables");
 	}
 
 	/**
@@ -70,7 +67,7 @@ public class DbaController {
 		model.addAttribute("tableName", tableName);
 		model.addAttribute("columns", columns);
 
-		return model.asView("/dba/describetable");
+		return model.asView("/starter/dba/describetable");
 	}
 
 }

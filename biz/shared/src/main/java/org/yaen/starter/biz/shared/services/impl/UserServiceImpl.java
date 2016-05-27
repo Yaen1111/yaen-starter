@@ -8,10 +8,12 @@ import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.biz.shared.services.UserService;
 import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsBizException;
+import org.yaen.starter.common.data.exceptions.DuplicateDataBizException;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.common.util.utils.DateUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.user.User;
 
 /**
@@ -29,74 +31,78 @@ public class UserServiceImpl implements UserService {
 	private QueryService queryService;
 
 	/**
-	 * @see org.yaen.starter.biz.shared.services.UserService#RegisterNewUser(org.yaen.starter.biz.shared.objects.UserDTO)
+	 * @see org.yaen.starter.biz.shared.services.UserService#registerNewUser(org.yaen.starter.biz.shared.objects.UserDTO)
 	 */
 	@Override
-	public long RegisterNewUser(UserDTO dto) throws BizException {
-		AssertUtil.notNull(dto);
+	public void registerNewUser(UserDTO user) throws BizException {
+		AssertUtil.notNull(user);
 
 		// create new user
-		User user = new User();
+		User model = new User();
 
-		// set partyid if given
-		if (dto.getUserID() > 0) {
-			user.setId(dto.getUserID());
+		// set id if given
+		if (user.getUserID() > 0) {
+			model.setId(user.getUserID());
 		}
-		user.setUserName(dto.getUserName());
-		user.setPasswordSalt(dto.getPasswordSalt());
-		user.setPasswordHash(dto.getPasswordHash());
-		long userid = 0;
+
+		// set basic info
+		model.setUserName(user.getUserName());
+		model.setPasswordHash(user.getPassword());
+
+		// gen salt, set hash
+		model.setPasswordSalt(user.getPasswordSalt());
+		model.setPasswordHash(user.getPasswordHash());
+
+		long userID = 0;
 		try {
-			userid = modelService.insertModel(user);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			userID = modelService.insertModel(model);
+		} catch (CoreException ex) {
+			throw new BizException(ex);
 		}
 
-		return userid;
+		// set user id
+		user.setUserID(userID);
 	}
 
 	/**
-	 * @see org.yaen.starter.biz.shared.services.UserService#Login(org.yaen.starter.biz.shared.objects.UserDTO)
+	 * @see org.yaen.starter.biz.shared.services.UserService#getUserByName(org.yaen.starter.biz.shared.objects.UserDTO)
 	 */
 	@Override
-	public void Login(UserDTO dto) throws BizException {
-		AssertUtil.notNull(dto);
+	public void getUserByName(UserDTO user) throws BizException {
+		AssertUtil.notNull(user);
 
 		try {
 			// find user
-			User user = new User();
-			user.setId(0);
+			User model = new User();
+			model.setId(0);
 
 			// try to get model, used to create table
-			modelService.trySelectModel(user, 0L);
+			modelService.trySelectModel(model, 0L);
 
-			user.setUserName(dto.getUserName());
+			model.setUserName(user.getUserName());
 
-			List<Long> ids = queryService.SelectIDsByFieldName(user, "userName");
+			List<Long> ids = queryService.SelectIDsByFieldName(model, "userName");
 
 			if (ids == null || ids.isEmpty()) {
-				throw new BizException("user not exists");
+				throw new DataNotExistsBizException("user not exists");
 			}
 
 			if (ids.size() > 1) {
-				throw new BizException("duplicate usernames");
+				throw new DuplicateDataBizException("duplicate usernames");
 			}
 
 			// get user detail
-			modelService.selectModel(user, ids.get(0));
+			modelService.selectModel(model, ids.get(0));
 
 			// do some additional check, like locked
 
-			// user found, update something
-			user.setLastLoginTime(DateUtil.getNow());
-			modelService.updateModel(user);
+			// user ok, set info
+			user.setUserID(model.getId());
+			user.setUserName(model.getUserName());
+			user.setPasswordHash(model.getPasswordHash());
+			user.setPasswordSalt(model.getPasswordSalt());
 
-			// login ok, set value to dto
-			dto.setUserID(user.getId());
-			dto.setUserName(user.getUserName());
-			dto.setPasswordHash(user.getPasswordHash());
-			dto.setPasswordSalt(user.getPasswordSalt());
+			// TODO how to set last login time?
 
 		} catch (CoreException ex) {
 			throw new BizException(ex);
@@ -107,37 +113,23 @@ public class UserServiceImpl implements UserService {
 	 * @see org.yaen.starter.biz.shared.services.UserService#Logout(org.yaen.starter.biz.shared.objects.UserDTO)
 	 */
 	@Override
-	public void Logout(UserDTO dto) throws BizException {
-		if (dto == null)
-			return;
+	public void Logout(UserDTO user) throws BizException {
+		// TODO how to set last logout time?
+	}
 
-		try {
-			// find user
-			User user = new User();
-			user.setUserName(dto.getUserName());
+	/**
+	 * @see org.yaen.starter.biz.shared.services.UserService#checkUserCredentials(org.yaen.starter.biz.shared.objects.UserDTO)
+	 */
+	@Override
+	public boolean checkUserCredentials(UserDTO user) {
 
-			List<Long> ids = queryService.SelectIDsByFieldName(user, "userName");
+		// TODO here may set the last login time
 
-			if (ids == null || ids.isEmpty()) {
-				throw new BizException("user not exists");
-			}
-
-			if (ids.size() > 1) {
-				throw new BizException("duplicate usernames");
-			}
-
-			// get user detail
-			modelService.selectModel(user, ids.get(0));
-
-			// do some additional check, like locked
-
-			// user found, update something
-			user.setLastLogoutTime(DateUtil.getNow());
-			modelService.updateModel(user);
-
-		} catch (CoreException ex) {
-			throw new BizException(ex);
+		// check password, just same
+		if (StringUtil.equals(user.getPasswordHash(), user.getPassword())) {
+			return true;
 		}
+		return false;
 	}
 
 }

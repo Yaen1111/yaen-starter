@@ -6,12 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
- * date util
- * 
+ * date util for format date/get date
  * 
  * @author Yaen 2016年1月5日下午1:26:56
  */
@@ -537,45 +534,6 @@ public class DateUtil {
 		long times = (new Date().getTime()) - d1.getTime();
 		int age = Long.valueOf((times / (1000 * 60 * 60 * 24)) / 365).intValue();
 		return age > 0 ? age : 1;
-	}
-
-	/**
-	 * 从身份证号码中获取生日日期
-	 *
-	 * @param cardID
-	 * @return
-	 */
-	public static Date getBirthday(String cardID) {
-
-		if (StringUtil.isBlank(cardID)) {
-			return null;
-		}
-
-		if (cardID.length() == 15) {
-			Pattern p = Pattern.compile(
-					"^[1-9]\\d{5}(\\d{2}((((0[13578])|(1[02]))(([0-2][0-9])|(3[01])))|(((0[469])|(11))(([0-2][0-9])|(30)))|(02[0-2][0-9])))\\d{3}$");
-			Matcher m = p.matcher(cardID);
-			if (m.matches()) {
-				String s = m.group(1);
-				try {
-					return new SimpleDateFormat("yyyyMMdd").parse("19" + s);
-				} catch (ParseException e) {
-				}
-			}
-		} else if (cardID.length() == 18) {
-			Pattern p = Pattern.compile(
-					"^[1-9]\\d{5}(\\d{4}((((0[13578])|(1[02]))(([0-2][0-9])|(3[01])))|(((0[469])|(11))(([0-2][0-9])|(30)))|(02[0-2][0-9])))\\d{3}[\\dX]$");
-			Matcher m = p.matcher(cardID);
-			if (m.matches()) {
-				String s = m.group(1);
-				try {
-					return new SimpleDateFormat("yyyyMMdd").parse(s);
-				} catch (ParseException e) {
-				}
-			}
-		}
-
-		return null;
 	}
 
 }

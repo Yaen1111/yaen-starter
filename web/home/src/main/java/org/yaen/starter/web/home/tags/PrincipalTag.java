@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.freemarker;
+package org.yaen.starter.web.home.tags;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -51,7 +51,7 @@ public class PrincipalTag extends SecureTag {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.web.home.freemarker.SecureTag#render(freemarker.core.Environment, java.util.Map,
+	 * @see org.yaen.starter.web.home.tags.SecureTag#render(freemarker.core.Environment, java.util.Map,
 	 *      freemarker.template.TemplateDirectiveBody)
 	 */
 	@Override

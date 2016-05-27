@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.common.util.utils;
 
 import java.text.ParseException;
@@ -9,10 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * util for id card in china
- * 
  * 
  * @author Yaen 2016年1月19日下午9:12:26
  */
@@ -257,8 +255,7 @@ public class IdCardUtil {
 	 *            身份编码
 	 * @return 身份证信息数组
 	 *         <p>
-	 *         [0] - 台湾、澳门、香港 [1] - 性别(男M,女F,未知N) [2] - 是否合法(合法true,不合法false)
-	 *         若不是身份证件号码则返回null
+	 *         [0] - 台湾、澳门、香港 [1] - 性别(男M,女F,未知N) [2] - 是否合法(合法true,不合法false) 若不是身份证件号码则返回null
 	 *         </p>
 	 */
 	public static String[] validateIdCard10(String idCard) {
@@ -323,8 +320,7 @@ public class IdCardUtil {
 	/**
 	 * 验证香港身份证号码(存在Bug，部份特殊身份证无法检查)
 	 * <p>
-	 * 身份证前2位为英文字符，如果只出现一个英文字符则表示第一位是空格，对应数字58 前2位英文字符A-Z分别对应数字10-35
-	 * 最后一位校验码为0-9的数字加上字符"A"，"A"代表10
+	 * 身份证前2位为英文字符，如果只出现一个英文字符则表示第一位是空格，对应数字58 前2位英文字符A-Z分别对应数字10-35 最后一位校验码为0-9的数字加上字符"A"，"A"代表10
 	 * </p>
 	 * <p>
 	 * 将身份证号码全部转换为数字，分别对应乘9-1相加的总和，整除11则证件号码有效
@@ -541,15 +537,15 @@ public class IdCardUtil {
 	 * @return 性别(M-男，F-女，N-未知)
 	 */
 	public static String getGenderByIdCard(String idCard) {
-		String sGender = "未知";
+		String sGender = "N";
 		if (idCard.length() == CHINA_ID_MIN_LENGTH) {
 			idCard = conver15CardTo18(idCard);
 		}
 		String sCardNum = idCard.substring(16, 17);
 		if (Integer.parseInt(sCardNum) % 2 != 0) {
-			sGender = "男";
+			sGender = "M";
 		} else {
-			sGender = "女";
+			sGender = "F";
 		}
 		return sGender;
 	}
@@ -619,4 +615,44 @@ public class IdCardUtil {
 		}
 		return (iDate >= 1) && (iDate <= datePerMonth);
 	}
+
+	/**
+	 * 从身份证号码中获取生日日期
+	 *
+	 * @param cardID
+	 * @return
+	 */
+	public static Date getBirthday(String cardID) {
+
+		if (StringUtil.isBlank(cardID)) {
+			return null;
+		}
+
+		if (cardID.length() == 15) {
+			Pattern p = Pattern.compile(
+					"^[1-9]\\d{5}(\\d{2}((((0[13578])|(1[02]))(([0-2][0-9])|(3[01])))|(((0[469])|(11))(([0-2][0-9])|(30)))|(02[0-2][0-9])))\\d{3}$");
+			Matcher m = p.matcher(cardID);
+			if (m.matches()) {
+				String s = m.group(1);
+				try {
+					return new SimpleDateFormat("yyyyMMdd").parse("19" + s);
+				} catch (ParseException e) {
+				}
+			}
+		} else if (cardID.length() == 18) {
+			Pattern p = Pattern.compile(
+					"^[1-9]\\d{5}(\\d{4}((((0[13578])|(1[02]))(([0-2][0-9])|(3[01])))|(((0[469])|(11))(([0-2][0-9])|(30)))|(02[0-2][0-9])))\\d{3}[\\dX]$");
+			Matcher m = p.matcher(cardID);
+			if (m.matches()) {
+				String s = m.group(1);
+				try {
+					return new SimpleDateFormat("yyyyMMdd").parse(s);
+				} catch (ParseException e) {
+				}
+			}
+		}
+
+		return null;
+	}
+
 }

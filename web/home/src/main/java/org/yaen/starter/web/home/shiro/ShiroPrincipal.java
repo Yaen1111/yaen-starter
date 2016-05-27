@@ -2,15 +2,16 @@ package org.yaen.starter.web.home.shiro;
 
 import java.io.Serializable;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * shiro principal(user info)
  * 
  * @author Yaen 2016年5月19日下午6:42:54
  */
-@Data
+@Getter
+@Setter
 public class ShiroPrincipal implements Serializable {
 	private static final long serialVersionUID = 2591810631949952332L;
 
@@ -24,5 +25,15 @@ public class ShiroPrincipal implements Serializable {
 	 */
 	public ShiroPrincipal(String username) {
 		this.username = username;
+	}
+
+	/**
+	 * return username by default
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.username;
 	}
 }

@@ -1,9 +1,10 @@
 package org.yaen.starter.web.home.shiro;
 
+import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.biz.shared.services.UserService;
 import org.yaen.starter.common.data.exceptions.BizException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsBizException;
+import org.yaen.starter.common.data.exceptions.DuplicateDataBizException;
 import org.yaen.starter.common.util.utils.StringUtil;
 
 /**
@@ -30,7 +33,7 @@ public class ShiroRealm extends AuthorizingRealm {
 	private UserService userService;
 
 	/**
-	 * check user login info, throw exception if login failed
+	 * get user info only, no password check, throw exception if user not found
 	 * 
 	 * @see org.apache.shiro.realm.AuthenticatingRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)
 	 */
@@ -40,7 +43,6 @@ public class ShiroRealm extends AuthorizingRealm {
 		UsernamePasswordToken userToken = (UsernamePasswordToken) token;
 
 		String username = StringUtil.trimToNull(userToken.getUsername());
-		String password = StringUtil.trimToNull(String.copyValueOf(userToken.getPassword()));
 
 		// check user name
 		if (username == null) {
@@ -48,26 +50,26 @@ public class ShiroRealm extends AuthorizingRealm {
 		}
 
 		UserDTO user = new UserDTO();
+		user.setUserName(username);
 
 		// find user
 		try {
-			user.setUserName(username);
-			userService.Login(user);
-
-		} catch (BizException ex) {
+			userService.getUserByName(user);
+		} catch (DataNotExistsBizException ex) {
 			// user not exists
 			throw new UnknownAccountException("user not exists");
-		}
-
-		// check password
-		if (!StringUtil.equalsIgnoreCase(password, user.getPasswordHash())) {
-			throw new IncorrectCredentialsException("password error");
+		} catch (DuplicateDataBizException ex) {
+			// duplicate user found
+			throw new DisabledAccountException("duplicate user found and is disabled");
+		} catch (BizException ex) {
+			// other error
+			throw new AccountException("unknown error", ex);
 		}
 
 		// here is ok, create authentication info
 
-		// create principal(user object)
-		ShiroPrincipal principal = new ShiroPrincipal(username);
+		// create principal(user object), the username maybe changed by capital
+		ShiroPrincipal principal = new ShiroPrincipal(user.getUserName());
 
 		// create credentials(password hash and salt)
 		ShiroCredentials credentials = new ShiroCredentials(user.getPasswordHash(), user.getPasswordSalt());

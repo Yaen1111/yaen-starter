@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.biz.shared.services.UserService;
 import org.yaen.starter.common.data.exceptions.BizException;
-import org.yaen.starter.common.data.exceptions.CommonException;
-import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.test.test.tester.UnitTester;
 
 /**
@@ -29,15 +27,15 @@ public class UserServiceTester extends UnitTester {
 		System.out.println("------------");
 
 		try {
-			UserDTO dto = new UserDTO();
-			dto.setUserID(124);
-			dto.setUserName("John2");
-			dto.setPasswordSalt("123");
-			dto.setPasswordHash("321");
+			UserDTO user = new UserDTO();
+			user.setUserID(124);
+			user.setUserName("John2");
+			user.setPasswordSalt("123");
+			user.setPasswordHash("321");
 
-			long userid = userService.RegisterNewUser(dto);
+			userService.registerNewUser(user);
 
-			System.out.println(userid);
+			System.out.println(user.getUserID());
 
 		} catch (BizException ex) {
 			System.out.println(ex);

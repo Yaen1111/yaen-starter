@@ -8,14 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.yaen.starter.common.util.utils.StringUtil;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * home controller, deals welcome, login, logout, error
  * 
  * @author Yaen 2016年5月19日下午2:28:18
  */
-@Slf4j
 @Controller
 @RequestMapping("/home")
 public class HomeController {

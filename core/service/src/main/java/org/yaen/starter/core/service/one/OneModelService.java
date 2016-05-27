@@ -18,8 +18,8 @@ import org.yaen.starter.common.data.entities.OneEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.enums.SqlTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.DataNotExistsException;
-import org.yaen.starter.common.data.exceptions.OperationCancelledException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsCoreException;
+import org.yaen.starter.common.data.exceptions.OperationCancelledCoreException;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -306,7 +306,7 @@ public class OneModelService implements ModelService {
 
 				if (!exists) {
 					// not exists, throw
-					throw new DataNotExistsException("data for update not exists");
+					throw new DataNotExistsCoreException("data for update not exists");
 				}
 			}
 
@@ -355,7 +355,7 @@ public class OneModelService implements ModelService {
 
 				if (!exists) {
 					// not exists, throw
-					throw new DataNotExistsException("data for delete not exists");
+					throw new DataNotExistsCoreException("data for delete not exists");
 				}
 			}
 
@@ -389,7 +389,7 @@ public class OneModelService implements ModelService {
 
 			if (!exists) {
 				// not exists
-				throw new DataNotExistsException("data for select not exists");
+				throw new DataNotExistsCoreException("data for select not exists");
 			}
 
 			// trigger after select
@@ -397,7 +397,7 @@ public class OneModelService implements ModelService {
 
 		} else {
 			// select canceled
-			throw new OperationCancelledException("select cancelled by trigger");
+			throw new OperationCancelledCoreException("select cancelled by trigger");
 		}
 
 	}
@@ -411,9 +411,9 @@ public class OneModelService implements ModelService {
 		try {
 			this.selectModel(model, id);
 			return true;
-		} catch (DataNotExistsException ex) {
+		} catch (DataNotExistsCoreException ex) {
 			return false;
-		} catch (OperationCancelledException ex) {
+		} catch (OperationCancelledCoreException ex) {
 			return false;
 		}
 	}
@@ -441,7 +441,7 @@ public class OneModelService implements ModelService {
 
 		} else {
 			// select canceled
-			throw new OperationCancelledException("select cancelled by trigger");
+			throw new OperationCancelledCoreException("select cancelled by trigger");
 		}
 	}
 

@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.freemarker;
+package org.yaen.starter.web.home.tags;
 
 import freemarker.template.ObjectWrapper;
 import freemarker.template.SimpleHash;

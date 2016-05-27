@@ -1,19 +1,25 @@
-package org.yaen.starter.web.home.utils;
+package org.yaen.starter.common.util.utils;
 
 /**
- * 
+ * gps util for convert gps formats
  * 
  * @author Yaen 2016年5月11日下午1:53:33
  */
-public class GpsUtils {
+public class GpsUtil {
 
 	public static final double x_pi = (3.14159265358979324 * 3000.0) / 180.0;
 
-	// 高德转百度
-	public static double[] gaoToBd(double gg_lat, double gg_lon) {
+	/**
+	 * convert gps format from baidu to gaode
+	 * 
+	 * @param gd_lat
+	 * @param gd_lon
+	 * @return [0]=lat, [1]=long
+	 */
+	public static double[] gaoToBd(double gd_lat, double gd_lon) {
 
 		double[] gaoToBd = new double[2];
-		double x = gg_lon, y = gg_lat;
+		double x = gd_lon, y = gd_lat;
 
 		double z = Math.sqrt((x * x) + (y * y)) + (0.00002 * Math.sin(y * x_pi));
 		double theta = Math.atan2(y, x) + (0.000003 * Math.cos(x * x_pi));
@@ -27,7 +33,13 @@ public class GpsUtils {
 		return gaoToBd;
 	}
 
-	// 百度转高德
+	/**
+	 * convert gps format from baidu to gaode
+	 * 
+	 * @param bd_lat
+	 * @param bd_lon
+	 * @return [0]=lat, [1]=long
+	 */
 	public static double[] bdToGao(double bd_lat, double bd_lon) {
 
 		double[] bdToGao = new double[2];
@@ -44,17 +56,4 @@ public class GpsUtils {
 		return bdToGao;
 	}
 
-	public static void main(String[] args) {
-
-		double[] s = GpsUtils.gaoToBd(31.192179, 121.523579);
-		// 31.198056746570984
-		// 121.53010215818301
-		System.out.println(s[0]);
-		System.out.println(s[1]);
-
-		double[] y = GpsUtils.bdToGao(31.198056746570984, 121.53010215818301);
-
-		System.out.println(y[0]);
-		System.out.println(y[1]);
-	}
 }

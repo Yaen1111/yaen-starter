@@ -1,12 +1,12 @@
 package org.yaen.starter.common.data.exceptions;
 
 /**
- * operation is cancelled by some reason
+ * data not exists for core
  * 
  * @author Yaen 2016年1月13日下午7:31:52
  */
-public class OperationCancelledException extends CoreException {
-	private static final long serialVersionUID = -2869692681784416785L;
+public class DataNotExistsCoreException extends CoreException {
+	private static final long serialVersionUID = 8154004478287341494L;
 
 	/**
 	 * @param message
@@ -14,7 +14,7 @@ public class OperationCancelledException extends CoreException {
 	 * @param enableSuppression
 	 * @param writableStackTrace
 	 */
-	public OperationCancelledException(String message, Throwable cause, boolean enableSuppression,
+	public DataNotExistsCoreException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
@@ -23,21 +23,21 @@ public class OperationCancelledException extends CoreException {
 	 * @param message
 	 * @param cause
 	 */
-	public OperationCancelledException(String message, Throwable cause) {
+	public DataNotExistsCoreException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
-	public OperationCancelledException(String message) {
+	public DataNotExistsCoreException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public OperationCancelledException(Throwable cause) {
+	public DataNotExistsCoreException(Throwable cause) {
 		super(cause);
 	}
 

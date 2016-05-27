@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.freemarker;
+package org.yaen.starter.web.home.tags;
 
 import java.io.IOException;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class GuestTag extends SecureTag {
 	/**
 	 * render if guest
 	 * 
-	 * @see org.yaen.starter.web.home.freemarker.SecureTag#render(freemarker.core.Environment, java.util.Map,
+	 * @see org.yaen.starter.web.home.tags.SecureTag#render(freemarker.core.Environment, java.util.Map,
 	 *      freemarker.template.TemplateDirectiveBody)
 	 */
 	@SuppressWarnings("rawtypes")

@@ -3,7 +3,6 @@ package org.yaen.starter.web.home.shiro;
 import java.io.Serializable;
 
 import lombok.Data;
-import lombok.NonNull;
 
 /**
  * shiro user info
@@ -18,16 +17,16 @@ public class ShiroCredentials implements Serializable {
 	private String passwordHash;
 
 	/** password salt */
-	private String salt;
+	private String passwordSalt;
 
 	/**
 	 * constructor
 	 * 
 	 * @param passwordHash
-	 * @param salt
+	 * @param passwordSalt
 	 */
-	public ShiroCredentials(String passwordHash, String salt) {
+	public ShiroCredentials(String passwordHash, String passwordSalt) {
 		this.passwordHash = passwordHash;
-		this.salt = salt;
+		this.passwordSalt = passwordSalt;
 	}
 }

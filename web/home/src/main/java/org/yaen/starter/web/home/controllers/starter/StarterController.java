@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.controllers;
+package org.yaen.starter.web.home.controllers.starter;
 
 import java.io.IOException;
 
@@ -12,16 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.web.home.viewmodels.ViewModel;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * starter controller, mostly for sample
  * 
  * @author Yaen 2016年5月19日下午2:28:18
  */
-@Slf4j
 @Controller
-@RequestMapping("/starter")
+@RequestMapping("/starter/starter")
 public class StarterController {
 
 	/**
@@ -38,7 +35,7 @@ public class StarterController {
 	}
 
 	/**
-	 * use spring model, recommanded way
+	 * use spring model, recommended way
 	 * 
 	 * @param request
 	 * @param response

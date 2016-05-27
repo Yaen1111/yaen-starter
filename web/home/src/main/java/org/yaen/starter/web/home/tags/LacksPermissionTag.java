@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.freemarker;
+package org.yaen.starter.web.home.tags;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ public class LacksPermissionTag extends PermissionTag {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.web.home.freemarker.PermissionTag#showTagBody(java.lang.String)
+	 * @see org.yaen.starter.web.home.tags.PermissionTag#showTagBody(java.lang.String)
 	 */
 	@Override
 	protected boolean showTagBody(String p) {

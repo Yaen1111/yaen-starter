@@ -14,11 +14,25 @@ public interface UserService {
 	 * register new user
 	 * 
 	 * @param user
-	 * @return
 	 */
-	long RegisterNewUser(UserDTO dto) throws BizException;
+	void registerNewUser(UserDTO user) throws BizException;
 
-	void Login(UserDTO dto) throws BizException;
+	/**
+	 * get user by name, fill user dto by info, no password check
+	 * 
+	 * @param user
+	 * @throws BizException
+	 */
+	void getUserByName(UserDTO user) throws BizException;
 
-	void Logout(UserDTO dto) throws BizException;
+	/**
+	 * fast check user login, use username/hash/salt to check, no db access
+	 * 
+	 * @param user
+	 * @return
+	 * @throws BizException
+	 */
+	boolean checkUserCredentials(UserDTO user);
+
+	void Logout(UserDTO user) throws BizException;
 }

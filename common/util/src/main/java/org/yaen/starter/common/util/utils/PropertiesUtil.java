@@ -3,34 +3,57 @@ package org.yaen.starter.common.util.utils;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * get properties from file in runtime
+ * <p>
+ * use context with injection is better?
+ * 
+ * @author Yaen 2016年5月11日下午1:54:15
+ */
+@Slf4j
 public class PropertiesUtil {
-	/** logger */
-	public static final Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
+
+	public static final String PROPERTIES_FILE_NAME = "common.properties";
+
+	/** the properties */
 	private static Properties properties = null;
-	
-	static  { 
-			String COMMON_PROPERTIES_FILE="common.properties";
-			properties = new Properties();
-			Resource resource = new ClassPathResource(COMMON_PROPERTIES_FILE);
-			try {
-				properties.load(resource.getInputStream());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}  
+
+	/**
+	 * static constructor
+	 */
+	static {
+		properties = new Properties();
+		try {
+			properties.load((new ClassPathResource(PROPERTIES_FILE_NAME)).getInputStream());
+		} catch (IOException ex) {
+			log.error("can not load properties file {}", PROPERTIES_FILE_NAME);
+			log.error("exception is ", ex);
+		}
 	}
-	public static String getProperty(String key){ 
+
+	/**
+	 * get property by key, return null if not found
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public static String getProperty(String key) {
 		return properties.getProperty(key);
-		
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(PropertiesUtil.getProperty("wx.corpsecret"));
+
+	/**
+	 * get property by key, return defaultValue if not found
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public static String getProperty(String key, String defaultValue) {
+		String value = getProperty(key);
+		return value == null ? defaultValue : value;
 	}
-	
 }

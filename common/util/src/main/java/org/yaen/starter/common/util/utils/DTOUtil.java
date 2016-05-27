@@ -12,36 +12,55 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * data copy util
- * 
  * 
  * @author Yaen 2016年1月5日下午10:24:22
  */
 public class DTOUtil {
 
-	public static final Logger log = LoggerFactory.getLogger(DTOUtil.class);
-
+	/** model mapper */
 	public static final ModelMapper INSTANCE = new ModelMapper();
 
+	/**
+	 * static constructor
+	 */
 	static {
+		// add a joda datetime to date converter
 		INSTANCE.addConverter(new DateTimeToDateConverter());
 		INSTANCE.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 	}
 
+	/**
+	 * copy source to target class, a new object will be created
+	 * 
+	 * @param source
+	 * @param targetClass
+	 * @return
+	 */
 	public static <S, T> T map(S source, Class<T> targetClass) {
-
 		return INSTANCE.map(source, targetClass);
 	}
 
-	public static <S, T> void map(S source, T dist) {
+	/**
+	 * copy object data from source to target
+	 * 
+	 * @param source
+	 * @param target
+	 */
+	public static <S, T> void map(S source, T target) {
 
-		INSTANCE.map(source, dist);
+		INSTANCE.map(source, target);
 	}
 
+	/**
+	 * copy object list to target class list
+	 * 
+	 * @param source
+	 * @param targetClass
+	 * @return
+	 */
 	public static <S, T> List<T> map(List<S> source, Class<T> targetClass) {
 
 		List<T> list = new ArrayList<T>(source.size());
@@ -52,15 +71,25 @@ public class DTOUtil {
 		return list;
 	}
 
-	public static Map<String, Object> beanToMap(Object source) throws Exception {
-		if (source == null) {
-			throw new Exception("beanToMap source bean is null");
-		}
+	/**
+	 * map object fields to map, but with out parent fields
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public static Map<String, Object> map(Object source) {
+		AssertUtil.notNull(source, "source object is null");
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		Field[] fds = source.getClass().getDeclaredFields();
 		for (Field f : fds) {
 			f.setAccessible(true);
-			map.put(f.getName(), f.get(source));
+			// ignore access error
+			try {
+				map.put(f.getName(), f.get(source));
+			} catch (IllegalArgumentException e) {
+			} catch (IllegalAccessException e) {
+			}
 		}
 		return map;
 	}
