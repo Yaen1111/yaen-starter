@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.yaen.starter.common.dal.mappers.QueryMapper">
 
-	<select id="selectIDsByColumns" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
+	<select id="selectRowidsByColumns" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
 		SELECT
-		`ID`
+		`ROWID`
 		FROM `${tableName}`
 		<where>
 			<foreach collection="columns" index="index" item="info" open="" separator="AND" close="">
@@ -13,13 +13,19 @@
 		</where>
 	</select>
 
-	<select id="selectIDsByWhereClause" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
+	<select id="selectRowidsByWhereClause" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
 		SELECT
-		`ID`
+		`ROWID`
 		FROM `${tableName}`
 		<where>
 			${whereClause}
 		</where>
+	</select>
+
+	<select id="selectRowidsByAll" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
+		SELECT
+		`ROWID`
+		FROM `${tableName}`
 	</select>
 
 </mapper>

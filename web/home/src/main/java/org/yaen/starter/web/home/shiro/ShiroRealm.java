@@ -50,11 +50,10 @@ public class ShiroRealm extends AuthorizingRealm {
 		}
 
 		UserDTO user = new UserDTO();
-		user.setUserName(username);
 
 		// find user
 		try {
-			userService.getUserByName(user);
+			user = userService.getUserByName(username);
 		} catch (DataNotExistsBizException ex) {
 			// user not exists
 			throw new UnknownAccountException("user not exists");
@@ -69,7 +68,7 @@ public class ShiroRealm extends AuthorizingRealm {
 		// here is ok, create authentication info
 
 		// create principal(user object), the username maybe changed by capital
-		ShiroPrincipal principal = new ShiroPrincipal(user.getUserName());
+		ShiroPrincipal principal = new ShiroPrincipal(user.getUserId());
 
 		// create credentials(password hash and salt)
 		ShiroCredentials credentials = new ShiroCredentials(user.getPasswordHash(), user.getPasswordSalt());

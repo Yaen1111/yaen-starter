@@ -13,9 +13,9 @@ import lombok.Data;
 public class RoleDTO implements Serializable {
 	private static final long serialVersionUID = 2689960845760007277L;
 
-	private String roleName;
+	private String roleId;
 
-	private String roleGroupName;
+	private String groupName;
 
 	private String title;
 

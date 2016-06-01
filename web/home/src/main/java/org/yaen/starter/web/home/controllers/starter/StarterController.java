@@ -46,7 +46,7 @@ public class StarterController {
 	public String model(Model model) throws IOException {
 
 		UserDTO user = new UserDTO();
-		user.setUserName("John");
+		user.setUserId("John");
 		user.setTrueName("John Smith");
 
 		model.addAttribute("user", user);
@@ -68,7 +68,7 @@ public class StarterController {
 		ViewModel model = new ViewModel();
 
 		UserDTO user = new UserDTO();
-		user.setUserName("username");
+		user.setUserId("username");
 		user.setTrueName("truename");
 
 		model.addAttribute("user", user);

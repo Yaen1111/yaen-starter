@@ -1,11 +1,15 @@
 package org.yaen.starter.core.model.user;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.core.model.one.OneModel;
+import org.yaen.starter.core.model.utils.ModelUtil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,10 +47,48 @@ public class User extends OneModel {
 	@OneData(DataType = DataTypes.DATETIME)
 	private Date lastLogoutTime;
 
+	/** the role id of the user */
+	private List<String> roleIds;
+
 	/**
 	 * constructor
 	 */
 	public User() {
 		super();
+	}
+
+	/**
+	 * getter of roleIds
+	 * 
+	 * @return
+	 * @throws CoreException
+	 */
+	public List<String> getRoleIds() throws CoreException {
+		if (this.roleIds == null) {
+
+			// get values
+			UserRole sub = new UserRole();
+			List<Object> values = ModelUtil.getService().selectValueListById(sub, this.getId(), "roleId");
+
+			this.roleIds = new ArrayList<String>(values.size());
+
+			// convert to string
+			for (Object o : values) {
+				this.roleIds.add((String) o);
+			}
+		}
+		return this.roleIds;
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.one.OneModel#AfterSelect()
+	 */
+	@Override
+	public void AfterSelect() throws CoreException {
+		// reset ref
+		this.roleIds = null;
+
+		// call super
+		super.AfterSelect();
 	}
 }

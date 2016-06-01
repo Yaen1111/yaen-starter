@@ -28,7 +28,7 @@ public class UserServiceTester extends UnitTester {
 
 		try {
 			UserDTO user = new UserDTO();
-			user.setUserName("John2");
+			user.setUserId("John2");
 			user.setPasswordSalt("123");
 			user.setPasswordHash("321");
 

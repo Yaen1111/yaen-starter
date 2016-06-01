@@ -5,7 +5,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.biz.shared.services.UserService;
 
 /**
@@ -34,15 +33,7 @@ public class ShiroCredentialsMatcher extends SimpleCredentialsMatcher {
 		ShiroCredentials credentials = (ShiroCredentials) this.getCredentials(info);
 
 		// call service to check credential
-		UserDTO user = new UserDTO();
-		// set input password
-		user.setPassword(new String(userToken.getPassword()));
-
-		// set stored password
-		user.setPasswordHash(credentials.getPasswordHash());
-		user.setPasswordSalt(credentials.getPasswordSalt());
-
-		// do check
-		return userService.checkUserCredentials(user);
+		return userService.checkUserCredentials(new String(userToken.getPassword()), credentials.getPasswordHash(),
+				credentials.getPasswordSalt());
 	}
 }

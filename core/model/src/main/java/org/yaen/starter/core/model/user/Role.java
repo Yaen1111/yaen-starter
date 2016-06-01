@@ -22,6 +22,12 @@ import lombok.Setter;
 public class Role extends OneModel {
 	private static final long serialVersionUID = -709733522935110043L;
 
+	/** group name */
+	@Getter
+	@Setter
+	@OneData(DataType = DataTypes.VARCHAR20)
+	private String groupName;
+
 	/** title */
 	@Getter
 	@Setter
@@ -52,16 +58,30 @@ public class Role extends OneModel {
 	 */
 	public List<String> getAuthIds() throws CoreException {
 		if (this.authIds == null) {
-			// get auth id by RoleAuth
+
+			// get values
 			RoleAuth sub = new RoleAuth();
-			List<Object> list = ModelUtil.getService().selectValueListById(sub, this.getId(), "authId");
+			List<Object> values = ModelUtil.getService().selectValueListById(sub, this.getId(), "authId");
 
-			this.authIds = new ArrayList<String>(list.size());
+			this.authIds = new ArrayList<String>(values.size());
 
-			for (Object o : list) {
+			// convert to string
+			for (Object o : values) {
 				this.authIds.add((String) o);
 			}
 		}
 		return this.authIds;
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.one.OneModel#AfterSelect()
+	 */
+	@Override
+	public void AfterSelect() throws CoreException {
+		// reset ref
+		this.authIds = null;
+
+		// call super
+		super.AfterSelect();
 	}
 }

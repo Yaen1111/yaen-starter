@@ -30,22 +30,22 @@ public class OneQueryService implements QueryService {
 	private QueryMapper queryMapper;
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByFieldName(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByFieldName(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.lang.String)
 	 */
 	@Override
-	public <T extends BaseModel> List<Long> SelectIDsByFieldName(T model, String fieldName) throws CoreException {
+	public <T extends BaseModel> List<Long> selectRowidsByFieldName(T model, String fieldName) throws CoreException {
 		List<String> list = new ArrayList<String>();
 		list.add(fieldName);
-		return this.SelectIDsByFieldNameList(model, list);
+		return this.selectRowidsByFieldNameList(model, list);
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByFieldNameList(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByFieldNameList(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.util.List)
 	 */
 	@Override
-	public <T extends BaseModel> List<Long> SelectIDsByFieldNameList(T model, List<String> fieldNameList)
+	public <T extends BaseModel> List<Long> selectRowidsByFieldNameList(T model, List<String> fieldNameList)
 			throws CoreException {
 		AssertUtil.notNull(model);
 		AssertUtil.notNull(fieldNameList);
@@ -74,17 +74,17 @@ public class OneQueryService implements QueryService {
 			}
 
 			// call mapper
-			return queryMapper.selectIDsByColumns(query);
+			return queryMapper.selectRowidsByColumns(query);
 		} catch (Exception ex) {
 			throw new CoreException(ex);
 		}
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByAllField(org.yaen.starter.common.data.models.BaseModel)
+	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByAllField(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override
-	public <T extends BaseModel> List<Long> SelectIDsByAllField(T model) throws CoreException {
+	public <T extends BaseModel> List<Long> selectRowidsByAllField(T model) throws CoreException {
 		AssertUtil.notNull(model);
 
 		try {
@@ -112,7 +112,7 @@ public class OneQueryService implements QueryService {
 			}
 
 			// call mapper
-			return queryMapper.selectIDsByColumns(query);
+			return queryMapper.selectRowidsByColumns(query);
 		} catch (Exception ex) {
 			throw new CoreException(ex);
 		}
@@ -120,11 +120,11 @@ public class OneQueryService implements QueryService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByWhereClause(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.common.data.services.QueryService#selectRowsByWhereClause(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.lang.String)
 	 */
 	@Override
-	public <T extends BaseModel> List<Long> SelectIDsByWhereClause(T model, String whereClause) throws CoreException {
+	public <T extends BaseModel> List<Long> selectRowsByWhereClause(T model, String whereClause) throws CoreException {
 		AssertUtil.notNull(model);
 		AssertUtil.notNull(whereClause);
 
@@ -142,7 +142,31 @@ public class OneQueryService implements QueryService {
 			query.setWhereClause(whereClause);
 
 			// call mapper
-			return queryMapper.selectIDsByWhereClause(query);
+			return queryMapper.selectRowidsByWhereClause(query);
+		} catch (Exception ex) {
+			throw new CoreException(ex);
+		}
+	}
+
+	/**
+	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByAll(org.yaen.starter.common.data.models.BaseModel)
+	 */
+	@Override
+	public <T extends BaseModel> List<Long> selectRowidsByAll(T model) throws CoreException {
+		AssertUtil.notNull(model);
+
+		try {
+			// get another po
+			AnotherEntity po = new AnotherEntity(model);
+
+			// make event model
+			QueryEntity query = new QueryEntity();
+
+			// set table name
+			query.setTableName(po.getTableName());
+
+			// call mapper
+			return queryMapper.selectRowidsByAll(query);
 		} catch (Exception ex) {
 			throw new CoreException(ex);
 		}

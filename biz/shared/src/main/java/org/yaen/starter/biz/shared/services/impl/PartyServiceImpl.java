@@ -30,16 +30,14 @@ public class PartyServiceImpl implements PartyService {
 		// create new party
 		Party party = new Party();
 
-		// set partyid if given
-		if (StringUtil.isNotBlank(dto.getPartyID())) {
-			party.setId(dto.getPartyID());
-		}
+		party.setId(dto.getPartyID());
 		party.setPartyType(dto.getPartyType());
 		long partyid = modelService.insertModelByRowid(party);
 
 		// create role if need
 		if (StringUtil.isNotEmpty(dto.getPartyRoleType())) {
 			PartyRole role = new PartyRole();
+			role.setId(party.getId());
 			role.setPartyRoleType(dto.getPartyRoleType());
 			modelService.insertModelByRowid(role);
 		}

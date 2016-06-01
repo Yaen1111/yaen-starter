@@ -60,7 +60,7 @@ public class OneModel implements BaseModel {
 	@OneData(DataType = DataTypes.TEXT, FieldName = "SYS_PLOG")
 	protected String plog;
 
-	/** the primary key of id */
+	/** the main key of id */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.VARCHAR20, FieldName = "ID")

@@ -15,43 +15,52 @@ import org.yaen.starter.common.data.models.BaseModel;
 public interface QueryService {
 
 	/**
-	 * select ids by field name, the value is the given value in the model and use equal
+	 * select rowids by field name, the value is the given value in the model and use equal
 	 * 
 	 * @param model
 	 * @param fieldName
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> List<Long> SelectIDsByFieldName(T model, String fieldName) throws CoreException;
+	public <T extends BaseModel> List<Long> selectRowidsByFieldName(T model, String fieldName) throws CoreException;
 
 	/**
-	 * select ids by field name list, the value is the given value in the model and use equal
+	 * select rowids by field name list, the value is the given value in the model and use equal
 	 * 
 	 * @param model
 	 * @param fieldNameList
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> List<Long> SelectIDsByFieldNameList(T model, List<String> fieldNameList)
+	public <T extends BaseModel> List<Long> selectRowidsByFieldNameList(T model, List<String> fieldNameList)
 			throws CoreException;
 
 	/**
-	 * select ids by all none-null field, the value is the given value in the model
+	 * select rowids by all none-null field, the value is the given value in the model
 	 * 
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> List<Long> SelectIDsByAllField(T model) throws CoreException;
+	public <T extends BaseModel> List<Long> selectRowidsByAllField(T model) throws CoreException;
 
 	/**
-	 * select ids by given sql, starting with where, can include order, group, and having clause
+	 * select rowids by given sql, starting with where, can include order, group, and having clause
 	 * 
 	 * @param model
 	 * @param whereClause
 	 * @return
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> List<Long> SelectIDsByWhereClause(T model, String whereClause) throws CoreException;
+	public <T extends BaseModel> List<Long> selectRowsByWhereClause(T model, String whereClause) throws CoreException;
+
+	/**
+	 * select rowids by all
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	public <T extends BaseModel> List<Long> selectRowidsByAll(T model) throws CoreException;
 
 }
