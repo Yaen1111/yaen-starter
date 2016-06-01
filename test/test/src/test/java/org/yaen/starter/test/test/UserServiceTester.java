@@ -28,14 +28,11 @@ public class UserServiceTester extends UnitTester {
 
 		try {
 			UserDTO user = new UserDTO();
-			user.setUserID(124);
 			user.setUserName("John2");
 			user.setPasswordSalt("123");
 			user.setPasswordHash("321");
 
 			userService.registerNewUser(user);
-
-			System.out.println(user.getUserID());
 
 		} catch (BizException ex) {
 			System.out.println(ex);

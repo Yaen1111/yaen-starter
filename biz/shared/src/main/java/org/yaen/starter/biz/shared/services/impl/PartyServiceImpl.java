@@ -31,17 +31,17 @@ public class PartyServiceImpl implements PartyService {
 		Party party = new Party();
 
 		// set partyid if given
-		if (dto.getPartyID() > 0) {
+		if (StringUtil.isNotBlank(dto.getPartyID())) {
 			party.setId(dto.getPartyID());
 		}
 		party.setPartyType(dto.getPartyType());
-		long partyid = modelService.insertModel(party);
+		long partyid = modelService.insertModelByRowid(party);
 
 		// create role if need
 		if (StringUtil.isNotEmpty(dto.getPartyRoleType())) {
-			PartyRole role = new PartyRole(party);
+			PartyRole role = new PartyRole();
 			role.setPartyRoleType(dto.getPartyRoleType());
-			modelService.insertModel(role);
+			modelService.insertModelByRowid(role);
 		}
 
 		return partyid;

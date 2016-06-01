@@ -13,9 +13,7 @@ import org.yaen.starter.common.dal.mappers.QueryMapper;
 import org.yaen.starter.common.data.entities.AnotherEntity;
 import org.yaen.starter.common.data.entities.OneColumnEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.models.BaseAttributeModel;
 import org.yaen.starter.common.data.models.BaseModel;
-import org.yaen.starter.common.data.models.BaseRelationModel;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
@@ -32,93 +30,6 @@ public class OneQueryService implements QueryService {
 	private QueryMapper queryMapper;
 
 	/**
-	 * select ids by base id
-	 * 
-	 * @param element
-	 * @param baseId
-	 * @throws Exception
-	 */
-	@Override
-	public <T_ATTR extends BaseAttributeModel> List<Long> SelectIDsByAttributeBase(T_ATTR attribute, long baseId)
-			throws CoreException {
-		AssertUtil.notNull(attribute);
-		try {
-
-			// get another po
-			AnotherEntity po = new AnotherEntity(attribute);
-
-			// need event engine
-			QueryEntity model = new QueryEntity();
-			model.setTableName(po.getTableName());
-
-			// set given base id
-			model.setBaseId(baseId);
-
-			// call event
-			return queryMapper.selectIDsByBaseID(model);
-		} catch (Exception ex) {
-			throw new CoreException(ex);
-		}
-	}
-
-	/**
-	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationFrom(org.yaen.starter.common.data.models.BaseRelationModel,
-	 *      long)
-	 */
-	@Override
-	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationFrom(T_REL rel, long fromId)
-			throws CoreException {
-		AssertUtil.notNull(rel);
-
-		try {
-			// get another po
-			AnotherEntity po = new AnotherEntity(rel);
-
-			// need event engine
-			QueryEntity model = new QueryEntity();
-			model.setTableName(po.getTableName());
-
-			// set given base id
-			model.setFromId(fromId);
-
-			// call event
-			return queryMapper.selectIDsByFromID(model);
-		} catch (Exception ex) {
-			throw new CoreException(ex);
-		}
-	}
-
-	/**
-	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByRelationTo(org.yaen.starter.common.data.models.BaseRelationModel,
-	 *      long)
-	 */
-	@Override
-	public <T_REL extends BaseRelationModel> List<Long> SelectIDsByRelationTo(T_REL rel, long toId)
-			throws CoreException {
-		AssertUtil.notNull(rel);
-
-		try {
-			// get another po
-			AnotherEntity po = new AnotherEntity(rel);
-
-			// need event engine
-			QueryEntity model = new QueryEntity();
-			model.setTableName(po.getTableName());
-
-			// set given base id
-			model.setFromId(toId);
-
-			// call event
-			return queryMapper.selectIDsByToID(model);
-		} catch (Exception ex) {
-			throw new CoreException(ex);
-		}
-	}
-
-	/**
-	 * 
 	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByFieldName(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.lang.String)
 	 */
@@ -130,7 +41,6 @@ public class OneQueryService implements QueryService {
 	}
 
 	/**
-	 * 
 	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByFieldNameList(org.yaen.starter.common.data.models.BaseModel,
 	 *      java.util.List)
 	 */
@@ -171,7 +81,6 @@ public class OneQueryService implements QueryService {
 	}
 
 	/**
-	 * 
 	 * @see org.yaen.starter.common.data.services.QueryService#SelectIDsByAllField(org.yaen.starter.common.data.models.BaseModel)
 	 */
 	@Override

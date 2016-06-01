@@ -8,10 +8,9 @@ import java.io.Serializable;
 
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.services.ModelService;
 
 /**
- * base model
+ * base model, extends BaseEntity, with id and rowId
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
@@ -59,20 +58,20 @@ public interface BaseModel extends BaseEntity, Cloneable, Serializable {
 	 * @return true for next chain, false for done
 	 * @throws Exception
 	 */
-	public boolean BeforeSelect(ModelService service) throws CoreException;
+	public boolean BeforeSelect() throws CoreException;
 
-	public boolean AfterSelect(ModelService service) throws CoreException;
+	public void AfterSelect() throws CoreException;
 
-	public boolean BeforeInsert(ModelService service) throws CoreException;
+	public boolean BeforeInsert() throws CoreException;
 
-	public boolean AfterInsert(ModelService service) throws CoreException;
+	public void AfterInsert() throws CoreException;
 
-	public boolean BeforeUpdate(ModelService service) throws CoreException;
+	public boolean BeforeUpdate() throws CoreException;
 
-	public boolean AfterUpdate(ModelService service) throws CoreException;
+	public void AfterUpdate() throws CoreException;
 
-	public boolean BeforeDelete(ModelService service) throws CoreException;
+	public boolean BeforeDelete() throws CoreException;
 
-	public boolean AfterDelete(ModelService service) throws CoreException;
+	public void AfterDelete() throws CoreException;
 
 }

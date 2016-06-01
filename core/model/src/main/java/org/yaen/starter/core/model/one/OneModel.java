@@ -11,41 +11,35 @@ import java.io.ObjectOutputStream;
 import java.util.Date;
 
 import org.yaen.starter.common.data.annotations.OneData;
-import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
-import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.DateUtil;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * one model for base objects
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
-@Slf4j
-@ToString(callSuper = true)
 @OneTable(TableName = "ONE")
 public class OneModel implements BaseModel {
 	private static final long serialVersionUID = 101L;
 
-	/** enable change log or not, default to false */
+	/** the primary key of id */
 	@Getter
 	@Setter
-	@OneIgnore
-	private boolean enableChangeLog = false;
+	@OneData(DataType = DataTypes.BIGINT, FieldName = "ROWID")
+	private long rowid = 0;
 
 	/** the primary key of id */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.BIGINT, FieldName = "ID")
-	private long id;
+	@OneData(DataType = DataTypes.VARCHAR20, FieldName = "ID")
+	private String id = "";
 
 	/** the create date time of the record */
 	@Getter
@@ -73,11 +67,15 @@ public class OneModel implements BaseModel {
 	@OneData(DataType = DataTypes.TEXT, FieldName = "SYS_PLOG")
 	private String plog;
 
+	/** enable change log or not, default to false */
+	@Getter
+	@Setter
+	private boolean enableChangeLog = false;
+
 	/**
-	 * constructor
+	 * empty constructor
 	 */
 	public OneModel() {
-		this.id = 0;
 	}
 
 	/**
@@ -103,23 +101,39 @@ public class OneModel implements BaseModel {
 		ObjectInputStream oi = new ObjectInputStream(bi);
 		try {
 			return oi.readObject();
-		} catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException ex) {
 			// should not got here
-			log.error("deep clone failed", e);
-			return null;
+			throw new RuntimeException(ex);
 		}
 
 	}
 
-	public boolean BeforeSelect(ModelService service) throws CoreException {
+	/**
+	 * return true
+	 * 
+	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeSelect()
+	 */
+	@Override
+	public boolean BeforeSelect() throws CoreException {
 		return true;
 	}
 
-	public boolean AfterSelect(ModelService service) throws CoreException {
-		return true;
+	/**
+	 * empty
+	 * 
+	 * @see org.yaen.starter.common.data.models.BaseModel#AfterSelect()
+	 */
+	@Override
+	public void AfterSelect() throws CoreException {
 	}
 
-	public boolean BeforeInsert(ModelService service) throws CoreException {
+	/**
+	 * set cdate/udate and return true
+	 * 
+	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeInsert()
+	 */
+	@Override
+	public boolean BeforeInsert() throws CoreException {
 		// set cdate, udate
 		this.cdate = DateUtil.getNow();
 		this.udate = this.cdate;
@@ -127,27 +141,54 @@ public class OneModel implements BaseModel {
 		return true;
 	}
 
-	public boolean AfterInsert(ModelService service) throws CoreException {
-		return true;
+	/**
+	 * empty
+	 * 
+	 * @see org.yaen.starter.common.data.models.BaseModel#AfterInsert()
+	 */
+	@Override
+	public void AfterInsert() throws CoreException {
 	}
 
-	public boolean BeforeUpdate(ModelService service) throws CoreException {
+	/**
+	 * set udate and return true
+	 * 
+	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeUpdate()
+	 */
+	@Override
+	public boolean BeforeUpdate() throws CoreException {
 		// set udate date
 		this.udate = DateUtil.getNow();
 
 		return true;
 	}
 
-	public boolean AfterUpdate(ModelService service) throws CoreException {
+	/**
+	 * empty
+	 * 
+	 * @see org.yaen.starter.common.data.models.BaseModel#AfterUpdate()
+	 */
+	@Override
+	public void AfterUpdate() throws CoreException {
+	}
+
+	/**
+	 * return true
+	 * 
+	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeDelete()
+	 */
+	@Override
+	public boolean BeforeDelete() throws CoreException {
 		return true;
 	}
 
-	public boolean BeforeDelete(ModelService service) throws CoreException {
-		return true;
-	}
-
-	public boolean AfterDelete(ModelService service) throws CoreException {
-		return true;
+	/**
+	 * empty
+	 * 
+	 * @see org.yaen.starter.common.data.models.BaseModel#AfterDelete()
+	 */
+	@Override
+	public void AfterDelete() throws CoreException {
 	}
 
 }

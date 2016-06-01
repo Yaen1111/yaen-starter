@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.core.model.party;
 
 import org.yaen.starter.common.data.annotations.OneData;
@@ -10,14 +7,12 @@ import org.yaen.starter.core.model.one.OneModel;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * party main object
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
-@ToString(callSuper = true)
 @OneTable(TableName = "ZP_PARTY")
 public class Party extends OneModel {
 	private static final long serialVersionUID = -709733522935110043L;
@@ -25,17 +20,17 @@ public class Party extends OneModel {
 	/** the party type, usually is org/person */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20, FieldName = "PARTY_TYPE")
+	@OneData(DataType = DataTypes.VARCHAR20)
 	private String partyType;
 
 	/** the reference resource, in some case, we may need the reference to other system */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50, FieldName = "REFERENCE_RESOURCE")
+	@OneData(DataType = DataTypes.VARCHAR50)
 	private String referenceResource;
 
 	/**
-	 * constructor
+	 * empty constructor
 	 */
 	public Party() {
 		super();

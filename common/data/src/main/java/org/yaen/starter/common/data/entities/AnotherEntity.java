@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.common.data.entities;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
@@ -15,24 +12,44 @@ public class AnotherEntity extends OneEntity {
 	private static final long serialVersionUID = -7232516405181212096L;
 
 	/**
-	 * bridge id to entity
+	 * bridge rowid to entity
 	 * 
-	 * @see org.yaen.starter.common.data.entities.OneEntity#getId()
+	 * @see org.yaen.starter.common.data.entities.OneEntity#getRowid()
 	 */
 	@Override
-	public long getId() {
-		return this.entity.getId();
+	public long getRowid() {
+		return this.entity.getRowid();
+	};
+
+	/**
+	 * bridge rowid to entity
+	 * 
+	 * @see org.yaen.starter.common.data.entities.OneEntity#setRowid(long)
+	 */
+	@Override
+	public void setRowid(long rowid) {
+		this.entity.setRowid(rowid);
 	};
 
 	/**
 	 * bridge id to entity
 	 * 
-	 * @see org.yaen.starter.common.data.entities.OneEntity#setId(long)
+	 * @see org.yaen.starter.common.data.entities.OneEntity#getId()
 	 */
 	@Override
-	public void setId(long id) {
+	public String getId() {
+		return this.entity.getId();
+	}
+
+	/**
+	 * bridge id to entity
+	 * 
+	 * @see org.yaen.starter.common.data.entities.OneEntity#setId(java.lang.String)
+	 */
+	@Override
+	public void setId(String id) {
 		this.entity.setId(id);
-	};
+	}
 
 	/**
 	 * create another po with given entity

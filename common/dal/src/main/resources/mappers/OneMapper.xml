@@ -2,59 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.yaen.starter.common.dal.mappers.OneMapper">
 
-	<select id="selectByID" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<select id="selectByRowid" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		SELECT
-		`ID`
+		`ROWID`
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
 			`${info.columnName}`
 		</foreach>
 		FROM `${tableName}`
-		WHERE `ID` = #{id,jdbcType=BIGINT}
+		WHERE `ROWID` = #{rowid}
 	</select>
 
-	<select id="selectByIDs" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
-		SELECT
-		`ID`
-		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
-			`${info.columnName}`
-		</foreach>
-		FROM `${tableName}`
-		WHERE `ID` IN
-		<foreach collection="ids" index="index" item="id2" open="(" separator="," close=")">
-			`${id2,jdbcType=BIGINT}`
-		</foreach>
-	</select>
-
-	<insert id="insertByID" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<insert id="insertByRowid" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		INSERT INTO `${tableName}`
 		(
-		`ID`
+		`ROWID`
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
 			`${info.columnName}`
 		</foreach>
 		)
 		VALUES
 		(
-		#{id}
+		#{rowid}
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
 			#{info.value}
 		</foreach>
 		)
 	</insert>
 
-	<update id="updateByID" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<update id="updateByRowid" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		UPDATE `${tableName}`
 		SET
-		<foreach collection="columns" index="index" item="info" open="" separator="," close="">
+		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
 			`${info.columnName}` =
 			#{info.value}
 		</foreach>
-		WHERE `ID` = #{id,jdbcType=BIGINT}
+		WHERE `ROWID` = #{rowid}
 	</update>
 
-	<delete id="deleteByID" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<delete id="deleteByRowid" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		DELETE FROM `${tableName}`
-		WHERE `ID` = #{id,jdbcType=BIGINT}
+		WHERE `ROWID` = #{rowid}
 	</delete>
+
+	<select id="selectListByRowids" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+		SELECT
+		`ROWID`
+		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
+			`${info.columnName}`
+		</foreach>
+		FROM `${tableName}`
+		WHERE `ROWID` IN
+		<foreach collection="rowids" index="index" item="id2" open="(" separator="," close=")">
+			#{id2}
+		</foreach>
+	</select>
+
+	<select id="selectListById" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+		SELECT
+		`ROWID`
+		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
+			`${info.columnName}`
+		</foreach>
+		FROM `${tableName}`
+		WHERE `ID` = #{id}
+	</select>
 
 </mapper>

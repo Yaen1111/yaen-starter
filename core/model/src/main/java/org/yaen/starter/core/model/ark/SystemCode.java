@@ -7,20 +7,17 @@ import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.one.OneModel;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * system code model
  * 
  * @author Yaen 2016年1月4日下午8:38:45
  */
-@ToString(callSuper = true)
 @OneTable(TableName = "ARK_SYSTEM_CODE")
 public class SystemCode extends OneModel {
 	private static final long serialVersionUID = 5112904110562141729L;
@@ -69,7 +66,7 @@ public class SystemCode extends OneModel {
 	 */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50, FieldName = "TITLE")
+	@OneData(DataType = DataTypes.VARCHAR50)
 	private String title;
 
 	/**
@@ -77,15 +74,15 @@ public class SystemCode extends OneModel {
 	 */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50, FieldName = "DESCRIPTION")
+	@OneData(DataType = DataTypes.VARCHAR250)
 	private String description;
 
 	/**
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeInsert(ModelService service) throws CoreException {
-		if (super.BeforeInsert(service)) {
+	public boolean BeforeInsert() throws CoreException {
+		if (super.BeforeInsert()) {
 
 			// format code
 			this.formatCode();
@@ -100,8 +97,8 @@ public class SystemCode extends OneModel {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeUpdate(ModelService service) throws CoreException {
-		if (super.BeforeUpdate(service)) {
+	public boolean BeforeUpdate() throws CoreException {
+		if (super.BeforeUpdate()) {
 
 			// format code
 			this.formatCode();

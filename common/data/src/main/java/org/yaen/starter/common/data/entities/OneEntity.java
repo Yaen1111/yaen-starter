@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.common.data.entities;
 
 import java.lang.reflect.Field;
@@ -10,7 +7,6 @@ import java.util.Map;
 
 import org.yaen.starter.common.data.annotations.OneCopy;
 import org.yaen.starter.common.data.annotations.OneData;
-import org.yaen.starter.common.data.annotations.OneIgnore;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.OneTableHandler;
 
@@ -26,18 +22,23 @@ import lombok.Setter;
 public class OneEntity implements BaseEntity {
 	private static final long serialVersionUID = 218626629147397851L;
 
+	/** the camel upper case separator */
+	public static final char CAMEL_SEPERATOR_CHAR = '_';
+
 	/** the actual entity, maybe self */
-	@OneIgnore
 	protected BaseEntity entity;
 
 	/** the primary key */
 	@Getter
 	@Setter
-	@OneIgnore
-	private long id;
+	private long rowid;
+
+	/** the main key */
+	@Getter
+	@Setter
+	private String id;
 
 	/** the table name, if null, use class name instead */
-	@OneIgnore
 	protected String tableName;
 
 	/**
@@ -65,7 +66,7 @@ public class OneEntity implements BaseEntity {
 
 		// default to class name if empty
 		if (name == null || name.trim().isEmpty()) {
-			name = this.entity.getClass().getSimpleName().toUpperCase();
+			name = toCamelUpper(this.entity.getClass().getSimpleName());
 		}
 
 		// set to member
@@ -77,7 +78,6 @@ public class OneEntity implements BaseEntity {
 	/**
 	 * columns, with key of field name
 	 */
-	@OneIgnore
 	protected Map<String, OneColumnEntity> columns;
 
 	/**
@@ -92,8 +92,8 @@ public class OneEntity implements BaseEntity {
 
 		this.fetchOneColumnInfo(col, this.entity, this.entity.getClass());
 
-		// remove id, as is primary key
-		col.remove("id");
+		// remove rowid, as is auto primary key
+		col.remove("rowid");
 		col.remove("serialVersionUID");
 
 		// set to member
@@ -105,20 +105,17 @@ public class OneEntity implements BaseEntity {
 	/** the modified field name */
 	@Getter
 	@Setter
-	@OneIgnore
 	private String modifiedFieldName;
 
 	/** the added field name */
 	@Getter
 	@Setter
-	@OneIgnore
 	private String addedFieldName;
 
-	/** the id list for batch select */
+	/** the rowid list for batch select */
 	@Getter
 	@Setter
-	@OneIgnore
-	private List<Long> ids;
+	private List<Long> rowids;
 
 	/**
 	 * construct one entity of self
@@ -156,52 +153,99 @@ public class OneEntity implements BaseEntity {
 			// get all element annotation
 			OneData data = field.getAnnotation(OneData.class);
 			OneCopy copy = field.getAnnotation(OneCopy.class);
-			OneIgnore ignore = field.getAnnotation(OneIgnore.class);
 
-			// ignore
-			if (ignore == null) {
-
-				// add columns
-				if (data != null) {
-					// add data field
-					String column_name = data.FieldName();
-					if ((column_name == null || column_name.trim().isEmpty())) {
-						column_name = field.getName().toUpperCase();
-					}
-
-					OneColumnEntity info = new OneColumnEntity();
-					info.setColumnName(column_name);
-					info.setValue(field.get(one));
-					info.setDataType(data.DataType());
-					info.setDataSize(data.DataSize());
-					info.setField(field);
-
-					columns.put(field.getName(), info);
-				} else if (copy != null) {
-					// add copy
-					String prefix = copy.Prefix();
-
-					// get copy entity, and do only if the entity is not null
-					BaseEntity copyentity = (BaseEntity) field.get(one);
-					if (copyentity != null) {
-						AnotherEntity another = new AnotherEntity(copyentity);
-						Map<String, OneColumnEntity> copycolumns = another.getColumns();
-
-						// copy all columns with prefix
-						for (String copykey : copycolumns.keySet()) {
-
-							OneColumnEntity info = copycolumns.get(copykey);
-							info.setColumnName(prefix + info.getColumnName());
-
-							columns.put(prefix + copykey, info);
-						}
-					}
-
-				} else {
-					// nothing is set, ignore
+			// add columns
+			if (data != null) {
+				// add data field
+				String column_name = data.FieldName();
+				if ((column_name == null || column_name.trim().isEmpty())) {
+					column_name = toCamelUpper(field.getName());
 				}
-			} // ignore
+
+				OneColumnEntity info = new OneColumnEntity();
+				info.setColumnName(column_name);
+				info.setValue(field.get(one));
+				info.setDataType(data.DataType());
+				info.setDataSize(data.DataSize());
+				info.setField(field);
+
+				columns.put(field.getName(), info);
+			} else if (copy != null) {
+				// add copy
+				String prefix = copy.Prefix();
+
+				// get copy entity, and do only if the entity is not null
+				BaseEntity copyentity = (BaseEntity) field.get(one);
+				if (copyentity != null) {
+					AnotherEntity another = new AnotherEntity(copyentity);
+					Map<String, OneColumnEntity> copycolumns = another.getColumns();
+
+					// copy all columns with prefix
+					for (String copykey : copycolumns.keySet()) {
+
+						OneColumnEntity info = copycolumns.get(copykey);
+						info.setColumnName(prefix + info.getColumnName());
+
+						columns.put(prefix + copykey, info);
+					}
+				}
+
+			} else {
+				// nothing is set, ignore
+			}
 		} // for
 	}
 
+	/**
+	 * to camel upper, getUserName = GET_USER_NAME
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String toCamelUpper(String s) {
+		if (s == null)
+			return "";
+
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (Character.isUpperCase(c)) {
+				sb.append(CAMEL_SEPERATOR_CHAR);
+				sb.append(c);
+			} else {
+				sb.append(Character.toUpperCase(c));
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * to camel lower, GET_USER_NAME = getUserName
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String toCamelLower(String s) {
+		if (s == null)
+			return "";
+
+		StringBuilder sb = new StringBuilder();
+		boolean is_upper = false;
+
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == CAMEL_SEPERATOR_CHAR) {
+				is_upper = true;
+			} else {
+				if (is_upper) {
+					sb.append(Character.toUpperCase(c));
+					is_upper = false;
+				} else {
+					sb.append(Character.toLowerCase(c));
+				}
+			}
+		}
+		return sb.toString();
+	}
 }

@@ -40,28 +40,19 @@ public class UserServiceImpl implements UserService {
 		// create new user
 		User model = new User();
 
-		// set id if given
-		if (user.getUserID() > 0) {
-			model.setId(user.getUserID());
-		}
-
 		// set basic info
-		model.setUserName(user.getUserName());
+		model.setId(user.getUserName());
 		model.setPasswordHash(user.getPassword());
 
 		// gen salt, set hash
 		model.setPasswordSalt(user.getPasswordSalt());
 		model.setPasswordHash(user.getPasswordHash());
 
-		long userID = 0;
 		try {
-			userID = modelService.insertModel(model);
+			modelService.insertModelByRowid(model);
 		} catch (CoreException ex) {
 			throw new BizException(ex);
 		}
-
-		// set user id
-		user.setUserID(userID);
 	}
 
 	/**
@@ -74,12 +65,11 @@ public class UserServiceImpl implements UserService {
 		try {
 			// find user
 			User model = new User();
-			model.setId(0);
 
 			// try to get model, used to create table
-			modelService.trySelectModel(model, 0L);
+			modelService.trySelectModelByRowid(model, 0L);
 
-			model.setUserName(user.getUserName());
+			model.setId(user.getUserName());
 
 			List<Long> ids = queryService.SelectIDsByFieldName(model, "userName");
 
@@ -92,13 +82,12 @@ public class UserServiceImpl implements UserService {
 			}
 
 			// get user detail
-			modelService.selectModel(model, ids.get(0));
+			modelService.selectModelByRowid(model, ids.get(0));
 
 			// do some additional check, like locked
 
 			// user ok, set info
-			user.setUserID(model.getId());
-			user.setUserName(model.getUserName());
+			user.setUserName(model.getId());
 			user.setPasswordHash(model.getPasswordHash());
 			user.setPasswordSalt(model.getPasswordSalt());
 

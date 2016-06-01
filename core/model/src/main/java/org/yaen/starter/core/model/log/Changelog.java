@@ -8,21 +8,18 @@ import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.enums.SqlTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
-import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.one.OneModel;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * change log of element, save before and after value
  * 
  * @author Yaen 2016年1月4日下午8:40:03
  */
-@ToString(callSuper = true)
 public class Changelog extends OneModel implements OneTableHandler {
 	private static final long serialVersionUID = -606829448983274029L;
 
@@ -95,7 +92,7 @@ public class Changelog extends OneModel implements OneTableHandler {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeUpdate(ModelService service) throws CoreException {
+	public boolean BeforeUpdate() throws CoreException {
 		throw new CoreException("change document can not be updated");
 	}
 
@@ -103,7 +100,7 @@ public class Changelog extends OneModel implements OneTableHandler {
 	 * @see org.yaen.starter.core.model.one.OneModel#BeforeDelete(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
-	public boolean BeforeDelete(ModelService service) throws CoreException {
+	public boolean BeforeDelete() throws CoreException {
 		throw new CoreException("change document can not be deleted");
 	}
 

@@ -57,14 +57,13 @@ public class AllTester extends UnitTester {
 
 			// create user by given party
 			UserDTO user = new UserDTO();
-			user.setUserID(partyid);
 			user.setUserName("Linda");
 			user.setPasswordSalt("123");
 			user.setPasswordHash("321");
 
 			userService.registerNewUser(user);
 
-			System.out.println(user.getUserID());
+			System.out.println(user.getUserName());
 
 		} catch (CommonException ex) {
 			System.out.println(ex);

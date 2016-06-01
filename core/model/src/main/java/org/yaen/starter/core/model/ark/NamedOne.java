@@ -10,14 +10,12 @@ import org.yaen.starter.core.model.one.OneModel;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * code element, only for unique code/name
  * 
  * @author Yaen 2016年1月4日下午8:38:45
  */
-@ToString(callSuper = true)
 @OneTable(TableName = "ARK_NAMED_ONE")
 public class NamedOne extends OneModel {
 	private static final long serialVersionUID = 7297317955813307397L;
@@ -27,7 +25,7 @@ public class NamedOne extends OneModel {
 	 */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR20)
 	private String name;
 
 	/**
@@ -35,7 +33,7 @@ public class NamedOne extends OneModel {
 	 */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR20)
 	private String family;
 
 	/**
@@ -43,7 +41,7 @@ public class NamedOne extends OneModel {
 	 */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 50)
+	@OneData(DataType = DataTypes.VARCHAR50)
 	private String title;
 
 	/**
@@ -51,6 +49,6 @@ public class NamedOne extends OneModel {
 	 */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 250)
+	@OneData(DataType = DataTypes.VARCHAR250)
 	private String description;
 }

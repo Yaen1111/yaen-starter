@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.common.data.entities;
 
 import lombok.Getter;

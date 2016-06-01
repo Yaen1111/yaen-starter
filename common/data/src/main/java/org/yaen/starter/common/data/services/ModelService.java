@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.common.data.services;
 
 import java.util.List;
@@ -16,33 +13,13 @@ import org.yaen.starter.common.data.models.BaseModel;
 public interface ModelService {
 
 	/**
-	 * select model by id, and update model object with data
+	 * select model by rowid, and update model object with data
 	 * 
 	 * @param model
-	 * @param id
+	 * @param rowid
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> void selectModel(T model, long id) throws CoreException;
-
-	/**
-	 * try select model, return false if not exists
-	 * 
-	 * @param model
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public <T extends BaseModel> boolean trySelectModel(T model, long id) throws CoreException;
-
-	/**
-	 * select model list by given id list
-	 * 
-	 * @param model
-	 * @param ids
-	 * @return
-	 * @throws Exception
-	 */
-	public <T extends BaseModel> List<T> selectModelList(T model, List<Long> ids) throws CoreException;
+	public <T extends BaseModel> void selectModelByRowid(T model, long rowid) throws CoreException;
 
 	/**
 	 * insert model
@@ -50,22 +27,52 @@ public interface ModelService {
 	 * @param model
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> long insertModel(T model) throws CoreException;
+	public <T extends BaseModel> long insertModelByRowid(T model) throws CoreException;
 
 	/**
-	 * update model
+	 * update model by rowid, this id is also be updated
 	 * 
 	 * @param model
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> void updateModel(T model) throws CoreException;
+	public <T extends BaseModel> void updateModelByRowid(T model) throws CoreException;
 
 	/**
-	 * delete model
+	 * delete model by rowid
 	 * 
 	 * @param model
 	 * @throws Exception
 	 */
-	public <T extends BaseModel> void deleteModel(T model) throws CoreException;
+	public <T extends BaseModel> void deleteModelByRowid(T model) throws CoreException;
+
+	/**
+	 * try select model by rowid, return false if not exists
+	 * 
+	 * @param model
+	 * @param rowid
+	 * @return
+	 * @throws Exception
+	 */
+	public <T extends BaseModel> boolean trySelectModelByRowid(T model, long rowid) throws CoreException;
+
+	/**
+	 * select model list by given rowid list
+	 * 
+	 * @param model
+	 * @param rowids
+	 * @return
+	 * @throws Exception
+	 */
+	public <T extends BaseModel> List<T> selectModelListByRowids(T model, List<Long> rowids) throws CoreException;
+
+	/**
+	 * select model list by given id
+	 * 
+	 * @param model
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public <T extends BaseModel> List<T> selectModelListById(T model, String id) throws CoreException;
 
 }

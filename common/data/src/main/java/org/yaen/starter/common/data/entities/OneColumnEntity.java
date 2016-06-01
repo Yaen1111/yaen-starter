@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.common.data.entities;
 
 import java.lang.reflect.Field;

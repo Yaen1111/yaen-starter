@@ -2,30 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.yaen.starter.common.dal.mappers.QueryMapper">
 
-	<select id="selectIDsByBaseID" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
-		SELECT
-		`ID`
-		FROM `${tableName}`
-		WHERE
-		`BASE_ID` = #{baseId,jdbcType=BIGINT}
-	</select>
-
-	<select id="selectIDsByFromID" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
-		SELECT
-		`ID`
-		FROM `${tableName}`
-		WHERE
-		`FROM_ID` = #{fromId,jdbcType=BIGINT}
-	</select>
-
-	<select id="selectIDsByToID" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
-		SELECT
-		`ID`
-		FROM `${tableName}`
-		WHERE
-		`TO_ID` = #{toId,jdbcType=BIGINT}
-	</select>
-
 	<select id="selectIDsByColumns" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
 		SELECT
 		`ID`

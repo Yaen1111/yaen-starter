@@ -43,7 +43,7 @@ public class OneTester extends UnitTester {
 			SubCode code = new SubCode();
 			code.setEnableChangeLog(true);
 
-			if (service.trySelectModel(code, 2)) {
+			if (service.trySelectModelByRowid(code, 2)) {
 
 				System.out.println("------------");
 				System.out.println("------------");
@@ -55,15 +55,15 @@ public class OneTester extends UnitTester {
 				code.setTitle("ti6");
 				code.setIntvalue(556);
 
-				service.updateModel(code);
+				service.updateModelByRowid(code);
 
 				System.out.println("update done");
 
 			}
 
-			code.setId(0);
+			code.setRowid(0);
 			code.setFamily("new");
-			service.insertModel(code);
+			service.insertModelByRowid(code);
 
 			System.out.println("insert done");
 

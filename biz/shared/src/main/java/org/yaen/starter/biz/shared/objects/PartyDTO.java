@@ -13,7 +13,7 @@ import lombok.Data;
 public class PartyDTO implements Serializable {
 	private static final long serialVersionUID = -6724045254585597274L;
 
-	private long partyID;
+	private String partyID;
 
 	private String partyType;
 

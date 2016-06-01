@@ -10,14 +10,12 @@ import org.yaen.starter.core.model.ark.NamedOne;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * sub code element, mostly for test purpose
  * 
  * @author Yaen 2016年1月4日下午8:38:45
  */
-@ToString(callSuper = true)
 @OneTable(TableName = "ARK_SUBCODE")
 public class SubCode extends NamedOne {
 	private static final long serialVersionUID = -1638352121549503589L;
@@ -27,7 +25,7 @@ public class SubCode extends NamedOne {
 	 */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 20)
+	@OneData(DataType = DataTypes.VARCHAR20)
 	private String subcode;
 
 	/**

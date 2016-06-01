@@ -15,48 +15,57 @@ import org.yaen.starter.common.data.entities.OneEntity;
 public interface OneMapper {
 
 	/**
-	 * select one object by id
+	 * select one object by rowid
 	 * 
-	 * @param po
+	 * @param entity
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String, Object> selectByID(OneEntity po) throws Exception;
+	public Map<String, Object> selectByRowid(OneEntity entity) throws Exception;
 
 	/**
-	 * select object list by id list
+	 * insert by rowid
 	 * 
-	 * @param po
+	 * @param entity
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Map<String, Object>> selectByIDs(OneEntity po) throws Exception;
+	public int insertByRowid(OneEntity entity) throws Exception;
 
 	/**
-	 * insert by id
+	 * update by rowid
 	 * 
-	 * @param po
+	 * @param entity
 	 * @return
 	 * @throws Exception
 	 */
-	public int insertByID(OneEntity po) throws Exception;
+	public int updateByRowid(OneEntity entity) throws Exception;
 
 	/**
-	 * update by id
+	 * delete by rowid
 	 * 
-	 * @param po
+	 * @param entity
 	 * @return
 	 * @throws Exception
 	 */
-	public int updateByID(OneEntity po) throws Exception;
+	public int deleteByRowid(OneEntity entity) throws Exception;
 
 	/**
-	 * delete by id
+	 * select object list by rowid list
 	 * 
-	 * @param po
+	 * @param entity
 	 * @return
 	 * @throws Exception
 	 */
-	public int deleteByID(OneEntity po) throws Exception;
+	public List<Map<String, Object>> selectListByRowids(OneEntity entity) throws Exception;
+
+	/**
+	 * select object list by id
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectListById(OneEntity entity) throws Exception;
 
 }
