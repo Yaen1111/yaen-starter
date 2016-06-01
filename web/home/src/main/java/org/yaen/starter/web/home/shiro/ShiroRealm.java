@@ -1,5 +1,7 @@
 package org.yaen.starter.web.home.shiro;
 
+import java.util.List;
+
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -20,6 +22,8 @@ import org.yaen.starter.common.data.exceptions.DataNotExistsBizException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataBizException;
 import org.yaen.starter.common.util.utils.StringUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * shiro realm for authentication(user info) and authorization(role and perm)
  * <p>
@@ -27,6 +31,7 @@ import org.yaen.starter.common.util.utils.StringUtil;
  * 
  * @author Yaen 2016年5月19日下午6:42:54
  */
+@Slf4j
 public class ShiroRealm extends AuthorizingRealm {
 
 	@Autowired
@@ -87,15 +92,23 @@ public class ShiroRealm extends AuthorizingRealm {
 		// get user principal
 		ShiroPrincipal principal = (ShiroPrincipal) principals.fromRealm(this.getName()).iterator().next();
 
-		// TODO
 		if (principal != null) {
-			// the return info
-			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-			info.addRole("admin");
+			try {
+				// get user roles
+				List<String> roles = userService.getUserRoles(principal.getUsername());
 
-			return info;
+				// simple
+				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
+				// add all roles
+				info.addRoles(roles);
+
+				return info;
+			} catch (BizException ex) {
+				log.error("get user role error", ex);
+				return null;
+			}
 		}
 		return null;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
+import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.core.model.one.OneModel;
@@ -19,6 +20,7 @@ import lombok.Setter;
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @OneTable(TableName = "ZU_ROLE")
+@OneUniqueIndex("ID")
 public class Role extends OneModel {
 	private static final long serialVersionUID = -709733522935110043L;
 

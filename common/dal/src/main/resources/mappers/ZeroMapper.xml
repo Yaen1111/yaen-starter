@@ -29,6 +29,13 @@
 			DEFAULT NULL
 		</foreach>
 		PRIMARY KEY (`ROWID`)
+		<foreach collection="uniqueIndexes" index="index" item="info" open="," separator="," close="">
+			UNIQUE INDEX
+			(${info})
+		</foreach>
+		<foreach collection="indexes" index="index" item="info" open="," separator="," close="">
+			INDEX (${info})
+		</foreach>
 		)
 		ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
 	</update>

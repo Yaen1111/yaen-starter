@@ -9,6 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.yaen.starter.common.data.enums.DataTypes;
+
 /**
  * define data type for the one
  * 
@@ -31,7 +33,7 @@ public @interface OneData {
 	 * 
 	 * @return
 	 */
-	String DataType() default "STRING";
+	String DataType() default DataTypes.VARCHAR50;
 
 	/**
 	 * the data size if need, 0 for default

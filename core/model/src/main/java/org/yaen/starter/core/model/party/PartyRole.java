@@ -1,6 +1,7 @@
 package org.yaen.starter.core.model.party;
 
 import org.yaen.starter.common.data.annotations.OneData;
+import org.yaen.starter.common.data.annotations.OneIndex;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.core.model.one.OneModel;
@@ -14,6 +15,7 @@ import lombok.Setter;
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @OneTable(TableName = "ZP_PARTY_ROLE")
+@OneIndex("ID")
 public class PartyRole extends OneModel {
 	private static final long serialVersionUID = 1743340074473975732L;
 

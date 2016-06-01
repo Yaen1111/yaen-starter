@@ -336,6 +336,12 @@ public class OneModelService implements ModelService {
 	@SuppressWarnings("unchecked")
 	protected <T extends BaseModel> List<T> innerSelectModelListByRowids(T model, List<Long> rowids, OneEntity entity)
 			throws CoreException {
+
+		// return empty if rowids is empty
+		if (rowids.isEmpty()) {
+			return new ArrayList<T>();
+		}
+
 		try {
 			// get another entity if not
 			if (entity == null) {
@@ -352,8 +358,8 @@ public class OneModelService implements ModelService {
 			List<Map<String, Object>> maps = oneMapper.selectListByRowids(entity);
 
 			// check existence
-			if (maps == null) {
-				return null;
+			if (maps == null || maps.isEmpty()) {
+				return new ArrayList<T>();
 			}
 
 			List<T> list = new ArrayList<T>(maps.size());
@@ -587,14 +593,14 @@ public class OneModelService implements ModelService {
 	 *      java.util.List)
 	 */
 	@Override
-	public <T extends BaseModel> List<T> selectModelListByRowids(T model, List<Long> ids) throws CoreException {
+	public <T extends BaseModel> List<T> selectModelListByRowids(T model, List<Long> rowids) throws CoreException {
 		AssertUtil.notNull(model);
-		AssertUtil.notNull(ids);
+		AssertUtil.notNull(rowids);
 
 		// trigger before select, only once is ok
 		if (model.BeforeSelect()) {
 
-			List<T> list = this.innerSelectModelListByRowids(model, ids, null);
+			List<T> list = this.innerSelectModelListByRowids(model, rowids, null);
 
 			// trigger after select each
 			for (int i = 0; i < list.size(); i++) {

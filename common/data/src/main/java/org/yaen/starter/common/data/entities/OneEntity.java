@@ -1,14 +1,17 @@
 package org.yaen.starter.common.data.entities;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.yaen.starter.common.data.annotations.OneCopy;
 import org.yaen.starter.common.data.annotations.OneData;
+import org.yaen.starter.common.data.annotations.OneIndex;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.OneTableHandler;
+import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,15 +34,15 @@ public class OneEntity implements BaseEntity {
 	/** the primary key */
 	@Getter
 	@Setter
-	private long rowid;
+	private long rowid = 0;
 
 	/** the main key */
 	@Getter
 	@Setter
-	private String id;
+	private String id = "";
 
 	/** the table name, if null, use class name instead */
-	protected String tableName;
+	protected String tableName = "";
 
 	/**
 	 * getter of tableName
@@ -72,12 +75,72 @@ public class OneEntity implements BaseEntity {
 		// set to member
 		this.tableName = name;
 
-		return tableName;
+		return this.tableName;
 	}
 
+	/** the indexes to create */
+	private List<String> indexes = new ArrayList<String>();
+
 	/**
-	 * columns, with key of field name
+	 * getter for indexes
+	 * 
+	 * @return
 	 */
+	public List<String> getIndexes() {
+		// use local var to modify
+		List<String> list = new ArrayList<String>();
+
+		// try get annotation
+		OneIndex index = this.entity.getClass().getAnnotation(OneIndex.class);
+
+		// add index from one index
+		if (index != null) {
+			String[] temp = index.value();
+			if (temp != null && temp.length > 0) {
+				for (int i = 0; i < temp.length; i++) {
+					list.add(temp[i]);
+				}
+			}
+		}
+
+		// set to member
+		this.indexes = list;
+
+		return this.indexes;
+	}
+
+	/** the uniqueIndexes to create */
+	private List<String> uniqueIndexes = new ArrayList<String>();
+
+	/**
+	 * getter for uniqueIndexes
+	 * 
+	 * @return
+	 */
+	public List<String> getUniqueIndexes() {
+		// use local var to modify
+		List<String> list = new ArrayList<String>();
+
+		// try get annotation
+		OneUniqueIndex index = this.entity.getClass().getAnnotation(OneUniqueIndex.class);
+
+		// add index from one index
+		if (index != null) {
+			String[] temp = index.value();
+			if (temp != null && temp.length > 0) {
+				for (int i = 0; i < temp.length; i++) {
+					list.add(temp[i]);
+				}
+			}
+		}
+
+		// set to member
+		this.uniqueIndexes = list;
+
+		return this.uniqueIndexes;
+	}
+
+	/** columns, with key of field name */
 	protected Map<String, OneColumnEntity> columns;
 
 	/**
@@ -105,22 +168,22 @@ public class OneEntity implements BaseEntity {
 	/** the selected column name */
 	@Getter
 	@Setter
-	private String selectedColumnName;
+	private String selectedColumnName = "";
 
 	/** the modified field name */
 	@Getter
 	@Setter
-	private String modifiedFieldName;
+	private String modifiedFieldName = "";
 
 	/** the added field name */
 	@Getter
 	@Setter
-	private String addedFieldName;
+	private String addedFieldName = "";
 
 	/** the rowid list for batch select */
 	@Getter
 	@Setter
-	private List<Long> rowids;
+	private List<Long> rowids = new ArrayList<Long>();
 
 	/**
 	 * construct one entity of self

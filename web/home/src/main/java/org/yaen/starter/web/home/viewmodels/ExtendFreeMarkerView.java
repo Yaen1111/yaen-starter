@@ -23,8 +23,9 @@ public class ExtendFreeMarkerView extends FreeMarkerView {
 
 		// add base to model
 		model.putIfAbsent("base", request.getContextPath());
-		// ensure title is not null
-		model.putIfAbsent("title", "");
+
+		// add view to model
+		model.putIfAbsent("view", this.getBeanName());
 
 		super.exposeHelpers(model, request);
 	}

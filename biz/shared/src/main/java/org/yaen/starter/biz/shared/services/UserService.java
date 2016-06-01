@@ -55,7 +55,7 @@ public interface UserService {
 	 * @return
 	 * @throws BizException
 	 */
-	List<RoleDTO> getRoleList() throws BizException;
+	List<RoleDTO> getRoleListAll() throws BizException;
 
 	/**
 	 * get user role names

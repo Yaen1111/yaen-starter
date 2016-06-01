@@ -159,16 +159,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * @see org.yaen.starter.biz.shared.services.UserService#getRoleList()
+	 * @see org.yaen.starter.biz.shared.services.UserService#getRoleListAll()
 	 */
 	@Override
-	public List<RoleDTO> getRoleList() throws BizException {
+	public List<RoleDTO> getRoleListAll() throws BizException {
 
 		List<RoleDTO> list = new ArrayList<RoleDTO>();
 
 		Role role = new Role();
 
 		try {
+			// try get one to create table
+			modelService.trySelectModelByRowid(role, 0L);
 
 			// get all id list
 			List<Long> ids = queryService.selectRowidsByAll(role);

@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
+import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
@@ -25,6 +26,7 @@ import lombok.Setter;
  * @author Yaen 2016年1月4日下午8:35:55
  */
 @OneTable(TableName = "ONE")
+@OneUniqueIndex("ID")
 public class OneModel implements BaseModel {
 	private static final long serialVersionUID = 101L;
 

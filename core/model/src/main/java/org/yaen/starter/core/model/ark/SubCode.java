@@ -4,6 +4,7 @@
 package org.yaen.starter.core.model.ark;
 
 import org.yaen.starter.common.data.annotations.OneData;
+import org.yaen.starter.common.data.annotations.OneIndex;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.core.model.ark.NamedOne;
@@ -17,6 +18,7 @@ import lombok.Setter;
  * @author Yaen 2016年1月4日下午8:38:45
  */
 @OneTable(TableName = "ARK_SUBCODE")
+@OneIndex("SUBCODE")
 public class SubCode extends NamedOne {
 	private static final long serialVersionUID = -1638352121549503589L;
 

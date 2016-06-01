@@ -2,6 +2,7 @@ package org.yaen.starter.core.model.user;
 
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
+import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.core.model.one.OneModel;
 
@@ -14,6 +15,7 @@ import lombok.Setter;
  * @author Yaen 2016年5月17日下午2:44:19
  */
 @OneTable(TableName = "ZU_ROLE_AUTH")
+@OneUniqueIndex("ID,AUTH_ID")
 public class RoleAuth extends OneModel {
 	private static final long serialVersionUID = -4458934767334916729L;
 
