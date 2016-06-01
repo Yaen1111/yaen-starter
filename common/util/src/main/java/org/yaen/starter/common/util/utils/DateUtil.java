@@ -20,6 +20,9 @@ public class DateUtil {
 	/** yyyy-MM-dd HH:mm:ss */
 	public static final String DATETIME_FMT = "yyyy-MM-dd HH:mm:ss";
 
+	/** yyyyMMddHHmmssS */
+	public static final String DATETIME_FMT_COMPACT = "yyyyMMddHHmmssSS";
+
 	/** HH:mm:ss */
 	public static final String TIME_FMT = "HH:mm:ss";
 
@@ -102,7 +105,7 @@ public class DateUtil {
 	 */
 	public static String formatDateSeq() {
 
-		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FMT);
+		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FMT_COMPACT);
 		return sdf.format(new Date());
 	}
 

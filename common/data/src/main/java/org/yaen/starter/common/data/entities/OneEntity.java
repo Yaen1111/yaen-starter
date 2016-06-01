@@ -102,6 +102,11 @@ public class OneEntity implements BaseEntity {
 		return this.columns;
 	}
 
+	/** the selected column name */
+	@Getter
+	@Setter
+	private String selectedColumnName;
+
 	/** the modified field name */
 	@Getter
 	@Setter

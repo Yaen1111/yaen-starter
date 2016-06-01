@@ -68,4 +68,13 @@ public interface OneMapper {
 	 */
 	public List<Map<String, Object>> selectListById(OneEntity entity) throws Exception;
 
+	/**
+	 * select object list by id
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Object> selectValueListById(OneEntity entity) throws Exception;
+
 }

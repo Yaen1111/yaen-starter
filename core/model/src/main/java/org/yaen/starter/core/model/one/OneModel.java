@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.core.model.one;
 
 import java.io.ByteArrayInputStream;
@@ -16,12 +13,14 @@ import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.util.utils.DateUtil;
+import org.yaen.starter.common.util.utils.IdUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * one model for base objects
+ * one model for base objects, all member is protected
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
@@ -33,19 +32,13 @@ public class OneModel implements BaseModel {
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.BIGINT, FieldName = "ROWID")
-	private long rowid = 0;
-
-	/** the primary key of id */
-	@Getter
-	@Setter
-	@OneData(DataType = DataTypes.VARCHAR20, FieldName = "ID")
-	private String id = "";
+	protected long rowid = 0;
 
 	/** the create date time of the record */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "SYS_CDATE")
-	private Date cdate;
+	protected Date cdate;
 
 	/**
 	 * the last update date time of the record
@@ -53,24 +46,30 @@ public class OneModel implements BaseModel {
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "SYS_UDATE")
-	private Date udate;
+	protected Date udate;
 
 	/** the last patch date time of the record */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "SYS_PDATE")
-	private Date pdate;
+	protected Date pdate;
 
 	/** the patch log of the record, should use append */
 	@Getter
 	@Setter
 	@OneData(DataType = DataTypes.TEXT, FieldName = "SYS_PLOG")
-	private String plog;
+	protected String plog;
+
+	/** the primary key of id */
+	@Getter
+	@Setter
+	@OneData(DataType = DataTypes.VARCHAR20, FieldName = "ID")
+	protected String id = "";
 
 	/** enable change log or not, default to false */
 	@Getter
 	@Setter
-	private boolean enableChangeLog = false;
+	protected boolean enableChangeLog = false;
 
 	/**
 	 * empty constructor
@@ -105,7 +104,6 @@ public class OneModel implements BaseModel {
 			// should not got here
 			throw new RuntimeException(ex);
 		}
-
 	}
 
 	/**
@@ -128,7 +126,7 @@ public class OneModel implements BaseModel {
 	}
 
 	/**
-	 * set cdate/udate and return true
+	 * set cdate/udate/id if empty and return true
 	 * 
 	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeInsert()
 	 */
@@ -137,6 +135,11 @@ public class OneModel implements BaseModel {
 		// set cdate, udate
 		this.cdate = DateUtil.getNow();
 		this.udate = this.cdate;
+
+		// set id if not given
+		if (StringUtil.isBlank(this.id)) {
+			this.id = IdUtil.generateId("AUTO");
+		}
 
 		return true;
 	}

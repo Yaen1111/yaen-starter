@@ -75,4 +75,16 @@ public interface ModelService {
 	 */
 	public <T extends BaseModel> List<T> selectModelListById(T model, String id) throws CoreException;
 
+	/**
+	 * select value list by given id and field name
+	 * 
+	 * @param model
+	 * @param id
+	 * @param fieldName
+	 * @return
+	 * @throws CoreException
+	 */
+	public <T extends BaseModel> List<Object> selectValueListById(T model, String id, String fieldName)
+			throws CoreException;
+
 }

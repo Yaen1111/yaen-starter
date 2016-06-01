@@ -32,7 +32,7 @@
 	<update id="updateByRowid" parameterType="org.yaen.starter.common.data.entities.OneEntity">
 		UPDATE `${tableName}`
 		SET
-		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
+		<foreach collection="columns" index="index" item="info" open="" separator="," close="">
 			`${info.columnName}` =
 			#{info.value}
 		</foreach>
@@ -64,6 +64,13 @@
 			`${info.columnName}`
 		</foreach>
 		FROM `${tableName}`
+		WHERE `ID` = #{id}
+	</select>
+
+	<select id="selectValueListById" resultType="java.lang.Object" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+		SELECT `${selectedColumnName}`
+		FROM
+		`${tableName}`
 		WHERE `ID` = #{id}
 	</select>
 
