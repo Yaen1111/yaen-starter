@@ -1,7 +1,4 @@
-/**
- * 
- */
-package org.yaen.starter.common.dal.entities;
+package org.yaen.starter.common.data.entities;
 
 import java.util.Map;
 
@@ -17,13 +14,9 @@ import lombok.Setter;
 @Setter
 public class QueryEntity {
 
-	private long id;
+	private long rowid;
 
-	private long baseId;
-
-	private long fromId;
-
-	private long toId;
+	private String id;
 
 	private String tableName;
 

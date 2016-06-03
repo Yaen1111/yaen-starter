@@ -8,6 +8,8 @@ import org.yaen.starter.common.data.entities.OneEntity;
 
 /**
  * one mapper for all crud operations
+ * <p>
+ * prepare for WRITE/MAIN/MASTER db server
  * 
  * @author Yaen 2016年5月3日下午9:28:37
  */
@@ -49,32 +51,5 @@ public interface OneMapper {
 	 * @throws Exception
 	 */
 	public int deleteByRowid(OneEntity entity) throws Exception;
-
-	/**
-	 * select object list by rowid list
-	 * 
-	 * @param entity
-	 * @return
-	 * @throws Exception
-	 */
-	public List<Map<String, Object>> selectListByRowids(OneEntity entity) throws Exception;
-
-	/**
-	 * select object list by id
-	 * 
-	 * @param entity
-	 * @return
-	 * @throws Exception
-	 */
-	public List<Map<String, Object>> selectListById(OneEntity entity) throws Exception;
-
-	/**
-	 * select object list by id
-	 * 
-	 * @param entity
-	 * @return
-	 * @throws Exception
-	 */
-	public List<Object> selectValueListById(OneEntity entity) throws Exception;
 
 }

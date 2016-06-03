@@ -1,7 +1,5 @@
 package org.yaen.starter.common.data.services;
 
-import java.util.List;
-
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.models.BaseModel;
 
@@ -54,37 +52,5 @@ public interface ModelService {
 	 * @throws Exception
 	 */
 	public <T extends BaseModel> boolean trySelectModelByRowid(T model, long rowid) throws CoreException;
-
-	/**
-	 * select model list by given rowid list
-	 * 
-	 * @param model
-	 * @param rowids
-	 * @return
-	 * @throws Exception
-	 */
-	public <T extends BaseModel> List<T> selectModelListByRowids(T model, List<Long> rowids) throws CoreException;
-
-	/**
-	 * select model list by given id
-	 * 
-	 * @param model
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	public <T extends BaseModel> List<T> selectModelListById(T model, String id) throws CoreException;
-
-	/**
-	 * select value list by given id and field name
-	 * 
-	 * @param model
-	 * @param id
-	 * @param fieldName
-	 * @return
-	 * @throws CoreException
-	 */
-	public <T extends BaseModel> List<Object> selectValueListById(T model, String id, String fieldName)
-			throws CoreException;
 
 }

@@ -70,7 +70,7 @@ public class User extends OneModel {
 
 			// get values
 			UserRole sub = new UserRole();
-			List<Object> values = ModelUtil.getService().selectValueListById(sub, this.getId(), "roleId");
+			List<Object> values = ModelUtil.getQueryService().selectValueListById(sub, this.getId(), "roleId");
 
 			this.roleIds = new ArrayList<String>(values.size());
 

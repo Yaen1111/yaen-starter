@@ -63,7 +63,7 @@ public class Role extends OneModel {
 
 			// get values
 			RoleAuth sub = new RoleAuth();
-			List<Object> values = ModelUtil.getService().selectValueListById(sub, this.getId(), "authId");
+			List<Object> values = ModelUtil.getQueryService().selectValueListById(sub, this.getId(), "authId");
 
 			this.authIds = new ArrayList<String>(values.size());
 

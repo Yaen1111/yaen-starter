@@ -1,7 +1,5 @@
 package org.yaen.starter.core.service.one;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,6 +23,7 @@ import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.log.Changelog;
+import org.yaen.starter.core.service.utils.OneServiceUil;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
@@ -122,38 +121,6 @@ public class OneModelService implements ModelService {
 	}
 
 	/**
-	 * fill model by data in map, with rowid and id
-	 * 
-	 * @param model
-	 * @param columns
-	 * @param values
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 */
-	protected <T extends BaseModel> void fillModelByColumns(T model, Map<String, OneColumnEntity> columns,
-			Map<String, Object> values) throws IllegalArgumentException, IllegalAccessException {
-
-		// fill rowid and id
-		if (values.containsKey("rowid")) {
-			model.setRowid((Long) values.get("rowid"));
-		}
-
-		// fill model fields by value map
-		for (Entry<String, OneColumnEntity> entry : columns.entrySet()) {
-			OneColumnEntity info = entry.getValue();
-			Field field = info.getField();
-
-			// set value if exists
-			if (values.containsKey(info.getColumnName())) {
-				Object value = values.get(info.getColumnName());
-
-				// set value of any type
-				field.set(model, value);
-			}
-		}
-	}
-
-	/**
 	 * inner select model by rowid, fill model fields, no triggers
 	 * 
 	 * @param model
@@ -185,7 +152,7 @@ public class OneModelService implements ModelService {
 			}
 
 			// fill field
-			this.fillModelByColumns(model, entity.getColumns(), map);
+			OneServiceUil.fillModelByColumns(model, entity.getColumns(), map);
 
 			return true;
 		} catch (Exception ex) {
@@ -325,148 +292,6 @@ public class OneModelService implements ModelService {
 	}
 
 	/**
-	 * inner select model list, no triggers, origin model is not changed
-	 * 
-	 * @param model
-	 * @param rowids
-	 * @param entity
-	 * @return
-	 * @throws CoreException
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T extends BaseModel> List<T> innerSelectModelListByRowids(T model, List<Long> rowids, OneEntity entity)
-			throws CoreException {
-
-		// return empty if rowids is empty
-		if (rowids.isEmpty()) {
-			return new ArrayList<T>();
-		}
-
-		try {
-			// get another entity if not
-			if (entity == null) {
-				entity = new AnotherEntity(model);
-
-				// create table if not exists
-				this.CreateTable(entity);
-			}
-
-			// set rowid list
-			entity.setRowids(rowids);
-
-			// call mapper
-			List<Map<String, Object>> maps = oneMapper.selectListByRowids(entity);
-
-			// check existence
-			if (maps == null || maps.isEmpty()) {
-				return new ArrayList<T>();
-			}
-
-			List<T> list = new ArrayList<T>(maps.size());
-
-			// make models
-			for (Map<String, Object> map : maps) {
-
-				// create new model
-				T newmodel = (T) model.getClass().newInstance();
-
-				// fill field
-				this.fillModelByColumns(newmodel, entity.getColumns(), map);
-
-				list.add(newmodel);
-			}
-			return list;
-		} catch (Exception ex) {
-			throw new CoreException(ex);
-		}
-	}
-
-	/**
-	 * inner select model by id, no triggers, origin model is not changed
-	 * 
-	 * @param model
-	 * @param rowids
-	 * @param entity
-	 * @return
-	 * @throws CoreException
-	 */
-	@SuppressWarnings("unchecked")
-	protected <T extends BaseModel> List<T> innerSelectModelListById(T model, String id, OneEntity entity)
-			throws CoreException {
-		try {
-			// get another entity if not
-			if (entity == null) {
-				entity = new AnotherEntity(model);
-
-				// create table if not exists
-				this.CreateTable(entity);
-			}
-
-			// set id
-			entity.setId(id);
-
-			// call mapper
-			List<Map<String, Object>> maps = oneMapper.selectListById(entity);
-
-			// check existence
-			if (maps == null) {
-				return null;
-			}
-
-			List<T> list = new ArrayList<T>(maps.size());
-
-			// make models
-			for (Map<String, Object> map : maps) {
-
-				// create new model
-				T newmodel = (T) model.getClass().newInstance();
-
-				// fill field
-				this.fillModelByColumns(newmodel, entity.getColumns(), map);
-
-				list.add(newmodel);
-			}
-			return list;
-		} catch (Exception ex) {
-			throw new CoreException(ex);
-		}
-	}
-
-	/**
-	 * inner select value by id, no triggers, origin model is not changed
-	 * 
-	 * @param model
-	 * @param rowids
-	 * @param fieldName
-	 * @param entity
-	 * @return
-	 * @throws CoreException
-	 */
-	protected <T extends BaseModel> List<Object> innerSelectValueListById(T model, String id, String fieldName,
-			OneEntity entity) throws CoreException {
-		try {
-			// get another entity if not
-			if (entity == null) {
-				entity = new AnotherEntity(model);
-
-				// create table if not exists
-				this.CreateTable(entity);
-			}
-
-			// set id and column
-			entity.setId(id);
-			entity.setSelectedColumnName(entity.getColumns().get(fieldName).getColumnName());
-
-			// call mapper
-			List<Object> values = oneMapper.selectValueListById(entity);
-
-			return values;
-		} catch (Exception ex) {
-			throw new CoreException(ex);
-		}
-	}
-
-	/**
 	 * @see org.yaen.starter.common.data.services.ModelService#selectModelByRowid(org.yaen.starter.common.data.models.BaseModel,
 	 *      long)
 	 */
@@ -585,80 +410,6 @@ public class OneModelService implements ModelService {
 			return false;
 		} catch (OperationCancelledCoreException ex) {
 			return false;
-		}
-	}
-
-	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#selectModelListByRowids(org.yaen.starter.common.data.models.BaseModel,
-	 *      java.util.List)
-	 */
-	@Override
-	public <T extends BaseModel> List<T> selectModelListByRowids(T model, List<Long> rowids) throws CoreException {
-		AssertUtil.notNull(model);
-		AssertUtil.notNull(rowids);
-
-		// trigger before select, only once is ok
-		if (model.BeforeSelect()) {
-
-			List<T> list = this.innerSelectModelListByRowids(model, rowids, null);
-
-			// trigger after select each
-			for (int i = 0; i < list.size(); i++) {
-				list.get(i).AfterSelect();
-			}
-
-			return list;
-
-		} else {
-			// select canceled
-			throw new OperationCancelledCoreException("select cancelled by trigger");
-		}
-	}
-
-	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#selectModelListById(org.yaen.starter.common.data.models.BaseModel,
-	 *      java.lang.String)
-	 */
-	@Override
-	public <T extends BaseModel> List<T> selectModelListById(T model, String id) throws CoreException {
-		AssertUtil.notNull(model);
-
-		// trigger before select, only once is ok
-		if (model.BeforeSelect()) {
-
-			List<T> list = this.innerSelectModelListById(model, id, null);
-
-			// trigger after select each
-			for (int i = 0; i < list.size(); i++) {
-				list.get(i).AfterSelect();
-			}
-
-			return list;
-		} else {
-			// select canceled
-			throw new OperationCancelledCoreException("select cancelled by trigger");
-		}
-	}
-
-	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#selectValueListById(org.yaen.starter.common.data.models.BaseModel,
-	 *      java.lang.String, java.lang.String)
-	 */
-	@Override
-	public <T extends BaseModel> List<Object> selectValueListById(T model, String id, String fieldName)
-			throws CoreException {
-		AssertUtil.notNull(model);
-		AssertUtil.notEmpty(fieldName);
-
-		// trigger before select, only once is ok
-		if (model.BeforeSelect()) {
-
-			List<Object> list = this.innerSelectValueListById(model, id, fieldName, null);
-
-			return list;
-		} else {
-			// select canceled
-			throw new OperationCancelledCoreException("select cancelled by trigger");
 		}
 	}
 

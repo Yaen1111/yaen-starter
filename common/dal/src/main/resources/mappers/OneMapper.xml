@@ -44,34 +44,4 @@
 		WHERE `ROWID` = #{rowid}
 	</delete>
 
-	<select id="selectListByRowids" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
-		SELECT
-		`ROWID`
-		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
-			`${info.columnName}`
-		</foreach>
-		FROM `${tableName}`
-		WHERE `ROWID` IN
-		<foreach collection="rowids" index="index" item="id2" open="(" separator="," close=")">
-			#{id2}
-		</foreach>
-	</select>
-
-	<select id="selectListById" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
-		SELECT
-		`ROWID`
-		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
-			`${info.columnName}`
-		</foreach>
-		FROM `${tableName}`
-		WHERE `ID` = #{id}
-	</select>
-
-	<select id="selectValueListById" resultType="java.lang.Object" parameterType="org.yaen.starter.common.data.entities.OneEntity">
-		SELECT `${selectedColumnName}`
-		FROM
-		`${tableName}`
-		WHERE `ID` = #{id}
-	</select>
-
 </mapper>
