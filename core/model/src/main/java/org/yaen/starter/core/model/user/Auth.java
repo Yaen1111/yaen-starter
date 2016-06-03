@@ -19,6 +19,12 @@ import lombok.Setter;
 public class Auth extends OneModel {
 	private static final long serialVersionUID = -709733522935110043L;
 
+	/** override the id to be long enough */
+	@Getter
+	@Setter
+	@OneData(DataType = DataTypes.VARCHAR50, FieldName = "ID")
+	protected String id = "";
+
 	/** title */
 	@Getter
 	@Setter

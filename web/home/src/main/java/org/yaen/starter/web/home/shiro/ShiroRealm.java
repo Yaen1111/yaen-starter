@@ -104,9 +104,21 @@ public class ShiroRealm extends AuthorizingRealm {
 				// add all roles
 				info.addRoles(roles);
 
+				// should add permissions manually, or should inject RolePermissionResolver to this realm to get
+				// permissions of role in real-time(no cache)
+
+				// get all permissions of all roles, this may use cache
+				for (String role : roles) {
+					List<String> auths = userService.getRoleAuths(role);
+					info.addStringPermissions(auths);
+				}
+
+				log.debug("get user roles, user={}, roles={}", principal.getUsername(), roles);
+				log.debug("get user auths, user={}, auths={}", principal.getUsername(), info.getStringPermissions());
+
 				return info;
 			} catch (BizException ex) {
-				log.error("get user role error", ex);
+				log.error("get role auth error", ex);
 				return null;
 			}
 		}

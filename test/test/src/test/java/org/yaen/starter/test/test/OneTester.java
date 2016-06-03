@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.core.model.ark.SubCode;
+import org.yaen.starter.core.model.user.Auth;
 import org.yaen.starter.test.test.tester.UnitTester;
 
 /**
@@ -40,8 +41,13 @@ public class OneTester extends UnitTester {
 
 		try {
 
+			Auth auth = new Auth();
+			auth.setId("13");
+			auth.setTitle("jus");
+
+			service.insertModelByRowid(auth);
+
 			SubCode code = new SubCode();
-			code.setEnableChangeLog(true);
 
 			if (service.trySelectModelByRowid(code, 2)) {
 

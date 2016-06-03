@@ -75,4 +75,22 @@ public interface UserService {
 	 */
 	void assignUserRoles(String username, List<String> roles) throws BizException;
 
+	/**
+	 * get role auth names
+	 * 
+	 * @param rolename
+	 * @return
+	 * @throws BizException
+	 */
+	List<String> getRoleAuths(String rolename) throws BizException;
+
+	/**
+	 * assign role auths, may add and remove
+	 * 
+	 * @param username
+	 * @param auths
+	 * @throws BizException
+	 */
+	void assignRoleAuths(String rolename, List<String> auths) throws BizException;
+
 }

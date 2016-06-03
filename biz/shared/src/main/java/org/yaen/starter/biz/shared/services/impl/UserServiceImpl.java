@@ -19,6 +19,7 @@ import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.user.Role;
+import org.yaen.starter.core.model.user.RoleAuth;
 import org.yaen.starter.core.model.user.User;
 import org.yaen.starter.core.model.user.UserRole;
 
@@ -59,6 +60,38 @@ public class UserServiceImpl implements UserService {
 
 			if (list.size() > 1) {
 				throw new DuplicateDataBizException("duplicate usernames");
+			}
+
+			return list.get(0);
+
+		} catch (CoreException ex) {
+			throw new BizException(ex);
+		}
+	}
+
+	/**
+	 * inner get role by id(rolename)
+	 * 
+	 * @param rolename
+	 * @return
+	 * @throws BizException
+	 */
+	protected Role innerGetRoleByName(String rolename) throws BizException {
+		AssertUtil.notNull(rolename);
+
+		// find role
+		Role role = new Role();
+
+		try {
+
+			List<Role> list = modelService.selectModelListById(role, rolename);
+
+			if (list == null || list.isEmpty()) {
+				throw new DataNotExistsBizException("role not exists");
+			}
+
+			if (list.size() > 1) {
+				throw new DuplicateDataBizException("duplicate rolenames");
 			}
 
 			return list.get(0);
@@ -197,7 +230,6 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public List<String> getUserRoles(String username) throws BizException {
-
 		// find user
 		User user = this.innerGetUserByName(username);
 		try {
@@ -211,11 +243,11 @@ public class UserServiceImpl implements UserService {
 	 * @see org.yaen.starter.biz.shared.services.UserService#assignUserRoles(java.lang.String, java.util.List)
 	 */
 	@Override
-	public void assignUserRoles(String username, List<String> roleids) throws BizException {
-		AssertUtil.notNull(roleids);
+	public void assignUserRoles(String username, List<String> roles) throws BizException {
+		AssertUtil.notNull(roles);
 
 		// copy roles and put in set
-		Set<String> set = new HashSet<String>(roleids);
+		Set<String> set = new HashSet<String>(roles);
 
 		// get user
 		User user = this.innerGetUserByName(username);
@@ -249,4 +281,60 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * @see org.yaen.starter.biz.shared.services.UserService#getRoleAuths(java.lang.String)
+	 */
+	@Override
+	public List<String> getRoleAuths(String rolename) throws BizException {
+
+		// find role
+		Role role = this.innerGetRoleByName(rolename);
+		try {
+			return role.getAuthIds();
+		} catch (CoreException ex) {
+			throw new BizException(ex);
+		}
+	}
+
+	/**
+	 * @see org.yaen.starter.biz.shared.services.UserService#assignRoleAuths(java.lang.String, java.util.List)
+	 */
+	@Override
+	public void assignRoleAuths(String rolename, List<String> auths) throws BizException {
+		AssertUtil.notNull(auths);
+
+		// copy roles and put in set
+		Set<String> set = new HashSet<String>(auths);
+
+		// get user
+		Role role = this.innerGetRoleByName(rolename);
+		RoleAuth roleauth = new RoleAuth();
+
+		try {
+			// get current user roles
+			List<RoleAuth> ras = modelService.selectModelListById(roleauth, role.getId());
+
+			for (RoleAuth ra : ras) {
+				if (set.contains(ra.getId())) {
+					// has, remove from set, as is no change
+					set.remove(ra.getId());
+				} else {
+					// delete if not in set
+					modelService.deleteModelByRowid(ra);
+				}
+			}
+
+			// add new if still in set
+			if (!set.isEmpty()) {
+				for (String authid : set) {
+					RoleAuth ra = new RoleAuth();
+					ra.setId(role.getId());
+					ra.setAuthId(authid);
+					modelService.insertModelByRowid(ra);
+				}
+			}
+		} catch (CoreException ex) {
+			throw new BizException(ex);
+		}
+	}
 }

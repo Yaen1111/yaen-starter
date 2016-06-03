@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * one entity(persistent object) for all crud operation, all entity has to inherit this one. if can not inherite this
+ * one entity(persistent object) for all crud operation, all entity has to inherit this one. if can not inherit this
  * one, try use another entity to hold other object as entity.
  * 
  * @author Yaen 2016年1月6日下午7:57:22
@@ -193,7 +193,7 @@ public class OneEntity implements BaseEntity {
 	}
 
 	/**
-	 * fetch one column info
+	 * fetch one column info, if child has same field as parent, parent will be ignored
 	 * 
 	 * @param model
 	 * @param one
@@ -207,6 +207,7 @@ public class OneEntity implements BaseEntity {
 		// try to get super class, ignore interface
 		Class<?> superclazz = clazz.getSuperclass();
 
+		// fetch parent first, if the child override some field, the parent field will be ignored
 		if (superclazz != null) {
 			this.fetchOneColumnInfo(columns, one, superclazz);
 		}

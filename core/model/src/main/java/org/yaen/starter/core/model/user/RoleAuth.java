@@ -19,10 +19,10 @@ import lombok.Setter;
 public class RoleAuth extends OneModel {
 	private static final long serialVersionUID = -4458934767334916729L;
 
-	/** the auth id */
+	/** the auth id, should be long */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR50)
 	private String authId;
 
 	/**
