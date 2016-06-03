@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
 		try {
 
-			List<User> list = modelService.selectModelListById(user, username);
+			List<User> list = queryService.selectModelListById(user, username);
 
 			if (list == null || list.isEmpty()) {
 				throw new DataNotExistsBizException("user not exists");
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
 		try {
 
-			List<Role> list = modelService.selectModelListById(role, rolename);
+			List<Role> list = queryService.selectModelListById(role, rolename);
 
 			if (list == null || list.isEmpty()) {
 				throw new DataNotExistsBizException("role not exists");
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
 
 			// get all id list
 			List<Long> ids = queryService.selectRowidsByAll(role);
-			List<Role> roles = modelService.selectModelListByRowids(role, ids);
+			List<Role> roles = queryService.selectModelListByRowids(role, ids);
 
 			// make dto
 			for (Role r : roles) {
@@ -255,7 +255,7 @@ public class UserServiceImpl implements UserService {
 
 		try {
 			// get current user roles
-			List<UserRole> urs = modelService.selectModelListById(userrole, user.getId());
+			List<UserRole> urs = queryService.selectModelListById(userrole, user.getId());
 
 			for (UserRole u : urs) {
 				if (set.contains(u.getId())) {
@@ -312,7 +312,7 @@ public class UserServiceImpl implements UserService {
 
 		try {
 			// get current user roles
-			List<RoleAuth> ras = modelService.selectModelListById(roleauth, role.getId());
+			List<RoleAuth> ras = queryService.selectModelListById(roleauth, role.getId());
 
 			for (RoleAuth ra : ras) {
 				if (set.contains(ra.getId())) {

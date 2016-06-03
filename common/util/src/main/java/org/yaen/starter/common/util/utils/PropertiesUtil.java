@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.springframework.core.io.ClassPathResource;
+import org.yaen.starter.common.util.contexts.ConfigLoader;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PropertiesUtil {
 
-	public static final String PROPERTIES_FILE_NAME = "common.properties";
-
 	/** the properties */
 	private static Properties properties = null;
 
@@ -27,10 +26,12 @@ public class PropertiesUtil {
 	 */
 	static {
 		properties = new Properties();
+		String propertiesfilename = "";
 		try {
-			properties.load((new ClassPathResource(PROPERTIES_FILE_NAME)).getInputStream());
+			propertiesfilename = ConfigLoader.getPropertiesFilename();
+			properties.load((new ClassPathResource(propertiesfilename)).getInputStream());
 		} catch (IOException ex) {
-			log.error("can not load properties file {}", PROPERTIES_FILE_NAME);
+			log.error("can not load properties file {}", propertiesfilename);
 			log.error("exception is ", ex);
 		}
 	}

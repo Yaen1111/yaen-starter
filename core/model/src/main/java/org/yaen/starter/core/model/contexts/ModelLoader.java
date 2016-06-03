@@ -1,4 +1,4 @@
-package org.yaen.starter.core.model.utils;
+package org.yaen.starter.core.model.contexts;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,12 +8,12 @@ import org.yaen.starter.common.data.services.QueryService;
 import lombok.Getter;
 
 /**
- * model util, used to get autowired service
+ * model context, used to get autowired service
  * 
  * @author Yaen 2016年2月1日下午8:55:32
  */
 @Component
-public class ModelUtil {
+public class ModelLoader {
 
 	/** the static model service */
 	@Getter
@@ -30,7 +30,7 @@ public class ModelUtil {
 	 */
 	@Autowired
 	public void setModelService(ModelService modelService) {
-		ModelUtil.modelService = modelService;
+		ModelLoader.modelService = modelService;
 	}
 
 	/**
@@ -40,6 +40,6 @@ public class ModelUtil {
 	 */
 	@Autowired
 	public void setQueryService(QueryService queryService) {
-		ModelUtil.queryService = queryService;
+		ModelLoader.queryService = queryService;
 	}
 }
