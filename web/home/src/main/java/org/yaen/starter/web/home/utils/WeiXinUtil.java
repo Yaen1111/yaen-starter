@@ -12,6 +12,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
+import org.yaen.starter.common.util.contexts.MyX509TrustManager;
+
 /**
  * @ClassName: WeiXinUtil
  * @Description: 微信公众接口工具类

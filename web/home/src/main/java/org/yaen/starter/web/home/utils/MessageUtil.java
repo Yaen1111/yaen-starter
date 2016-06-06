@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.yaen.starter.common.data.objects.wechat.Article;
+import org.yaen.starter.common.data.objects.wechat.MusicResponseMessage;
+import org.yaen.starter.common.data.objects.wechat.NewsResponseMessage;
+import org.yaen.starter.common.data.objects.wechat.TextResponseMessage;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
@@ -69,9 +73,9 @@ public class MessageUtil {
 	 * @param textMessage
 	 * @return
 	 */
-	public static String textMessageToXml(TextMessage textMessage) {
-		xStream.alias("xml", textMessage.getClass());
-		return xStream.toXML(textMessage);
+	public static String textMessageToXml(TextResponseMessage textResponseMessage) {
+		xStream.alias("xml", textResponseMessage.getClass());
+		return xStream.toXML(textResponseMessage);
 	}
 
 	/**
@@ -81,43 +85,40 @@ public class MessageUtil {
 	 *            音乐消息对象
 	 * @return xml
 	 */
-	public static String musicMessageToXml(MusicMessage musicMessage) {
-		xStream.alias("xml", musicMessage.getClass());
-		return xStream.toXML(musicMessage);
+	public static String musicMessageToXml(MusicResponseMessage musicResponseMessage) {
+		xStream.alias("xml", musicResponseMessage.getClass());
+		return xStream.toXML(musicResponseMessage);
 	}
 
 	/**
 	 * 图文消息对象转换成xml
 	 * 
-	 * @param newsMessage
+	 * @param newsResponseMessage
 	 *            图文消息对象
 	 * @return xml
 	 */
-	public static String newsMessageToXml(NewsMessage newsMessage) {
-		xStream.alias("xml", newsMessage.getClass());
-		xStream.alias("item", new ArticleModel().getClass());
-		return xStream.toXML(newsMessage);
-	}
-
-	public static void main(String[] args) {
-		NewsMessage ms = new NewsMessage();
-		ms.setArticleCount(1);
-		System.out.println(newsMessageToXml(ms));
+	public static String newsMessageToXml(NewsResponseMessage newsResponseMessage) {
+		xStream.alias("xml", newsResponseMessage.getClass());
+		xStream.alias("item", new Article().getClass());
+		return xStream.toXML(newsResponseMessage);
 	}
 
 	/**
 	 * 扩展xstream，使其支持CDATA块
 	 */
 	private static XStream xStream = new XStream(new XppDriver() {
+		@Override
 		public HierarchicalStreamWriter createWriter(Writer out) {
 			return new PrettyPrintWriter(out) {
 				// 对所有xml节点的转换都增加CDATA标记
 				boolean cdata = true;
 
-				public void startNode(String name, Class clazz) {
+				@Override
+				public void startNode(String name, @SuppressWarnings("rawtypes") Class clazz) {
 					super.startNode(name, clazz);
 				}
 
+				@Override
 				protected void writeText(QuickWriter writer, String text) {
 					if (cdata) {
 						writer.write("<![CDATA[");
