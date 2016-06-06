@@ -14,6 +14,8 @@ import javax.net.ssl.TrustManager;
 
 import org.yaen.starter.common.util.contexts.MyX509TrustManager;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @ClassName: WeiXinUtil
  * @Description: 微信公众接口工具类
@@ -91,7 +93,7 @@ public class WeiXinUtil {
 			inputStream = null;
 
 			httpsUrlConn.disconnect();
-			jsonObject = JSONObject.fromObject(buffer.toString());
+			jsonObject = JSONObject.parseObject(buffer.toString());
 			System.out.println(jsonObject);
 
 		} catch (ConnectException ce) {

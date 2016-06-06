@@ -19,6 +19,9 @@ public final class MessageTypes {
 	/** location request message */
 	public static final String REQ_MESSAGE_TYPE_LOCATION = "location";
 
+	/** voice request message */
+	public static final String REQ_MESSAGE_TYPE_VOICE = "voice";
+
 	/** event request message */
 	public static final String REQ_MESSAGE_TYPE_EVENT = "event";
 

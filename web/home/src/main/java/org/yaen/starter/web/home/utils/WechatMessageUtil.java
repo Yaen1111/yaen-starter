@@ -27,7 +27,16 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
-public class MessageUtil {
+/**
+ * deal with wechat message
+ * 
+ * TODO merge to WechatUtil
+ * 
+ * TODO rewrite xml
+ * 
+ * @author Yaen 2016年6月7日上午2:18:42
+ */
+public class WechatMessageUtil {
 
 	/**
 	 * 解析微信发来的请求（xml）
