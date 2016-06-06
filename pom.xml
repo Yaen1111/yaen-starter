@@ -950,6 +950,7 @@ all of the starter-*-*.xml is for sample use, the child should set the xml  on t
 				<includes>
 					<include>spring/**/*.*</include>
 					<include>logback.xml</include>
+					<include>common.properties</include>
 				</includes>
 			</resource>
 			<!-- resources without filter -->
@@ -962,6 +963,7 @@ all of the starter-*-*.xml is for sample use, the child should set the xml  on t
 				<excludes>
 					<exclude>spring/**/*.*</exclude>
 					<exclude>logback.xml</exclude>
+					<exclude>common.properties</exclude>
 				</excludes>
 			</resource>
 		</resources>
