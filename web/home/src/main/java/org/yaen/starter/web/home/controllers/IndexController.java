@@ -5,24 +5,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * welcome controller, deals welcome
+ * index controller, deals welcome
  * 
  * @author Yaen 2016年5月19日下午2:28:18
  */
 @Controller
 @RequestMapping("/")
-public class WelcomeController {
+public class IndexController {
 
 	/**
-	 * welcome
+	 * index
 	 * 
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping({ "welcome.html", "" })
+	@RequestMapping({ "index.html", "" })
 	public String index(Model model) throws Exception {
-		return "welcome";
+		return "index";
 	}
 
 }

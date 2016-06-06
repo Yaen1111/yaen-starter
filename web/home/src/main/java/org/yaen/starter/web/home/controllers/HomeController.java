@@ -18,15 +18,15 @@ import org.yaen.starter.common.util.utils.StringUtil;
 public class HomeController {
 
 	/**
-	 * welcome
+	 * index
 	 * 
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping({ "welcome.html", "" })
-	public String welcome(Model model) throws Exception {
-		return "home/welcome";
+	@RequestMapping({ "index.html", "" })
+	public String index(Model model) throws Exception {
+		return "home/index";
 	}
 
 	/**
