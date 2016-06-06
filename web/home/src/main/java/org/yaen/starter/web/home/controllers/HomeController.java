@@ -24,7 +24,7 @@ public class HomeController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping({ "index.html", "" })
+	@RequestMapping({ "index.jspx", "" })
 	public String index(Model model) throws Exception {
 		return "home/index";
 	}
@@ -38,7 +38,7 @@ public class HomeController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("login.html")
+	@RequestMapping("login.jspx")
 	public String login(Model model, HttpServletRequest request) throws Exception {
 		// check post for login result
 		if (StringUtil.equalsIgnoreCase(request.getMethod(), "post")) {
@@ -60,7 +60,7 @@ public class HomeController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("logout.html")
+	@RequestMapping("logout.jspx")
 	public String logout(Model model) throws Exception {
 		return "home/logout";
 	}

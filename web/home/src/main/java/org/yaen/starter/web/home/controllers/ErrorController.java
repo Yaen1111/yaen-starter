@@ -20,7 +20,7 @@ public class ErrorController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping({ "error", "error.html" })
+	@RequestMapping({ "error", "error.jspx" })
 	public String error(Model model) throws Exception {
 		return "error/error";
 	}
@@ -32,7 +32,7 @@ public class ErrorController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping({ "404", "404.html" })
+	@RequestMapping({ "404", "404.jspx" })
 	public String error404(Model model) throws Exception {
 		return "error/404";
 	}
@@ -44,7 +44,7 @@ public class ErrorController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping({ "403", "403.html" })
+	@RequestMapping({ "403", "403.jspx" })
 	public String error403(Model model) throws Exception {
 		return "error/403";
 	}

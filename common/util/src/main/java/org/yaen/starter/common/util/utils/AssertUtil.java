@@ -13,7 +13,14 @@ import org.springframework.util.Assert;
 public class AssertUtil extends Assert {
 
 	/**
-	 * assert not empty, null, "", " " is empty
+	 * assert not empty
+	 * 
+	 * <pre>
+	 * null = no
+	 * "" = no
+	 * " " = ok
+	 * "a" = ok
+	 * </pre>
 	 * 
 	 * @param s
 	 */
@@ -23,6 +30,27 @@ public class AssertUtil extends Assert {
 		if (StringUtil.isEmpty(s)) {
 			throw new IllegalArgumentException(
 					"[Assertion failed] - this argument is required; it must not be null or empty");
+		}
+	}
+
+	/**
+	 * assert not blank
+	 * 
+	 * <pre>
+	 * null = no
+	 * "" = no
+	 * " " = no
+	 * "a" = ok
+	 * </pre>
+	 * 
+	 * @param s
+	 */
+	public static void notBlank(String s) {
+		AssertUtil.notNull(s);
+
+		if (StringUtil.isBlank(s)) {
+			throw new IllegalArgumentException(
+					"[Assertion failed] - this argument is required; it must not be null or empty or blank");
 		}
 	}
 

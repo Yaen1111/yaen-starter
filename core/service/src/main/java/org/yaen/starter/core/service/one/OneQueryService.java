@@ -225,7 +225,7 @@ public class OneQueryService implements QueryService {
 	public <T extends BaseModel> List<Object> selectValueListById(T model, String id, String fieldName)
 			throws CoreException {
 		AssertUtil.notNull(model);
-		AssertUtil.notEmpty(fieldName);
+		AssertUtil.notBlank(fieldName);
 
 		// trigger before select, only once is ok
 		if (model.BeforeSelect()) {

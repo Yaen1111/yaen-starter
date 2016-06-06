@@ -29,7 +29,7 @@ public class StarterController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("/welcome.html")
+	@RequestMapping("index.jspx")
 	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		return new ModelAndView("starter/welcome", "welcome", "welcome content");
 	}
@@ -42,7 +42,7 @@ public class StarterController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("/model.html")
+	@RequestMapping("model.jspx")
 	public String model(Model model) throws IOException {
 
 		UserDTO user = new UserDTO();
@@ -62,7 +62,7 @@ public class StarterController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("/model2.html")
+	@RequestMapping("model2.jspx")
 	public ModelAndView viewModel() throws IOException {
 
 		ViewModel model = new ViewModel();

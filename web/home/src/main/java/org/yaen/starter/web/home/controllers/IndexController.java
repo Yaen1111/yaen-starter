@@ -20,7 +20,7 @@ public class IndexController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping({ "index.html", "" })
+	@RequestMapping({ "index.jspx", "" })
 	public String index(Model model) throws Exception {
 		return "index";
 	}
