@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.web.home.utils.WebUtil;
 import org.yaen.starter.web.home.utils.WechatUtil;
 
@@ -24,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WechatServlet extends HttpServlet {
 	private static final long serialVersionUID = 4068700881623683064L;
+
+	public static final String WECHAT_TOKEN_PROPERTY = "wechat.token";
 
 	/**
 	 * empty constructor
@@ -54,7 +57,7 @@ public class WechatServlet extends HttpServlet {
 		String ip = WebUtil.getClientIp(req);
 
 		// get token
-		String token = "";
+		String token = PropertiesUtil.getProperty(WECHAT_TOKEN_PROPERTY);
 
 		log.debug("get: ip={}, signature={}, timestamp={}, nonce={}, echostr={}", ip, signature, timestamp, nonce,
 				echostr);
@@ -62,7 +65,7 @@ public class WechatServlet extends HttpServlet {
 		// direct output
 		PrintWriter writer = resp.getWriter();
 
-		// 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
+		// check signature, return echostr if pass
 		if (signature == null || timestamp == null || nonce == null || echostr == null) {
 			writer.write("you records has recorded,please leave it now !");
 		} else {
