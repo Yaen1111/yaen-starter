@@ -22,7 +22,7 @@ import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.log.Changelog;
+import org.yaen.starter.core.model.changelog.Changelog;
 import org.yaen.starter.core.service.utils.OneServiceUil;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;

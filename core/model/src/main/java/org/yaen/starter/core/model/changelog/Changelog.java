@@ -1,4 +1,4 @@
-package org.yaen.starter.core.model.log;
+package org.yaen.starter.core.model.changelog;
 
 import org.yaen.starter.common.data.annotations.OneCopy;
 import org.yaen.starter.common.data.annotations.OneData;
