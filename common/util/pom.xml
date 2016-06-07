@@ -236,8 +236,8 @@
 			<artifactId>ant</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom</artifactId>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
 		</dependency>
 
 		<!-- email support -->
