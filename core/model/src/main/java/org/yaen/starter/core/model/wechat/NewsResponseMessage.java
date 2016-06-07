@@ -1,4 +1,4 @@
-package org.yaen.starter.common.data.objects.wechat;
+package org.yaen.starter.core.model.wechat;
 
 import java.util.List;
 

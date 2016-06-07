@@ -1,4 +1,4 @@
-package org.yaen.starter.common.data.enums.wechat;
+package org.yaen.starter.core.model.wechat.enums;
 
 /**
  * wechat event types definition, message type should be EVENT
