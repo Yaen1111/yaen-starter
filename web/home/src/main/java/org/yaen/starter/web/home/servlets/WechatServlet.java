@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
-import org.yaen.starter.core.model.wechat.TextResponseMessage;
-import org.yaen.starter.core.model.wechat.enums.EventTypes;
-import org.yaen.starter.core.model.wechat.enums.MessageTypes;
+import org.yaen.starter.core.model.enums.wechat.EventTypes;
+import org.yaen.starter.core.model.enums.wechat.MessageTypes;
+import org.yaen.starter.core.model.models.wechat.TextResponseMessage;
 import org.yaen.starter.web.home.utils.WebUtil;
 import org.yaen.starter.web.home.utils.WechatMessageUtil;
 import org.yaen.starter.web.home.utils.WechatUtil;

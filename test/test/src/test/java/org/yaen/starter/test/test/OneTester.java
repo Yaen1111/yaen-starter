@@ -3,8 +3,8 @@ package org.yaen.starter.test.test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.core.model.ark.SubCode;
-import org.yaen.starter.core.model.user.Auth;
+import org.yaen.starter.core.model.models.ark.SubCode;
+import org.yaen.starter.core.model.models.user.Auth;
 import org.yaen.starter.test.test.tester.UnitTester;
 
 /**

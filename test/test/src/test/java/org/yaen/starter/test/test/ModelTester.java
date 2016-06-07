@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.core.model.user.Role;
+import org.yaen.starter.core.model.models.user.Role;
 import org.yaen.starter.test.test.tester.UnitTester;
 
 /**

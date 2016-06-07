@@ -18,10 +18,10 @@ import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.user.Role;
-import org.yaen.starter.core.model.user.RoleAuth;
-import org.yaen.starter.core.model.user.User;
-import org.yaen.starter.core.model.user.UserRole;
+import org.yaen.starter.core.model.models.user.Role;
+import org.yaen.starter.core.model.models.user.RoleAuth;
+import org.yaen.starter.core.model.models.user.User;
+import org.yaen.starter.core.model.models.user.UserRole;
 
 /**
  * user based actions

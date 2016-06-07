@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.yaen.starter.core.model.wechat.Article;
-import org.yaen.starter.core.model.wechat.MusicResponseMessage;
-import org.yaen.starter.core.model.wechat.NewsResponseMessage;
-import org.yaen.starter.core.model.wechat.TextResponseMessage;
+import org.yaen.starter.core.model.models.wechat.Article;
+import org.yaen.starter.core.model.models.wechat.MusicResponseMessage;
+import org.yaen.starter.core.model.models.wechat.NewsResponseMessage;
+import org.yaen.starter.core.model.models.wechat.TextResponseMessage;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;

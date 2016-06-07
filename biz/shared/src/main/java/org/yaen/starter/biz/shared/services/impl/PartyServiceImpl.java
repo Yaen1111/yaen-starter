@@ -7,8 +7,8 @@ import org.yaen.starter.biz.shared.services.PartyService;
 import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.party.Party;
-import org.yaen.starter.core.model.party.PartyRole;
+import org.yaen.starter.core.model.models.party.Party;
+import org.yaen.starter.core.model.models.party.PartyRole;
 
 /**
  * 
