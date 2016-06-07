@@ -21,10 +21,5 @@
 			<groupId>org.yaen</groupId>
 			<artifactId>yaen-starter-biz-shared</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>org.yaen</groupId>
-			<artifactId>yaen-starter-biz-wechat</artifactId>
-		</dependency>
 	</dependencies>
 </project>

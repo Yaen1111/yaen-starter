@@ -159,11 +159,6 @@ all of the starter-*-*.xml is for sample use, the child should set the xml  on t
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-biz-wechat</artifactId>
-				<version>${yaen-starter.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.yaen</groupId>
 				<artifactId>yaen-starter-biz-implement</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
