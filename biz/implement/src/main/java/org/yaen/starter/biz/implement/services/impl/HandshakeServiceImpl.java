@@ -1,12 +1,12 @@
 /**
  * 
  */
-package org.yaen.starter.biz.implement.facades.impl;
+package org.yaen.starter.biz.implement.services.impl;
 
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.data.objects.Request;
 import org.yaen.starter.common.data.objects.Response;
-import org.yaen.starter.common.facade.HandshakeService;
+import org.yaen.starter.common.facade.services.HandshakeService;
 
 /**
  * service implement
@@ -18,7 +18,7 @@ public class HandshakeServiceImpl implements HandshakeService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.facade.HandshakeService#Handshake(org.yaen.starter.common.data.objects.Request)
+	 * @see org.yaen.starter.common.facade.services.HandshakeService#Handshake(org.yaen.starter.common.data.objects.Request)
 	 */
 	@Override
 	public Response Handshake(Request req) {

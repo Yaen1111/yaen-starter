@@ -1,12 +1,12 @@
 /**
  * 
  */
-package org.yaen.starter.common.integration.impl;
+package org.yaen.starter.common.integration.clients.impl;
 
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.data.objects.Request;
 import org.yaen.starter.common.data.objects.Response;
-import org.yaen.starter.common.integration.HandshakeServiceClient;
+import org.yaen.starter.common.integration.clients.HandshakeServiceClient;
 
 /**
  * service client

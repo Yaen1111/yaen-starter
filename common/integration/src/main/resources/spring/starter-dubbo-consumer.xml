@@ -19,7 +19,7 @@
 	<!-- the follow is dubbo client, the id and interface should be same as provider -->
 
 	<!-- handshake client -->
-	<!-- <dubbo:reference id="handshakeService" interface="org.yaen.starter.common.facade.HandshakeService" /> -->
+	<!-- <dubbo:reference id="handshakeService" interface="org.yaen.starter.common.facade.services.HandshakeService" /> -->
 
 
 </beans>

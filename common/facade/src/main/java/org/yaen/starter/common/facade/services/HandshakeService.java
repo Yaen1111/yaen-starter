@@ -1,17 +1,14 @@
-/**
- * 
- */
-package org.yaen.starter.common.integration;
+package org.yaen.starter.common.facade.services;
 
 import org.yaen.starter.common.data.objects.Request;
 import org.yaen.starter.common.data.objects.Response;
 
 /**
- * client interface, must copy from server
+ * hand shake service, for test purpose
  * 
- * @author Yaen 2016年5月12日下午2:01:42
+ * @author Yaen 2015年11月30日下午11:49:06
  */
-public interface HandshakeServiceClient {
+public interface HandshakeService {
 
 	/**
 	 * hand shake facade
