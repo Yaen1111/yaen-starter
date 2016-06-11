@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * news article
+ * article with picture, mainly used by news response
  * 
  * @author Yaen 2016年6月6日下午11:49:57
  */

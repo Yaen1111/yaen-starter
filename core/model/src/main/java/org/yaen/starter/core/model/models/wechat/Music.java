@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * the music object
+ * the music object, mainly used by music response
  * 
  * @author Yaen 2016年6月6日下午11:47:30
  */

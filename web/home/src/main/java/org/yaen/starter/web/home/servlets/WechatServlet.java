@@ -124,7 +124,7 @@ public class WechatServlet extends HttpServlet {
 	}
 
 	/**
-	 * sample precess request routine
+	 * sample process request routine
 	 * 
 	 * @param request
 	 * @return

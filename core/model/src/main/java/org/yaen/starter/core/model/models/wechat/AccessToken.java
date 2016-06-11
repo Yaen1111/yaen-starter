@@ -15,7 +15,7 @@ public class AccessToken {
 	/** the access token */
 	private String token;
 
-	/** the expire */
+	/** the expire time, usually is 2 hour */
 	private int expiresIn;
 
 }
