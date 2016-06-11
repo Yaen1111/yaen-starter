@@ -1,6 +1,7 @@
 package org.yaen.starter.web.home.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -10,13 +11,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.core.model.enums.wechat.EventTypes;
 import org.yaen.starter.core.model.enums.wechat.MessageTypes;
 import org.yaen.starter.core.model.models.wechat.responses.TextResponseMessage;
+import org.yaen.starter.core.service.services.WechatService;
 import org.yaen.starter.web.home.utils.WebUtil;
-import org.yaen.starter.web.home.utils.WechatUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +41,9 @@ public class WechatServlet extends HttpServlet {
 
 	/** the secret for communicate with wechat server */
 	public static final String WECHAT_SECRET_PROPERTY = "wechat.secret";
+
+	@Autowired
+	private WechatService wechatService;
 
 	/**
 	 * empty constructor
@@ -82,7 +87,7 @@ public class WechatServlet extends HttpServlet {
 			writer.write("you records has recorded,please leave it now !");
 		} else {
 			try {
-				if (WechatUtil.checkSignature(token, signature, timestamp, nonce)) {
+				if (wechatService.checkSignature(token, signature, timestamp, nonce)) {
 					log.debug("wechat route auth ok");
 					writer.write(echostr);
 				}
@@ -132,12 +137,15 @@ public class WechatServlet extends HttpServlet {
 	@Deprecated
 	private String sampleProcessRequest(HttpServletRequest request) {
 		String respMessage = null;
+		InputStream is = null;
 		try {
 			// 默认返回的文本消息内容
 			String respContent = "请求处理异常，请稍候尝试！";
 
+			is = request.getInputStream();
+
 			// xml请求解析
-			Map<String, String> requestMap = WechatUtil.parseXml(request);
+			Map<String, String> requestMap = wechatService.parseXml(is);
 
 			// 发送方帐号（open_id）
 			String fromUserName = requestMap.get("FromUserName");
@@ -222,9 +230,17 @@ public class WechatServlet extends HttpServlet {
 			}
 
 			textResponseMessage.setContent(respContent);
-			respMessage = WechatUtil.textMessageToXml(textResponseMessage);
+			respMessage = wechatService.textMessageToXml(textResponseMessage);
 		} catch (Exception ex) {
 			log.error("wechat servlet error:", ex);
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+				}
+				is = null;
+			}
 		}
 
 		return respMessage;

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.web.home.utils;
 
 import java.io.IOException;

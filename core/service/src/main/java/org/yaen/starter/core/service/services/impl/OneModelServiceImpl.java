@@ -1,4 +1,4 @@
-package org.yaen.starter.core.service.services.one.impl;
+package org.yaen.starter.core.service.services.impl;
 
 import java.util.List;
 import java.util.Map;
