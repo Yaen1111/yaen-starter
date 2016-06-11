@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.web.home.exceptions;
+package org.yaen.starter.web.home.exceptionresolvers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
