@@ -1,4 +1,4 @@
-package org.yaen.starter.core.model.models.wechat;
+package org.yaen.starter.core.model.models.wechat.requests;
 
 import lombok.Getter;
 import lombok.Setter;

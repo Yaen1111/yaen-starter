@@ -1,5 +1,8 @@
 package org.yaen.starter.common.util.utils;
 
+import java.io.InputStream;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -92,5 +95,24 @@ public class StringUtil extends StringUtils {
 		tempArr[1] = Digit[mByte & 0x0F];
 
 		return new String(tempArr);
+	}
+
+	/**
+	 * convert input stream to string
+	 * 
+	 * @param is
+	 * @return
+	 * @throws Exception
+	 */
+	public static String inputStream2String(InputStream is) throws Exception {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		byte[] buf = new byte[1024];
+		int len = -1;
+		while ((len = is.read(buf)) != -1) {
+			baos.write(buf, 0, len);
+		}
+		String str = new String(baos.toByteArray());
+		baos.close();
+		return str;
 	}
 }

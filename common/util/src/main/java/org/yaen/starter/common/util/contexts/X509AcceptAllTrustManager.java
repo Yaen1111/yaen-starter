@@ -5,11 +5,11 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * trust manager for https
+ * trust manager for https, accept all certificate
  * 
  * @author Yaen
  */
-public class MyX509TrustManager implements X509TrustManager {
+public class X509AcceptAllTrustManager implements X509TrustManager {
 
 	/**
 	 * 检查客户端证书

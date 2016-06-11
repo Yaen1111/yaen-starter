@@ -1,6 +1,8 @@
-package org.yaen.starter.core.model.models.wechat;
+package org.yaen.starter.core.model.models.wechat.responses;
 
 import java.util.List;
+
+import org.yaen.starter.core.model.models.wechat.Article;
 
 import lombok.Getter;
 import lombok.Setter;

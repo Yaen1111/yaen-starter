@@ -1,4 +1,6 @@
-package org.yaen.starter.core.model.models.wechat;
+package org.yaen.starter.core.model.models.wechat.responses;
+
+import org.yaen.starter.core.model.models.wechat.Music;
 
 import lombok.Getter;
 import lombok.Setter;

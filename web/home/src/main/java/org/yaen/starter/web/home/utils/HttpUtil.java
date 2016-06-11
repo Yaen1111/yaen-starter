@@ -16,7 +16,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -29,7 +28,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.yaen.starter.common.util.contexts.MyX509TrustManager;
+import org.yaen.starter.common.util.contexts.X509AcceptAllTrustManager;
 import org.yaen.starter.common.util.utils.StringUtil;
 
 import com.alibaba.fastjson.JSONObject;
@@ -49,7 +48,7 @@ public class HttpUtil {
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	public static String executeGet(String url) throws ParseException, IOException {
+	public static String httpGet(String url) throws ParseException, IOException {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpGet httpget = new HttpGet(url);
@@ -73,7 +72,7 @@ public class HttpUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String executePost(String url, Map<String, String> param) throws Exception {
+	public static String httpPost(String url, Map<String, String> param) throws Exception {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpPost post = new HttpPost(url);
@@ -87,7 +86,7 @@ public class HttpUtil {
 			post.setEntity(formEntity);
 			HttpResponse response = httpclient.execute(post);
 			InputStream is = response.getEntity().getContent();
-			return inStream2String(is);
+			return StringUtil.inputStream2String(is);
 		} finally {
 			try {
 				if (httpclient != null) {
@@ -98,94 +97,85 @@ public class HttpUtil {
 		}
 	}
 
-	// 将输入流转换成字符串
-	private static String inStream2String(InputStream is) throws Exception {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		byte[] buf = new byte[1024];
-		int len = -1;
-		while ((len = is.read(buf)) != -1) {
-			baos.write(buf, 0, len);
-		}
-		String str = new String(baos.toByteArray());
-		baos.close();
-		return str;
-	}
-
 	/**
-	 * 发送https请求
+	 * https request(get/set/head/delete), return response as json. the request url should be https://
 	 * 
 	 * @param requestUrl
-	 *            请求地址
 	 * @param requestMethod
-	 *            请求方式（GET、POST）
-	 * @param param
-	 *            提交的数据
-	 * @return JSONObject(通过JSONObject.get(key)的方式获取json对象的属性值)
+	 * @param jsonString
+	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject httpsRequest(String requestUrl, String requestMethod, Map<String, Object> param)
-			throws Exception {
+	public static JSONObject httpsRequest(String requestUrl, String requestMethod, String jsonString) throws Exception {
+		// the json object
 		JSONObject jsonObject = null;
 
+		// connections
 		HttpsURLConnection conn = null;
 		InputStream inputStream = null;
 		InputStreamReader inputStreamReader = null;
 		BufferedReader bufferedReader = null;
+
 		try {
-			String params = "";
-			if (param != null && !param.isEmpty()) {
-				params = JSONObject.toJSONString(param);
-			}
+			// need trust manager for ssl, here we accept all
+			TrustManager[] tm = { new X509AcceptAllTrustManager() };
 
-			// 创建SSLContext对象，并使用我们指定的信任管理器初始化
-			TrustManager[] tm = { new MyX509TrustManager() };
-
-			// 目前针对SUN JVM,如果在IBM JVM下运行会报错，需要进行相应的调整
+			// init ssl context
 			SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
 			sslContext.init(null, tm, new java.security.SecureRandom());
 
-			// 从上述SSLContext对象中得到SSLSocketFactory对象
+			// get socket factory from ssl
 			SSLSocketFactory ssf = sslContext.getSocketFactory();
 
+			// the url should be https, or the return will be URLConnection
 			URL url = new URL(requestUrl);
 			conn = (HttpsURLConnection) url.openConnection();
-			conn.setSSLSocketFactory(ssf);
 
+			// set attribute to the connection
+			conn.setSSLSocketFactory(ssf);
 			conn.setDoOutput(true);
 			conn.setDoInput(true);
 			conn.setUseCaches(false);
 
-			// 设置请求方式（GET/POST）
+			// set method, get/post/head etc
 			conn.setRequestMethod(requestMethod);
 
-			// 当outputStr不为null时向输出流写数据
-			if (StringUtil.isNotBlank(params)) {
+			// need for "GET" ??
+			if (requestMethod.equalsIgnoreCase("GET"))
+				conn.connect();
+
+			// write input if not empty
+			if (StringUtil.isNotBlank(jsonString)) {
 				OutputStream outputStream = conn.getOutputStream();
 
-				// 注意编码格式
-				outputStream.write(params.getBytes("UTF-8"));
+				// need utf-8
+				outputStream.write(jsonString.getBytes("UTF-8"));
 				outputStream.close();
 			}
 
-			// 从输入流读取返回内容
+			// get result
 			inputStream = conn.getInputStream();
 			inputStreamReader = new InputStreamReader(inputStream, "utf-8");
 			bufferedReader = new BufferedReader(inputStreamReader);
 			String str = null;
-			StringBuffer buffer = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			while ((str = bufferedReader.readLine()) != null) {
-				buffer.append(str);
+				sb.append(str);
 			}
 
-			jsonObject = (JSONObject) JSONObject.parse((buffer).toString());
+			// parse result to json
+			jsonObject = JSONObject.parseObject(sb.toString());
+
 		} finally {
 
-			// 释放资源
+			// release
 			if (bufferedReader != null) {
 				bufferedReader.close();
+				bufferedReader = null;
 			}
 			if (inputStreamReader != null) {
 				inputStreamReader.close();
+				inputStreamReader = null;
 			}
 			if (inputStream != null) {
 				inputStream.close();
@@ -193,6 +183,7 @@ public class HttpUtil {
 			}
 			if (conn != null) {
 				conn.disconnect();
+				conn = null;
 			}
 		}
 
@@ -200,30 +191,43 @@ public class HttpUtil {
 	}
 
 	/**
-	 * 发送https请求
+	 * https get
 	 * 
 	 * @param requestUrl
-	 *            请求地址
-	 * @param outputStr
-	 *            提交的数据
-	 * @return JSONObject(通过JSONObject.get(key)的方式获取json对象的属性值)
+	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject httpsGetRequest(String requestUrl) throws Exception {
+	public static JSONObject httpsGet(String requestUrl) throws Exception {
 		return httpsRequest(requestUrl, "GET", null);
 	}
 
 	/**
-	 * 发送https请求
+	 * https post
 	 * 
 	 * @param requestUrl
-	 *            请求地址
-	 * @param outputStr
-	 *            提交的数据
-	 * @return JSONObject(通过JSONObject.get(key)的方式获取json对象的属性值)
+	 * @param param
+	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject httpsPostRequest(String requestUrl, Map<String, Object> param) throws Exception {
-		return httpsRequest(requestUrl, "POST", param);
+	public static JSONObject httpsPost(String requestUrl, String jsonString) throws Exception {
+		return httpsRequest(requestUrl, "POST", jsonString);
+	}
+
+	/**
+	 * https post
+	 * 
+	 * @param requestUrl
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	public static JSONObject httpsPost(String requestUrl, Map<String, Object> param) throws Exception {
+		// convert param to json
+		String jsonString = null;
+		if (param != null && !param.isEmpty()) {
+			jsonString = JSONObject.toJSONString(param);
+		}
+
+		return httpsPost(requestUrl, jsonString);
 	}
 }

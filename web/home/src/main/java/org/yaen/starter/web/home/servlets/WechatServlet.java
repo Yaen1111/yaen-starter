@@ -14,9 +14,8 @@ import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.core.model.enums.wechat.EventTypes;
 import org.yaen.starter.core.model.enums.wechat.MessageTypes;
-import org.yaen.starter.core.model.models.wechat.TextResponseMessage;
+import org.yaen.starter.core.model.models.wechat.responses.TextResponseMessage;
 import org.yaen.starter.web.home.utils.WebUtil;
-import org.yaen.starter.web.home.utils.WechatMessageUtil;
 import org.yaen.starter.web.home.utils.WechatUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,14 @@ import lombok.extern.slf4j.Slf4j;
 public class WechatServlet extends HttpServlet {
 	private static final long serialVersionUID = 4068700881623683064L;
 
+	/** the token for verify server response */
 	public static final String WECHAT_TOKEN_PROPERTY = "wechat.token";
+
+	/** the appid for the wechat platform */
+	public static final String WECHAT_APPID_PROPERTY = "wechat.appid";
+
+	/** the secret for communicate with wechat server */
+	public static final String WECHAT_SECRET_PROPERTY = "wechat.secret";
 
 	/**
 	 * empty constructor
@@ -96,6 +102,8 @@ public class WechatServlet extends HttpServlet {
 	}
 
 	/**
+	 * menu/send response will be posted
+	 * 
 	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
 	 *      javax.servlet.http.HttpServletResponse)
 	 */
@@ -129,7 +137,7 @@ public class WechatServlet extends HttpServlet {
 			String respContent = "请求处理异常，请稍候尝试！";
 
 			// xml请求解析
-			Map<String, String> requestMap = WechatMessageUtil.parseXml(request);
+			Map<String, String> requestMap = WechatUtil.parseXml(request);
 
 			// 发送方帐号（open_id）
 			String fromUserName = requestMap.get("FromUserName");
@@ -176,21 +184,49 @@ public class WechatServlet extends HttpServlet {
 				}
 				// 取消订阅
 				else if (eventType.equals(EventTypes.EVENT_TYPE_UNSUBSCRIBE)) {
-					// TODO 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+					// 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
 				}
 				// 自定义菜单点击事件
 				else if (eventType.equals(EventTypes.EVENT_TYPE_CLICK)) {
-					// TODO 自定义菜单权没有开放，暂不处理该类消息
+					// 事件KEY值，与创建自定义菜单时指定的KEY值对应
+					String eventKey = requestMap.get("EventKey");
+
+					if (eventKey.equals("11")) {
+						respContent = "天气预报菜单项被点击！";
+					} else if (eventKey.equals("12")) {
+						respContent = "公交查询菜单项被点击！";
+					} else if (eventKey.equals("13")) {
+						respContent = "周边搜索菜单项被点击！";
+					} else if (eventKey.equals("14")) {
+						respContent = "历史上的今天菜单项被点击！";
+					} else if (eventKey.equals("21")) {
+						respContent = "歌曲点播菜单项被点击！";
+					} else if (eventKey.equals("22")) {
+						respContent = "经典游戏菜单项被点击！";
+					} else if (eventKey.equals("23")) {
+						respContent = "美女电台菜单项被点击！";
+					} else if (eventKey.equals("24")) {
+						respContent = "人脸识别菜单项被点击！";
+					} else if (eventKey.equals("25")) {
+						respContent = "聊天唠嗑菜单项被点击！";
+					} else if (eventKey.equals("31")) {
+						respContent = "Q友圈菜单项被点击！";
+					} else if (eventKey.equals("32")) {
+						respContent = "电影排行榜菜单项被点击！";
+					} else if (eventKey.equals("33")) {
+						respContent = "幽默笑话菜单项被点击！";
+					} else {
+						respContent = "menu clicked key=" + eventKey;
+					}
 				}
 			}
 
 			textResponseMessage.setContent(respContent);
-			respMessage = WechatMessageUtil.textMessageToXml(textResponseMessage);
-		} catch (Exception e) {
-			e.printStackTrace();
+			respMessage = WechatUtil.textMessageToXml(textResponseMessage);
+		} catch (Exception ex) {
+			log.error("wechat servlet error:", ex);
 		}
 
 		return respMessage;
 	}
-
 }
