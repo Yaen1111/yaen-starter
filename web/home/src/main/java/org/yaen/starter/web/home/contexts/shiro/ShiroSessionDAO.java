@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.web.home.shiro;
+package org.yaen.starter.web.home.contexts.shiro;
 
 import java.io.Serializable;
 import java.util.Collection;

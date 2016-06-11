@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.shiro;
+package org.yaen.starter.web.home.contexts.shiro;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
