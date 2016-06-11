@@ -13,7 +13,6 @@
 
 	<modules>
 		<module>shared</module>
-		<module>wechat</module>
 		<module>implement</module>
 	</modules>
 </project>
