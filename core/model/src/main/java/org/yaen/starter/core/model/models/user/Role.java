@@ -9,7 +9,7 @@ import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.core.model.contexts.ModelLoader;
-import org.yaen.starter.core.model.models.one.OneModel;
+import org.yaen.starter.core.model.models.OneModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -76,7 +76,7 @@ public class Role extends OneModel {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.models.one.OneModel#AfterSelect()
+	 * @see org.yaen.starter.core.model.models.OneModel#AfterSelect()
 	 */
 	@Override
 	public void AfterSelect() throws CoreException {

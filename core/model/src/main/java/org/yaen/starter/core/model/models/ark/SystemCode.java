@@ -8,7 +8,7 @@ import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.models.one.OneModel;
+import org.yaen.starter.core.model.models.OneModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -78,7 +78,7 @@ public class SystemCode extends OneModel {
 	private String description;
 
 	/**
-	 * @see org.yaen.starter.core.model.models.one.OneModel#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
+	 * @see org.yaen.starter.core.model.models.OneModel#BeforeInsert(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public boolean BeforeInsert() throws CoreException {
@@ -94,7 +94,7 @@ public class SystemCode extends OneModel {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.models.one.OneModel#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
+	 * @see org.yaen.starter.core.model.models.OneModel#BeforeUpdate(org.yaen.starter.common.data.services.ModelService)
 	 */
 	@Override
 	public boolean BeforeUpdate() throws CoreException {

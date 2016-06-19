@@ -3,7 +3,7 @@ package org.yaen.starter.core.model.models.ark;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
-import org.yaen.starter.core.model.models.one.OneModel;
+import org.yaen.starter.core.model.models.OneModel;
 
 import lombok.Getter;
 import lombok.Setter;
