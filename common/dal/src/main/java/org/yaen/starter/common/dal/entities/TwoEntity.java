@@ -3,6 +3,8 @@ package org.yaen.starter.common.dal.entities;
 import java.util.Date;
 
 import org.yaen.starter.common.data.annotations.OneData;
+import org.yaen.starter.common.data.annotations.OneTable;
+import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.IdUtil;
@@ -19,6 +21,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@OneTable(TableName = "TWO")
+@OneUniqueIndex("ID")
 public class TwoEntity extends OneEntity {
 	private static final long serialVersionUID = 330177009269873369L;
 

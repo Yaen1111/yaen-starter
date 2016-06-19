@@ -22,12 +22,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * one entity(persistent object) for all crud operation, all entity has to inherit this one. if can not inherit this
- * one, try use another entity to hold other object as entity.
+ * one entity(persistent object) abstract for all crud operation, all entity has to inherit this one. if can not inherit
+ * this one, try use another entity to hold other object as entity.
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */
-public class OneEntity implements BaseEntity {
+public abstract class OneEntity implements BaseEntity {
 	private static final long serialVersionUID = 218626629147397851L;
 
 	/** the actual entity, maybe self */
@@ -279,8 +279,41 @@ public class OneEntity implements BaseEntity {
 	/**
 	 * construct one entity of self
 	 */
-	public OneEntity() {
+	protected OneEntity() {
 		this.entity = this;
+	}
+
+	/**
+	 * fill entity fields by given value
+	 * 
+	 * @param values
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 */
+	public void fillValues(Map<String, Object> values) throws IllegalArgumentException, IllegalAccessException {
+
+		// fill rowid as is not contained in the column list
+		if (values.containsKey("rowid")) {
+			this.setRowid((Long) values.get("rowid"));
+		}
+
+		// get columns if not
+		if (this.columns == null)
+			this.getColumns();
+
+		// fill model fields by value map
+		for (Entry<String, OneColumnEntity> entry : this.columns.entrySet()) {
+			OneColumnEntity info = entry.getValue();
+			Field field = info.getField();
+
+			// set value if exists
+			if (values.containsKey(info.getColumnName())) {
+				Object value = values.get(info.getColumnName());
+
+				// set value of any type
+				field.set(this.entity, value);
+			}
+		}
 	}
 
 	/**
@@ -324,39 +357,6 @@ public class OneEntity implements BaseEntity {
 	}
 
 	public void AfterDelete() {
-	}
-
-	/**
-	 * fill entity fields by given value
-	 * 
-	 * @param values
-	 * @throws IllegalAccessException
-	 * @throws IllegalArgumentException
-	 */
-	public void fillValues(Map<String, Object> values) throws IllegalArgumentException, IllegalAccessException {
-
-		// fill rowid as is not contained in the column list
-		if (values.containsKey("rowid")) {
-			this.setRowid((Long) values.get("rowid"));
-		}
-
-		// get columns if not
-		if (this.columns == null)
-			this.getColumns();
-
-		// fill model fields by value map
-		for (Entry<String, OneColumnEntity> entry : this.columns.entrySet()) {
-			OneColumnEntity info = entry.getValue();
-			Field field = info.getField();
-
-			// set value if exists
-			if (values.containsKey(info.getColumnName())) {
-				Object value = values.get(info.getColumnName());
-
-				// set value of any type
-				field.set(this.entity, value);
-			}
-		}
 	}
 
 }
