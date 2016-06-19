@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.yaen.starter.common.dal.mappers.ZeroMapper">
-	<resultMap id="DescribeMap" type="org.yaen.starter.common.data.entities.MyDescribeEntity">
+	<resultMap id="DescribeMap" type="org.yaen.starter.common.dal.entities.MyDescribeEntity">
 		<id column="Field" property="myField" jdbcType="VARCHAR" />
 		<result column="Type" property="myType" jdbcType="VARCHAR" />
 		<result column="Null" property="myNull" jdbcType="VARCHAR" />
@@ -18,7 +18,7 @@
 		DESC ${tableName}
 	</select>
 
-	<update id="createTable" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<update id="createTable" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		CREATE TABLE `${tableName}`
 		(
 		`ROWID` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -40,7 +40,7 @@
 		ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
 	</update>
 
-	<update id="addColumn" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<update id="addColumn" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		ALTER TABLE `${tableName}`
 		ADD COLUMN
 		<foreach collection="columns" index="index" item="info" open="" separator="" close="">
@@ -53,7 +53,7 @@
 		</foreach>
 	</update>
 
-	<update id="modifyColumn" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<update id="modifyColumn" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		ALTER TABLE `${tableName}`
 		MODIFY COLUMN
 		<foreach collection="columns" index="index" item="info" open="" separator="" close="">

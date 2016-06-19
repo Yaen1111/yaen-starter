@@ -16,6 +16,9 @@ public class StringUtil extends StringUtils {
 	public static final char[] Digit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
 			'F' };
 
+	/** the camel upper case separator */
+	public static final char CAMEL_SEPERATOR_CHAR = '_';
+
 	/**
 	 * s1 like s2, null = empty = "  "
 	 * 
@@ -114,5 +117,58 @@ public class StringUtil extends StringUtils {
 		String str = new String(baos.toByteArray());
 		baos.close();
 		return str;
+	}
+
+	/**
+	 * to camel upper, getUserName = GET_USER_NAME
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String toCamelUpper(String s) {
+		if (s == null)
+			return "";
+
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (Character.isUpperCase(c)) {
+				sb.append(CAMEL_SEPERATOR_CHAR);
+				sb.append(c);
+			} else {
+				sb.append(Character.toUpperCase(c));
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * to camel lower, GET_USER_NAME = getUserName
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String toCamelLower(String s) {
+		if (s == null)
+			return "";
+
+		StringBuilder sb = new StringBuilder();
+		boolean is_upper = false;
+
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == CAMEL_SEPERATOR_CHAR) {
+				is_upper = true;
+			} else {
+				if (is_upper) {
+					sb.append(Character.toUpperCase(c));
+					is_upper = false;
+				} else {
+					sb.append(Character.toLowerCase(c));
+				}
+			}
+		}
+		return sb.toString();
 	}
 }

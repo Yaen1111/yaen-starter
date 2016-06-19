@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.yaen.starter.common.dal.mappers.QueryMapper">
 
-	<select id="selectListByRowids" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<select id="selectListByRowids" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		SELECT
 		`ROWID`
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
@@ -15,7 +15,7 @@
 		</foreach>
 	</select>
 
-	<select id="selectListById" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<select id="selectListById" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		SELECT
 		`ROWID`
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
@@ -25,14 +25,14 @@
 		WHERE `ID` = #{id}
 	</select>
 
-	<select id="selectValueListById" resultType="java.lang.Object" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<select id="selectValueListById" resultType="java.lang.Object" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		SELECT `${selectedColumnName}`
 		FROM
 		`${tableName}`
 		WHERE `ID` = #{id}
 	</select>
 
-	<select id="selectRowidsByColumns" resultType="java.lang.Long" parameterType="org.yaen.starter.common.data.entities.QueryEntity">
+	<select id="selectRowidsByColumns" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
 		SELECT
 		`ROWID`
 		FROM `${tableName}`
@@ -43,7 +43,7 @@
 		</where>
 	</select>
 
-	<select id="selectRowidsByWhereClause" resultType="java.lang.Long" parameterType="org.yaen.starter.common.data.entities.QueryEntity">
+	<select id="selectRowidsByWhereClause" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
 		SELECT
 		`ROWID`
 		FROM `${tableName}`
@@ -52,7 +52,7 @@
 		</where>
 	</select>
 
-	<select id="selectRowidsByAll" resultType="java.lang.Long" parameterType="org.yaen.starter.common.data.entities.QueryEntity">
+	<select id="selectRowidsByAll" resultType="java.lang.Long" parameterType="org.yaen.starter.common.dal.entities.QueryEntity">
 		SELECT
 		`ROWID`
 		FROM `${tableName}`

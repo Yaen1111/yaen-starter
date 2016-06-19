@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.yaen.starter.common.dal.mappers.OneMapper">
 
-	<select id="selectByRowid" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<select id="selectByRowid" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		SELECT
 		`ROWID`
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
@@ -12,7 +12,7 @@
 		WHERE `ROWID` = #{rowid}
 	</select>
 
-	<insert id="insertByRowid" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<insert id="insertByRowid" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		INSERT INTO `${tableName}`
 		(
 		`ROWID`
@@ -29,7 +29,7 @@
 		)
 	</insert>
 
-	<update id="updateByRowid" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<update id="updateByRowid" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		UPDATE `${tableName}`
 		SET
 		<foreach collection="columns" index="index" item="info" open="" separator="," close="">
@@ -39,7 +39,7 @@
 		WHERE `ROWID` = #{rowid}
 	</update>
 
-	<delete id="deleteByRowid" parameterType="org.yaen.starter.common.data.entities.OneEntity">
+	<delete id="deleteByRowid" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		DELETE FROM `${tableName}`
 		WHERE `ROWID` = #{rowid}
 	</delete>

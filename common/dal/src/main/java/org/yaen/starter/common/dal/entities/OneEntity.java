@@ -13,6 +13,8 @@ import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.OneTableHandler;
 import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.entities.BaseEntity;
+import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,9 +27,6 @@ import lombok.Setter;
  */
 public class OneEntity implements BaseEntity {
 	private static final long serialVersionUID = 218626629147397851L;
-
-	/** the camel upper case separator */
-	public static final char CAMEL_SEPERATOR_CHAR = '_';
 
 	/** the actual entity, maybe self */
 	protected BaseEntity entity;
@@ -70,7 +69,7 @@ public class OneEntity implements BaseEntity {
 
 		// default to class name if empty
 		if (name == null || name.trim().isEmpty()) {
-			name = toCamelUpper(this.entity.getClass().getSimpleName());
+			name = StringUtil.toCamelUpper(this.entity.getClass().getSimpleName());
 		}
 
 		// set to member
@@ -187,6 +186,17 @@ public class OneEntity implements BaseEntity {
 	private List<Long> rowids = new ArrayList<Long>();
 
 	/**
+	 * protected constructor with entity
+	 * 
+	 * @param entity
+	 */
+	protected OneEntity(BaseEntity entity) {
+		AssertUtil.notNull(entity, "entity should not be null");
+		AssertUtil.isTrue(entity != this, "entity should not be self");
+		this.entity = entity;
+	}
+
+	/**
 	 * construct one entity of self
 	 */
 	public OneEntity() {
@@ -229,7 +239,7 @@ public class OneEntity implements BaseEntity {
 				// add data field
 				String column_name = data.FieldName();
 				if ((column_name == null || column_name.trim().isEmpty())) {
-					column_name = toCamelUpper(field.getName());
+					column_name = StringUtil.toCamelUpper(field.getName());
 				}
 
 				OneColumnEntity info = new OneColumnEntity();
@@ -266,56 +276,4 @@ public class OneEntity implements BaseEntity {
 		} // for
 	}
 
-	/**
-	 * to camel upper, getUserName = GET_USER_NAME
-	 * 
-	 * @param s
-	 * @return
-	 */
-	public static String toCamelUpper(String s) {
-		if (s == null)
-			return "";
-
-		StringBuilder sb = new StringBuilder();
-
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (Character.isUpperCase(c)) {
-				sb.append(CAMEL_SEPERATOR_CHAR);
-				sb.append(c);
-			} else {
-				sb.append(Character.toUpperCase(c));
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * to camel lower, GET_USER_NAME = getUserName
-	 * 
-	 * @param s
-	 * @return
-	 */
-	public static String toCamelLower(String s) {
-		if (s == null)
-			return "";
-
-		StringBuilder sb = new StringBuilder();
-		boolean is_upper = false;
-
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == CAMEL_SEPERATOR_CHAR) {
-				is_upper = true;
-			} else {
-				if (is_upper) {
-					sb.append(Character.toUpperCase(c));
-					is_upper = false;
-				} else {
-					sb.append(Character.toLowerCase(c));
-				}
-			}
-		}
-		return sb.toString();
-	}
 }

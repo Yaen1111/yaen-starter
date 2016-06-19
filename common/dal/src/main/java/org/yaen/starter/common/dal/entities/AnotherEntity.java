@@ -59,11 +59,14 @@ public class AnotherEntity extends OneEntity {
 	 * @throws CoreException
 	 */
 	public AnotherEntity(BaseEntity another) {
-		super();
+		super(another);
+	}
 
-		if (another == null)
-			throw new IllegalArgumentException("another entity should not be null");
-
-		this.entity = another;
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return entity.toString();
 	}
 }
