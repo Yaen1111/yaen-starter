@@ -17,7 +17,7 @@ import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.core.model.enums.wechat.EventTypes;
 import org.yaen.starter.core.model.enums.wechat.MessageTypes;
 import org.yaen.starter.core.model.models.wechat.responses.TextResponseMessage;
-import org.yaen.starter.core.service.services.WechatService;
+import org.yaen.starter.core.model.services.WechatService;
 import org.yaen.starter.web.home.utils.WebUtil;
 
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package org.yaen.starter.core.service.services;
+package org.yaen.starter.core.model.services;
 
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;

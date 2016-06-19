@@ -26,7 +26,7 @@ import org.yaen.starter.core.model.models.wechat.menus.Menu;
 import org.yaen.starter.core.model.models.wechat.responses.MusicResponseMessage;
 import org.yaen.starter.core.model.models.wechat.responses.NewsResponseMessage;
 import org.yaen.starter.core.model.models.wechat.responses.TextResponseMessage;
-import org.yaen.starter.core.service.services.WechatService;
+import org.yaen.starter.core.model.services.WechatService;
 
 import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.xstream.XStream;
@@ -76,7 +76,7 @@ public class WechatServiceImpl implements WechatService {
 	});
 
 	/**
-	 * @see org.yaen.starter.core.service.services.WechatService#checkSignature(java.lang.String, java.lang.String,
+	 * @see org.yaen.starter.core.model.services.WechatService#checkSignature(java.lang.String, java.lang.String,
 	 *      java.lang.String, java.lang.String)
 	 */
 	@Override
