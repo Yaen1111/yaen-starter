@@ -48,6 +48,13 @@ public interface WechatService {
 	void createMenu(Menu menu, AccessToken accessToken) throws Exception;
 
 	/**
+	 * load menu from entity
+	 * 
+	 * @return
+	 */
+	Menu loadMenu();
+
+	/**
 	 * parse xml from input stream
 	 * 
 	 * @param is

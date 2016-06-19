@@ -17,7 +17,11 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
+import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.services.EntityService;
+import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.core.model.models.wechat.AccessToken;
@@ -35,16 +39,25 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * wechat service implement
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
+@Slf4j
 @Service
 public class WechatServiceImpl implements WechatService {
 
 	@Autowired
 	private WechatClient wechatClient;
+
+	@Autowired
+	private EntityService entityService;
+
+	@Autowired
+	private QueryService queryService;
 
 	/**
 	 * 扩展xstream，使其支持CDATA块
@@ -147,6 +160,34 @@ public class WechatServiceImpl implements WechatService {
 		}
 
 		// here is all ok
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.services.WechatService#loadMenu()
+	 */
+	@Override
+	public Menu loadMenu() {
+
+		// get all menu
+		MenuEntity entity = new MenuEntity();
+
+		List<Long> rowids = null;
+
+		List<MenuEntity> list = null;
+
+		try {
+
+			rowids = queryService.selectRowidsByAll(entity);
+
+			list = queryService.selectListByRowids(entity, rowids);
+
+		} catch (CommonException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**

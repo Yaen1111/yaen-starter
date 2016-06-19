@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 @OneTable(TableName = "ZU_ROLE_AUTH")
 @OneUniqueIndex("ID,AUTH_ID")
-public class RoleAuth extends TwoEntity {
+public class RoleAuthEntity extends TwoEntity {
 	private static final long serialVersionUID = -4458934767334916729L;
 
 	/** the auth id, should be long */

@@ -22,7 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Changelog extends TwoEntity implements OneTableHandler {
+public class ChangelogEntity extends TwoEntity implements OneTableHandler {
 	private static final long serialVersionUID = -606829448983274029L;
 
 	/** the sql type */
@@ -53,7 +53,7 @@ public class Changelog extends TwoEntity implements OneTableHandler {
 	 * @param afterEntity
 	 * @throws CoreException
 	 */
-	public Changelog(String sqlType, BaseEntity beforeEntity, BaseEntity afterEntity) throws CoreException {
+	public ChangelogEntity(String sqlType, BaseEntity beforeEntity, BaseEntity afterEntity) throws CoreException {
 		super();
 
 		// check param by type

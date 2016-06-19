@@ -1,9 +1,5 @@
 package org.yaen.starter.core.model.services;
 
-import java.util.List;
-
-import org.yaen.starter.common.data.exceptions.CoreException;
-
 /**
  * party service to handle party
  * 

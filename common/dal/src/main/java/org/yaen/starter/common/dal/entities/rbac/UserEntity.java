@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter
 @OneTable(TableName = "ZU_USER")
 @OneUniqueIndex("ID")
-public class User extends TwoEntity {
+public class UserEntity extends TwoEntity {
 	private static final long serialVersionUID = -709733522935110043L;
 
 	/** password hashed by salt */

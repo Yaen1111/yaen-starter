@@ -10,19 +10,27 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * relation of user and role
+ * role object
  * 
- * @author Yaen 2016年5月17日下午2:44:19
+ * @author Yaen 2016年5月17日下午2:28:32
  */
 @Getter
 @Setter
-@OneTable(TableName = "ZU_USER_ROLE")
-@OneUniqueIndex("ID,ROLE_ID")
-public class UserRole extends TwoEntity {
-	private static final long serialVersionUID = -4458934767334916729L;
+@OneTable(TableName = "ZU_ROLE")
+@OneUniqueIndex("ID")
+public class RoleEntity extends TwoEntity {
+	private static final long serialVersionUID = -709733522935110043L;
 
-	/** the role id */
+	/** group name */
 	@OneData(DataType = DataTypes.VARCHAR20)
-	private String roleId;
+	private String groupName;
+
+	/** title */
+	@OneData(DataType = DataTypes.VARCHAR50)
+	private String title;
+
+	/** description */
+	@OneData(DataType = DataTypes.VARCHAR250)
+	private String description;
 
 }
