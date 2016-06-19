@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.yaen.starter.common.data.annotations.OneCopy;
 import org.yaen.starter.common.data.annotations.OneData;
@@ -147,9 +148,10 @@ public class OneEntity implements BaseEntity {
 	 * getter of columns. get all field and value
 	 * 
 	 * @return
-	 * @throws Exception
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
 	 */
-	public Map<String, OneColumnEntity> getColumns() throws Exception {
+	public Map<String, OneColumnEntity> getColumns() throws IllegalArgumentException, IllegalAccessException {
 		// use local var to modify
 		Map<String, OneColumnEntity> col = new LinkedHashMap<String, OneColumnEntity>();
 
@@ -186,32 +188,16 @@ public class OneEntity implements BaseEntity {
 	private List<Long> rowids = new ArrayList<Long>();
 
 	/**
-	 * protected constructor with entity
-	 * 
-	 * @param entity
-	 */
-	protected OneEntity(BaseEntity entity) {
-		AssertUtil.notNull(entity, "entity should not be null");
-		AssertUtil.isTrue(entity != this, "entity should not be self");
-		this.entity = entity;
-	}
-
-	/**
-	 * construct one entity of self
-	 */
-	public OneEntity() {
-		this.entity = this;
-	}
-
-	/**
 	 * fetch one column info, if child has same field as parent, parent will be ignored
 	 * 
 	 * @param model
 	 * @param one
 	 * @param clazz
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
 	 */
 	protected void fetchOneColumnInfo(Map<String, OneColumnEntity> columns, Object one, Class<?> clazz)
-			throws Exception {
+			throws IllegalArgumentException, IllegalAccessException {
 		if (clazz == null)
 			return;
 
@@ -274,6 +260,57 @@ public class OneEntity implements BaseEntity {
 				// nothing is set, ignore
 			}
 		} // for
+	}
+
+	/**
+	 * protected constructor with entity
+	 * 
+	 * @param entity
+	 */
+	protected OneEntity(BaseEntity entity) {
+		AssertUtil.notNull(entity, "entity should not be null");
+		AssertUtil.isTrue(entity != this, "entity should not be self");
+		this.entity = entity;
+	}
+
+	/**
+	 * construct one entity of self
+	 */
+	public OneEntity() {
+		this.entity = this;
+	}
+
+	/**
+	 * fill entity fields by given value
+	 * 
+	 * @param values
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 */
+	public void fillValues(Map<String, Object> values) throws IllegalArgumentException, IllegalAccessException {
+
+		// fill rowid as is not contained in the column list
+		if (values.containsKey("rowid")) {
+			this.setRowid((Long) values.get("rowid"));
+		}
+
+		// get columns if not
+		if (this.columns == null)
+			this.getColumns();
+
+		// fill model fields by value map
+		for (Entry<String, OneColumnEntity> entry : this.columns.entrySet()) {
+			OneColumnEntity info = entry.getValue();
+			Field field = info.getField();
+
+			// set value if exists
+			if (values.containsKey(info.getColumnName())) {
+				Object value = values.get(info.getColumnName());
+
+				// set value of any type
+				field.set(this.entity, value);
+			}
+		}
 	}
 
 }

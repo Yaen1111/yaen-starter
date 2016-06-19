@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.core.model.models;
 
 import java.io.IOException;
