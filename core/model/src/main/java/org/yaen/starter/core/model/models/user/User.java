@@ -9,7 +9,7 @@ import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.core.model.contexts.ModelLoader;
+import org.yaen.starter.core.model.contexts.ServiceLoader;
 import org.yaen.starter.core.model.models.OneModel;
 
 import lombok.Getter;
@@ -70,7 +70,7 @@ public class User extends OneModel {
 
 			// get values
 			UserRole sub = new UserRole();
-			List<Object> values = ModelLoader.getQueryService().selectValueListById(sub, this.getId(), "roleId");
+			List<Object> values = ServiceLoader.getQueryService().selectValueListById(sub, this.getId(), "roleId");
 
 			this.roleIds = new ArrayList<String>(values.size());
 

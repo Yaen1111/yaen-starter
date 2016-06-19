@@ -1,0 +1,99 @@
+package org.yaen.starter.common.data.services;
+
+import java.util.List;
+
+import org.yaen.starter.common.data.entities.BaseEntity;
+import org.yaen.starter.common.data.exceptions.CommonException;
+
+/**
+ * query service for most search operation
+ * <p>
+ * all result is id list, and then can page in application level
+ * 
+ * @author Yaen 2016年1月4日下午8:35:55
+ */
+public interface QueryService {
+
+	/**
+	 * select entity list by given rowid list, with triggers
+	 * 
+	 * @param entity
+	 * @param rowids
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<T> selectListByRowids(T entity, List<Long> rowids) throws CommonException;
+
+	/**
+	 * select entity list by given id, with triggers
+	 * 
+	 * @param entity
+	 * @param id
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<T> selectListById(T entity, String id) throws CommonException;
+
+	/**
+	 * select value list by given id and field name, no triggers
+	 * 
+	 * @param entity
+	 * @param id
+	 * @param fieldName
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<Object> selectValueListById(T entity, String id, String fieldName)
+			throws CommonException;
+
+	/**
+	 * select rowids by field name, the value is the given value in the entity and use equal, no triggers
+	 * 
+	 * @param entity
+	 * @param fieldName
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<Long> selectRowidsByFieldName(T entity, String fieldName) throws CommonException;
+
+	/**
+	 * select rowids by field name list, the value is the given value in the entity and use equal, no triggers
+	 * 
+	 * @param entity
+	 * @param fieldNameList
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<Long> selectRowidsByFieldNameList(T entity, List<String> fieldNameList)
+			throws CommonException;
+
+	/**
+	 * select rowids by all none-null field, the value is the given value in the entity, no triggers
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<Long> selectRowidsByAllField(T entity) throws CommonException;
+
+	/**
+	 * select rowids by given sql, starting with where, can include order, group, and having clause, no triggers
+	 * 
+	 * @param entity
+	 * @param whereClause
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<Long> selectRowsByWhereClause(T entity, String whereClause)
+			throws CommonException;
+
+	/**
+	 * select rowids by all, no triggers
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<Long> selectRowidsByAll(T entity) throws CommonException;
+
+}

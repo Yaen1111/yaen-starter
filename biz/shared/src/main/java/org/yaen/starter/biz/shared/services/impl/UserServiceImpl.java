@@ -14,6 +14,7 @@ import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsBizException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataBizException;
+import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.user.Role;
@@ -21,7 +22,6 @@ import org.yaen.starter.core.model.models.user.RoleAuth;
 import org.yaen.starter.core.model.models.user.User;
 import org.yaen.starter.core.model.models.user.UserRole;
 import org.yaen.starter.core.model.services.ModelService;
-import org.yaen.starter.core.model.services.QueryService;
 
 /**
  * user based actions
