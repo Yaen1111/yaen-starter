@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @OneTable(TableName = "ARK_NAMED_ONE")
-public class NamedOne extends TwoEntity {
+public class NamedOneEntity extends TwoEntity {
 	private static final long serialVersionUID = 7297317955813307397L;
 
 	/** the name */

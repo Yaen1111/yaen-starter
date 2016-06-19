@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.ark;
+package org.yaen.starter.common.dal.entities.user;
 
 import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @OneTable(TableName = "ZU_USER_INFO")
-public class UserInfoEx extends TwoEntity {
+public class UserInfoExEntity extends TwoEntity {
 	private static final long serialVersionUID = 8955391077702613155L;
 
 	/** the true name of user */

@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.rbac;
+package org.yaen.starter.common.dal.entities.user;
 
 import java.util.Date;
 

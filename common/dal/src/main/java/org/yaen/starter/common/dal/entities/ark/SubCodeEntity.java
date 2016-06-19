@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @OneTable(TableName = "ARK_SUBCODE")
 @OneIndex("SUBCODE")
-public class SubCode extends NamedOne {
+public class SubCodeEntity extends NamedOneEntity {
 	private static final long serialVersionUID = -1638352121549503589L;
 
 	/** the sub code */

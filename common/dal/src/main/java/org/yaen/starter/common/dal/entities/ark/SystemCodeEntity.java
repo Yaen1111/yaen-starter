@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @OneTable(TableName = "ARK_SYSTEM_CODE")
-public class SystemCode extends TwoEntity {
+public class SystemCodeEntity extends TwoEntity {
 	private static final long serialVersionUID = 5112904110562141729L;
 
 	/** the code, combined by 4 part */
