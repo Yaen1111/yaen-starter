@@ -1,15 +1,15 @@
 package org.yaen.starter.core.model.models.changelog;
 
+import org.yaen.starter.common.dal.entities.AnotherEntity;
 import org.yaen.starter.common.data.annotations.OneCopy;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTableHandler;
-import org.yaen.starter.common.data.entities.AnotherEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.enums.SqlTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.models.BaseModel;
 import org.yaen.starter.core.model.models.one.OneModel;
 
 import lombok.Getter;

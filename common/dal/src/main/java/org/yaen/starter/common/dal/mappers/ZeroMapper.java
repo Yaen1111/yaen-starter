@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import org.yaen.starter.common.data.entities.MyDescribeEntity;
-import org.yaen.starter.common.data.entities.OneEntity;
+import org.yaen.starter.common.dal.entities.MyDescribeEntity;
+import org.yaen.starter.common.dal.entities.OneEntity;
 
 /**
  * zero mapper for table create

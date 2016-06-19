@@ -12,10 +12,10 @@ import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.models.BaseModel;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.IdUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.models.BaseModel;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -89,7 +89,7 @@ public class OneModel implements BaseModel {
 
 	/**
 	 * @throws IOException
-	 * @see org.yaen.starter.common.data.models.BaseModel#deepClone()
+	 * @see org.yaen.starter.core.model.models.BaseModel#deepClone()
 	 */
 	@Override
 	public Object deepClone() throws IOException {
@@ -111,7 +111,7 @@ public class OneModel implements BaseModel {
 	/**
 	 * return true
 	 * 
-	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeSelect()
+	 * @see org.yaen.starter.core.model.models.BaseModel#BeforeSelect()
 	 */
 	@Override
 	public boolean BeforeSelect() throws CoreException {
@@ -121,7 +121,7 @@ public class OneModel implements BaseModel {
 	/**
 	 * empty
 	 * 
-	 * @see org.yaen.starter.common.data.models.BaseModel#AfterSelect()
+	 * @see org.yaen.starter.core.model.models.BaseModel#AfterSelect()
 	 */
 	@Override
 	public void AfterSelect() throws CoreException {
@@ -130,7 +130,7 @@ public class OneModel implements BaseModel {
 	/**
 	 * set cdate/udate/id if empty and return true
 	 * 
-	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeInsert()
+	 * @see org.yaen.starter.core.model.models.BaseModel#BeforeInsert()
 	 */
 	@Override
 	public boolean BeforeInsert() throws CoreException {
@@ -149,7 +149,7 @@ public class OneModel implements BaseModel {
 	/**
 	 * empty
 	 * 
-	 * @see org.yaen.starter.common.data.models.BaseModel#AfterInsert()
+	 * @see org.yaen.starter.core.model.models.BaseModel#AfterInsert()
 	 */
 	@Override
 	public void AfterInsert() throws CoreException {
@@ -158,7 +158,7 @@ public class OneModel implements BaseModel {
 	/**
 	 * set udate and return true
 	 * 
-	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeUpdate()
+	 * @see org.yaen.starter.core.model.models.BaseModel#BeforeUpdate()
 	 */
 	@Override
 	public boolean BeforeUpdate() throws CoreException {
@@ -171,7 +171,7 @@ public class OneModel implements BaseModel {
 	/**
 	 * empty
 	 * 
-	 * @see org.yaen.starter.common.data.models.BaseModel#AfterUpdate()
+	 * @see org.yaen.starter.core.model.models.BaseModel#AfterUpdate()
 	 */
 	@Override
 	public void AfterUpdate() throws CoreException {
@@ -180,7 +180,7 @@ public class OneModel implements BaseModel {
 	/**
 	 * return true
 	 * 
-	 * @see org.yaen.starter.common.data.models.BaseModel#BeforeDelete()
+	 * @see org.yaen.starter.core.model.models.BaseModel#BeforeDelete()
 	 */
 	@Override
 	public boolean BeforeDelete() throws CoreException {
@@ -190,7 +190,7 @@ public class OneModel implements BaseModel {
 	/**
 	 * empty
 	 * 
-	 * @see org.yaen.starter.common.data.models.BaseModel#AfterDelete()
+	 * @see org.yaen.starter.core.model.models.BaseModel#AfterDelete()
 	 */
 	@Override
 	public void AfterDelete() throws CoreException {

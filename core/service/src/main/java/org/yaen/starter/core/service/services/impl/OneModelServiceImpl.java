@@ -7,22 +7,22 @@ import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Service;
+import org.yaen.starter.common.dal.entities.AnotherEntity;
+import org.yaen.starter.common.dal.entities.MyDescribeEntity;
+import org.yaen.starter.common.dal.entities.OneColumnEntity;
+import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.dal.mappers.OneMapper;
 import org.yaen.starter.common.dal.mappers.ZeroMapper;
-import org.yaen.starter.common.data.entities.AnotherEntity;
-import org.yaen.starter.common.data.entities.MyDescribeEntity;
-import org.yaen.starter.common.data.entities.OneColumnEntity;
-import org.yaen.starter.common.data.entities.OneEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.enums.SqlTypes;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsCoreException;
 import org.yaen.starter.common.data.exceptions.OperationCancelledCoreException;
-import org.yaen.starter.common.data.models.BaseModel;
-import org.yaen.starter.common.data.services.ModelService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.models.BaseModel;
 import org.yaen.starter.core.model.models.changelog.Changelog;
+import org.yaen.starter.core.model.services.ModelService;
 import org.yaen.starter.core.service.utils.OneServiceUil;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
@@ -292,7 +292,7 @@ public class OneModelServiceImpl implements ModelService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#selectModelByRowid(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.core.model.services.ModelService#selectModelByRowid(org.yaen.starter.core.model.models.BaseModel,
 	 *      long)
 	 */
 	@Override
@@ -319,7 +319,7 @@ public class OneModelServiceImpl implements ModelService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#insertModelByRowid(org.yaen.starter.common.data.models.BaseModel)
+	 * @see org.yaen.starter.core.model.services.ModelService#insertModelByRowid(org.yaen.starter.core.model.models.BaseModel)
 	 */
 	@Override
 	public <T extends BaseModel> long insertModelByRowid(T model) throws CoreException {
@@ -348,7 +348,7 @@ public class OneModelServiceImpl implements ModelService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#updateModelByRowid(org.yaen.starter.common.data.models.BaseModel)
+	 * @see org.yaen.starter.core.model.services.ModelService#updateModelByRowid(org.yaen.starter.core.model.models.BaseModel)
 	 */
 	@Override
 	public <T extends BaseModel> void updateModelByRowid(T model) throws CoreException {
@@ -373,7 +373,7 @@ public class OneModelServiceImpl implements ModelService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#deleteModelByRowid(org.yaen.starter.common.data.models.BaseModel)
+	 * @see org.yaen.starter.core.model.services.ModelService#deleteModelByRowid(org.yaen.starter.core.model.models.BaseModel)
 	 */
 	@Override
 	public <T extends BaseModel> void deleteModelByRowid(T model) throws CoreException {
@@ -398,7 +398,7 @@ public class OneModelServiceImpl implements ModelService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#trySelectModelByRowid(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.core.model.services.ModelService#trySelectModelByRowid(org.yaen.starter.core.model.models.BaseModel,
 	 *      long)
 	 */
 	@Override

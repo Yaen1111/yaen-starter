@@ -8,17 +8,17 @@ import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.yaen.starter.common.dal.entities.AnotherEntity;
+import org.yaen.starter.common.dal.entities.OneColumnEntity;
+import org.yaen.starter.common.dal.entities.OneEntity;
+import org.yaen.starter.common.dal.entities.QueryEntity;
 import org.yaen.starter.common.dal.mappers.QueryMapper;
-import org.yaen.starter.common.data.entities.AnotherEntity;
-import org.yaen.starter.common.data.entities.OneColumnEntity;
-import org.yaen.starter.common.data.entities.OneEntity;
-import org.yaen.starter.common.data.entities.QueryEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.OperationCancelledCoreException;
-import org.yaen.starter.common.data.models.BaseModel;
-import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.models.BaseModel;
+import org.yaen.starter.core.model.services.QueryService;
 import org.yaen.starter.core.service.utils.OneServiceUil;
 
 /**
@@ -166,7 +166,7 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#selectModelListByRowids(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.core.model.services.ModelService#selectModelListByRowids(org.yaen.starter.core.model.models.BaseModel,
 	 *      java.util.List)
 	 */
 	@Override
@@ -193,7 +193,7 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#selectModelListById(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.core.model.services.ModelService#selectModelListById(org.yaen.starter.core.model.models.BaseModel,
 	 *      java.lang.String)
 	 */
 	@Override
@@ -218,7 +218,7 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.ModelService#selectValueListById(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.core.model.services.ModelService#selectValueListById(org.yaen.starter.core.model.models.BaseModel,
 	 *      java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -240,7 +240,7 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByFieldName(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.core.model.services.QueryService#selectRowidsByFieldName(org.yaen.starter.core.model.models.BaseModel,
 	 *      java.lang.String)
 	 */
 	@Override
@@ -251,7 +251,7 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByFieldNameList(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.core.model.services.QueryService#selectRowidsByFieldNameList(org.yaen.starter.core.model.models.BaseModel,
 	 *      java.util.List)
 	 */
 	@Override
@@ -291,7 +291,7 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByAllField(org.yaen.starter.common.data.models.BaseModel)
+	 * @see org.yaen.starter.core.model.services.QueryService#selectRowidsByAllField(org.yaen.starter.core.model.models.BaseModel)
 	 */
 	@Override
 	public <T extends BaseModel> List<Long> selectRowidsByAllField(T model) throws CoreException {
@@ -330,7 +330,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 	/**
 	 * 
-	 * @see org.yaen.starter.common.data.services.QueryService#selectRowsByWhereClause(org.yaen.starter.common.data.models.BaseModel,
+	 * @see org.yaen.starter.core.model.services.QueryService#selectRowsByWhereClause(org.yaen.starter.core.model.models.BaseModel,
 	 *      java.lang.String)
 	 */
 	@Override
@@ -359,7 +359,7 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByAll(org.yaen.starter.common.data.models.BaseModel)
+	 * @see org.yaen.starter.core.model.services.QueryService#selectRowidsByAll(org.yaen.starter.core.model.models.BaseModel)
 	 */
 	@Override
 	public <T extends BaseModel> List<Long> selectRowidsByAll(T model) throws CoreException {

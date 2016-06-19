@@ -3,7 +3,7 @@ package org.yaen.starter.common.dal.mappers;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-import org.yaen.starter.common.data.entities.OneEntity;
+import org.yaen.starter.common.dal.entities.OneEntity;
 
 /**
  * one mapper for all crud operations

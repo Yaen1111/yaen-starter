@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.yaen.starter.common.dal.entities.MyDescribeEntity;
 import org.yaen.starter.common.dal.mappers.ZeroMapper;
-import org.yaen.starter.common.data.entities.MyDescribeEntity;
 import org.yaen.starter.web.home.viewmodels.ViewModel;
 
 /**

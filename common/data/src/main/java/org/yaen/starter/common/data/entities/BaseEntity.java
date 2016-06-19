@@ -16,25 +16,25 @@ public interface BaseEntity extends Serializable {
 	/**
 	 * get the primary key of rowid
 	 */
-	public long getRowid();
+	long getRowid();
 
 	/**
 	 * set the primary key of rowid
 	 * 
 	 * @param rowid
 	 */
-	public void setRowid(long rowid);
+	void setRowid(long rowid);
 
 	/**
 	 * get the id
 	 */
-	public String getId();
+	String getId();
 
 	/**
 	 * set the id
 	 * 
 	 * @param id
 	 */
-	public void setId(String id);
+	void setId(String id);
 
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.yaen.starter.common.data.models;
+package org.yaen.starter.core.model.models;
 
 import java.io.IOException;
 import java.io.Serializable;

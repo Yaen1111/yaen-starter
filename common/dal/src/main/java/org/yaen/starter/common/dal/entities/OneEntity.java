@@ -1,4 +1,4 @@
-package org.yaen.starter.common.data.entities;
+package org.yaen.starter.common.dal.entities;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import org.yaen.starter.common.data.annotations.OneIndex;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.OneTableHandler;
 import org.yaen.starter.common.data.annotations.OneUniqueIndex;
+import org.yaen.starter.common.data.entities.BaseEntity;
 
 import lombok.Getter;
 import lombok.Setter;

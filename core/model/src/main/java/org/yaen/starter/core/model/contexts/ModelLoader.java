@@ -2,8 +2,8 @@ package org.yaen.starter.core.model.contexts;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.yaen.starter.common.data.services.ModelService;
-import org.yaen.starter.common.data.services.QueryService;
+import org.yaen.starter.core.model.services.ModelService;
+import org.yaen.starter.core.model.services.QueryService;
 
 import lombok.Getter;
 

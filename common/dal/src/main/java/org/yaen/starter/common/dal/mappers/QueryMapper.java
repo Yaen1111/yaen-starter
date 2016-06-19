@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-import org.yaen.starter.common.data.entities.OneEntity;
-import org.yaen.starter.common.data.entities.QueryEntity;
+import org.yaen.starter.common.dal.entities.OneEntity;
+import org.yaen.starter.common.dal.entities.QueryEntity;
 
 /**
  * event mapper for event engine, most of operation return id list for memery paging

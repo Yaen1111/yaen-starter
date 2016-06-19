@@ -1,7 +1,7 @@
-package org.yaen.starter.common.data.services;
+package org.yaen.starter.core.model.services;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.core.model.models.BaseModel;
 
 /**
  * model service for CRUD

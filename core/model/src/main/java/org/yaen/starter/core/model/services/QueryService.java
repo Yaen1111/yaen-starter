@@ -1,9 +1,9 @@
-package org.yaen.starter.common.data.services;
+package org.yaen.starter.core.model.services;
 
 import java.util.List;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.core.model.models.BaseModel;
 
 /**
  * query service for most search operation

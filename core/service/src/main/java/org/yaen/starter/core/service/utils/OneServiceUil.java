@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.yaen.starter.common.data.entities.OneColumnEntity;
-import org.yaen.starter.common.data.models.BaseModel;
+import org.yaen.starter.common.dal.entities.OneColumnEntity;
+import org.yaen.starter.core.model.models.BaseModel;
 
 /**
  * one service util

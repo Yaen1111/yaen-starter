@@ -1,5 +1,6 @@
-package org.yaen.starter.common.data.entities;
+package org.yaen.starter.common.dal.entities;
 
+import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 
 /**
@@ -14,7 +15,7 @@ public class AnotherEntity extends OneEntity {
 	/**
 	 * bridge rowid to entity
 	 * 
-	 * @see org.yaen.starter.common.data.entities.OneEntity#getRowid()
+	 * @see org.yaen.starter.common.dal.entities.OneEntity#getRowid()
 	 */
 	@Override
 	public long getRowid() {
@@ -24,7 +25,7 @@ public class AnotherEntity extends OneEntity {
 	/**
 	 * bridge rowid to entity
 	 * 
-	 * @see org.yaen.starter.common.data.entities.OneEntity#setRowid(long)
+	 * @see org.yaen.starter.common.dal.entities.OneEntity#setRowid(long)
 	 */
 	@Override
 	public void setRowid(long rowid) {
@@ -34,7 +35,7 @@ public class AnotherEntity extends OneEntity {
 	/**
 	 * bridge id to entity
 	 * 
-	 * @see org.yaen.starter.common.data.entities.OneEntity#getId()
+	 * @see org.yaen.starter.common.dal.entities.OneEntity#getId()
 	 */
 	@Override
 	public String getId() {
@@ -44,7 +45,7 @@ public class AnotherEntity extends OneEntity {
 	/**
 	 * bridge id to entity
 	 * 
-	 * @see org.yaen.starter.common.data.entities.OneEntity#setId(java.lang.String)
+	 * @see org.yaen.starter.common.dal.entities.OneEntity#setId(java.lang.String)
 	 */
 	@Override
 	public void setId(String id) {

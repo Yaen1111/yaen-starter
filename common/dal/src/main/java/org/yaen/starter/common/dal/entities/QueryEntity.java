@@ -1,4 +1,4 @@
-package org.yaen.starter.common.data.entities;
+package org.yaen.starter.common.dal.entities;
 
 import java.util.Map;
 
