@@ -14,6 +14,7 @@ import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.annotations.OneTableHandler;
 import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.entities.BaseEntity;
+import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 
@@ -35,12 +36,14 @@ public class OneEntity implements BaseEntity {
 	/** the primary key */
 	@Getter
 	@Setter
-	private long rowid = 0;
+	@OneData(DataType = DataTypes.BIGINT, FieldName = "ROWID")
+	protected long rowid = 0;
 
 	/** the main key */
 	@Getter
 	@Setter
-	private String id = "";
+	@OneData(DataType = DataTypes.VARCHAR20, FieldName = "ID")
+	protected String id = "";
 
 	/** the table name, if null, use class name instead */
 	protected String tableName = "";
@@ -80,7 +83,7 @@ public class OneEntity implements BaseEntity {
 	}
 
 	/** the indexes to create */
-	private List<String> indexes = new ArrayList<String>();
+	protected List<String> indexes = new ArrayList<String>();
 
 	/**
 	 * getter for indexes
@@ -111,7 +114,7 @@ public class OneEntity implements BaseEntity {
 	}
 
 	/** the uniqueIndexes to create */
-	private List<String> uniqueIndexes = new ArrayList<String>();
+	protected List<String> uniqueIndexes = new ArrayList<String>();
 
 	/**
 	 * getter for uniqueIndexes
@@ -170,22 +173,22 @@ public class OneEntity implements BaseEntity {
 	/** the selected column name */
 	@Getter
 	@Setter
-	private String selectedColumnName = "";
+	protected String selectedColumnName = "";
 
 	/** the modified field name */
 	@Getter
 	@Setter
-	private String modifiedFieldName = "";
+	protected String modifiedFieldName = "";
 
 	/** the added field name */
 	@Getter
 	@Setter
-	private String addedFieldName = "";
+	protected String addedFieldName = "";
 
 	/** the rowid list for batch select */
 	@Getter
 	@Setter
-	private List<Long> rowids = new ArrayList<Long>();
+	protected List<Long> rowids = new ArrayList<Long>();
 
 	/**
 	 * fetch one column info, if child has same field as parent, parent will be ignored
@@ -278,6 +281,49 @@ public class OneEntity implements BaseEntity {
 	 */
 	public OneEntity() {
 		this.entity = this;
+	}
+
+	/**
+	 * triggers, can be trigger chain, but only for simple and single-entity operations
+	 * 
+	 * <pre>
+	 * if (super.BeforeSelect) {
+	 * 	// do something
+	 * 	return true; // true if need next, false for all done
+	 * } else {
+	 * 	return false; // super already done, do nothing but return false
+	 * }
+	 * </pre>
+	 * 
+	 * @param service
+	 * @return true for next chain, false for done
+	 */
+	public boolean BeforeSelect() {
+		return true;
+	}
+
+	public void AfterSelect() {
+	}
+
+	public boolean BeforeInsert() {
+		return true;
+	}
+
+	public void AfterInsert() {
+	}
+
+	public boolean BeforeUpdate() {
+		return true;
+	}
+
+	public void AfterUpdate() {
+	}
+
+	public boolean BeforeDelete() {
+		return true;
+	}
+
+	public void AfterDelete() {
 	}
 
 	/**

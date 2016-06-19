@@ -19,6 +19,7 @@ import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsCommonException;
+import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
@@ -258,11 +259,24 @@ public class OneEntityServiceImpl implements EntityService {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
-		boolean exists = this.innerSelectEntityByRowid((OneEntity) entity, rowid);
+		OneEntity one = (OneEntity) entity;
 
-		if (!exists) {
-			// not exists
-			throw new DataNotExistsCommonException("data not exists");
+		// trigger
+		if (one.BeforeSelect()) {
+
+			boolean exists = this.innerSelectEntityByRowid(one, rowid);
+
+			if (!exists) {
+				// not exists
+				throw new DataNotExistsCommonException("data not exists");
+			}
+
+			// trigger
+			one.AfterSelect();
+
+		} else {
+			// select canceled
+			throw new OperationCancelledCommonException("select cancelled by trigger");
 		}
 	}
 
@@ -274,10 +288,23 @@ public class OneEntityServiceImpl implements EntityService {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
-		// inner insert
-		this.innerInsertEntityByRowid((OneEntity) entity);
+		OneEntity one = (OneEntity) entity;
 
-		// id already set into entity and bridged to entity
+		// trigger
+		if (one.BeforeInsert()) {
+
+			// inner insert
+			this.innerInsertEntityByRowid(one);
+
+			// id already set into entity and bridged to entity
+
+			// trigger
+			one.AfterInsert();
+
+		} else {
+			// canceled
+			throw new OperationCancelledCommonException("insert cancelled by trigger");
+		}
 
 		return entity.getRowid();
 	}
@@ -290,8 +317,21 @@ public class OneEntityServiceImpl implements EntityService {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
-		// update
-		this.innerUpdateEntityByRowid((OneEntity) entity);
+		OneEntity one = (OneEntity) entity;
+
+		// trigger
+		if (one.BeforeUpdate()) {
+
+			// update
+			this.innerUpdateEntityByRowid(one);
+
+			// trigger
+			one.AfterUpdate();
+
+		} else {
+			// canceled
+			throw new OperationCancelledCommonException("update cancelled by trigger");
+		}
 	}
 
 	/**
@@ -302,9 +342,21 @@ public class OneEntityServiceImpl implements EntityService {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
-		// delete
-		this.innerDeleteEntity((OneEntity) entity);
+		OneEntity one = (OneEntity) entity;
 
+		// trigger
+		if (one.BeforeDelete()) {
+
+			// delete
+			this.innerDeleteEntity((OneEntity) entity);
+
+			// trigger
+			one.AfterDelete();
+
+		} else {
+			// canceled
+			throw new OperationCancelledCommonException("delete cancelled by trigger");
+		}
 	}
 
 	/**
@@ -317,6 +369,8 @@ public class OneEntityServiceImpl implements EntityService {
 			this.selectEntityByRowid(entity, rowid);
 			return true;
 		} catch (DataNotExistsCommonException ex) {
+			return false;
+		} catch (OperationCancelledCommonException ex) {
 			return false;
 		}
 	}
