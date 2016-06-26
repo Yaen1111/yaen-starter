@@ -13,6 +13,6 @@ import org.yaen.starter.core.model.models.OneModel;
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
-public class Rbac extends OneModel {
+public class RbacModel extends OneModel {
 
 }

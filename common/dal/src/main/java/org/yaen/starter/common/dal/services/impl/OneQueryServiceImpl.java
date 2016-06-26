@@ -12,6 +12,7 @@ import org.yaen.starter.common.dal.entities.OneColumnEntity;
 import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.dal.entities.QueryEntity;
 import org.yaen.starter.common.dal.mappers.QueryMapper;
+import org.yaen.starter.common.dal.services.ZeroEntityService;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
@@ -30,6 +31,9 @@ public class OneQueryServiceImpl implements QueryService {
 
 	@Autowired
 	private QueryMapper queryMapper;
+
+	@Autowired
+	private ZeroEntityService zeroEntityService;
 
 	/**
 	 * inner select model list, no triggers, origin entity is not changed
@@ -51,6 +55,9 @@ public class OneQueryServiceImpl implements QueryService {
 		}
 
 		try {
+
+			// create table if not exists
+			zeroEntityService.CreateTable(entity);
 
 			// set rowid list
 			entity.setRowids(rowids);
@@ -98,6 +105,9 @@ public class OneQueryServiceImpl implements QueryService {
 
 		try {
 
+			// create table if not exists
+			zeroEntityService.CreateTable(entity);
+
 			// set id
 			entity.setId(id);
 
@@ -141,6 +151,9 @@ public class OneQueryServiceImpl implements QueryService {
 	protected <T extends OneEntity> List<Object> innerSelectValueListById(T entity, String id, String fieldName)
 			throws CommonException {
 		try {
+
+			// create table if not exists
+			zeroEntityService.CreateTable(entity);
 
 			// set id and column
 			entity.setId(id);
@@ -275,6 +288,9 @@ public class OneQueryServiceImpl implements QueryService {
 		OneEntity one = (OneEntity) entity;
 
 		try {
+			// create table if not exists
+			zeroEntityService.CreateTable(one);
+
 			// make event model
 			QueryEntity query = new QueryEntity();
 
@@ -301,6 +317,8 @@ public class OneQueryServiceImpl implements QueryService {
 			// call mapper
 			return queryMapper.selectRowidsByColumns(query);
 
+		} catch (CommonException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			throw new CommonException(ex);
 		}
@@ -317,6 +335,9 @@ public class OneQueryServiceImpl implements QueryService {
 		OneEntity one = (OneEntity) entity;
 
 		try {
+			// create table if not exists
+			zeroEntityService.CreateTable(one);
+
 			// make event model
 			QueryEntity query = new QueryEntity();
 
@@ -342,6 +363,8 @@ public class OneQueryServiceImpl implements QueryService {
 			// call mapper
 			return queryMapper.selectRowidsByColumns(query);
 
+		} catch (CommonException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			throw new CommonException(ex);
 		}
@@ -361,6 +384,9 @@ public class OneQueryServiceImpl implements QueryService {
 		OneEntity one = (OneEntity) entity;
 
 		try {
+			// create table if not exists
+			zeroEntityService.CreateTable(one);
+
 			// make event model
 			QueryEntity query = new QueryEntity();
 
@@ -373,6 +399,8 @@ public class OneQueryServiceImpl implements QueryService {
 			// call mapper
 			return queryMapper.selectRowidsByWhereClause(query);
 
+		} catch (CommonException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			throw new CommonException(ex);
 		}
@@ -389,6 +417,9 @@ public class OneQueryServiceImpl implements QueryService {
 		OneEntity one = (OneEntity) entity;
 
 		try {
+			// create table if not exists
+			zeroEntityService.CreateTable(one);
+
 			// make event model
 			QueryEntity query = new QueryEntity();
 
@@ -398,6 +429,8 @@ public class OneQueryServiceImpl implements QueryService {
 			// call mapper
 			return queryMapper.selectRowidsByAll(query);
 
+		} catch (CommonException ex) {
+			throw ex;
 		} catch (Exception ex) {
 			throw new CommonException(ex);
 		}

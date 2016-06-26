@@ -11,6 +11,6 @@ import org.yaen.starter.core.model.models.OneModel;
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
-public class Party extends OneModel {
+public class PartyModel extends OneModel {
 
 }

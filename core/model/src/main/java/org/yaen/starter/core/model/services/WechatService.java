@@ -4,11 +4,12 @@ import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-import org.yaen.starter.core.model.models.wechat.AccessToken;
-import org.yaen.starter.core.model.models.wechat.menus.Menu;
-import org.yaen.starter.core.model.models.wechat.responses.MusicResponseMessage;
-import org.yaen.starter.core.model.models.wechat.responses.NewsResponseMessage;
-import org.yaen.starter.core.model.models.wechat.responses.TextResponseMessage;
+import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.core.model.models.wechat.MenuModel;
+import org.yaen.starter.core.model.pojos.wechat.AccessToken;
+import org.yaen.starter.core.model.pojos.wechat.MusicResponseMessage;
+import org.yaen.starter.core.model.pojos.wechat.NewsResponseMessage;
+import org.yaen.starter.core.model.pojos.wechat.TextResponseMessage;
 
 /**
  * wechat service
@@ -31,37 +32,38 @@ public interface WechatService {
 			throws NoSuchAlgorithmException;
 
 	/**
-	 * get access token, can be cached
+	 * get access token, can be cached, typically 2 hours
 	 * 
 	 * @return
-	 * @throws Exception
+	 * @throws CoreException
 	 */
-	AccessToken getAccessToken() throws Exception;
+	AccessToken getAccessToken() throws CoreException;
 
 	/**
 	 * create menu
 	 * 
 	 * @param menu
 	 * @param accessToken
-	 * @throws Exception
+	 * @throws CoreException
 	 */
-	void createMenu(Menu menu, AccessToken accessToken) throws Exception;
+	void createMenu(MenuModel menu, AccessToken accessToken) throws CoreException;
 
 	/**
 	 * load menu from entity
 	 * 
 	 * @return
+	 * @throws CoreException
 	 */
-	Menu loadMenu();
+	MenuModel loadMenu() throws CoreException;
 
 	/**
 	 * parse xml from input stream
 	 * 
 	 * @param is
 	 * @return
-	 * @throws Exception
+	 * @throws CoreException
 	 */
-	Map<String, String> parseXml(InputStream is) throws Exception;
+	Map<String, String> parseXml(InputStream is) throws CoreException;
 
 	/**
 	 * convert message to xml
@@ -101,4 +103,12 @@ public interface WechatService {
 	 * @return
 	 */
 	String formatTime(String createTime);
+
+	/**
+	 * handle request
+	 * 
+	 * @param requestMap
+	 * @return
+	 */
+	String handleRequest(Map<String, String> requestMap);
 }

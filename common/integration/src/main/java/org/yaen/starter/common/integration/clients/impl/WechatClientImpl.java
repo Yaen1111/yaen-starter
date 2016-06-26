@@ -92,20 +92,17 @@ public class WechatClientImpl implements WechatClient {
 	 * create menu
 	 * 
 	 * @param accessToken
-	 * @param menuJsonString
+	 * @param menuJSONString
 	 * @throws Exception
 	 */
 	@Override
-	public JSONObject createMenu(String accessToken, String menuJsonString) throws Exception {
+	public JSONObject createMenu(String accessToken, String menuJSONString) throws Exception {
 
 		// make url
 		String url = MENU_CREATE_URL.replace("ACCESS_TOKEN", accessToken);
 
-		// replace null, as we no not need it
-		String menu = menuJsonString.replaceAll(",null", "");
-
 		// do https post
-		return HttpUtil.httpsPost(url, menu);
+		return HttpUtil.httpsPost(url, menuJSONString);
 	}
 
 }

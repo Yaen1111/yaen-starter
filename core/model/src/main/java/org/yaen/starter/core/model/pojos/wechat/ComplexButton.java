@@ -1,4 +1,4 @@
-package org.yaen.starter.core.model.models.wechat.menus;
+package org.yaen.starter.core.model.pojos.wechat;
 
 import lombok.Getter;
 import lombok.Setter;

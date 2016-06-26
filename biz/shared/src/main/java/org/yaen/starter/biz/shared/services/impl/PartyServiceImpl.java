@@ -6,8 +6,8 @@ import org.yaen.starter.biz.shared.objects.PartyDTO;
 import org.yaen.starter.biz.shared.services.PartyService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.models.party.Party;
-import org.yaen.starter.core.model.models.party.PartyRole;
+import org.yaen.starter.core.model.models.party.PartyModel;
+import org.yaen.starter.core.model.models.party.PartyModel;
 import org.yaen.starter.core.model.services.ModelService;
 
 /**
@@ -28,7 +28,7 @@ public class PartyServiceImpl implements PartyService {
 		AssertUtil.notNull(dto);
 
 		// create new party
-		Party party = new Party();
+		PartyModel party = new PartyModel();
 
 		party.setId(dto.getPartyID());
 		party.setPartyType(dto.getPartyType());

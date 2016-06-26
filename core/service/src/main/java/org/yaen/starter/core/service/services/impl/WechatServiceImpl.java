@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,17 @@ import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
+import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
-import org.yaen.starter.core.model.models.wechat.AccessToken;
-import org.yaen.starter.core.model.models.wechat.Article;
-import org.yaen.starter.core.model.models.wechat.menus.Menu;
-import org.yaen.starter.core.model.models.wechat.responses.MusicResponseMessage;
-import org.yaen.starter.core.model.models.wechat.responses.NewsResponseMessage;
-import org.yaen.starter.core.model.models.wechat.responses.TextResponseMessage;
+import org.yaen.starter.core.model.enums.wechat.EventTypes;
+import org.yaen.starter.core.model.enums.wechat.MessageTypes;
+import org.yaen.starter.core.model.models.wechat.MenuModel;
+import org.yaen.starter.core.model.pojos.wechat.AccessToken;
+import org.yaen.starter.core.model.pojos.wechat.Article;
+import org.yaen.starter.core.model.pojos.wechat.MusicResponseMessage;
+import org.yaen.starter.core.model.pojos.wechat.NewsResponseMessage;
+import org.yaen.starter.core.model.pojos.wechat.TextResponseMessage;
 import org.yaen.starter.core.model.services.WechatService;
 
 import com.alibaba.fastjson.JSONObject;
@@ -60,7 +65,7 @@ public class WechatServiceImpl implements WechatService {
 	private QueryService queryService;
 
 	/**
-	 * 扩展xstream，使其支持CDATA块
+	 * extend xstream to support cdata
 	 */
 	private XStream xStream = new XStream(new XppDriver() {
 		@Override
@@ -99,13 +104,10 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * get access token, the token will expire in 2 hours typically
-	 * 
-	 * @return
-	 * @throws Exception
+	 * @see org.yaen.starter.core.model.services.WechatService#getAccessToken()
 	 */
 	@Override
-	public AccessToken getAccessToken() throws Exception {
+	public AccessToken getAccessToken() throws CoreException {
 
 		// TODO check cache
 
@@ -117,7 +119,12 @@ public class WechatServiceImpl implements WechatService {
 		String secret = PropertiesUtil.getProperty("wechat.secret");
 
 		// call client
-		JSONObject jsonObject = wechatClient.getAccessToken(appid, secret);
+		JSONObject jsonObject;
+		try {
+			jsonObject = wechatClient.getAccessToken(appid, secret);
+		} catch (Exception ex) {
+			throw new CoreException("get access token error", ex);
+		}
 
 		// check result
 		if (jsonObject == null) {
@@ -132,20 +139,25 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * create menu
-	 * 
-	 * @param menu
-	 * @param accessToken
-	 * @throws Exception
+	 * @see org.yaen.starter.core.model.services.WechatService#createMenu(org.yaen.starter.core.model.models.wechat.MenuModel,
+	 *      org.yaen.starter.core.model.pojos.wechat.AccessToken)
 	 */
 	@Override
-	public void createMenu(Menu menu, AccessToken accessToken) throws Exception {
+	public void createMenu(MenuModel menu, AccessToken accessToken) throws CoreException {
+		AssertUtil.notNull(menu);
 
-		// convert menu to json
-		String jsonMenu = JSONObject.toJSONString(menu);
+		// try to get access token if not
+		if (accessToken == null) {
+			accessToken = this.getAccessToken();
+		}
 
 		// call client
-		JSONObject jsonObject = wechatClient.createMenu(jsonMenu, accessToken.getToken());
+		JSONObject jsonObject;
+		try {
+			jsonObject = wechatClient.createMenu(menu.toJSON(), accessToken.getToken());
+		} catch (Exception ex) {
+			throw new CoreException("wechat create menu failed", ex);
+		}
 
 		// check result
 		if (jsonObject == null) {
@@ -166,7 +178,7 @@ public class WechatServiceImpl implements WechatService {
 	 * @see org.yaen.starter.core.model.services.WechatService#loadMenu()
 	 */
 	@Override
-	public Menu loadMenu() {
+	public MenuModel loadMenu() throws CoreException {
 
 		// get all menu
 		MenuEntity entity = new MenuEntity();
@@ -181,9 +193,8 @@ public class WechatServiceImpl implements WechatService {
 
 			list = queryService.selectListByRowids(entity, rowids);
 
-		} catch (CommonException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (CommonException ex) {
+			throw new CoreException("get menu error", ex);
 		}
 
 		// TODO Auto-generated method stub
@@ -191,22 +202,24 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * 解析微信发来的请求（xml）
-	 * 
-	 * @param is
-	 * @return
-	 * @throws Exception
+	 * @see org.yaen.starter.core.model.services.WechatService#parseXml(java.io.InputStream)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Map<String, String> parseXml(InputStream is) throws Exception {
+	public Map<String, String> parseXml(InputStream is) throws CoreException {
+		AssertUtil.notNull(is);
 
 		// 将解析结果存在Map中
 		Map<String, String> map = new HashMap<String, String>();
 
 		// 读取输入流
 		SAXReader reader = new SAXReader();
-		Document document = reader.read(is);
+		Document document;
+		try {
+			document = reader.read(is);
+		} catch (DocumentException ex) {
+			throw new CoreException("read xml from is error", ex);
+		}
 
 		// 取得xml的根元素
 		Element root = document.getRootElement();
@@ -223,49 +236,41 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * 回复的文本消息转换成xml格式
-	 * 
-	 * @param textMessage
-	 * @return
+	 * @see org.yaen.starter.core.model.services.WechatService#textMessageToXml(org.yaen.starter.core.model.pojos.wechat.TextResponseMessage)
 	 */
 	@Override
 	public String textMessageToXml(TextResponseMessage textResponseMessage) {
+		AssertUtil.notNull(textResponseMessage);
+
 		xStream.alias("xml", textResponseMessage.getClass());
 		return xStream.toXML(textResponseMessage);
 	}
 
 	/**
-	 * 音乐消息对象转换成xml
-	 * 
-	 * @param musicMessage
-	 *            音乐消息对象
-	 * @return xml
+	 * @see org.yaen.starter.core.model.services.WechatService#musicMessageToXml(org.yaen.starter.core.model.pojos.wechat.MusicResponseMessage)
 	 */
 	@Override
 	public String musicMessageToXml(MusicResponseMessage musicResponseMessage) {
+		AssertUtil.notNull(musicResponseMessage);
+
 		xStream.alias("xml", musicResponseMessage.getClass());
 		return xStream.toXML(musicResponseMessage);
 	}
 
 	/**
-	 * 图文消息对象转换成xml
-	 * 
-	 * @param newsResponseMessage
-	 *            图文消息对象
-	 * @return xml
+	 * @see org.yaen.starter.core.model.services.WechatService#newsMessageToXml(org.yaen.starter.core.model.pojos.wechat.NewsResponseMessage)
 	 */
 	@Override
 	public String newsMessageToXml(NewsResponseMessage newsResponseMessage) {
+		AssertUtil.notNull(newsResponseMessage);
+
 		xStream.alias("xml", newsResponseMessage.getClass());
 		xStream.alias("item", new Article().getClass());
 		return xStream.toXML(newsResponseMessage);
 	}
 
 	/**
-	 * 判断是否是QQ表情
-	 * 
-	 * @param content
-	 * @return
+	 * @see org.yaen.starter.core.model.services.WechatService#isQqFace(java.lang.String)
 	 */
 	@Override
 	public boolean isQqFace(String content) {
@@ -282,11 +287,7 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * 将微信消息中的CreateTime转换成标准格式的时间（yyyy-MM-dd HH:mm:ss）
-	 * 
-	 * @param createTime
-	 *            消息创建时间
-	 * @return
+	 * @see org.yaen.starter.core.model.services.WechatService#formatTime(java.lang.String)
 	 */
 	@Override
 	public String formatTime(String createTime) {
@@ -294,6 +295,111 @@ public class WechatServiceImpl implements WechatService {
 		long msgCreateTime = Long.parseLong(createTime) * 1000L;
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return format.format(new Date(msgCreateTime));
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.services.WechatService#handleRequest(java.util.Map)
+	 */
+	@Override
+	public String handleRequest(Map<String, String> requestMap) {
+		AssertUtil.notNull(requestMap);
+		AssertUtil.notEmpty(requestMap);
+
+		String respMessage = "";
+
+		try {
+			// 默认返回的文本消息内容
+			String respContent = "请求处理异常，请稍候尝试！";
+
+			// 发送方帐号（open_id）
+			String fromUserName = requestMap.get("FromUserName");
+			// 公众帐号
+			String toUserName = requestMap.get("ToUserName");
+			// 消息类型
+			String msgType = requestMap.get("MsgType");
+
+			// 回复文本消息
+			TextResponseMessage textResponseMessage = new TextResponseMessage();
+			textResponseMessage.setToUserName(fromUserName);
+			textResponseMessage.setFromUserName(toUserName);
+			textResponseMessage.setCreateTime(DateUtil.getNow().getTime());
+			textResponseMessage.setMsgType(MessageTypes.RESP_MESSAGE_TYPE_TEXT);
+			textResponseMessage.setFuncFlag(0);
+
+			// 文本消息
+			if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_TEXT)) {
+				respContent = "您发送的是文本消息！";
+			}
+			// 图片消息
+			else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_IMAGE)) {
+				respContent = "您发送的是图片消息！";
+			}
+			// 地理位置消息
+			else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_LOCATION)) {
+				respContent = "您发送的是地理位置消息！";
+			}
+			// 链接消息
+			else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_LINK)) {
+				respContent = "您发送的是链接消息！";
+			}
+			// 音频消息
+			else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_VOICE)) {
+				respContent = "您发送的是音频消息！";
+			}
+			// 事件推送
+			else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_EVENT)) {
+				// 事件类型
+				String eventType = requestMap.get("Event");
+				// 订阅
+				if (eventType.equals(EventTypes.EVENT_TYPE_SUBSCRIBE)) {
+					respContent = "谢谢您的关注！";
+				}
+				// 取消订阅
+				else if (eventType.equals(EventTypes.EVENT_TYPE_UNSUBSCRIBE)) {
+					// 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+				}
+				// 自定义菜单点击事件
+				else if (eventType.equals(EventTypes.EVENT_TYPE_CLICK)) {
+					// 事件KEY值，与创建自定义菜单时指定的KEY值对应
+					String eventKey = requestMap.get("EventKey");
+
+					if (eventKey.equals("11")) {
+						respContent = "天气预报菜单项被点击！";
+					} else if (eventKey.equals("12")) {
+						respContent = "公交查询菜单项被点击！";
+					} else if (eventKey.equals("13")) {
+						respContent = "周边搜索菜单项被点击！";
+					} else if (eventKey.equals("14")) {
+						respContent = "历史上的今天菜单项被点击！";
+					} else if (eventKey.equals("21")) {
+						respContent = "歌曲点播菜单项被点击！";
+					} else if (eventKey.equals("22")) {
+						respContent = "经典游戏菜单项被点击！";
+					} else if (eventKey.equals("23")) {
+						respContent = "美女电台菜单项被点击！";
+					} else if (eventKey.equals("24")) {
+						respContent = "人脸识别菜单项被点击！";
+					} else if (eventKey.equals("25")) {
+						respContent = "聊天唠嗑菜单项被点击！";
+					} else if (eventKey.equals("31")) {
+						respContent = "Q友圈菜单项被点击！";
+					} else if (eventKey.equals("32")) {
+						respContent = "电影排行榜菜单项被点击！";
+					} else if (eventKey.equals("33")) {
+						respContent = "幽默笑话菜单项被点击！";
+					} else {
+						respContent = "menu clicked key=" + eventKey;
+					}
+				}
+			}
+
+			textResponseMessage.setContent(respContent);
+			respMessage = this.textMessageToXml(textResponseMessage);
+		} catch (Exception ex) {
+			log.error("wechat servlet error:", ex);
+		}
+
+		return respMessage;
 	}
 
 }

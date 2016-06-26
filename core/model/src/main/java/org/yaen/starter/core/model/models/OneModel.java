@@ -3,7 +3,7 @@ package org.yaen.starter.core.model.models;
 /**
  * one model as base model object
  * <p>
- * model is usually composed by entities and other model, and with logicals
+ * model is usually composed by entities and pojos and other model, and with logicals
  * <p>
  * usually one model need one service to handle it
  * 
