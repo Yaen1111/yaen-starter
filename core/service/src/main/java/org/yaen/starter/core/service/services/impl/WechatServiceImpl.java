@@ -7,8 +7,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,14 +29,18 @@ import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
+import org.yaen.starter.core.model.enums.wechat.ButtonTypes;
 import org.yaen.starter.core.model.enums.wechat.EventTypes;
 import org.yaen.starter.core.model.enums.wechat.MessageTypes;
 import org.yaen.starter.core.model.models.wechat.MenuModel;
 import org.yaen.starter.core.model.pojos.wechat.AccessToken;
 import org.yaen.starter.core.model.pojos.wechat.Article;
+import org.yaen.starter.core.model.pojos.wechat.ClickButton;
+import org.yaen.starter.core.model.pojos.wechat.ComplexButton;
 import org.yaen.starter.core.model.pojos.wechat.MusicResponseMessage;
 import org.yaen.starter.core.model.pojos.wechat.NewsResponseMessage;
 import org.yaen.starter.core.model.pojos.wechat.TextResponseMessage;
+import org.yaen.starter.core.model.pojos.wechat.ViewButton;
 import org.yaen.starter.core.model.services.WechatService;
 
 import com.alibaba.fastjson.JSONObject;
@@ -183,22 +189,76 @@ public class WechatServiceImpl implements WechatService {
 		// get all menu
 		MenuEntity entity = new MenuEntity();
 
-		List<Long> rowids = null;
-
 		List<MenuEntity> list = null;
 
 		try {
-
-			rowids = queryService.selectRowidsByAll(entity);
-
+			List<Long> rowids = queryService.selectRowidsByAll(entity);
 			list = queryService.selectListByRowids(entity, rowids);
-
 		} catch (CommonException ex) {
 			throw new CoreException("get menu error", ex);
 		}
 
-		// TODO Auto-generated method stub
-		return null;
+		// the pojo has no relation, so make it in temp
+		Map<String, ComplexButton> map = new LinkedHashMap<String, ComplexButton>();
+
+		// load all top menu
+		for (MenuEntity m : list) {
+			if (m.getLevel() == 1) {
+				// top level, make complex button
+				ComplexButton btn = new ComplexButton();
+				btn.setName(m.getTitle());
+				map.put(m.getId(), btn);
+			}
+		}
+
+		// load all 2nd menu
+		for (MenuEntity m : list) {
+			if (m.getLevel() == 2) {
+				// parent must exists
+				if (map.containsKey(m.getParentId())) {
+					switch (m.getType()) {
+					case ButtonTypes.CLICK: {
+						ClickButton btn = new ClickButton();
+						btn.setType(m.getType());
+						btn.setName(m.getTitle());
+						btn.setKey(m.getKey());
+						map.get(m.getParentId()).getSub_button().add(btn);
+					}
+						break;
+					case ButtonTypes.VIEW: {
+						ViewButton btn = new ViewButton();
+						btn.setType(m.getType());
+						btn.setName(m.getTitle());
+						btn.setUrl(m.getUrl());
+						map.get(m.getParentId()).getSub_button().add(btn);
+					}
+						break;
+					default:
+						// ignore
+						log.info("unknown menu type, id={}, type={}", m.getId(), m.getType());
+						break;
+					}
+				} else {
+					log.info("menu parent not exists, id={}, parentid={}", m.getId(), m.getParentId());
+				}
+			}
+		}
+
+		// make menu model from entity
+		MenuModel menu = new MenuModel();
+
+		// TODO the top menu maybe simple button
+
+		// set top menu item into menu
+		int count = 0;
+		for (Entry<String, ComplexButton> m : map.entrySet()) {
+			menu.getButtons().add(m.getValue());
+			count++;
+			if (count >= MenuModel.WECHAT_MAX_TOP_MENU_COUNT)
+				break;
+		}
+
+		return menu;
 	}
 
 	/**

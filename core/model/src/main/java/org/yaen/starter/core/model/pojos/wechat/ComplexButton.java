@@ -1,5 +1,8 @@
 package org.yaen.starter.core.model.pojos.wechat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +16,6 @@ import lombok.Setter;
 public class ComplexButton extends Button {
 
 	/** the sub button */
-	private Button[] sub_button;
+	private List<Button> sub_button = new ArrayList<Button>();
 
 }
