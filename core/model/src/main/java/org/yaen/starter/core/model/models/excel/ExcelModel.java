@@ -41,8 +41,8 @@ public abstract class ExcelModel extends OneModel implements ExcelHandler {
 
 		if (StringUtil.equalsIgnoreCase(extension, "xls")) {
 			try {
-				Excel2003Processor processor = new Excel2003Processor(this, userData, filename);
-				processor.process();
+				Excel2003Processor processor = new Excel2003Processor(this, userData);
+				processor.process(filename);
 			} catch (IOException ex) {
 				throw new CoreException("file read error.", ex);
 			}

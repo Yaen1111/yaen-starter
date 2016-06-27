@@ -1,7 +1,6 @@
 package org.yaen.starter.core.model.models.excel.handlers;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,28 +77,33 @@ public class Excel2003Processor implements HSSFListener {
 
 	private int curRow;
 	private List<String> rowlist;
+
 	@SuppressWarnings("unused")
 	private String sheetName;
 
-	public Excel2003Processor(ExcelHandler handler, Object userData, POIFSFileSystem fs) {
+	/**
+	 * constructor
+	 * 
+	 * @param handler
+	 * @param userData
+	 */
+	public Excel2003Processor(ExcelHandler handler, Object userData) {
 		this.handler = handler;
 		this.userData = userData;
 
-		this.fs = fs;
 		this.minColumns = -1;
 		this.curRow = 0;
 		this.rowlist = new ArrayList<String>();
 	}
 
-	public Excel2003Processor(ExcelHandler handler, Object userData, String filename)
-			throws IOException, FileNotFoundException {
-		this(handler, userData, new POIFSFileSystem(new FileInputStream(filename)));
-	}
-
 	/**
-	 * 遍历 excel 文件
+	 * process whole excel sheets
+	 * 
+	 * @param filename
 	 */
-	public void process() throws IOException {
+	public void process(String filename) throws IOException {
+		this.fs = new POIFSFileSystem(new FileInputStream(filename));
+
 		MissingRecordAwareHSSFListener listener = new MissingRecordAwareHSSFListener(this);
 		formatListener = new FormatTrackingHSSFListener(listener);
 
@@ -117,8 +121,9 @@ public class Excel2003Processor implements HSSFListener {
 	}
 
 	/**
-	 * HSSFListener 监听方法，处理 Record
+	 * @see org.apache.poi.hssf.eventusermodel.HSSFListener#processRecord(org.apache.poi.hssf.record.Record)
 	 */
+	@Override
 	public void processRecord(Record record) {
 		int thisRow = -1;
 		int thisColumn = -1;

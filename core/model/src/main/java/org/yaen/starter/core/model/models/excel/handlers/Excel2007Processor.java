@@ -18,6 +18,9 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * excel 2007 event mode processor
  * <p>
@@ -26,6 +29,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Yaen 2016年6月14日下午4:00:56
  */
 public class Excel2007Processor extends DefaultHandler {
+
 	/** the handler */
 	private ExcelHandler handler;
 
@@ -41,9 +45,20 @@ public class Excel2007Processor extends DefaultHandler {
 	private int curRow = 0; // 当前行
 	private int curCol = 0; // 当前列索引
 	private int preCol = 0; // 上一列列索引
+
+	/** the title row, usually is 0 */
+	@Getter
+	@Setter
 	private int titleRow = 0; // 标题行，一般情况下为0
+
 	private int rowsize = 0; // 列数
 
+	/**
+	 * constructor
+	 * 
+	 * @param handler
+	 * @param userData
+	 */
 	public Excel2007Processor(ExcelHandler handler, Object userData) {
 		super();
 
@@ -52,7 +67,7 @@ public class Excel2007Processor extends DefaultHandler {
 	}
 
 	/**
-	 * 只遍历一个sheet，其中sheetId为要遍历的sheet索引，从1开始，1-3
+	 * process one sheet, sheet id is 1-based
 	 * 
 	 * @param filename
 	 * @param sheetId
@@ -75,7 +90,7 @@ public class Excel2007Processor extends DefaultHandler {
 	}
 
 	/**
-	 * 遍历 excel 文件
+	 * process whole excel sheets
 	 * 
 	 * @param filename
 	 * @throws OpenXML4JException
@@ -218,11 +233,4 @@ public class Excel2007Processor extends DefaultHandler {
 		return (int) num;
 	}
 
-	public int getTitleRow() {
-		return this.titleRow;
-	}
-
-	public void setTitleRow(int titleRow) {
-		this.titleRow = titleRow;
-	}
 }

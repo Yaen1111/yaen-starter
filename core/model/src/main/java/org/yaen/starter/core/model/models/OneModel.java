@@ -27,12 +27,20 @@ public abstract class OneModel {
 	 * @param version
 	 */
 	protected OneModel(String version) {
-		
+
 		// set version
 		if (StringUtil.isNotBlank(version)) {
 			this.version = version;
 		} else {
 			this.version = "1.0.0";
 		}
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return super.toString() + ", version=" + this.version;
 	}
 }
