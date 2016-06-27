@@ -1,4 +1,4 @@
-package org.yaen.starter.core.model.pojos.wechat;
+package org.yaen.starter.core.model.models.wechat.objects;
 
 import java.util.ArrayList;
 import java.util.List;

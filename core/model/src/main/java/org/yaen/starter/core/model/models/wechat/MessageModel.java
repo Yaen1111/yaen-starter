@@ -1,8 +1,8 @@
 package org.yaen.starter.core.model.models.wechat;
 
 import org.yaen.starter.core.model.models.OneModel;
-import org.yaen.starter.core.model.pojos.wechat.BaseRequestMessage;
-import org.yaen.starter.core.model.pojos.wechat.BaseResponseMessage;
+import org.yaen.starter.core.model.models.wechat.objects.BaseRequestMessage;
+import org.yaen.starter.core.model.models.wechat.objects.BaseResponseMessage;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,4 +24,10 @@ public class MessageModel extends OneModel {
 	@Setter
 	private BaseResponseMessage response;
 
+	/**
+	 * empty constructor
+	 */
+	public MessageModel(){
+		super("1.0.0");
+	}
 }

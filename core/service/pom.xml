@@ -22,4 +22,5 @@
 			<artifactId>yaen-starter-core-model</artifactId>
 		</dependency>
 	</dependencies>
+	<description>core service,  logical implement for model, only used by model, do not need to  be used by caller.</description>
 </project>

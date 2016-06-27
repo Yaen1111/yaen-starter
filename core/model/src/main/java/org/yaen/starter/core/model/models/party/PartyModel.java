@@ -13,4 +13,10 @@ import org.yaen.starter.core.model.models.OneModel;
  */
 public class PartyModel extends OneModel {
 
+	/**
+	 * empty constructor
+	 */
+	public PartyModel() {
+		super("1.0.0");
+	}
 }

@@ -15,4 +15,10 @@ import org.yaen.starter.core.model.models.OneModel;
  */
 public class RbacModel extends OneModel {
 
+	/**
+	 * empty constructor
+	 */
+	public RbacModel() {
+		super("1.0.0");
+	}
 }

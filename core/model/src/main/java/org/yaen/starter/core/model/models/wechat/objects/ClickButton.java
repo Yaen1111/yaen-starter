@@ -1,6 +1,6 @@
-package org.yaen.starter.core.model.pojos.wechat;
+package org.yaen.starter.core.model.models.wechat.objects;
 
-import org.yaen.starter.core.model.enums.wechat.ButtonTypes;
+import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
 
 import lombok.Getter;
 import lombok.Setter;

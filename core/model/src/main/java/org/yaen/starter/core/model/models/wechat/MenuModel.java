@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.yaen.starter.core.model.models.OneModel;
-import org.yaen.starter.core.model.pojos.wechat.Button;
+import org.yaen.starter.core.model.models.wechat.objects.Button;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -24,10 +24,10 @@ public class MenuModel extends OneModel {
 	private List<Button> buttons = new ArrayList<Button>();
 
 	/**
-	 * constructor
+	 * empty constructor
 	 */
 	public MenuModel() {
-		super();
+		super("1.0.0");
 	}
 
 	/**

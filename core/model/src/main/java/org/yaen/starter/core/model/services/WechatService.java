@@ -6,10 +6,10 @@ import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.core.model.models.wechat.MenuModel;
-import org.yaen.starter.core.model.pojos.wechat.AccessToken;
-import org.yaen.starter.core.model.pojos.wechat.MusicResponseMessage;
-import org.yaen.starter.core.model.pojos.wechat.NewsResponseMessage;
-import org.yaen.starter.core.model.pojos.wechat.TextResponseMessage;
+import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
+import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
+import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
+import org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage;
 
 /**
  * wechat service

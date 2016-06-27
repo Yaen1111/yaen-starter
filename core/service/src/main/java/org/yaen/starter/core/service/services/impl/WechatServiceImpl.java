@@ -29,18 +29,18 @@ import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
-import org.yaen.starter.core.model.enums.wechat.ButtonTypes;
-import org.yaen.starter.core.model.enums.wechat.EventTypes;
-import org.yaen.starter.core.model.enums.wechat.MessageTypes;
 import org.yaen.starter.core.model.models.wechat.MenuModel;
-import org.yaen.starter.core.model.pojos.wechat.AccessToken;
-import org.yaen.starter.core.model.pojos.wechat.Article;
-import org.yaen.starter.core.model.pojos.wechat.ClickButton;
-import org.yaen.starter.core.model.pojos.wechat.ComplexButton;
-import org.yaen.starter.core.model.pojos.wechat.MusicResponseMessage;
-import org.yaen.starter.core.model.pojos.wechat.NewsResponseMessage;
-import org.yaen.starter.core.model.pojos.wechat.TextResponseMessage;
-import org.yaen.starter.core.model.pojos.wechat.ViewButton;
+import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
+import org.yaen.starter.core.model.models.wechat.enums.EventTypes;
+import org.yaen.starter.core.model.models.wechat.enums.MessageTypes;
+import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
+import org.yaen.starter.core.model.models.wechat.objects.Article;
+import org.yaen.starter.core.model.models.wechat.objects.ClickButton;
+import org.yaen.starter.core.model.models.wechat.objects.ComplexButton;
+import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
+import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
+import org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage;
+import org.yaen.starter.core.model.models.wechat.objects.ViewButton;
 import org.yaen.starter.core.model.services.WechatService;
 
 import com.alibaba.fastjson.JSONObject;
@@ -146,7 +146,7 @@ public class WechatServiceImpl implements WechatService {
 
 	/**
 	 * @see org.yaen.starter.core.model.services.WechatService#createMenu(org.yaen.starter.core.model.models.wechat.MenuModel,
-	 *      org.yaen.starter.core.model.pojos.wechat.AccessToken)
+	 *      org.yaen.starter.core.model.models.wechat.objects.AccessToken)
 	 */
 	@Override
 	public void createMenu(MenuModel menu, AccessToken accessToken) throws CoreException {
@@ -296,7 +296,7 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#textMessageToXml(org.yaen.starter.core.model.pojos.wechat.TextResponseMessage)
+	 * @see org.yaen.starter.core.model.services.WechatService#textMessageToXml(org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage)
 	 */
 	@Override
 	public String textMessageToXml(TextResponseMessage textResponseMessage) {
@@ -307,7 +307,7 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#musicMessageToXml(org.yaen.starter.core.model.pojos.wechat.MusicResponseMessage)
+	 * @see org.yaen.starter.core.model.services.WechatService#musicMessageToXml(org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage)
 	 */
 	@Override
 	public String musicMessageToXml(MusicResponseMessage musicResponseMessage) {
@@ -318,7 +318,7 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#newsMessageToXml(org.yaen.starter.core.model.pojos.wechat.NewsResponseMessage)
+	 * @see org.yaen.starter.core.model.services.WechatService#newsMessageToXml(org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage)
 	 */
 	@Override
 	public String newsMessageToXml(NewsResponseMessage newsResponseMessage) {

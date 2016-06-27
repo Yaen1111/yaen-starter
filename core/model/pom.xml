@@ -26,4 +26,5 @@
 			<artifactId>yaen-starter-common-integration</artifactId>
 		</dependency>
 	</dependencies>
+	<description>core model, many model sets here, with service inteface, use ServiceLoader to get service implement and use in  model. model  do not need service.</description>
 </project>

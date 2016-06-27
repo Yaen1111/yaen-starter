@@ -1,4 +1,4 @@
-package org.yaen.starter.core.model.enums.wechat;
+package org.yaen.starter.core.model.models.wechat.enums;
 
 /**
  * wechat message types definition
