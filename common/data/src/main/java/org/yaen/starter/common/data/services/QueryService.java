@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
+import org.yaen.starter.common.data.objects.QueryBuilder;
 
 /**
  * query service for most search operation
@@ -95,5 +96,15 @@ public interface QueryService {
 	 * @throws CommonException
 	 */
 	public <T extends BaseEntity> List<Long> selectRowidsByAll(T entity) throws CommonException;
+
+	/**
+	 * select rowids by query
+	 * 
+	 * @param entity
+	 * @param queryBuilder
+	 * @return
+	 * @throws CommonException
+	 */
+	public <T extends BaseEntity> List<Long> selectRowidsByQuery(T entity, QueryBuilder queryBuilder) throws CommonException;
 
 }

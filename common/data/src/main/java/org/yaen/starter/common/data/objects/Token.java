@@ -29,19 +29,9 @@ public class Token implements Serializable {
 	private long timestamp = 0;
 
 	/** token pager */
+	@Getter
 	@Setter
-	private Pager pager;
-
-	/**
-	 * getter of pager, make new pager if null
-	 * 
-	 * @return
-	 */
-	public Pager getPager() {
-		if (this.pager == null)
-			this.pager = new Pager();
-		return pager;
-	}
+	private Pager pager = new Pager(0);
 
 	/**
 	 * empty token with current timestamp

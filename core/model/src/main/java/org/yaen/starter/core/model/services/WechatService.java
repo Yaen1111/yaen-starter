@@ -2,10 +2,11 @@ package org.yaen.starter.core.model.services;
 
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
+import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.core.model.models.wechat.MenuModel;
 import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
@@ -46,15 +47,16 @@ public interface WechatService {
 	 * @param accessToken
 	 * @throws CoreException
 	 */
-	void createMenu(MenuModel menu, AccessToken accessToken) throws CoreException;
+	void createMenu(String menu, AccessToken accessToken) throws CoreException;
 
 	/**
-	 * load menu from entity
+	 * get menu entity list by group name
 	 * 
+	 * @param groupName
 	 * @return
 	 * @throws CoreException
 	 */
-	MenuModel loadMenu() throws CoreException;
+	List<MenuEntity> getMenuEntityList(String groupName) throws CoreException;
 
 	/**
 	 * parse xml from input stream

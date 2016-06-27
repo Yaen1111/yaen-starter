@@ -21,13 +21,25 @@ import lombok.Setter;
 public class MenuEntity extends TwoEntity {
 	private static final long serialVersionUID = -6445208030709771936L;
 
-	/** parent menu id */
+	/** menu group name */
 	@OneData(DataType = DataTypes.VARCHAR20)
-	private String parentId;
+	private String groupName;
+
+	/** menu level, currently 1 or 2 */
+	@OneData(DataType = DataTypes.INT)
+	private Integer level;
+
+	/** menu order, follow the level */
+	@OneData(DataType = DataTypes.INT)
+	private int orders;
 
 	/** menu type */
 	@OneData(DataType = DataTypes.VARCHAR20)
 	private String type;
+
+	/** parent menu id */
+	@OneData(DataType = DataTypes.VARCHAR20)
+	private String parentId;
 
 	/** menu title */
 	@OneData(DataType = DataTypes.VARCHAR50)
@@ -36,10 +48,6 @@ public class MenuEntity extends TwoEntity {
 	/** menu key */
 	@OneData(DataType = DataTypes.VARCHAR20)
 	private String key;
-
-	/** menu level, currently 1 or 2 */
-	@OneData(DataType = DataTypes.INT)
-	private Integer level;
 
 	/** menu url, will jump to that url */
 	@OneData(DataType = DataTypes.VARCHAR250)

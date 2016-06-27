@@ -17,6 +17,7 @@ import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
+import org.yaen.starter.common.data.objects.QueryBuilder;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
@@ -425,6 +426,53 @@ public class OneQueryServiceImpl implements QueryService {
 
 			// set table name
 			query.setTableName(one.getTableName());
+
+			// call mapper
+			return queryMapper.selectRowidsByAll(query);
+
+		} catch (CommonException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			throw new CommonException(ex);
+		}
+	}
+
+	/**
+	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByQuery(org.yaen.starter.common.data.entities.BaseEntity,
+	 *      org.yaen.starter.common.data.objects.QueryBuilder)
+	 */
+	@Override
+	public <T extends BaseEntity> List<Long> selectRowidsByQuery(T entity, QueryBuilder queryBuilder)
+			throws CommonException {
+		AssertUtil.notNull(entity);
+		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
+
+		OneEntity one = (OneEntity) entity;
+
+		try {
+			// create table if not exists
+			zeroEntityService.CreateTable(one);
+
+			// make event model
+			QueryEntity query = new QueryEntity();
+
+			// set table name
+			query.setTableName(one.getTableName());
+
+			// set where if not empty
+			if (!queryBuilder.getWhereEquals().isEmpty()) {
+				// TODO
+			}
+
+			// set order if not empty
+			if (!queryBuilder.getOrders().isEmpty()) {
+				// TODO
+			}
+
+			// set pager if not empty
+			if (queryBuilder.getPager().getItemPerPage() > 0) {
+				// TODO
+			}
 
 			// call mapper
 			return queryMapper.selectRowidsByAll(query);

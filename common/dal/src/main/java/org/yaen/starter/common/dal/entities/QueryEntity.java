@@ -23,4 +23,6 @@ public class QueryEntity {
 	private Map<String, Object> columns;
 
 	private String whereClause;
+
+	private String orderby;
 }

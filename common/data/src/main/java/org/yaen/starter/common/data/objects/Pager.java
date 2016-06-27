@@ -21,21 +21,36 @@ public class Pager implements Serializable {
 	@Setter
 	private int totalItem = 0;
 
-	/** items per page, default to 10 */
+	/** items per page, default to 0 for all */
 	@Getter
 	@Setter
-	private int itemPerPage = 10;
+	private int itemPerPage = 0;
 
-	/** current page, should not */
+	/** current page, 0-based */
 	@Getter
 	@Setter
 	private int currentPage = 0;
 
 	/**
-	 * common pager
+	 * constructor
+	 * 
+	 * @param totalItem
+	 * @param itemPerPage
+	 * @param currentPage
 	 */
-	public Pager() {
+	public Pager(int totalItem, int itemPerPage, int currentPage) {
+		this.totalItem = totalItem;
+		this.itemPerPage = itemPerPage;
+		this.currentPage = currentPage;
+	}
 
+	/**
+	 * constructor
+	 * 
+	 * @param itemPerPage
+	 */
+	public Pager(int itemPerPage) {
+		this(0, itemPerPage, 0);
 	}
 
 	/**
@@ -51,8 +66,31 @@ public class Pager implements Serializable {
 	 * 
 	 * @param str
 	 */
-	public void TryParse(String str) {
-		// TODO
+	public boolean TryParse(String str) {
+		if (str == null)
+			return false;
+
+		// split by -, and need at least 3
+		String[] temp = str.split("-");
+		if (temp == null || temp.length < 3)
+			return false;
+
+		try {
+			// parse
+			int t = Integer.parseInt(temp[0]);
+			int p = Integer.parseInt(temp[1]);
+			int c = Integer.parseInt(temp[2]);
+
+			// set if all ok
+			this.totalItem = t;
+			this.itemPerPage = p;
+			this.currentPage = c;
+
+			return true;
+
+		} catch (NumberFormatException ex) {
+			return false;
+		}
 	}
 
 }
