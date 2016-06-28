@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.objects.NameValue;
+import org.yaen.starter.common.data.objects.QueryBuilder;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -177,8 +179,11 @@ public class WechatServiceImpl implements WechatService {
 		List<MenuEntity> list = null;
 
 		try {
-			entity.setGroupName(groupName);
-			List<Long> rowids = queryService.selectRowidsByFieldName(entity, "groupName");
+			QueryBuilder qb = new QueryBuilder();
+			qb.getWhereEquals().add(new NameValue("groupName", groupName));
+			qb.getOrders().add("orders");
+			
+			List<Long> rowids = queryService.selectRowidsByQuery(entity, qb);
 			list = queryService.selectListByRowids(entity, rowids);
 		} catch (CommonException ex) {
 			throw new CoreException("get menu entity error", ex);

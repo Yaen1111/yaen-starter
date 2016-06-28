@@ -162,7 +162,10 @@ public class Excel2003Processor implements HSSFListener {
 
 			thisRow = brec.getRow();
 			thisColumn = brec.getColumn();
-			thisStr = "";
+
+			// blank, add blank
+			// thisStr = "";
+			this.rowlist.add(thisColumn, " ");
 			break;
 		case BoolErrRecord.sid:
 			BoolErrRecord berec = (BoolErrRecord) record;
@@ -218,11 +221,11 @@ public class Excel2003Processor implements HSSFListener {
 			curRow = thisRow = lsrec.getRow();
 			thisColumn = lsrec.getColumn();
 			if (sstRecord == null) {
-				rowlist.add(thisColumn, " ");
+				this.rowlist.add(thisColumn, " ");
 			} else {
 				value = sstRecord.getString(lsrec.getSSTIndex()).toString().trim();
 				value = value.equals("") ? " " : value;
-				rowlist.add(thisColumn, value);
+				this.rowlist.add(thisColumn, value);
 			}
 			break;
 		case NoteRecord.sid:

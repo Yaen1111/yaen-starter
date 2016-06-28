@@ -463,6 +463,8 @@ public class OneQueryServiceImpl implements QueryService {
 			if (!queryBuilder.getWhereEquals().isEmpty()) {
 				// TODO
 			}
+			
+			zz
 
 			// set order if not empty
 			if (!queryBuilder.getOrders().isEmpty()) {
