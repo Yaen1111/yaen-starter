@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.web.home.viewmodels.ViewModel;
 
 /**
@@ -45,12 +44,6 @@ public class StarterController {
 	@RequestMapping("model.jspx")
 	public String model(Model model) throws IOException {
 
-		UserDTO user = new UserDTO();
-		user.setUserId("John");
-		user.setTrueName("John Smith");
-
-		model.addAttribute("user", user);
-
 		return "starter/model";
 	}
 
@@ -66,12 +59,12 @@ public class StarterController {
 	public ModelAndView viewModel() throws IOException {
 
 		ViewModel model = new ViewModel();
-
-		UserDTO user = new UserDTO();
-		user.setUserId("username");
-		user.setTrueName("truename");
-
-		model.addAttribute("user", user);
+		//
+		// UserDTO user = new UserDTO();
+		// user.setUserId("username");
+		// user.setTrueName("truename");
+		//
+		// model.addAttribute("user", user);
 
 		model.setTitle("model2");
 

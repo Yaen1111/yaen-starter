@@ -1,16 +1,11 @@
 package org.yaen.starter.core.model.models.user;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.yaen.starter.common.dal.entities.user.UserEntity;
-import org.yaen.starter.common.dal.entities.user.UserRoleEntity;
-import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.services.EntityService;
@@ -40,7 +35,10 @@ public class UserModel extends OneModel {
 	private UserEntity user;
 
 	/** the role id list */
-	private List<String> roles;
+	private Set<String> roles;
+
+	/** the auth id list */
+	private Set<String> auths;
 
 	/** entity service */
 	private EntityService entityService = ServiceLoader.getEntityService();
@@ -81,9 +79,10 @@ public class UserModel extends OneModel {
 	 * 
 	 * @param id
 	 * @throws CoreException
-	 * @throws DataException
+	 * @throws DuplicateDataException
+	 * @throws DataNotExistsException
 	 */
-	public void load(String username) throws CoreException, DataException {
+	public void load(String username) throws CoreException, DataNotExistsException, DuplicateDataException {
 		AssertUtil.notBlank(username);
 
 		// clear user
@@ -164,28 +163,32 @@ public class UserModel extends OneModel {
 	 * @return
 	 * @throws CoreException
 	 */
-	public List<String> getRoles() throws CoreException {
+	public Set<String> getRoles() throws CoreException {
 		this.checkUser();
 
+		// call rbac model to get roles if not exists
 		if (this.roles == null || this.roles.isEmpty()) {
-			try {
-				// get value list
-				List<Object> list = queryService.selectValueListById(new UserRoleEntity(), this.user.getId(), "roleId");
-
-				// convert to role list
-				List<String> role_list = new ArrayList<String>(list.size());
-				for (Object o : list) {
-					role_list.add((String) o);
-				}
-
-				// set to member
-				this.roles = role_list;
-			} catch (CommonException ex) {
-				throw new CoreException(ex);
-			}
+			this.roles = new RbacModel().getUserRoles(this.user.getId());
 		}
 
 		return this.roles;
+	}
+
+	/**
+	 * get auths
+	 * 
+	 * @return
+	 * @throws CoreException
+	 */
+	public Set<String> getAuths() throws CoreException {
+		this.checkUser();
+
+		// call rbac model to get roles if not exists
+		if (this.auths == null || this.auths.isEmpty()) {
+			this.auths = new RbacModel().getUserAuths(this.user.getId());
+		}
+
+		return this.auths;
 	}
 
 	/**
@@ -195,40 +198,9 @@ public class UserModel extends OneModel {
 	 * @throws CoreException
 	 */
 	public void assignNewRoles(List<String> roles) throws CoreException {
-		AssertUtil.notNull(roles);
 		this.checkUser();
 
-		// copy roles and put in set
-		Set<String> set = new HashSet<String>(roles);
-
-		// get user
-		UserRoleEntity userrole = new UserRoleEntity();
-
-		try {
-			// get current user roles
-			List<UserRoleEntity> urs = queryService.selectListById(userrole, this.user.getId());
-
-			for (UserRoleEntity u : urs) {
-				if (set.contains(u.getId())) {
-					// has, remove from set, as is no change
-					set.remove(u.getId());
-				} else {
-					// delete if not in set
-					entityService.deleteEntityByRowid(u);
-				}
-			}
-
-			// add new if still in set
-			if (!set.isEmpty()) {
-				for (String roleid : set) {
-					UserRoleEntity ur = new UserRoleEntity();
-					ur.setId(user.getId());
-					ur.setRoleId(roleid);
-					entityService.insertEntityByRowid(ur);
-				}
-			}
-		} catch (CommonException ex) {
-			throw new CoreException(ex);
-		}
+		// call rbac model
+		new RbacModel().assignUserWithNewRoles(this.user.getId(), roles);
 	}
 }

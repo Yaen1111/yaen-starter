@@ -1,12 +1,11 @@
 package org.yaen.starter.web.home.contexts.shiro;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -14,13 +13,12 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.yaen.starter.biz.shared.objects.UserDTO;
-import org.yaen.starter.biz.shared.services.UserService;
-import org.yaen.starter.common.data.exceptions.BizException;
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.models.user.RbacModel;
+import org.yaen.starter.core.model.models.user.UserModel;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,9 +31,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ShiroRealm extends AuthorizingRealm {
-
-	@Autowired
-	private UserService userService;
 
 	/**
 	 * get user info only, no password check, throw exception if user not found
@@ -54,23 +49,28 @@ public class ShiroRealm extends AuthorizingRealm {
 			throw new UnknownAccountException("username is empty");
 		}
 
-		UserDTO user = new UserDTO();
+		UserModel user = new UserModel();
 
 		// find user
 		try {
-			user = userService.getUserByName(username);
-		} catch (BizException ex) {
+			user.load(username);
+		} catch (CoreException ex) {
 			// other error
 			throw new AccountException("unknown error", ex);
+		} catch (DataNotExistsException ex) {
+			throw new UnknownAccountException();
+		} catch (DuplicateDataException ex) {
+			throw new UnknownAccountException("duplicate account found");
 		}
 
 		// here is ok, create authentication info
 
 		// create principal(user object), the username maybe changed by capital
-		ShiroPrincipal principal = new ShiroPrincipal(user.getUserId());
+		ShiroPrincipal principal = new ShiroPrincipal(user.getUser().getId());
 
 		// create credentials(password hash and salt)
-		ShiroCredentials credentials = new ShiroCredentials(user.getPasswordHash(), user.getPasswordSalt());
+		ShiroCredentials credentials = new ShiroCredentials(user.getUser().getPasswordHash(),
+				user.getUser().getPasswordSalt());
 
 		// return auth info
 		return new SimpleAuthenticationInfo(principal, credentials, this.getName());
@@ -90,7 +90,8 @@ public class ShiroRealm extends AuthorizingRealm {
 
 			try {
 				// get user roles
-				List<String> roles = userService.getUserRoles(principal.getUsername());
+				Set<String> roles = new RbacModel().getUserRoles(principal.getUsername());
+				Set<String> auths = new RbacModel().getUserAuths(principal.getUsername());
 
 				// simple
 				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
@@ -102,16 +103,13 @@ public class ShiroRealm extends AuthorizingRealm {
 				// permissions of role in real-time(no cache)
 
 				// get all permissions of all roles, this may use cache
-				for (String role : roles) {
-					List<String> auths = userService.getRoleAuths(role);
-					info.addStringPermissions(auths);
-				}
+				info.addStringPermissions(auths);
 
 				log.debug("get user roles, user={}, roles={}", principal.getUsername(), roles);
-				log.debug("get user auths, user={}, auths={}", principal.getUsername(), info.getStringPermissions());
+				log.debug("get user auths, user={}, auths={}", principal.getUsername(), auths);
 
 				return info;
-			} catch (BizException ex) {
+			} catch (CoreException ex) {
 				log.error("get role auth error", ex);
 				return null;
 			}

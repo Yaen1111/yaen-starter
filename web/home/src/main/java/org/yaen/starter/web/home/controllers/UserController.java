@@ -2,12 +2,11 @@ package org.yaen.starter.web.home.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.yaen.starter.biz.shared.objects.RoleDTO;
-import org.yaen.starter.biz.shared.services.UserService;
+import org.yaen.starter.common.dal.entities.user.RoleEntity;
+import org.yaen.starter.core.model.models.user.RbacModel;
 
 /**
  * user controller, deals user/role/auth
@@ -17,9 +16,6 @@ import org.yaen.starter.biz.shared.services.UserService;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-
-	@Autowired
-	private UserService userService;
 
 	/**
 	 * user list and pager
@@ -43,7 +39,7 @@ public class UserController {
 	@RequestMapping("role.jspx")
 	public String role(Model model) throws Exception {
 		// get all role list
-		List<RoleDTO> rolelist = userService.getRoleListAll();
+		List<RoleEntity> rolelist = new RbacModel().getRoleListAll();
 		model.addAttribute("rolelist", rolelist);
 
 		return "user/role";

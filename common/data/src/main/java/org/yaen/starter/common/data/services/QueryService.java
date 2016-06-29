@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
-import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.objects.QueryBuilder;
