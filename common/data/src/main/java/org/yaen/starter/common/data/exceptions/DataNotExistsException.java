@@ -1,11 +1,11 @@
 package org.yaen.starter.common.data.exceptions;
 
 /**
- * data not exists for biz
+ * data not exists
  * 
  * @author Yaen 2016年1月13日下午7:31:52
  */
-public class DataNotExistsBizException extends BizException {
+public class DataNotExistsException extends DataException {
 	private static final long serialVersionUID = -928810488442832704L;
 
 	/**
@@ -14,7 +14,7 @@ public class DataNotExistsBizException extends BizException {
 	 * @param enableSuppression
 	 * @param writableStackTrace
 	 */
-	public DataNotExistsBizException(String message, Throwable cause, boolean enableSuppression,
+	public DataNotExistsException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
@@ -23,21 +23,21 @@ public class DataNotExistsBizException extends BizException {
 	 * @param message
 	 * @param cause
 	 */
-	public DataNotExistsBizException(String message, Throwable cause) {
+	public DataNotExistsException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
-	public DataNotExistsBizException(String message) {
+	public DataNotExistsException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public DataNotExistsBizException(Throwable cause) {
+	public DataNotExistsException(Throwable cause) {
 		super(cause);
 	}
 

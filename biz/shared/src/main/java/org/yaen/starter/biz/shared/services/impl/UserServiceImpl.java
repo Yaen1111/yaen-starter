@@ -12,8 +12,8 @@ import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.biz.shared.services.UserService;
 import org.yaen.starter.common.data.exceptions.BizException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.DataNotExistsBizException;
-import org.yaen.starter.common.data.exceptions.DuplicateDataBizException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
@@ -55,11 +55,11 @@ public class UserServiceImpl implements UserService {
 			List<User> list = queryService.selectModelListById(user, username);
 
 			if (list == null || list.isEmpty()) {
-				throw new DataNotExistsBizException("user not exists");
+				throw new DataNotExistsException("user not exists");
 			}
 
 			if (list.size() > 1) {
-				throw new DuplicateDataBizException("duplicate usernames");
+				throw new DuplicateDataException("duplicate usernames");
 			}
 
 			return list.get(0);
@@ -87,11 +87,11 @@ public class UserServiceImpl implements UserService {
 			List<Role> list = queryService.selectModelListById(role, rolename);
 
 			if (list == null || list.isEmpty()) {
-				throw new DataNotExistsBizException("role not exists");
+				throw new DataNotExistsException("role not exists");
 			}
 
 			if (list.size() > 1) {
-				throw new DuplicateDataBizException("duplicate rolenames");
+				throw new DuplicateDataException("duplicate rolenames");
 			}
 
 			return list.get(0);

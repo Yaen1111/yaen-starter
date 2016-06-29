@@ -10,7 +10,7 @@ import org.yaen.starter.common.dal.services.ZeroEntityService;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.DataNotExistsCommonException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -153,7 +153,7 @@ public class OneEntityServiceImpl implements EntityService {
 	 *      long)
 	 */
 	@Override
-	public <T extends BaseEntity> void selectEntityByRowid(T entity, long rowid) throws CommonException {
+	public <T extends BaseEntity> void selectEntityByRowid(T entity, long rowid) throws CommonException, DataNotExistsException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
@@ -166,7 +166,7 @@ public class OneEntityServiceImpl implements EntityService {
 
 			if (!exists) {
 				// not exists
-				throw new DataNotExistsCommonException("data not exists");
+				throw new DataNotExistsException("data not exists");
 			}
 
 			// trigger
@@ -266,7 +266,7 @@ public class OneEntityServiceImpl implements EntityService {
 		try {
 			this.selectEntityByRowid(entity, rowid);
 			return true;
-		} catch (DataNotExistsCommonException ex) {
+		} catch (DataNotExistsException ex) {
 			return false;
 		} catch (OperationCancelledCommonException ex) {
 			return false;

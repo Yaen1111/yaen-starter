@@ -2,6 +2,7 @@ package org.yaen.starter.common.data.services;
 
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 
 /**
  * entity service for CRUD
@@ -16,8 +17,10 @@ public interface EntityService {
 	 * @param entity
 	 * @param rowid
 	 * @throws CommonException
+	 * @throws DataNotExistsException
 	 */
-	public <T extends BaseEntity> void selectEntityByRowid(T entity, long rowid) throws CommonException;
+	public <T extends BaseEntity> void selectEntityByRowid(T entity, long rowid)
+			throws CommonException, DataNotExistsException;
 
 	/**
 	 * insert entity, the rowid is auto-increase

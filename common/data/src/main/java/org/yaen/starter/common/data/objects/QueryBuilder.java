@@ -15,11 +15,11 @@ import lombok.Setter;
 @Setter
 public class QueryBuilder {
 
-	/** where/and name = value */
+	/** where/and fieldname = value */
 	private List<NameValue> whereEquals = new ArrayList<NameValue>();
 
-	/** order by list */
-	private List<String> orders = new ArrayList<String>();
+	/** order by list, true as asc, false as desc */
+	private List<NameValueT<Boolean>> orders = new ArrayList<NameValueT<Boolean>>();
 
 	/** pager for limit */
 	private Pager pager = new Pager(0);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.objects.QueryBuilder;
 
 /**
@@ -34,6 +35,17 @@ public interface QueryService {
 	 * @throws CommonException
 	 */
 	public <T extends BaseEntity> List<T> selectListById(T entity, String id) throws CommonException;
+
+	/**
+	 * select one entity by given id, with triggers, empty or duplicate will throw
+	 * 
+	 * @param entity
+	 * @param id
+	 * @return
+	 * @throws CommonException
+	 * @throws DataException
+	 */
+	public <T extends BaseEntity> T selectOneById(T entity, String id) throws CommonException, DataException;
 
 	/**
 	 * select value list by given id and field name, no triggers
@@ -105,6 +117,7 @@ public interface QueryService {
 	 * @return
 	 * @throws CommonException
 	 */
-	public <T extends BaseEntity> List<Long> selectRowidsByQuery(T entity, QueryBuilder queryBuilder) throws CommonException;
+	public <T extends BaseEntity> List<Long> selectRowidsByQuery(T entity, QueryBuilder queryBuilder)
+			throws CommonException;
 
 }

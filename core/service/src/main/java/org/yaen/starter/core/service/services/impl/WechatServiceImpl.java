@@ -22,6 +22,7 @@ import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.objects.NameValue;
+import org.yaen.starter.common.data.objects.NameValueT;
 import org.yaen.starter.common.data.objects.QueryBuilder;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
@@ -54,6 +55,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class WechatServiceImpl implements WechatService {
+	/** the cached access token */
+	private AccessToken m_accessToken;
+
+	/** the cache time */
+	private long m_accessTokenTimeStamp;
 
 	@Autowired
 	private WechatClient wechatClient;
@@ -106,33 +112,38 @@ public class WechatServiceImpl implements WechatService {
 	@Override
 	public AccessToken getAccessToken() throws CoreException {
 
-		// TODO check cache
+		// check cache
+		// TODO use redis
+		long now = DateUtil.getNow().getTime();
+		if (m_accessToken == null || m_accessTokenTimeStamp + 1000 <= now) {
 
-		// the access token
-		AccessToken accessToken = null;
+			// get appid and secret
+			String appid = PropertiesUtil.getProperty("wechat.appid");
+			String secret = PropertiesUtil.getProperty("wechat.secret");
 
-		// get appid and secret
-		String appid = PropertiesUtil.getProperty("wechat.appid");
-		String secret = PropertiesUtil.getProperty("wechat.secret");
+			// call client
+			JSONObject jsonObject;
+			try {
+				jsonObject = wechatClient.getAccessToken(appid, secret);
+			} catch (Exception ex) {
+				throw new CoreException("get access token error", ex);
+			}
 
-		// call client
-		JSONObject jsonObject;
-		try {
-			jsonObject = wechatClient.getAccessToken(appid, secret);
-		} catch (Exception ex) {
-			throw new CoreException("get access token error", ex);
+			// check result
+			if (jsonObject == null) {
+				throw new CoreException("wechat get access token failed");
+			} else {
+				m_accessToken = new AccessToken();
+				m_accessToken.setToken(jsonObject.getString("access_token"));
+				m_accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
+			}
+
+			// set update time
+			m_accessTokenTimeStamp = now;
+
 		}
 
-		// check result
-		if (jsonObject == null) {
-			throw new CoreException("wechat get access token failed");
-		} else {
-			accessToken = new AccessToken();
-			accessToken.setToken(jsonObject.getString("access_token"));
-			accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
-		}
-
-		return accessToken;
+		return m_accessToken;
 	}
 
 	/**
@@ -181,8 +192,8 @@ public class WechatServiceImpl implements WechatService {
 		try {
 			QueryBuilder qb = new QueryBuilder();
 			qb.getWhereEquals().add(new NameValue("groupName", groupName));
-			qb.getOrders().add("orders");
-			
+			qb.getOrders().add(new NameValueT<Boolean>("orders", true));
+
 			List<Long> rowids = queryService.selectRowidsByQuery(entity, qb);
 			list = queryService.selectListByRowids(entity, rowids);
 		} catch (CommonException ex) {

@@ -16,6 +16,9 @@ import org.yaen.starter.common.dal.services.ZeroEntityService;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
 import org.yaen.starter.common.data.objects.QueryBuilder;
 import org.yaen.starter.common.data.services.QueryService;
@@ -236,6 +239,27 @@ public class OneQueryServiceImpl implements QueryService {
 			// select canceled
 			throw new OperationCancelledCommonException("select cancelled by trigger");
 		}
+	}
+
+	/**
+	 * @see org.yaen.starter.common.data.services.QueryService#selectOneById(org.yaen.starter.common.data.entities.BaseEntity,
+	 *      java.lang.String)
+	 */
+	@Override
+	public <T extends BaseEntity> T selectOneById(T entity, String id) throws CommonException, DataException {
+		List<T> list = this.selectListById(entity, id);
+
+		// check empty
+		if (list == null || list.isEmpty()) {
+			throw new DataNotExistsException("user not exists, id=" + id);
+		}
+
+		// check duplicate
+		if (list.size() > 1) {
+			throw new DuplicateDataException("user id duplicate, id=" + id);
+		}
+
+		return list.get(0);
 	}
 
 	/**
@@ -461,18 +485,19 @@ public class OneQueryServiceImpl implements QueryService {
 
 			// set where if not empty
 			if (!queryBuilder.getWhereEquals().isEmpty()) {
+				throw new CommonException("not implemented");
 				// TODO
 			}
-			
-			zz
 
 			// set order if not empty
 			if (!queryBuilder.getOrders().isEmpty()) {
+				throw new CommonException("not implemented");
 				// TODO
 			}
 
 			// set pager if not empty
 			if (queryBuilder.getPager().getItemPerPage() > 0) {
+				throw new CommonException("not implemented");
 				// TODO
 			}
 

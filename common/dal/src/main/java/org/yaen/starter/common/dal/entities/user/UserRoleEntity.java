@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.rbac;
+package org.yaen.starter.common.dal.entities.user;
 
 import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;

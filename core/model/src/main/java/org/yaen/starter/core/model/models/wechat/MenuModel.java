@@ -32,6 +32,9 @@ public class MenuModel extends OneModel {
 	/** top menu(level 1) max count is 3 */
 	public static int WECHAT_MAX_TOP_MENU_COUNT = 3;
 
+	/** the menu list */
+	private List<MenuEntity> menuList;
+
 	/** the service */
 	private WechatService service = ServiceLoader.getWechatService();
 
@@ -52,15 +55,15 @@ public class MenuModel extends OneModel {
 	 * @param groupName
 	 * @throws CoreException
 	 */
-	public void loadMenu(String groupName) throws CoreException {
+	public void load(String groupName) throws CoreException {
 		// get entity
-		List<MenuEntity> entity_list = service.getMenuEntityList(groupName);
+		this.menuList = service.getMenuEntityList(groupName);
 
 		// the object has no relation, so make it in temp
 		Map<String, ComplexButton> top = new HashMap<String, ComplexButton>();
 
 		// load all top menu
-		for (MenuEntity entity : entity_list) {
+		for (MenuEntity entity : this.menuList) {
 			if (entity.getLevel() == 1) {
 				// top level, make complex button
 				ComplexButton btn = new ComplexButton();
@@ -70,7 +73,7 @@ public class MenuModel extends OneModel {
 		}
 
 		// load all 2nd menu
-		for (MenuEntity entity : entity_list) {
+		for (MenuEntity entity : this.menuList) {
 			if (entity.getLevel() == 2) {
 				// parent must exists
 				if (top.containsKey(entity.getParentId())) {
@@ -106,7 +109,7 @@ public class MenuModel extends OneModel {
 		this.buttons = new ArrayList<Button>();
 
 		// load all top menu again, put top menu in order and re-make none-parent button
-		for (MenuEntity entity : entity_list) {
+		for (MenuEntity entity : this.menuList) {
 			if (entity.getLevel() == 1) {
 				// check max size
 				if (this.buttons.size() >= WECHAT_MAX_TOP_MENU_COUNT) {
@@ -152,6 +155,15 @@ public class MenuModel extends OneModel {
 	}
 
 	/**
+	 * save menu to db
+	 * 
+	 * @throws CoreException
+	 */
+	public void save() throws CoreException {
+
+	}
+
+	/**
 	 * push menu to wechat server
 	 * 
 	 * @throws CoreException
@@ -172,7 +184,7 @@ public class MenuModel extends OneModel {
 	 */
 	public String toJSONString() {
 		// to json
-		String json = JSONObject.toJSONString(this);
+		String json = JSONObject.toJSONString(this.buttons);
 
 		// replace null, as we no not need it
 		return json.replaceAll(",null", "");

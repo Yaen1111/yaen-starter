@@ -1,12 +1,12 @@
 package org.yaen.starter.common.data.exceptions;
 
 /**
- * data not exists for core
+ * duplicate data found where is not allowed
  * 
  * @author Yaen 2016年1月13日下午7:31:52
  */
-public class DataNotExistsCoreException extends CoreException {
-	private static final long serialVersionUID = 8154004478287341494L;
+public class DuplicateDataException extends DataException {
+	private static final long serialVersionUID = -373810400540795151L;
 
 	/**
 	 * @param message
@@ -14,7 +14,7 @@ public class DataNotExistsCoreException extends CoreException {
 	 * @param enableSuppression
 	 * @param writableStackTrace
 	 */
-	public DataNotExistsCoreException(String message, Throwable cause, boolean enableSuppression,
+	public DuplicateDataException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
@@ -23,21 +23,21 @@ public class DataNotExistsCoreException extends CoreException {
 	 * @param message
 	 * @param cause
 	 */
-	public DataNotExistsCoreException(String message, Throwable cause) {
+	public DuplicateDataException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
-	public DataNotExistsCoreException(String message) {
+	public DuplicateDataException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public DataNotExistsCoreException(Throwable cause) {
+	public DuplicateDataException(Throwable cause) {
 		super(cause);
 	}
 

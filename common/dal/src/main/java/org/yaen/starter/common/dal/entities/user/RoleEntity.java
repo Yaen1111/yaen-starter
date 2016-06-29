@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.rbac;
+package org.yaen.starter.common.dal.entities.user;
 
 import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;
@@ -10,20 +10,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * auth object
+ * role object
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @Getter
 @Setter
-@OneTable(TableName = "ZU_AUTH")
+@OneTable(TableName = "ZU_ROLE")
 @OneUniqueIndex("ID")
-public class AuthEntity extends TwoEntity {
+public class RoleEntity extends TwoEntity {
 	private static final long serialVersionUID = -709733522935110043L;
 
-	/** override the id to be long enough */
-	@OneData(DataType = DataTypes.VARCHAR50, FieldName = "ID")
-	protected String id = "";
+	/** group name */
+	@OneData(DataType = DataTypes.VARCHAR20)
+	private String groupName;
 
 	/** title */
 	@OneData(DataType = DataTypes.VARCHAR50)

@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.biz.shared.objects.UserDTO;
 import org.yaen.starter.biz.shared.services.UserService;
 import org.yaen.starter.common.data.exceptions.BizException;
-import org.yaen.starter.common.data.exceptions.DataNotExistsBizException;
-import org.yaen.starter.common.data.exceptions.DuplicateDataBizException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.util.utils.StringUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -59,12 +59,6 @@ public class ShiroRealm extends AuthorizingRealm {
 		// find user
 		try {
 			user = userService.getUserByName(username);
-		} catch (DataNotExistsBizException ex) {
-			// user not exists
-			throw new UnknownAccountException("user not exists");
-		} catch (DuplicateDataBizException ex) {
-			// duplicate user found
-			throw new DisabledAccountException("duplicate user found and is disabled");
 		} catch (BizException ex) {
 			// other error
 			throw new AccountException("unknown error", ex);
