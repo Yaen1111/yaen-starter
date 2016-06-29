@@ -246,7 +246,8 @@ public class OneQueryServiceImpl implements QueryService {
 	 *      java.lang.String)
 	 */
 	@Override
-	public <T extends BaseEntity> T selectOneById(T entity, String id) throws CommonException, DataException {
+	public <T extends BaseEntity> T selectOneById(T entity, String id)
+			throws CommonException, DataNotExistsException, DuplicateDataException {
 		List<T> list = this.selectListById(entity, id);
 
 		// check empty
