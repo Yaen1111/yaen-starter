@@ -26,6 +26,7 @@ import org.yaen.starter.common.data.objects.NameValueT;
 import org.yaen.starter.common.data.objects.QueryBuilder;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
+import org.yaen.starter.common.integration.contexts.GeneralCacheManager;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
@@ -55,11 +56,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class WechatServiceImpl implements WechatService {
-	/** the cached access token */
-	private AccessToken m_accessToken;
-
-	/** the cache time */
-	private long m_accessTokenTimeStamp;
+	private static String ACCESS_TOKEN_KEY = "WECHAT_ACCESS_TOKEN";
 
 	@Autowired
 	private WechatClient wechatClient;
@@ -112,10 +109,10 @@ public class WechatServiceImpl implements WechatService {
 	@Override
 	public AccessToken getAccessToken() throws CoreException {
 
-		// check cache
-		// TODO use redis
-		long now = DateUtil.getNow().getTime();
-		if (m_accessToken == null || m_accessTokenTimeStamp + 1000 <= now) {
+		// get tocek from cache
+		AccessToken accessToken = (AccessToken) GeneralCacheManager.get(ACCESS_TOKEN_KEY);
+
+		if (accessToken == null) {
 
 			// get appid and secret
 			String appid = PropertiesUtil.getProperty("wechat.appid");
@@ -132,18 +129,18 @@ public class WechatServiceImpl implements WechatService {
 			// check result
 			if (jsonObject == null) {
 				throw new CoreException("wechat get access token failed");
-			} else {
-				m_accessToken = new AccessToken();
-				m_accessToken.setToken(jsonObject.getString("access_token"));
-				m_accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
 			}
 
-			// set update time
-			m_accessTokenTimeStamp = now;
+			// set token
+			accessToken = new AccessToken();
+			accessToken.setToken(jsonObject.getString("access_token"));
+			accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
+
+			GeneralCacheManager.set(ACCESS_TOKEN_KEY, accessToken, accessToken.getExpiresIn());
 
 		}
 
-		return m_accessToken;
+		return accessToken;
 	}
 
 	/**
