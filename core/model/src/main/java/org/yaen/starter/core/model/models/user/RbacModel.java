@@ -15,7 +15,7 @@ import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.core.model.contexts.ServiceLoader;
+import org.yaen.starter.core.model.contexts.ServiceManager;
 import org.yaen.starter.core.model.models.OneModel;
 
 /**
@@ -32,10 +32,10 @@ import org.yaen.starter.core.model.models.OneModel;
 public class RbacModel extends OneModel {
 
 	/** entity service */
-	private EntityService entityService = ServiceLoader.getEntityService();
+	private EntityService entityService = ServiceManager.getEntityService();
 
 	/** query service */
-	private QueryService queryService = ServiceLoader.getQueryService();
+	private QueryService queryService = ServiceManager.getQueryService();
 
 	/**
 	 * empty constructor

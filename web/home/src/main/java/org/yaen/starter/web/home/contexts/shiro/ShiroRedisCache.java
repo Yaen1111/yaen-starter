@@ -5,67 +5,79 @@ import java.util.Set;
 
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
-import org.yaen.starter.common.util.utils.SerializeUtil;
-import org.yaen.starter.web.home.contexts.RedisRepositoryManager;
+import org.yaen.starter.common.integration.clients.RedisClient;
+import org.yaen.starter.common.util.utils.StringUtil;
+
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * shiro cache object
  * 
  * @author Yaen 2016年5月19日下午6:42:54
  */
+@Slf4j
 public class ShiroRedisCache<K, V> implements Cache<K, V> {
 
+	/** redis shiro cache prefix */
 	private static final String REDIS_SHIRO_CACHE = "shiro-cache:";
 
-	// cache指定redis缓存在哪个数据库：pc员工版启用1，pc站长版启用2
+	/** db index, default is 0, cache use 1 */
 	private static final int DB_INDEX = 1;
 
 	/** the redis manager from constructor */
-	private RedisRepositoryManager repositoryManager;
+	private RedisClient redisClient;
 
+	/** the name used for key */
+	@Getter
 	private String name;
 
-	public ShiroRedisCache(String name, RedisRepositoryManager repositoryManager) {
-		this.name = name;
-		this.repositoryManager = repositoryManager;
+	/**
+	 * build cache key with prefix and name
+	 * 
+	 * @param key
+	 * @return
+	 */
+	protected String buildCacheKey(Object key) {
+		return REDIS_SHIRO_CACHE + this.name + ":" + StringUtil.toString(key);
 	}
 
 	/**
-	 * 自定义relm中的授权/认证的类名加上授权/认证英文名字
+	 * constructor
+	 * 
+	 * @param name
+	 * @param redisClient
 	 */
-	public String getName() {
-		if (name == null)
-			return "";
-		return name;
-	}
-
-	public void setName(String name) {
+	public ShiroRedisCache(String name, RedisClient redisClient) {
 		this.name = name;
+		this.redisClient = redisClient;
 	}
 
+	/**
+	 * @see org.apache.shiro.cache.Cache#get(java.lang.Object)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public V get(K key) throws CacheException {
-		byte[] byteKey = SerializeUtil.serialize(buildCacheKey(key));
-		byte[] byteValue = new byte[0];
 		try {
-			byteValue = repositoryManager.getValueByKey(DB_INDEX, byteKey);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("get cache error");
+			return (V) redisClient.getObjectByKey(DB_INDEX, this.buildCacheKey(key));
+		} catch (CacheException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			log.error("get from redis error", ex);
+			return null;
 		}
-		return (V) SerializeUtil.deserialize(byteValue);
 	}
 
 	@Override
 	public V put(K key, V value) throws CacheException {
-		V previos = get(key);
+		V previos = this.get(key);
 		try {
-			repositoryManager.saveValueByKey(DB_INDEX, SerializeUtil.serialize(buildCacheKey(key)),
-					SerializeUtil.serialize(value), -1);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("put cache error");
+			redisClient.saveObjectByKey(DB_INDEX, key, value, -1);
+		} catch (CacheException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			log.error("put to redis error", ex);
 		}
 		return previos;
 	}
@@ -74,10 +86,11 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	public V remove(K key) throws CacheException {
 		V previos = get(key);
 		try {
-			repositoryManager.deleteByKey(DB_INDEX, SerializeUtil.serialize(buildCacheKey(key)));
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("remove cache error");
+			redisClient.deleteByKey(DB_INDEX, this.buildCacheKey(key));
+		} catch (CacheException ex) {
+			throw ex;
+		} catch (Exception ex) {
+			log.error("remove from redis error", ex);
 		}
 		return previos;
 	}
@@ -89,9 +102,9 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public int size() {
-		if (keys() == null)
+		if (this.keys() == null)
 			return 0;
-		return keys().size();
+		return this.keys().size();
 	}
 
 	@Override
@@ -104,10 +117,6 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	public Collection<V> values() {
 		// TODO
 		return null;
-	}
-
-	private String buildCacheKey(Object key) {
-		return REDIS_SHIRO_CACHE + getName() + ":" + key;
 	}
 
 }

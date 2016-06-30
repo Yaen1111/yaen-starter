@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.core.model.contexts.ServiceLoader;
+import org.yaen.starter.core.model.contexts.ServiceManager;
 import org.yaen.starter.core.model.models.OneModel;
 import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
 import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
@@ -36,7 +36,7 @@ public class MenuModel extends OneModel {
 	private List<MenuEntity> menuList;
 
 	/** the service */
-	private WechatService service = ServiceLoader.getWechatService();
+	private WechatService service = ServiceManager.getWechatService();
 
 	/** the buttons */
 	@Getter

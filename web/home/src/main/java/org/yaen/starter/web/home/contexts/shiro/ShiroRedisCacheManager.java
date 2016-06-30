@@ -3,7 +3,7 @@ package org.yaen.starter.web.home.contexts.shiro;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
-import org.yaen.starter.web.home.contexts.RedisRepositoryManager;
+import org.yaen.starter.common.integration.clients.RedisClient;
 
 import lombok.Setter;
 
@@ -14,9 +14,9 @@ import lombok.Setter;
  */
 public class ShiroRedisCacheManager implements CacheManager {
 
-	/** the repository manager for injection */
+	/** the redis client for injection */
 	@Setter
-	private RedisRepositoryManager repositoryManager;
+	private RedisClient redisClient;
 
 	/**
 	 * get cache from redis
@@ -25,7 +25,7 @@ public class ShiroRedisCacheManager implements CacheManager {
 	 */
 	@Override
 	public <K, V> Cache<K, V> getCache(String name) throws CacheException {
-		return new ShiroRedisCache<K, V>(name, this.repositoryManager);
+		return new ShiroRedisCache<K, V>(name, this.redisClient);
 	}
 
 }

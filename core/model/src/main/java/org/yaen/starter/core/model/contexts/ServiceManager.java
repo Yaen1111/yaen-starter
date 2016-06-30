@@ -10,12 +10,12 @@ import org.yaen.starter.core.model.services.WechatService;
 import lombok.Getter;
 
 /**
- * service loader, used to get autowired service
+ * service manager, used to get autowired service
  * 
  * @author Yaen 2016年2月1日下午8:55:32
  */
 @Component
-public class ServiceLoader {
+public class ServiceManager {
 
 	/** the static entity service */
 	@Getter
@@ -40,7 +40,7 @@ public class ServiceLoader {
 	 */
 	@Autowired
 	public void setEntityService(EntityService entityService) {
-		ServiceLoader.entityService = entityService;
+		ServiceManager.entityService = entityService;
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class ServiceLoader {
 	 */
 	@Autowired
 	public void setQueryService(QueryService queryService) {
-		ServiceLoader.queryService = queryService;
+		ServiceManager.queryService = queryService;
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class ServiceLoader {
 	 */
 	@Autowired
 	public void setPartyService(PartyService partyService) {
-		ServiceLoader.partyService = partyService;
+		ServiceManager.partyService = partyService;
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class ServiceLoader {
 	 */
 	@Autowired
 	public void setWechatService(WechatService wechatService) {
-		ServiceLoader.wechatService = wechatService;
+		ServiceManager.wechatService = wechatService;
 	}
 
 }
