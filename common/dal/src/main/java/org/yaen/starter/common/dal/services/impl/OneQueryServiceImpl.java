@@ -12,11 +12,10 @@ import org.yaen.starter.common.dal.entities.OneColumnEntity;
 import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.dal.entities.QueryEntity;
 import org.yaen.starter.common.dal.mappers.QueryMapper;
-import org.yaen.starter.common.dal.services.ZeroEntityService;
+import org.yaen.starter.common.dal.services.TableService;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
@@ -37,7 +36,7 @@ public class OneQueryServiceImpl implements QueryService {
 	private QueryMapper queryMapper;
 
 	@Autowired
-	private ZeroEntityService zeroEntityService;
+	private TableService tableService;
 
 	/**
 	 * inner select model list, no triggers, origin entity is not changed
@@ -61,7 +60,7 @@ public class OneQueryServiceImpl implements QueryService {
 		try {
 
 			// create table if not exists
-			zeroEntityService.CreateTable(entity);
+			tableService.CreateTable(entity);
 
 			// set rowid list
 			entity.setRowids(rowids);
@@ -110,7 +109,7 @@ public class OneQueryServiceImpl implements QueryService {
 		try {
 
 			// create table if not exists
-			zeroEntityService.CreateTable(entity);
+			tableService.CreateTable(entity);
 
 			// set id
 			entity.setId(id);
@@ -157,7 +156,7 @@ public class OneQueryServiceImpl implements QueryService {
 		try {
 
 			// create table if not exists
-			zeroEntityService.CreateTable(entity);
+			tableService.CreateTable(entity);
 
 			// set id and column
 			entity.setId(id);
@@ -315,7 +314,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(one);
+			tableService.CreateTable(one);
 
 			// make event model
 			QueryEntity query = new QueryEntity();
@@ -362,7 +361,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(one);
+			tableService.CreateTable(one);
 
 			// make event model
 			QueryEntity query = new QueryEntity();
@@ -411,7 +410,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(one);
+			tableService.CreateTable(one);
 
 			// make event model
 			QueryEntity query = new QueryEntity();
@@ -444,7 +443,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(one);
+			tableService.CreateTable(one);
 
 			// make event model
 			QueryEntity query = new QueryEntity();
@@ -476,7 +475,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(one);
+			tableService.CreateTable(one);
 
 			// make event model
 			QueryEntity query = new QueryEntity();

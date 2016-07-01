@@ -13,7 +13,7 @@ import org.yaen.starter.common.dal.entities.OneEntity;
  * @author Yaen 2016年5月3日下午9:28:37
  */
 @Repository
-public interface OneMapper {
+public interface EntityMapper {
 
 	/**
 	 * select one object by rowid

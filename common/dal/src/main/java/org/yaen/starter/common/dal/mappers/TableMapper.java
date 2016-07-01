@@ -13,7 +13,7 @@ import org.yaen.starter.common.dal.entities.OneEntity;
  * @author Yaen 2016年1月6日下午7:51:57
  */
 @Repository
-public interface ZeroMapper {
+public interface TableMapper {
 
 	/**
 	 * create table by given element info

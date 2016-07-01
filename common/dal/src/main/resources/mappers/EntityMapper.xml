@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.yaen.starter.common.dal.mappers.OneMapper">
+<mapper namespace="org.yaen.starter.common.dal.mappers.EntityMapper">
 
 	<select id="selectByRowid" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		SELECT

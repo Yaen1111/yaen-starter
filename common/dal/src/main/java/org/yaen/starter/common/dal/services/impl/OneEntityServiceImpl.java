@@ -5,8 +5,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.dal.entities.OneEntity;
-import org.yaen.starter.common.dal.mappers.OneMapper;
-import org.yaen.starter.common.dal.services.ZeroEntityService;
+import org.yaen.starter.common.dal.mappers.EntityMapper;
+import org.yaen.starter.common.dal.services.TableService;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
@@ -26,10 +26,10 @@ import org.yaen.starter.common.util.utils.AssertUtil;
 public class OneEntityServiceImpl implements EntityService {
 
 	@Autowired
-	private OneMapper oneMapper;
+	private EntityMapper oneMapper;
 
 	@Autowired
-	private ZeroEntityService zeroEntityService;
+	private TableService tableService;
 
 	/**
 	 * inner select entity by rowid, fill entity fields, no triggers
@@ -42,7 +42,7 @@ public class OneEntityServiceImpl implements EntityService {
 	protected <T extends OneEntity> boolean innerSelectEntityByRowid(T entity, long rowid) throws CommonException {
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(entity);
+			tableService.CreateTable(entity);
 
 			// set rowid
 			entity.setRowid(rowid);
@@ -75,7 +75,7 @@ public class OneEntityServiceImpl implements EntityService {
 	protected <T extends OneEntity> void innerInsertEntityByRowid(T entity) throws CommonException {
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(entity);
+			tableService.CreateTable(entity);
 
 			// insert the given element
 			int ret = oneMapper.insertByRowid(entity);
@@ -104,7 +104,7 @@ public class OneEntityServiceImpl implements EntityService {
 	protected <T extends OneEntity> void innerUpdateEntityByRowid(T entity) throws CommonException {
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(entity);
+			tableService.CreateTable(entity);
 
 			// update the given element
 			int ret = oneMapper.updateByRowid(entity);
@@ -131,7 +131,7 @@ public class OneEntityServiceImpl implements EntityService {
 	protected <T extends OneEntity> void innerDeleteEntity(T entity) throws CommonException {
 		try {
 			// create table if not exists
-			zeroEntityService.CreateTable(entity);
+			tableService.CreateTable(entity);
 
 			// delete the given element
 			int ret = oneMapper.deleteByRowid(entity);
@@ -153,7 +153,8 @@ public class OneEntityServiceImpl implements EntityService {
 	 *      long)
 	 */
 	@Override
-	public <T extends BaseEntity> void selectEntityByRowid(T entity, long rowid) throws CommonException, DataNotExistsException {
+	public <T extends BaseEntity> void selectEntityByRowid(T entity, long rowid)
+			throws CommonException, DataNotExistsException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 

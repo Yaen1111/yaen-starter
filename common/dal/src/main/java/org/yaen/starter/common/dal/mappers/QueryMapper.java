@@ -8,7 +8,7 @@ import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.dal.entities.QueryEntity;
 
 /**
- * event mapper for event engine, most of operation return id list for memery paging
+ * query mapper for event engine, most of operation return id list for memery paging
  * <p>
  * prepare for READONLY/SUB/SLAVE db server
  * 

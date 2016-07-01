@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.yaen.starter.common.dal.entities.MyDescribeEntity;
 import org.yaen.starter.common.dal.entities.OneColumnEntity;
 import org.yaen.starter.common.dal.entities.OneEntity;
-import org.yaen.starter.common.dal.mappers.ZeroMapper;
-import org.yaen.starter.common.dal.services.ZeroEntityService;
+import org.yaen.starter.common.dal.mappers.TableMapper;
+import org.yaen.starter.common.dal.services.TableService;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.util.utils.StringUtil;
@@ -25,16 +25,16 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
  * @author Yaen 2016年6月26日下午5:03:17
  */
 @Service
-public class ZeroEntityServiceImpl implements ZeroEntityService {
+public class OneTableServiceImpl implements TableService {
 
-	/** tables that are already updated */
+	/** tables that are already updated, local cache is ok */
 	private static Set<String> tableSet = new HashSet<String>();
 
 	@Autowired
-	private ZeroMapper zeroMapper;
+	private TableMapper tableMapper;
 
 	/**
-	 * @see org.yaen.starter.common.dal.services.ZeroEntityService#CreateTable(org.yaen.starter.common.dal.entities.OneEntity)
+	 * @see org.yaen.starter.common.dal.services.TableService#CreateTable(org.yaen.starter.common.dal.entities.OneEntity)
 	 */
 	@Override
 	public void CreateTable(OneEntity entity) throws CommonException {
@@ -52,7 +52,7 @@ public class ZeroEntityServiceImpl implements ZeroEntityService {
 
 			// describe table, if table not exists, throw exception
 			try {
-				describes = zeroMapper.describeTable(entity.getTableName());
+				describes = tableMapper.describeTable(entity.getTableName());
 			} catch (BadSqlGrammarException ex) {
 				Throwable ex2 = ex.getCause();
 
@@ -67,7 +67,7 @@ public class ZeroEntityServiceImpl implements ZeroEntityService {
 			// check table exists
 			if (describes == null) {
 				// not exists, create new table
-				zeroMapper.createTable(entity);
+				tableMapper.createTable(entity);
 
 			} else {
 
@@ -102,7 +102,7 @@ public class ZeroEntityServiceImpl implements ZeroEntityService {
 								if (!StringUtil.like(type, describe.getMyType())) {
 									// column type changed, try to modify
 									entity.setModifiedFieldName(entry.getKey());
-									zeroMapper.modifyColumn(entity);
+									tableMapper.modifyColumn(entity);
 								}
 							}
 
@@ -113,7 +113,7 @@ public class ZeroEntityServiceImpl implements ZeroEntityService {
 					if (!exists) {
 						// no column, try to add one
 						entity.setAddedFieldName(entry.getKey());
-						zeroMapper.addColumn(entity);
+						tableMapper.addColumn(entity);
 					}
 				} // for
 			} // describes == null

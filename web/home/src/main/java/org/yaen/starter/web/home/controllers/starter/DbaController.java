@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.yaen.starter.common.dal.entities.MyDescribeEntity;
-import org.yaen.starter.common.dal.mappers.ZeroMapper;
+import org.yaen.starter.common.dal.mappers.TableMapper;
 import org.yaen.starter.web.home.viewmodels.ViewModel;
 
 /**
@@ -24,7 +24,7 @@ import org.yaen.starter.web.home.viewmodels.ViewModel;
 public class DbaController {
 
 	@Autowired
-	private ZeroMapper zero;
+	private TableMapper zero;
 
 	/**
 	 * show tables
