@@ -2,12 +2,9 @@ package org.yaen.starter.core.model.services;
 
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Map;
 
-import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage;
@@ -31,32 +28,6 @@ public interface WechatService {
 	 */
 	boolean checkSignature(String token, String signature, String timestamp, String nonce)
 			throws NoSuchAlgorithmException;
-
-	/**
-	 * get access token, can be cached, typically 2 hours
-	 * 
-	 * @return
-	 * @throws CoreException
-	 */
-	AccessToken getAccessToken() throws CoreException;
-
-	/**
-	 * create menu
-	 * 
-	 * @param menu
-	 * @param accessToken
-	 * @throws CoreException
-	 */
-	void createMenu(String menu, AccessToken accessToken) throws CoreException;
-
-	/**
-	 * get menu entity list by group name
-	 * 
-	 * @param groupName
-	 * @return
-	 * @throws CoreException
-	 */
-	List<MenuEntity> getMenuEntityList(String groupName) throws CoreException;
 
 	/**
 	 * parse xml from input stream

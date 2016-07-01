@@ -18,28 +18,18 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
-import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.objects.NameValue;
-import org.yaen.starter.common.data.objects.NameValueT;
-import org.yaen.starter.common.data.objects.QueryBuilder;
-import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
-import org.yaen.starter.common.integration.contexts.GeneralCacheManager;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
-import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.core.model.models.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.models.wechat.enums.MessageTypes;
-import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.models.wechat.objects.Article;
 import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage;
 import org.yaen.starter.core.model.services.WechatService;
 
-import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
@@ -56,13 +46,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class WechatServiceImpl implements WechatService {
-	private static String ACCESS_TOKEN_KEY = "WECHAT_ACCESS_TOKEN";
 
 	@Autowired
 	private WechatClient wechatClient;
-
-	@Autowired
-	private QueryService queryService;
 
 	/**
 	 * extend xstream to support cdata
@@ -101,103 +87,6 @@ public class WechatServiceImpl implements WechatService {
 	public boolean checkSignature(String token, String signature, String timestamp, String nonce)
 			throws NoSuchAlgorithmException {
 		return wechatClient.checkSignature(token, signature, timestamp, nonce);
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#getAccessToken()
-	 */
-	@Override
-	public AccessToken getAccessToken() throws CoreException {
-
-		// get tocek from cache
-		AccessToken accessToken = (AccessToken) GeneralCacheManager.get(ACCESS_TOKEN_KEY);
-
-		if (accessToken == null) {
-
-			// get appid and secret
-			String appid = PropertiesUtil.getProperty("wechat.appid");
-			String secret = PropertiesUtil.getProperty("wechat.secret");
-
-			// call client
-			JSONObject jsonObject;
-			try {
-				jsonObject = wechatClient.getAccessToken(appid, secret);
-			} catch (Exception ex) {
-				throw new CoreException("get access token error", ex);
-			}
-
-			// check result
-			if (jsonObject == null) {
-				throw new CoreException("wechat get access token failed");
-			}
-
-			// set token
-			accessToken = new AccessToken();
-			accessToken.setToken(jsonObject.getString("access_token"));
-			accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
-
-			GeneralCacheManager.set(ACCESS_TOKEN_KEY, accessToken, accessToken.getExpiresIn());
-
-		}
-
-		return accessToken;
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#createMenu(java.lang.String,
-	 *      org.yaen.starter.core.model.models.wechat.objects.AccessToken)
-	 */
-	@Override
-	public void createMenu(String menu, AccessToken accessToken) throws CoreException {
-		AssertUtil.notNull(menu);
-		AssertUtil.notNull(accessToken);
-
-		// call client
-		JSONObject jsonObject;
-		try {
-			jsonObject = wechatClient.createMenu(menu, accessToken.getToken());
-		} catch (Exception ex) {
-			throw new CoreException("wechat create menu failed", ex);
-		}
-
-		// check result
-		if (jsonObject == null) {
-			throw new CoreException("wechat create menu failed");
-		} else {
-			// check err code
-			int errcode = jsonObject.getIntValue("errcode");
-			if (errcode != 0) {
-				throw new CoreException(
-						"create menu failed, errcode=" + errcode + ", errmsg=" + jsonObject.getString("errmsg"));
-			}
-		}
-
-		// here is all ok
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#getMenuEntityList(java.lang.String)
-	 */
-	@Override
-	public List<MenuEntity> getMenuEntityList(String groupName) throws CoreException {
-
-		// get all menu
-		MenuEntity entity = new MenuEntity();
-
-		List<MenuEntity> list = null;
-
-		try {
-			QueryBuilder qb = new QueryBuilder();
-			qb.getWhereEquals().add(new NameValue("groupName", groupName));
-			qb.getOrders().add(new NameValueT<Boolean>("orders", true));
-
-			List<Long> rowids = queryService.selectRowidsByQuery(entity, qb);
-			list = queryService.selectListByRowids(entity, rowids);
-		} catch (CommonException ex) {
-			throw new CoreException("get menu entity error", ex);
-		}
-
-		return list;
 	}
 
 	/**

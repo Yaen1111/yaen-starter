@@ -10,6 +10,8 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
  * redis client, can be used as session or cache
+ * <p>
+ * inject by bean
  * 
  * @author Yaen 2016年5月19日下午6:42:54
  */

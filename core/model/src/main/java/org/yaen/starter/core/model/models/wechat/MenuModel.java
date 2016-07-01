@@ -6,7 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
+import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.objects.NameValue;
+import org.yaen.starter.common.data.objects.NameValueT;
+import org.yaen.starter.common.data.objects.QueryBuilder;
+import org.yaen.starter.common.integration.clients.WechatClient;
+import org.yaen.starter.common.integration.contexts.GeneralCacheManager;
+import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.core.model.contexts.ServiceManager;
 import org.yaen.starter.core.model.models.OneModel;
 import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
@@ -15,7 +22,6 @@ import org.yaen.starter.core.model.models.wechat.objects.Button;
 import org.yaen.starter.core.model.models.wechat.objects.ClickButton;
 import org.yaen.starter.core.model.models.wechat.objects.ComplexButton;
 import org.yaen.starter.core.model.models.wechat.objects.ViewButton;
-import org.yaen.starter.core.model.services.WechatService;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -32,15 +38,73 @@ public class MenuModel extends OneModel {
 	/** top menu(level 1) max count is 3 */
 	public static int WECHAT_MAX_TOP_MENU_COUNT = 3;
 
+	/** access token key in cache */
+	private static String ACCESS_TOKEN_KEY = "WECHAT_ACCESS_TOKEN";
+
 	/** the menu list */
 	private List<MenuEntity> menuList;
 
-	/** the service */
-	private WechatService service = ServiceManager.getWechatService();
+	/** wechat client */
+	private WechatClient wechatClient = ServiceManager.getWechatClient();
 
 	/** the buttons */
 	@Getter
 	private List<Button> buttons = new ArrayList<Button>();
+
+	/**
+	 * get access token from wechat, with cache
+	 * 
+	 * @return
+	 * @throws CoreException
+	 */
+	private AccessToken getAccessToken() throws CoreException {
+
+		// get token from cache
+		AccessToken accessToken = (AccessToken) GeneralCacheManager.get(ACCESS_TOKEN_KEY);
+
+		if (accessToken == null) {
+
+			// get appid and secret
+			String appid = PropertiesUtil.getProperty("wechat.appid");
+			String secret = PropertiesUtil.getProperty("wechat.secret");
+
+			// call client
+			JSONObject jsonObject;
+			try {
+				jsonObject = wechatClient.getAccessToken(appid, secret);
+			} catch (Exception ex) {
+				throw new CoreException("get access token error", ex);
+			}
+
+			// check result
+			if (jsonObject == null) {
+				throw new CoreException("wechat get access token failed");
+			}
+
+			// set token
+			accessToken = new AccessToken();
+			accessToken.setToken(jsonObject.getString("access_token"));
+			accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
+
+			GeneralCacheManager.set(ACCESS_TOKEN_KEY, accessToken, accessToken.getExpiresIn());
+
+		}
+
+		return accessToken;
+	}
+
+	/**
+	 * get menu as json string
+	 * 
+	 * @return
+	 */
+	private String getJsonMenu() {
+		// to json
+		String json = JSONObject.toJSONString(this.buttons);
+
+		// replace null, as we no not need it
+		return json.replaceAll(",null", "");
+	}
 
 	/**
 	 * empty constructor
@@ -56,8 +120,22 @@ public class MenuModel extends OneModel {
 	 * @throws CoreException
 	 */
 	public void load(String groupName) throws CoreException {
-		// get entity
-		this.menuList = service.getMenuEntityList(groupName);
+
+		// get all menu entity
+		{
+			MenuEntity entity = new MenuEntity();
+
+			try {
+				QueryBuilder qb = new QueryBuilder();
+				qb.getWhereEquals().add(new NameValue("groupName", groupName));
+				qb.getOrders().add(new NameValueT<Boolean>("orders", true));
+
+				List<Long> rowids = queryService.selectRowidsByQuery(entity, qb);
+				this.menuList = queryService.selectListByRowids(entity, rowids);
+			} catch (CommonException ex) {
+				throw new CoreException("get menu entity error", ex);
+			}
+		}
 
 		// the object has no relation, so make it in temp
 		Map<String, ComplexButton> top = new HashMap<String, ComplexButton>();
@@ -160,7 +238,7 @@ public class MenuModel extends OneModel {
 	 * @throws CoreException
 	 */
 	public void save() throws CoreException {
-
+		// TODO
 	}
 
 	/**
@@ -171,23 +249,30 @@ public class MenuModel extends OneModel {
 	public void pushMenu() throws CoreException {
 
 		// need access token
-		AccessToken accessToken = service.getAccessToken();
+		AccessToken accessToken = this.getAccessToken();
 
-		// call service to create menu
-		service.createMenu(this.toJSONString(), accessToken);
-	}
+		// get menu json
+		String menu = this.getJsonMenu();
 
-	/**
-	 * to json string
-	 * 
-	 * @return
-	 */
-	public String toJSONString() {
-		// to json
-		String json = JSONObject.toJSONString(this.buttons);
+		// call client
+		JSONObject jsonObject;
+		try {
+			jsonObject = wechatClient.createMenu(menu, accessToken.getToken());
+		} catch (Exception ex) {
+			throw new CoreException("wechat create menu failed", ex);
+		}
 
-		// replace null, as we no not need it
-		return json.replaceAll(",null", "");
+		// check result
+		if (jsonObject == null) {
+			throw new CoreException("wechat create menu return null");
+		} else {
+			// check err code
+			int errcode = jsonObject.getIntValue("errcode");
+			if (errcode != 0) {
+				throw new CoreException(
+						"create menu failed, errcode=" + errcode + ", errmsg=" + jsonObject.getString("errmsg"));
+			}
+		}
 	}
 
 }

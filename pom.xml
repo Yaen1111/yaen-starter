@@ -10,7 +10,9 @@
 	<name>yaen-starter</name>
 	<description>yaen starter with spring framework 4.2 and jdk 1.8.
 
-all of the starter-*-*.xml is for sample use, the child should set the xml  on there own.</description>
+all of the starter-*-*.xml is for sample use, the child should set the xml  on there own.
+
+starter focuse on common and core layer, some web layer, no biz layer</description>
 
 	<modules>
 		<module>common</module>

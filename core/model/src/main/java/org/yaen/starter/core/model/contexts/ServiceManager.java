@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
-import org.yaen.starter.core.model.services.PartyService;
-import org.yaen.starter.core.model.services.WechatService;
+import org.yaen.starter.common.integration.clients.WechatClient;
 
 import lombok.Getter;
 
@@ -25,13 +24,9 @@ public class ServiceManager {
 	@Getter
 	private static QueryService queryService;
 
-	/** the static party service */
+	/** the static wechat client */
 	@Getter
-	private static PartyService partyService;
-
-	/** the static wechat service */
-	@Getter
-	private static WechatService wechatService;
+	private static WechatClient wechatClient;
 
 	/**
 	 * none-static setter with autowired
@@ -56,21 +51,11 @@ public class ServiceManager {
 	/**
 	 * none-static setter with autowired
 	 * 
-	 * @param partyService
+	 * @param wechatClient
 	 */
 	@Autowired
-	public void setPartyService(PartyService partyService) {
-		ServiceManager.partyService = partyService;
-	}
-
-	/**
-	 * none-static setter with autowired
-	 * 
-	 * @param wechatService
-	 */
-	@Autowired
-	public void setWechatService(WechatService wechatService) {
-		ServiceManager.wechatService = wechatService;
+	public void setWechatClient(WechatClient wechatClient) {
+		ServiceManager.wechatClient = wechatClient;
 	}
 
 }
