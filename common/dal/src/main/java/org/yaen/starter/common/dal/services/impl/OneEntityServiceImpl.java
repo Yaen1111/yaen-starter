@@ -11,6 +11,7 @@ import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -70,9 +71,11 @@ public class OneEntityServiceImpl implements EntityService {
 	 * inner insert
 	 * 
 	 * @param entity
+	 * @throws NoDataAffectedException
 	 * @throws CoreException
 	 */
-	protected <T extends OneEntity> void innerInsertEntityByRowid(T entity) throws CommonException {
+	protected <T extends OneEntity> void innerInsertEntityByRowid(T entity)
+			throws CommonException, NoDataAffectedException {
 		try {
 			// create table if not exists
 			tableService.CreateTable(entity);
@@ -82,12 +85,12 @@ public class OneEntityServiceImpl implements EntityService {
 
 			if (ret <= 0) {
 				// execute fail
-				throw new CommonException("insert failed");
+				throw new NoDataAffectedException("insert failed");
 			}
 
 			// id already set into entity and bridged to entity
 
-		} catch (CommonException ex) {
+		} catch (NoDataAffectedException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			throw new CommonException(ex);
@@ -100,8 +103,10 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @param entity
 	 * @return
 	 * @throws CommonException
+	 * @throws NoDataAffectedException
 	 */
-	protected <T extends OneEntity> void innerUpdateEntityByRowid(T entity) throws CommonException {
+	protected <T extends OneEntity> void innerUpdateEntityByRowid(T entity)
+			throws CommonException, NoDataAffectedException {
 		try {
 			// create table if not exists
 			tableService.CreateTable(entity);
@@ -111,10 +116,10 @@ public class OneEntityServiceImpl implements EntityService {
 
 			if (ret <= 0) {
 				// execute fail
-				throw new CommonException("update failed");
+				throw new NoDataAffectedException("update failed");
 			}
 
-		} catch (CommonException ex) {
+		} catch (NoDataAffectedException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			throw new CommonException(ex);
@@ -126,9 +131,10 @@ public class OneEntityServiceImpl implements EntityService {
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws NoDataAffectedException
 	 * @throws CoreException
 	 */
-	protected <T extends OneEntity> void innerDeleteEntity(T entity) throws CommonException {
+	protected <T extends OneEntity> void innerDeleteEntity(T entity) throws CommonException, NoDataAffectedException {
 		try {
 			// create table if not exists
 			tableService.CreateTable(entity);
@@ -138,10 +144,10 @@ public class OneEntityServiceImpl implements EntityService {
 
 			if (ret <= 0) {
 				// execute fail
-				throw new CommonException("delete failed");
+				throw new NoDataAffectedException("delete failed");
 			}
 
-		} catch (CommonException ex) {
+		} catch (NoDataAffectedException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			throw new CommonException(ex);
@@ -183,7 +189,7 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @see org.yaen.starter.common.data.services.EntityService#insertEntityByRowid(org.yaen.starter.common.data.entities.BaseEntity)
 	 */
 	@Override
-	public <T extends BaseEntity> long insertEntityByRowid(T entity) throws CommonException {
+	public <T extends BaseEntity> long insertEntityByRowid(T entity) throws CommonException, NoDataAffectedException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
@@ -212,7 +218,7 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @see org.yaen.starter.common.data.services.EntityService#updateEntityByRowid(org.yaen.starter.common.data.entities.BaseEntity)
 	 */
 	@Override
-	public <T extends BaseEntity> void updateEntityByRowid(T entity) throws CommonException {
+	public <T extends BaseEntity> void updateEntityByRowid(T entity) throws CommonException, NoDataAffectedException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
@@ -237,7 +243,7 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @see org.yaen.starter.common.data.services.EntityService#deleteEntityByRowid(org.yaen.starter.common.data.entities.BaseEntity)
 	 */
 	@Override
-	public <T extends BaseEntity> void deleteEntityByRowid(T entity) throws CommonException {
+	public <T extends BaseEntity> void deleteEntityByRowid(T entity) throws CommonException, NoDataAffectedException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 

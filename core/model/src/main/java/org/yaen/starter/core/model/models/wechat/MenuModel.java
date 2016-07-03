@@ -24,6 +24,11 @@ public class MenuModel extends OneModel {
 	@Getter
 	private WechatService service;
 
+	/** the menu group name */
+	@Getter
+	@Setter
+	private String groupName;
+
 	/** the menu list */
 	@Getter
 	@Setter
@@ -101,7 +106,7 @@ public class MenuModel extends OneModel {
 	 */
 	public void push() throws CoreException {
 		this.check();
-		this.service.pushMenu(this.getJsonMenu());
+		this.service.pushMenu(this.getJsonMenu(), this.groupName);
 	}
 
 }

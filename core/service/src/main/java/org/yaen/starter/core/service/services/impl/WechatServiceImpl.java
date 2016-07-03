@@ -18,17 +18,21 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.data.objects.NameValue;
 import org.yaen.starter.common.data.objects.NameValueT;
 import org.yaen.starter.common.data.objects.QueryBuilder;
+import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.wechat.MenuModel;
 import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
 import org.yaen.starter.core.model.models.wechat.enums.EventTypes;
@@ -66,6 +70,9 @@ public class WechatServiceImpl implements WechatService {
 
 	/** access token key in cache */
 	private static String ACCESS_TOKEN_KEY = "WECHAT_ACCESS_TOKEN";
+
+	@Autowired
+	private EntityService entityService;
 
 	@Autowired
 	private QueryService queryService;
@@ -106,22 +113,57 @@ public class WechatServiceImpl implements WechatService {
 	});
 
 	/**
-	 * get access token from wechat, with cache
+	 * get menu list by group name
 	 * 
+	 * @param groupName
 	 * @return
 	 * @throws CoreException
 	 */
+	private List<MenuEntity> getMenuList(String groupName) throws CoreException {
+
+		MenuEntity entity = new MenuEntity();
+
+		try {
+			QueryBuilder qb = new QueryBuilder();
+			qb.getWhereEquals().add(new NameValue("groupName", groupName));
+			qb.getOrders().add(new NameValueT<Boolean>("orders", true));
+
+			List<Long> rowids = this.queryService.selectRowidsByQuery(entity, qb);
+			return this.queryService.selectListByRowids(entity, rowids);
+		} catch (CommonException ex) {
+			throw new CoreException("get menu entity error", ex);
+		}
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.services.WechatService#checkSignature(java.lang.String, java.lang.String,
+	 *      java.lang.String, java.lang.String)
+	 */
 	@Override
-	public AccessToken getAccessToken() throws CoreException {
+	public boolean checkSignature(String token, String signature, String timestamp, String nonce)
+			throws NoSuchAlgorithmException {
+		return wechatClient.checkSignature(token, signature, timestamp, nonce);
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.services.WechatService#getAccessToken(java.lang.String)
+	 */
+	@Override
+	public AccessToken getAccessToken(String groupName) throws CoreException {
+
+		// prefix group by . if not empty
+		String group = StringUtil.trimToEmpty(groupName);
+		if (!group.isEmpty())
+			group = "." + group;
 
 		// get token from cache
-		AccessToken accessToken = (AccessToken) this.cacheService.get(ACCESS_TOKEN_KEY);
+		AccessToken accessToken = (AccessToken) this.cacheService.get(ACCESS_TOKEN_KEY + group);
 
 		if (accessToken == null) {
 
 			// get appid and secret
-			String appid = PropertiesUtil.getProperty("wechat.appid");
-			String secret = PropertiesUtil.getProperty("wechat.secret");
+			String appid = PropertiesUtil.getProperty("wechat.appid" + group);
+			String secret = PropertiesUtil.getProperty("wechat.secret" + group);
 
 			// call client
 			JSONObject jsonObject;
@@ -141,18 +183,15 @@ public class WechatServiceImpl implements WechatService {
 			accessToken.setToken(jsonObject.getString("access_token"));
 			accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
 
-			this.cacheService.set(ACCESS_TOKEN_KEY, accessToken, accessToken.getExpiresIn());
+			this.cacheService.set(ACCESS_TOKEN_KEY + group, accessToken, accessToken.getExpiresIn());
 		}
 
 		return accessToken;
 	}
 
 	/**
-	 * load menu from database by group name and make the whole menu
-	 * 
-	 * @param model
-	 * @param groupName
-	 * @throws CoreException
+	 * @see org.yaen.starter.core.model.services.WechatService#loadMenu(org.yaen.starter.core.model.models.wechat.MenuModel,
+	 *      java.lang.String)
 	 */
 	@Override
 	public void loadMenu(MenuModel model, String groupName) throws CoreException {
@@ -160,21 +199,10 @@ public class WechatServiceImpl implements WechatService {
 		// clear
 		model.clear();
 
+		model.setGroupName(groupName);
+
 		// get all menu entity
-		{
-			MenuEntity entity = new MenuEntity();
-
-			try {
-				QueryBuilder qb = new QueryBuilder();
-				qb.getWhereEquals().add(new NameValue("groupName", groupName));
-				qb.getOrders().add(new NameValueT<Boolean>("orders", true));
-
-				List<Long> rowids = this.queryService.selectRowidsByQuery(entity, qb);
-				model.setMenuList(this.queryService.selectListByRowids(entity, rowids));
-			} catch (CommonException ex) {
-				throw new CoreException("get menu entity error", ex);
-			}
-		}
+		model.setMenuList(this.getMenuList(groupName));
 
 		// the object has no relation, so make it in temp
 		Map<String, ComplexButton> top = new HashMap<String, ComplexButton>();
@@ -269,36 +297,37 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#checkSignature(java.lang.String, java.lang.String,
-	 *      java.lang.String, java.lang.String)
+	 * @see org.yaen.starter.core.model.services.WechatService#save(org.yaen.starter.core.model.models.wechat.MenuModel)
 	 */
-	@Override
-	public boolean checkSignature(String token, String signature, String timestamp, String nonce)
-			throws NoSuchAlgorithmException {
-		return wechatClient.checkSignature(token, signature, timestamp, nonce);
-	}
-
-	/**
-	 * save menu to db
-	 * 
-	 * @throws CoreException
-	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void save(MenuModel model) throws CoreException {
 		model.check();
-		// TODO
+
+		// get old menu list
+		List<MenuEntity> list = this.getMenuList(model.getGroupName());
+
+		// TODO compare old and new, get diff
+		try {
+			this.entityService.updateEntityByRowid(list.get(0));
+		} catch (NoDataAffectedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CommonException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
-	 * push menu to wechat server
-	 * 
-	 * @throws CoreException
+	 * @see org.yaen.starter.core.model.services.WechatService#pushMenu(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void pushMenu(String menu) throws CoreException {
+	public void pushMenu(String menu, String groupName) throws CoreException {
 
 		// need access token
-		AccessToken accessToken = this.getAccessToken();
+		AccessToken accessToken = this.getAccessToken(groupName);
 
 		// call client
 		JSONObject jsonObject;

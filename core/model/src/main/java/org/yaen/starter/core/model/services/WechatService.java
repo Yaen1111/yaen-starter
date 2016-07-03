@@ -88,13 +88,16 @@ public interface WechatService {
 	String handleRequest(Map<String, String> requestMap);
 
 	/**
+	 * get access token of given group name, group name can be empty for default
 	 * 
+	 * @param groupName
 	 * @return
 	 * @throws CoreException
 	 */
-	AccessToken getAccessToken() throws CoreException;
+	AccessToken getAccessToken(String groupName) throws CoreException;
 
 	/**
+	 * load menu of given group name, group name can be empty for default
 	 * 
 	 * @param model
 	 * @param groupName
@@ -103,13 +106,16 @@ public interface WechatService {
 	void loadMenu(MenuModel model, String groupName) throws CoreException;
 
 	/**
+	 * push menu to wechat server by group name
 	 * 
 	 * @param menu
+	 * @param groupName
 	 * @throws CoreException
 	 */
-	void pushMenu(String menu) throws CoreException;
+	void pushMenu(String menu, String groupName) throws CoreException;
 
 	/**
+	 * save menu model content
 	 * 
 	 * @param model
 	 * @throws CoreException

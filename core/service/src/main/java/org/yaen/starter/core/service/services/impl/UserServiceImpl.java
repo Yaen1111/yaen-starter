@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.yaen.starter.common.dal.entities.user.RoleAuthEntity;
 import org.yaen.starter.common.dal.entities.user.RoleEntity;
 import org.yaen.starter.common.dal.entities.user.UserEntity;
@@ -15,6 +16,7 @@ import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
+import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -54,6 +56,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void loadModel(UserModel model, String username)
 			throws CoreException, DataNotExistsException, DuplicateDataException {
+		AssertUtil.notNull(model);
 		AssertUtil.notBlank(username);
 
 		// clear
@@ -70,6 +73,7 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * @see org.yaen.starter.core.model.services.UserService#registerNewUser(java.lang.String, java.lang.String)
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void registerNewUser(String username, String password) throws CoreException, DuplicateDataException {
 		AssertUtil.notBlank(username);
@@ -94,6 +98,8 @@ public class UserServiceImpl implements UserService {
 			// do insert
 			entityService.insertEntityByRowid(newuser);
 
+		} catch (NoDataAffectedException ex) {
+			throw new CoreException(ex);
 		} catch (CommonException ex) {
 			throw new CoreException(ex);
 		}
@@ -118,6 +124,7 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * @see org.yaen.starter.core.model.services.UserService#createNewRole(org.yaen.starter.common.dal.entities.user.RoleEntity)
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void createNewRole(RoleEntity role) throws CoreException, DuplicateDataException {
 		AssertUtil.notNull(role);
@@ -137,6 +144,8 @@ public class UserServiceImpl implements UserService {
 			// do insert
 			entityService.insertEntityByRowid(role);
 
+		} catch (NoDataAffectedException ex) {
+			throw new CoreException(ex);
 		} catch (CommonException ex) {
 			throw new CoreException(ex);
 		}
@@ -188,6 +197,7 @@ public class UserServiceImpl implements UserService {
 	 * @see org.yaen.starter.core.model.services.UserService#assignUserWithNewRoles(java.lang.String,
 	 *      java.util.Collection)
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void assignUserWithNewRoles(String username, Collection<String> roles) throws CoreException {
 		AssertUtil.notBlank(username);
@@ -222,6 +232,8 @@ public class UserServiceImpl implements UserService {
 					entityService.insertEntityByRowid(ur);
 				}
 			}
+		} catch (NoDataAffectedException ex) {
+			throw new CoreException(ex);
 		} catch (CommonException ex) {
 			throw new CoreException(ex);
 		}
@@ -254,6 +266,7 @@ public class UserServiceImpl implements UserService {
 	 * @see org.yaen.starter.core.model.services.UserService#assignRoleWithNewAuths(java.lang.String,
 	 *      java.util.Collection)
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void assignRoleWithNewAuths(String roleId, Collection<String> auths) throws CoreException {
 		AssertUtil.notBlank(roleId);
@@ -288,6 +301,8 @@ public class UserServiceImpl implements UserService {
 					entityService.insertEntityByRowid(ra);
 				}
 			}
+		} catch (NoDataAffectedException ex) {
+			throw new CoreException(ex);
 		} catch (CommonException ex) {
 			throw new CoreException(ex);
 		}

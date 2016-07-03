@@ -3,6 +3,7 @@ package org.yaen.starter.common.data.services;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 
 /**
  * entity service for CRUD
@@ -27,24 +28,27 @@ public interface EntityService {
 	 * 
 	 * @param entity
 	 * @throws CommonException
+	 * @throws NoDataAffectedException 
 	 */
-	public <T extends BaseEntity> long insertEntityByRowid(T entity) throws CommonException;
+	public <T extends BaseEntity> long insertEntityByRowid(T entity) throws CommonException, NoDataAffectedException;
 
 	/**
 	 * update entity by rowid, this id is also be updated
 	 * 
 	 * @param entity
 	 * @throws CommonException
+	 * @throws NoDataAffectedException 
 	 */
-	public <T extends BaseEntity> void updateEntityByRowid(T entity) throws CommonException;
+	public <T extends BaseEntity> void updateEntityByRowid(T entity) throws CommonException, NoDataAffectedException;
 
 	/**
 	 * delete entity by rowid
 	 * 
 	 * @param entity
 	 * @throws CommonException
+	 * @throws NoDataAffectedException 
 	 */
-	public <T extends BaseEntity> void deleteEntityByRowid(T entity) throws CommonException;
+	public <T extends BaseEntity> void deleteEntityByRowid(T entity) throws CommonException, NoDataAffectedException;
 
 	/**
 	 * try select entity by rowid, return false if not exists
