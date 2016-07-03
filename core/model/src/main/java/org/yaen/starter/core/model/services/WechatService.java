@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.core.model.models.wechat.MenuModel;
+import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage;
@@ -84,4 +86,33 @@ public interface WechatService {
 	 * @return
 	 */
 	String handleRequest(Map<String, String> requestMap);
+
+	/**
+	 * 
+	 * @return
+	 * @throws CoreException
+	 */
+	AccessToken getAccessToken() throws CoreException;
+
+	/**
+	 * 
+	 * @param model
+	 * @param groupName
+	 * @throws CoreException
+	 */
+	void loadMenu(MenuModel model, String groupName) throws CoreException;
+
+	/**
+	 * 
+	 * @param menu
+	 * @throws CoreException
+	 */
+	void pushMenu(String menu) throws CoreException;
+
+	/**
+	 * 
+	 * @param model
+	 * @throws CoreException
+	 */
+	void save(MenuModel model) throws CoreException;
 }

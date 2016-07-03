@@ -1,22 +1,18 @@
 package org.yaen.starter.core.model.models;
 
-import org.yaen.starter.common.data.services.EntityService;
-import org.yaen.starter.common.data.services.QueryService;
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.contexts.ServiceManager;
 
 import lombok.Getter;
 
 /**
  * one model as base model object
  * <p>
- * model is usually composed by entities and pojos and other model, and with logicals
+ * model is usually composed by entities and pojos and other model, and specialized service and logicals.
  * <p>
- * model use service in inner logic, the caller do not need use service
+ * the service hold every logical, but use model only is recommended
  * <p>
- * one model can do one thing completely, and need nothing other
- * <p>
- * child can use other service types
+ * change service implement may change model activities
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
@@ -25,12 +21,6 @@ public abstract class OneModel {
 	/** the version of model, needed in interface call */
 	@Getter
 	private String version;
-
-	/** default entity service, as most model need this */
-	protected EntityService entityService = ServiceManager.getEntityService();
-
-	/** default query service, as most model need this */
-	protected QueryService queryService = ServiceManager.getQueryService();
 
 	/**
 	 * protected constructor
@@ -46,6 +36,18 @@ public abstract class OneModel {
 			this.version = "1.0.0";
 		}
 	}
+
+	/**
+	 * check model status
+	 * 
+	 * @throws CoreException
+	 */
+	public abstract void check() throws CoreException;
+
+	/**
+	 * clear entire content, just as a new model
+	 */
+	public abstract void clear();
 
 	/**
 	 * @see java.lang.Object#toString()

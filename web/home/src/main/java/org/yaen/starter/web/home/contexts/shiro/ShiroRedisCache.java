@@ -22,9 +22,6 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	/** redis shiro cache prefix */
 	private static final String REDIS_SHIRO_CACHE = "shiro-cache:";
 
-	/** db index, default is 0, cache use 1 */
-	private static final int DB_INDEX = 1;
-
 	/** the redis manager from constructor */
 	private RedisClient redisClient;
 
@@ -60,7 +57,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	@Override
 	public V get(K key) throws CacheException {
 		try {
-			return (V) redisClient.getObjectByKey(DB_INDEX, this.buildCacheKey(key));
+			return (V) redisClient.getObjectByKey(this.buildCacheKey(key));
 		} catch (CacheException ex) {
 			throw ex;
 		} catch (Exception ex) {
@@ -73,7 +70,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	public V put(K key, V value) throws CacheException {
 		V previos = this.get(key);
 		try {
-			redisClient.saveObjectByKey(DB_INDEX, key, value, -1);
+			redisClient.saveObjectByKey(key, value, -1);
 		} catch (CacheException ex) {
 			throw ex;
 		} catch (Exception ex) {
@@ -86,7 +83,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 	public V remove(K key) throws CacheException {
 		V previos = get(key);
 		try {
-			redisClient.deleteByKey(DB_INDEX, this.buildCacheKey(key));
+			redisClient.deleteByKey(this.buildCacheKey(key));
 		} catch (CacheException ex) {
 			throw ex;
 		} catch (Exception ex) {

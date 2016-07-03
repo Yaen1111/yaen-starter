@@ -22,9 +22,6 @@ public class ShiroSessionDAO extends AbstractSessionDAO {
 	/** redis shiro session prefix */
 	private static final String REDIS_SHIRO_SESSION = "shiro-session:";
 
-	/** db index, default is 0, session use 2 */
-	private static final int DB_INDEX = 2;
-
 	/** the client for injection */
 	@Setter
 	private RedisClient redisClient;
@@ -66,7 +63,7 @@ public class ShiroSessionDAO extends AbstractSessionDAO {
 			return null;
 		}
 
-		return (Session) redisClient.getObjectByKey(DB_INDEX, this.buildSessionKey(sessionId));
+		return (Session) redisClient.getObjectByKey(this.buildSessionKey(sessionId));
 	}
 
 	/**
@@ -80,7 +77,7 @@ public class ShiroSessionDAO extends AbstractSessionDAO {
 		}
 
 		// save with timeout
-		redisClient.saveObjectByKey(DB_INDEX, this.buildSessionKey(session.getId()), session,
+		redisClient.saveObjectByKey(this.buildSessionKey(session.getId()), session,
 				session.getTimeout() < 0 ? -1 : this.sessionTimeoutInSecond);
 	}
 
@@ -91,7 +88,7 @@ public class ShiroSessionDAO extends AbstractSessionDAO {
 	public void delete(Session session) {
 		AssertUtil.notNull(session);
 
-		redisClient.deleteByKey(DB_INDEX, this.buildSessionKey(session.getId()));
+		redisClient.deleteByKey(this.buildSessionKey(session.getId()));
 	}
 
 	/**

@@ -13,12 +13,13 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.models.user.RbacModel;
 import org.yaen.starter.core.model.models.user.UserModel;
+import org.yaen.starter.core.model.services.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +32,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ShiroRealm extends AuthorizingRealm {
+
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * get user info only, no password check, throw exception if user not found
@@ -49,7 +53,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			throw new UnknownAccountException("username is empty");
 		}
 
-		UserModel user = new UserModel();
+		UserModel user = new UserModel(this.userService);
 
 		// find user
 		try {
@@ -90,8 +94,8 @@ public class ShiroRealm extends AuthorizingRealm {
 
 			try {
 				// get user roles
-				Set<String> roles = new RbacModel().getUserRoles(principal.getUsername());
-				Set<String> auths = new RbacModel().getUserAuths(principal.getUsername());
+				Set<String> roles = this.userService.getUserRoles(principal.getUsername());
+				Set<String> auths = this.userService.getUserAuths(principal.getUsername());
 
 				// simple
 				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();

@@ -9,61 +9,66 @@ import redis.clients.jedis.JedisPool;
  */
 public interface RedisClient {
 
-	/** the jedis pool for injection */
+	/**
+	 * the jedis pool for injection
+	 * 
+	 * @param jedisPool
+	 */
 	void setJedisPool(JedisPool jedisPool);
+
+	/**
+	 * the redis db index for injection, optional
+	 * 
+	 * @param dbIndex
+	 */
+	void setDbIndex(int dbIndex);
 
 	/**
 	 * get value by key
 	 * 
-	 * @param dbIndex
 	 * @param key
 	 * @return
 	 */
-	byte[] getValueByKey(int dbIndex, byte[] key);
+	byte[] getValueByKey(byte[] key);
 
 	/**
 	 * delete value by key
 	 * 
-	 * @param dbIndex
 	 * @param key
 	 */
-	void deleteByKey(int dbIndex, byte[] key);
+	void deleteByKey(byte[] key);
 
 	/**
 	 * save value by key
 	 * 
-	 * @param dbIndex
 	 * @param key
 	 * @param value
 	 * @param expireTime
 	 */
-	void saveValueByKey(int dbIndex, byte[] key, byte[] value, int expireTime);
+	void saveValueByKey(byte[] key, byte[] value, int expireTime);
 
 	/**
 	 * get object by key
 	 * 
-	 * @param dbIndex
 	 * @param key
 	 * @return
 	 */
-	Object getObjectByKey(int dbIndex, Object key);
+	Object getObjectByKey(Object key);
 
 	/**
 	 * delete value by key
 	 * 
-	 * @param dbIndex
 	 * @param key
 	 */
-	void deleteByKey(int dbIndex, Object key);
+	void deleteByKey(Object key);
 
 	/**
 	 * save object by key
 	 * 
-	 * @param dbIndex
 	 * @param key
 	 * @param value
 	 * @param expireTime
 	 */
-	void saveObjectByKey(int dbIndex, Object key, Object value, int expireTime);
+	void saveObjectByKey(Object key, Object value, int expireTime);
 
 }

@@ -1,12 +1,15 @@
-package org.yaen.starter.core.model.models.user;
+package org.yaen.starter.core.service.services.impl;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.yaen.starter.common.dal.entities.user.RoleAuthEntity;
 import org.yaen.starter.common.dal.entities.user.RoleEntity;
+import org.yaen.starter.common.dal.entities.user.UserEntity;
 import org.yaen.starter.common.dal.entities.user.UserRoleEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
@@ -15,42 +18,107 @@ import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.core.model.contexts.ServiceManager;
-import org.yaen.starter.core.model.models.OneModel;
+import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.models.user.UserModel;
+import org.yaen.starter.core.model.services.UserService;
 
 /**
- * rbac model
- * <p>
- * deal with rbac(Role-Based Access Control).
- * <p>
- * is made up with user, role, auth, user-role, role-auth, extends user-auth and groups
- * <p>
- * especially suitable for authorization
+ * user service to handle user model
  * 
- * @author Yaen 2016年5月17日下午2:28:32
+ * @author Yaen 2016年7月3日下午1:02:08
  */
-public class RbacModel extends OneModel {
+@Service
+public class UserServiceImpl implements UserService {
 
-	/** entity service */
-	private EntityService entityService = ServiceManager.getEntityService();
+	@Autowired
+	private EntityService entityService;
 
-	/** query service */
-	private QueryService queryService = ServiceManager.getQueryService();
+	@Autowired
+	private QueryService queryService;
 
 	/**
-	 * empty constructor
+	 * calculate password hash with given salt
+	 * 
+	 * @param password
+	 * @param salt
+	 * @return
 	 */
-	public RbacModel() {
-		super("1.0.0");
+	protected String calculatePasswordHash(String password, String salt) {
+		return password + salt;
 	}
 
 	/**
-	 * create new role with given id
-	 * 
-	 * @param role
-	 * @throws CoreException
-	 * @throws DuplicateDataException
+	 * @see org.yaen.starter.core.model.services.UserService#loadModel(org.yaen.starter.core.model.models.user.UserModel,
+	 *      java.lang.String)
 	 */
+	@Override
+	public void loadModel(UserModel model, String username)
+			throws CoreException, DataNotExistsException, DuplicateDataException {
+		AssertUtil.notBlank(username);
+
+		// clear
+		model.clear();
+
+		try {
+			// get user by id, only one
+			model.setUser(queryService.selectOneById(new UserEntity(), username));
+		} catch (CommonException ex) {
+			throw new CoreException(ex);
+		}
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.services.UserService#registerNewUser(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void registerNewUser(String username, String password) throws CoreException, DuplicateDataException {
+		AssertUtil.notBlank(username);
+		AssertUtil.notBlank(password);
+
+		try {
+
+			// try get user by given username to check duplicate
+			try {
+				queryService.selectOneById(new UserEntity(), username);
+			} catch (DuplicateDataException ex) {
+				throw ex;
+			} catch (DataNotExistsException e) {
+				// demanded result, should be ok
+			}
+
+			// create entity
+			UserEntity newuser = new UserEntity();
+			newuser.setId(username);
+			newuser.setPasswordHash(this.calculatePasswordHash(password, "salt"));
+
+			// do insert
+			entityService.insertEntityByRowid(newuser);
+
+		} catch (CommonException ex) {
+			throw new CoreException(ex);
+		}
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.services.UserService#checkUserCredentials(java.lang.String, java.lang.String,
+	 *      java.lang.String)
+	 */
+	@Override
+	public boolean checkUserCredentials(String password, String passwordHash, String passwordSalt) {
+
+		// TODO here may set the last login time
+
+		// calculate hash
+		String hash = this.calculatePasswordHash(password, passwordSalt);
+
+		// check hash, just same
+		return StringUtil.equals(hash, passwordHash);
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.services.UserService#createNewRole(org.yaen.starter.common.dal.entities.user.RoleEntity)
+	 */
+	@Override
 	public void createNewRole(RoleEntity role) throws CoreException, DuplicateDataException {
 		AssertUtil.notNull(role);
 		AssertUtil.notBlank(role.getId());
@@ -75,11 +143,9 @@ public class RbacModel extends OneModel {
 	}
 
 	/**
-	 * select all role list
-	 * 
-	 * @return
-	 * @throws CoreException
+	 * @see org.yaen.starter.core.model.services.UserService#getRoleListAll()
 	 */
+	@Override
 	public List<RoleEntity> getRoleListAll() throws CoreException {
 
 		try {
@@ -96,12 +162,9 @@ public class RbacModel extends OneModel {
 	}
 
 	/**
-	 * get user role ids
-	 * 
-	 * @param username
-	 * @return
-	 * @throws CoreException
+	 * @see org.yaen.starter.core.model.services.UserService#getUserRoles(java.lang.String)
 	 */
+	@Override
 	public Set<String> getUserRoles(String username) throws CoreException {
 		AssertUtil.notBlank(username);
 
@@ -122,12 +185,10 @@ public class RbacModel extends OneModel {
 	}
 
 	/**
-	 * assign new roles to user
-	 * 
-	 * @param username
-	 * @param roles
-	 * @throws CoreException
+	 * @see org.yaen.starter.core.model.services.UserService#assignUserWithNewRoles(java.lang.String,
+	 *      java.util.Collection)
 	 */
+	@Override
 	public void assignUserWithNewRoles(String username, Collection<String> roles) throws CoreException {
 		AssertUtil.notBlank(username);
 		AssertUtil.notNull(roles);
@@ -167,12 +228,9 @@ public class RbacModel extends OneModel {
 	}
 
 	/**
-	 * get auth ids for role
-	 * 
-	 * @param roleId
-	 * @return
-	 * @throws CoreException
+	 * @see org.yaen.starter.core.model.services.UserService#getRoleAuths(java.lang.String)
 	 */
+	@Override
 	public Set<String> getRoleAuths(String roleId) throws CoreException {
 		AssertUtil.notBlank(roleId);
 
@@ -193,12 +251,10 @@ public class RbacModel extends OneModel {
 	}
 
 	/**
-	 * assign new auths to role
-	 * 
-	 * @param roleId
-	 * @param auths
-	 * @throws CoreException
+	 * @see org.yaen.starter.core.model.services.UserService#assignRoleWithNewAuths(java.lang.String,
+	 *      java.util.Collection)
 	 */
+	@Override
 	public void assignRoleWithNewAuths(String roleId, Collection<String> auths) throws CoreException {
 		AssertUtil.notBlank(roleId);
 		AssertUtil.notNull(auths);
@@ -238,14 +294,9 @@ public class RbacModel extends OneModel {
 	}
 
 	/**
-	 * get user auth ids
-	 * <p>
-	 * get user roles, then get all auths
-	 * 
-	 * @param username
-	 * @return
-	 * @throws CoreException
+	 * @see org.yaen.starter.core.model.services.UserService#getUserAuths(java.lang.String)
 	 */
+	@Override
 	public Set<String> getUserAuths(String username) throws CoreException {
 		AssertUtil.notBlank(username);
 

@@ -1,6 +1,10 @@
 package org.yaen.starter.core.model.models.party;
 
+import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.core.model.models.OneModel;
+import org.yaen.starter.core.model.services.PartyService;
+
+import lombok.Getter;
 
 /**
  * party model
@@ -13,10 +17,36 @@ import org.yaen.starter.core.model.models.OneModel;
  */
 public class PartyModel extends OneModel {
 
+	/** the service */
+	@Getter
+	private PartyService service;
+
 	/**
-	 * empty constructor
+	 * construct new model with service
+	 * 
+	 * @param service
 	 */
-	public PartyModel() {
+	public PartyModel(PartyService service) {
 		super("1.0.0");
+
+		this.service = service;
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.models.OneModel#check()
+	 */
+	@Override
+	public void check() throws CoreException {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.models.OneModel#clear()
+	 */
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+
 	}
 }

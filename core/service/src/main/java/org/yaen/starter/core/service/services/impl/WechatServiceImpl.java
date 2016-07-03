@@ -18,18 +18,33 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
+import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.objects.NameValue;
+import org.yaen.starter.common.data.objects.NameValueT;
+import org.yaen.starter.common.data.objects.QueryBuilder;
+import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
+import org.yaen.starter.common.util.utils.PropertiesUtil;
+import org.yaen.starter.core.model.models.wechat.MenuModel;
+import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
 import org.yaen.starter.core.model.models.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.models.wechat.enums.MessageTypes;
+import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.models.wechat.objects.Article;
+import org.yaen.starter.core.model.models.wechat.objects.ClickButton;
+import org.yaen.starter.core.model.models.wechat.objects.ComplexButton;
 import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage;
+import org.yaen.starter.core.model.models.wechat.objects.ViewButton;
+import org.yaen.starter.core.model.services.CacheService;
 import org.yaen.starter.core.model.services.WechatService;
 
+import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
@@ -46,9 +61,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class WechatServiceImpl implements WechatService {
+	/** top menu(level 1) max count is 3 */
+	public static int WECHAT_MAX_TOP_MENU_COUNT = 3;
+
+	/** access token key in cache */
+	private static String ACCESS_TOKEN_KEY = "WECHAT_ACCESS_TOKEN";
+
+	@Autowired
+	private QueryService queryService;
 
 	@Autowired
 	private WechatClient wechatClient;
+
+	@Autowired
+	private CacheService cacheService;
 
 	/**
 	 * extend xstream to support cdata
@@ -80,6 +106,169 @@ public class WechatServiceImpl implements WechatService {
 	});
 
 	/**
+	 * get access token from wechat, with cache
+	 * 
+	 * @return
+	 * @throws CoreException
+	 */
+	@Override
+	public AccessToken getAccessToken() throws CoreException {
+
+		// get token from cache
+		AccessToken accessToken = (AccessToken) this.cacheService.get(ACCESS_TOKEN_KEY);
+
+		if (accessToken == null) {
+
+			// get appid and secret
+			String appid = PropertiesUtil.getProperty("wechat.appid");
+			String secret = PropertiesUtil.getProperty("wechat.secret");
+
+			// call client
+			JSONObject jsonObject;
+			try {
+				jsonObject = wechatClient.getAccessToken(appid, secret);
+			} catch (Exception ex) {
+				throw new CoreException("get access token error", ex);
+			}
+
+			// check result
+			if (jsonObject == null) {
+				throw new CoreException("wechat get access token failed");
+			}
+
+			// set token
+			accessToken = new AccessToken();
+			accessToken.setToken(jsonObject.getString("access_token"));
+			accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
+
+			this.cacheService.set(ACCESS_TOKEN_KEY, accessToken, accessToken.getExpiresIn());
+		}
+
+		return accessToken;
+	}
+
+	/**
+	 * load menu from database by group name and make the whole menu
+	 * 
+	 * @param model
+	 * @param groupName
+	 * @throws CoreException
+	 */
+	@Override
+	public void loadMenu(MenuModel model, String groupName) throws CoreException {
+
+		// clear
+		model.clear();
+
+		// get all menu entity
+		{
+			MenuEntity entity = new MenuEntity();
+
+			try {
+				QueryBuilder qb = new QueryBuilder();
+				qb.getWhereEquals().add(new NameValue("groupName", groupName));
+				qb.getOrders().add(new NameValueT<Boolean>("orders", true));
+
+				List<Long> rowids = this.queryService.selectRowidsByQuery(entity, qb);
+				model.setMenuList(this.queryService.selectListByRowids(entity, rowids));
+			} catch (CommonException ex) {
+				throw new CoreException("get menu entity error", ex);
+			}
+		}
+
+		// the object has no relation, so make it in temp
+		Map<String, ComplexButton> top = new HashMap<String, ComplexButton>();
+
+		// load all top menu
+		for (MenuEntity entity : model.getMenuList()) {
+			if (entity.getLevel() == 1) {
+				// top level, make complex button
+				ComplexButton btn = new ComplexButton();
+				btn.setName(entity.getTitle());
+				top.put(entity.getId(), btn);
+			}
+		}
+
+		// load all 2nd menu
+		for (MenuEntity entity : model.getMenuList()) {
+			if (entity.getLevel() == 2) {
+				// parent must exists
+				if (top.containsKey(entity.getParentId())) {
+					switch (entity.getType()) {
+					case ButtonTypes.CLICK: {
+						ClickButton btn = new ClickButton();
+						btn.setType(entity.getType());
+						btn.setName(entity.getTitle());
+						btn.setKey(entity.getKey());
+						top.get(entity.getParentId()).getSub_button().add(btn);
+					}
+						break;
+					case ButtonTypes.VIEW: {
+						ViewButton btn = new ViewButton();
+						btn.setType(entity.getType());
+						btn.setName(entity.getTitle());
+						btn.setUrl(entity.getUrl());
+						top.get(entity.getParentId()).getSub_button().add(btn);
+					}
+						break;
+					default:
+						// ignore
+						log.info("unknown menu type, id={}, type={}", entity.getId(), entity.getType());
+						break;
+					}
+				} else {
+					log.info("menu parent not exists, id={}, parentid={}", entity.getId(), entity.getParentId());
+				}
+			}
+		}
+
+		// load all top menu again, put top menu in order and re-make none-parent button
+		for (MenuEntity entity : model.getMenuList()) {
+			if (entity.getLevel() == 1) {
+				// check max size
+				if (model.getButtons().size() >= WECHAT_MAX_TOP_MENU_COUNT) {
+					log.info("menu max size exceed, rest button will be ignored");
+					break;
+				}
+
+				// get btn and check child count
+				ComplexButton topbtn = top.get(entity.getId());
+
+				if (topbtn.getSub_button().size() > 0) {
+					// has sub button
+					model.getButtons().add(topbtn);
+				} else {
+					// no sub button, is normal button
+					switch (entity.getType()) {
+					case ButtonTypes.CLICK: {
+						ClickButton btn = new ClickButton();
+						btn.setType(entity.getType());
+						btn.setName(entity.getTitle());
+						btn.setKey(entity.getKey());
+						model.getButtons().add(btn);
+					}
+						break;
+					case ButtonTypes.VIEW: {
+						ViewButton btn = new ViewButton();
+						btn.setType(entity.getType());
+						btn.setName(entity.getTitle());
+						btn.setUrl(entity.getUrl());
+						model.getButtons().add(btn);
+					}
+						break;
+					default:
+						// ignore
+						log.info("unknown menu type, id={}, type={}", entity.getId(), entity.getType());
+						break;
+					}
+				}
+			}
+		} // for
+
+		// all done
+	}
+
+	/**
 	 * @see org.yaen.starter.core.model.services.WechatService#checkSignature(java.lang.String, java.lang.String,
 	 *      java.lang.String, java.lang.String)
 	 */
@@ -87,6 +276,49 @@ public class WechatServiceImpl implements WechatService {
 	public boolean checkSignature(String token, String signature, String timestamp, String nonce)
 			throws NoSuchAlgorithmException {
 		return wechatClient.checkSignature(token, signature, timestamp, nonce);
+	}
+
+	/**
+	 * save menu to db
+	 * 
+	 * @throws CoreException
+	 */
+	@Override
+	public void save(MenuModel model) throws CoreException {
+		model.check();
+		// TODO
+	}
+
+	/**
+	 * push menu to wechat server
+	 * 
+	 * @throws CoreException
+	 */
+	@Override
+	public void pushMenu(String menu) throws CoreException {
+
+		// need access token
+		AccessToken accessToken = this.getAccessToken();
+
+		// call client
+		JSONObject jsonObject;
+		try {
+			jsonObject = wechatClient.createMenu(menu, accessToken.getToken());
+		} catch (Exception ex) {
+			throw new CoreException("wechat create menu failed", ex);
+		}
+
+		// check result
+		if (jsonObject == null) {
+			throw new CoreException("wechat create menu return null");
+		} else {
+			// check err code
+			int errcode = jsonObject.getIntValue("errcode");
+			if (errcode != 0) {
+				throw new CoreException(
+						"create menu failed, errcode=" + errcode + ", errmsg=" + jsonObject.getString("errmsg"));
+			}
+		}
 	}
 
 	/**

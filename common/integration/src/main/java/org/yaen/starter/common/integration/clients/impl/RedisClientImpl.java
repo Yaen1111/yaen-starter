@@ -21,15 +21,20 @@ public class RedisClientImpl implements RedisClient {
 	@Setter
 	private JedisPool jedisPool;
 
+	/** the redis db index for injection, optional */
+	@Setter
+	private int dbIndex = 0;
+
 	/**
-	 * get jedis object from pool
+	 * get jedis object from pool, and select given index
 	 * 
 	 * @return
 	 */
-	protected Jedis getJedis() {
+	private Jedis getJedis() {
 		Jedis jedis = null;
 		try {
 			jedis = this.jedisPool.getResource();
+			jedis.select(this.dbIndex);
 		} catch (Exception e) {
 			throw new JedisConnectionException(e);
 		}
@@ -42,7 +47,7 @@ public class RedisClientImpl implements RedisClient {
 	 * @param jedis
 	 * @param isBroken
 	 */
-	protected void returnResource(Jedis jedis, boolean isBroken) {
+	private void returnResource(Jedis jedis, boolean isBroken) {
 		if (jedis == null)
 			return;
 		if (isBroken)
@@ -52,23 +57,16 @@ public class RedisClientImpl implements RedisClient {
 	}
 
 	/**
-	 * empty constructor
-	 */
-	public RedisClientImpl() {
-	}
-
-	/**
-	 * @see org.yaen.starter.common.integration.clients.RedisClient#getValueByKey(int, byte[])
+	 * @see org.yaen.starter.common.integration.clients.RedisClient#getValueByKey(byte[])
 	 */
 	@Override
-	public byte[] getValueByKey(int dbIndex, byte[] key) {
+	public byte[] getValueByKey(byte[] key) {
 		Jedis jedis = null;
 		byte[] result = null;
 		boolean isBroken = false;
 
 		try {
 			jedis = getJedis();
-			jedis.select(dbIndex);
 			result = jedis.get(key);
 		} catch (Exception ex) {
 			isBroken = true;
@@ -80,15 +78,14 @@ public class RedisClientImpl implements RedisClient {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.integration.clients.RedisClient#deleteByKey(int, byte[])
+	 * @see org.yaen.starter.common.integration.clients.RedisClient#deleteByKey(byte[])
 	 */
 	@Override
-	public void deleteByKey(int dbIndex, byte[] key) {
+	public void deleteByKey(byte[] key) {
 		Jedis jedis = null;
 		boolean isBroken = false;
 		try {
 			jedis = getJedis();
-			jedis.select(dbIndex);
 			jedis.del(key);
 		} catch (Exception e) {
 			isBroken = true;
@@ -99,15 +96,14 @@ public class RedisClientImpl implements RedisClient {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.integration.clients.RedisClient#saveValueByKey(int, byte[], byte[], int)
+	 * @see org.yaen.starter.common.integration.clients.RedisClient#saveValueByKey(byte[], byte[], int)
 	 */
 	@Override
-	public void saveValueByKey(int dbIndex, byte[] key, byte[] value, int expireTime) {
+	public void saveValueByKey(byte[] key, byte[] value, int expireTime) {
 		Jedis jedis = null;
 		boolean isBroken = false;
 		try {
 			jedis = getJedis();
-			jedis.select(dbIndex);
 			jedis.set(key, value);
 			if (expireTime > 0)
 				jedis.expire(key, expireTime);
@@ -120,31 +116,31 @@ public class RedisClientImpl implements RedisClient {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.integration.clients.RedisClient#getObjectByKey(int, java.lang.Object)
+	 * @see org.yaen.starter.common.integration.clients.RedisClient#getObjectByKey(java.lang.Object)
 	 */
 	@Override
-	public Object getObjectByKey(int dbIndex, Object key) {
+	public Object getObjectByKey(Object key) {
 		// string to byte[], byte[] to object
-		return SerializeUtil.deserialize(this.getValueByKey(dbIndex, SerializeUtil.serialize(key)));
+		return SerializeUtil.deserialize(this.getValueByKey(SerializeUtil.serialize(key)));
 	}
 
 	/**
-	 * @see org.yaen.starter.common.integration.clients.RedisClient#deleteByKey(int, java.lang.Object)
+	 * @see org.yaen.starter.common.integration.clients.RedisClient#deleteByKey(java.lang.Object)
 	 */
 	@Override
-	public void deleteByKey(int dbIndex, Object key) {
+	public void deleteByKey(Object key) {
 		// string to byte[]
-		this.deleteByKey(dbIndex, SerializeUtil.serialize(key));
+		this.deleteByKey(SerializeUtil.serialize(key));
 	}
 
 	/**
-	 * @see org.yaen.starter.common.integration.clients.RedisClient#saveObjectByKey(int, java.lang.Object,
-	 *      java.lang.Object, int)
+	 * @see org.yaen.starter.common.integration.clients.RedisClient#saveObjectByKey(java.lang.Object, java.lang.Object,
+	 *      int)
 	 */
 	@Override
-	public void saveObjectByKey(int dbIndex, Object key, Object value, int expireTime) {
+	public void saveObjectByKey(Object key, Object value, int expireTime) {
 		// string to byte[], object to byte[]
-		this.saveValueByKey(dbIndex, SerializeUtil.serialize(key), SerializeUtil.serialize(value), expireTime);
+		this.saveValueByKey(SerializeUtil.serialize(key), SerializeUtil.serialize(value), expireTime);
 	}
 
 }
