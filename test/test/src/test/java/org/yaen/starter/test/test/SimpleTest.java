@@ -12,7 +12,7 @@ import org.yaen.starter.common.util.utils.HttpUtil;
 public class SimpleTest {
 
 	public static void main(String[] args) {
-		String apiurl = "http://smsapi.c123.cn/OpenPlatform/OpenApi";
+		// String apiurl = "http://smsapi.c123.cn/OpenPlatform/OpenApi";
 
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("action", "sendOnce");
