@@ -33,14 +33,8 @@ public class WechatClientImpl implements WechatClient {
 	public final static String PIC_RESPONSE_URL = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
 
 	/**
-	 * verify signature
-	 * 
-	 * @param token
-	 * @param signature
-	 * @param timestamp
-	 * @param nonce
-	 * @return
-	 * @throws NoSuchAlgorithmException
+	 * @see org.yaen.starter.common.integration.clients.WechatClient#checkSignature(java.lang.String, java.lang.String,
+	 *      java.lang.String, java.lang.String)
 	 */
 	@Override
 	public boolean checkSignature(String token, String signature, String timestamp, String nonce)
@@ -71,12 +65,7 @@ public class WechatClientImpl implements WechatClient {
 	}
 
 	/**
-	 * get access token, the token will expire in 2 hours typically, return json object
-	 * 
-	 * @param appid
-	 * @param appsecret
-	 * @return
-	 * @throws Exception
+	 * @see org.yaen.starter.common.integration.clients.WechatClient#getAccessToken(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public JSONObject getAccessToken(String appid, String appsecret) throws Exception {
@@ -89,11 +78,7 @@ public class WechatClientImpl implements WechatClient {
 	}
 
 	/**
-	 * create menu
-	 * 
-	 * @param accessToken
-	 * @param menuJSONString
-	 * @throws Exception
+	 * @see org.yaen.starter.common.integration.clients.WechatClient#createMenu(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public JSONObject createMenu(String accessToken, String menuJSONString) throws Exception {
