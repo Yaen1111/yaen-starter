@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,92 +42,65 @@ public class WechatController {
 	private WechatService wechatService;
 
 	/**
-	 * simple process request routine
-	 * 
-	 * @param request
-	 * @return
-	 */
-	private String simpleProcessRequest(HttpServletRequest request) {
-		InputStream is = null;
-		Map<String, String> requestMap = null;
-
-		// parse input
-		try {
-			// get input stream
-			is = request.getInputStream();
-
-			// parse xml to map
-			requestMap = wechatService.parseXml(is);
-
-		} catch (Exception ex) {
-			log.error("wechat servlet error:", ex);
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-				}
-				is = null;
-			}
-		}
-
-		// call service to handle request
-		return wechatService.handleRequest(requestMap);
-	}
-
-	/**
-	 * wechat callback get, for token check
+	 * wechat callback get, for token check, return echostr for ok, any other for error, no exception
 	 * 
 	 * @param model
 	 * @return
-	 * @throws Exception
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) {
 
 		// source check from wechat server, return echostr for ok
 		log.debug("wechat route auth, return echostr for ok, any other for error.");
 
-		// the follow is from wechat server
-		String signature = req.getParameter("signature");
-		String timestamp = req.getParameter("timestamp");
-		String nonce = req.getParameter("nonce");
-		String echostr = req.getParameter("echostr");
+		// the writer
+		PrintWriter writer = null;
 
-		// get ip
-		String ip = WebUtil.getClientIp(req);
+		try {
 
-		// get token
-		String token = PropertiesUtil.getProperty(WECHAT_TOKEN_PROPERTY);
+			// the follow is from wechat server
+			String signature = req.getParameter("signature");
+			String timestamp = req.getParameter("timestamp");
+			String nonce = req.getParameter("nonce");
+			String echostr = req.getParameter("echostr");
 
-		log.debug("get: ip={}, signature={}, timestamp={}, nonce={}, echostr={}", ip, signature, timestamp, nonce,
-				echostr);
+			// get ip
+			String ip = WebUtil.getClientIp(req);
 
-		// direct output
-		PrintWriter writer = resp.getWriter();
+			// get token
+			String token = PropertiesUtil.getProperty(WECHAT_TOKEN_PROPERTY);
 
-		// check signature, return echostr if pass
-		if (signature == null || timestamp == null || nonce == null || echostr == null) {
-			writer.write("you records has recorded,please leave it now !");
-		} else {
-			try {
-				if (wechatService.checkSignature(token, signature, timestamp, nonce)) {
-					log.debug("wechat route auth ok");
-					writer.write(echostr);
-				}
-			} catch (NoSuchAlgorithmException ex) {
-				log.error("SHA-1 can not be found", ex);
-				writer.write("error!");
-			} catch (IllegalArgumentException ex) {
-				log.error(
-						"wechat route auth fail with bad parameter, ip={}, signature={}, timestamp={}, nonce={}, echostr={}",
-						ip, signature, timestamp, nonce, echostr);
-				writer.write("error!");
+			log.debug("get: ip={}, signature={}, timestamp={}, nonce={}, echostr={}", ip, signature, timestamp, nonce,
+					echostr);
+
+			// direct output
+			writer = resp.getWriter();
+
+			// check signature, return echostr if pass
+			if (wechatService.checkSignature(token, signature, timestamp, nonce)) {
+				log.debug("wechat route auth ok");
+				writer.write(echostr);
+			} else {
+				log.debug("wechat route auth signature check failed");
+				writer.write("check failed");
+			}
+
+		} catch (IllegalArgumentException ex) {
+			log.error("wechat route auth fail with bad parameter");
+			writer.write("bad parameter");
+		} catch (NoSuchAlgorithmException ex) {
+			log.error("SHA-1 can not be found", ex);
+			resp.setStatus(500);
+		} catch (Exception ex) {
+			log.error("wechat doGet error", ex);
+			resp.setStatus(500);
+		} finally {
+			// close
+			if (writer != null) {
+				writer.close();
+				writer = null;
 			}
 		}
-
-		// close
-		writer.close();
 	}
 
 	/**
@@ -136,23 +108,54 @@ public class WechatController {
 	 * 
 	 * @param req
 	 * @param resp
-	 * @throws ServletException
-	 * @throws IOException
 	 */
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
-		// set encoding to utf-8
-		req.setCharacterEncoding("UTF-8");
-		resp.setCharacterEncoding("UTF-8");
+		// the writer
+		PrintWriter writer = null;
 
-		// get response
-		String respMessage = this.simpleProcessRequest(req);
+		// parse input stream as xml
+		InputStream is = null;
+		Map<String, String> requestMap = null;
 
-		// write response
-		PrintWriter writer = resp.getWriter();
-		writer.print(respMessage);
-		writer.close();
+		// parse input
+		try {
+
+			// set encoding to utf-8
+			req.setCharacterEncoding("UTF-8");
+			resp.setCharacterEncoding("UTF-8");
+
+			// get input stream
+			is = req.getInputStream();
+
+			// parse xml to map
+			requestMap = wechatService.parseXml(is);
+
+			// call service to handle request and get response
+			String respMessage = wechatService.handleRequest(requestMap);
+
+			// write response
+			writer = resp.getWriter();
+			writer.write(respMessage);
+		} catch (Exception ex) {
+			log.error("wechat servlet error:", ex);
+			resp.setStatus(500);
+		} finally {
+			// close
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+				}
+				is = null;
+			}
+
+			if (writer != null) {
+				writer.close();
+				writer = null;
+			}
+		}
 	}
 
 }
