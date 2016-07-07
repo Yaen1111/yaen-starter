@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.servlets;
+package org.yaen.starter.web.home.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,11 +7,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.core.model.services.WechatService;
 import org.yaen.starter.web.home.utils.WebUtil;
@@ -19,16 +21,14 @@ import org.yaen.starter.web.home.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * wechat servlet (use mvc controller instead)
- * <p>
- * used to response wechat server auth
+ * wechat controller, deals wechat auth/callback
  * 
- * @author Yaen 2016年6月6日下午10:06:54
+ * @author Yaen 2016年5月19日下午2:28:18
  */
 @Slf4j
-@Deprecated
-public class WechatServlet extends HttpServlet {
-	private static final long serialVersionUID = 4068700881623683064L;
+@Controller
+@RequestMapping("/wechat")
+public class WechatController {
 
 	/** the token for verify server response */
 	public static final String WECHAT_TOKEN_PROPERTY = "wechat.token";
@@ -77,13 +77,14 @@ public class WechatServlet extends HttpServlet {
 	}
 
 	/**
-	 * wechat server will send token by get for route auth, return echostr for ok
+	 * wechat callback get, for token check
 	 * 
-	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
+	 * @param model
+	 * @return
+	 * @throws Exception
 	 */
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		// source check from wechat server, return echostr for ok
 		log.debug("wechat route auth, return echostr for ok, any other for error.");
@@ -131,13 +132,15 @@ public class WechatServlet extends HttpServlet {
 	}
 
 	/**
-	 * menu/send response will be posted
+	 * wechat callback post, for messages
 	 * 
-	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
 	 */
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	@RequestMapping(value = "", method = RequestMethod.POST)
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		// set encoding to utf-8
 		req.setCharacterEncoding("UTF-8");
@@ -150,13 +153,6 @@ public class WechatServlet extends HttpServlet {
 		PrintWriter writer = resp.getWriter();
 		writer.print(respMessage);
 		writer.close();
-	}
-
-	/**
-	 * empty constructor
-	 */
-	public WechatServlet() {
-		super();
 	}
 
 }
