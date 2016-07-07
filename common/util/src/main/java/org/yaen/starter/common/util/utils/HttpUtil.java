@@ -42,15 +42,15 @@ public class HttpUtil {
 	/**
 	 * http get and return result as string
 	 * 
-	 * @param url
+	 * @param requestUrl
 	 * @return
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	public static String httpGet(String url) throws ParseException, IOException {
+	public static String httpGet(String requestUrl) throws ParseException, IOException {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
-			HttpGet httpget = new HttpGet(url);
+			HttpGet httpget = new HttpGet(requestUrl);
 			CloseableHttpResponse resp = httpclient.execute(httpget);
 			return EntityUtils.toString(resp.getEntity());
 		} finally {
@@ -66,15 +66,15 @@ public class HttpUtil {
 	/**
 	 * http post and return result as string
 	 * 
-	 * @param url
+	 * @param requestUrl
 	 * @param param
 	 * @return
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	public static String httpPost(String url, Map<String, String> param) throws Exception {
+	public static String httpPost(String requestUrl, Map<String, String> param) throws IOException {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
-			HttpPost post = new HttpPost(url);
+			HttpPost post = new HttpPost(requestUrl);
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			if (param != null) {
 				for (Entry<String, String> entry : param.entrySet()) {
@@ -87,11 +87,11 @@ public class HttpUtil {
 			InputStream is = response.getEntity().getContent();
 			return StringUtil.inputStream2String(is);
 		} finally {
-			try {
-				if (httpclient != null) {
+			if (httpclient != null) {
+				try {
 					httpclient.close();
+				} catch (IOException e) {
 				}
-			} catch (IOException e) {
 			}
 		}
 	}
@@ -229,5 +229,5 @@ public class HttpUtil {
 
 		return httpsPost(requestUrl, jsonString);
 	}
-	
+
 }

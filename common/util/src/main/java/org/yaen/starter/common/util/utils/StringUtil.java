@@ -1,5 +1,6 @@
 package org.yaen.starter.common.util.utils;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -105,9 +106,9 @@ public class StringUtil extends StringUtils {
 	 * 
 	 * @param is
 	 * @return
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	public static String inputStream2String(InputStream is) throws Exception {
+	public static String inputStream2String(InputStream is) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] buf = new byte[1024];
 		int len = -1;
