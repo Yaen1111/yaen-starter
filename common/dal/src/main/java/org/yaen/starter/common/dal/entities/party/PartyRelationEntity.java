@@ -22,11 +22,11 @@ public class PartyRelationEntity extends TwoEntity {
 	private static final long serialVersionUID = -4458934767334916729L;
 
 	/** the party relation to id */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String toId;
 
 	/** the party relation type(code) */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String partyRelationType;
 
 }

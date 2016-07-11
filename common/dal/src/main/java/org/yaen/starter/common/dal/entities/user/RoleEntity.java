@@ -22,11 +22,11 @@ public class RoleEntity extends TwoEntity {
 	private static final long serialVersionUID = -709733522935110043L;
 
 	/** group name */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String groupName;
 
 	/** title */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String title;
 
 	/** description */

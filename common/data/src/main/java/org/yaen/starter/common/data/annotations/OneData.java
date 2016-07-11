@@ -33,7 +33,7 @@ public @interface OneData {
 	 * 
 	 * @return
 	 */
-	String DataType() default DataTypes.VARCHAR50;
+	String DataType() default DataTypes.VARCHAR64;
 
 	/**
 	 * the data size if need, 0 for default

@@ -26,11 +26,11 @@ public class ChangelogEntity extends TwoEntity implements OneTableHandler {
 	private static final long serialVersionUID = -606829448983274029L;
 
 	/** the sql type */
-	@OneData(DataType = DataTypes.VARCHAR20, FieldName = "SQL_TYPE")
+	@OneData(DataType = DataTypes.VARCHAR32, FieldName = "SQL_TYPE")
 	private String sqlType;
 
 	/** the update user name */
-	@OneData(DataType = DataTypes.VARCHAR20, FieldName = "SYS_UUSER")
+	@OneData(DataType = DataTypes.VARCHAR32, FieldName = "SYS_UUSER")
 	private String uUser;
 
 	/** the update comment */

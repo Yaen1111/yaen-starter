@@ -22,7 +22,7 @@ public class MenuEntity extends TwoEntity {
 	private static final long serialVersionUID = -6445208030709771936L;
 
 	/** menu group name */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String groupName;
 
 	/** menu level, currently 1 or 2 */
@@ -34,19 +34,19 @@ public class MenuEntity extends TwoEntity {
 	private int orders;
 
 	/** menu type */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String type;
 
 	/** parent menu id */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String parentId;
 
 	/** menu title */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String title;
 
 	/** menu key */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String key;
 
 	/** menu url, will jump to that url */

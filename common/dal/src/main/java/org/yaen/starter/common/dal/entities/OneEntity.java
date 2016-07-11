@@ -42,7 +42,7 @@ public abstract class OneEntity implements BaseEntity {
 	/** the main key */
 	@Getter
 	@Setter
-	@OneData(DataType = DataTypes.VARCHAR20, FieldName = "ID")
+	@OneData(DataType = DataTypes.VARCHAR32, FieldName = "ID")
 	protected String id = "";
 
 	/** set to true to enable auto table */

@@ -21,7 +21,7 @@ public class SubCodeEntity extends NamedOneEntity {
 	private static final long serialVersionUID = -1638352121549503589L;
 
 	/** the sub code */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String subcode;
 
 	/** the code family, that is the group of the code */

@@ -22,11 +22,11 @@ public class PartyAttributeEntity extends TwoEntity {
 	private static final long serialVersionUID = 2310601189439211189L;
 
 	/** the attribute name */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String attributeName;
 
 	/** the attribute group */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String attributeGroup;
 
 	/** the attribute value */

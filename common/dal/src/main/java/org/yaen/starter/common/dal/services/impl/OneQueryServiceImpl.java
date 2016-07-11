@@ -264,45 +264,6 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#selectOneByUniqueFieldName(org.yaen.starter.common.data.entities.BaseEntity,
-	 *      java.lang.String)
-	 */
-	@Override
-	public <T extends BaseEntity> T selectOneByUniqueFieldName(T entity, String fieldName)
-			throws CommonException, DataNotExistsException, DuplicateDataException {
-		AssertUtil.notNull(entity);
-
-		List<Long> rowids = this.selectRowidsByFieldName(entity, fieldName);
-
-		// check empty
-		if (rowids == null || rowids.isEmpty()) {
-			throw new DataNotExistsException("data not exists, fieldName=" + fieldName);
-		}
-
-		// check duplicate
-		if (rowids.size() > 1) {
-			throw new DuplicateDataException("data id duplicate, fieldName=" + fieldName);
-		}
-
-		// get entity
-		List<Long> oneid = new ArrayList<Long>(1);
-		oneid.add(rowids.get(0));
-		List<T> list = this.selectListByRowids(entity, oneid);
-
-		// check empty again for concurrent
-		if (list == null || list.isEmpty()) {
-			throw new DataNotExistsException("data not exists, fieldName=" + fieldName);
-		}
-
-		// check duplicate
-		if (list.size() > 1) {
-			throw new DuplicateDataException("data id duplicate, fieldName=" + fieldName);
-		}
-
-		return list.get(0);
-	}
-
-	/**
 	 * @see org.yaen.starter.common.data.services.QueryService#selectValueListById(org.yaen.starter.common.data.entities.BaseEntity,
 	 *      java.lang.String, java.lang.String)
 	 */
@@ -328,27 +289,24 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByFieldName(org.yaen.starter.core.model.models.BaseModel,
+	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByField(org.yaen.starter.core.model.models.BaseModel,
 	 *      java.lang.String)
 	 */
 	@Override
-	public <T extends BaseEntity> List<Long> selectRowidsByFieldName(T entity, String fieldName)
-			throws CommonException {
-		List<String> list = new ArrayList<String>();
-		list.add(fieldName);
-		return this.selectRowidsByFieldNameList(entity, list);
+	public <T extends BaseEntity> List<Long> selectRowidsByField(T entity, String fieldName) throws CommonException {
+		return this.selectRowidsByFields(entity, new String[] { fieldName });
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByFieldNameList(org.yaen.starter.common.data.entities.BaseEntity,
-	 *      java.util.List)
+	 * @see org.yaen.starter.common.data.services.QueryService#selectRowidsByFields(org.yaen.starter.common.data.entities.BaseEntity,
+	 *      java.lang.String[])
 	 */
 	@Override
-	public <T extends BaseEntity> List<Long> selectRowidsByFieldNameList(T entity, List<String> fieldNameList)
+	public <T extends BaseEntity> List<Long> selectRowidsByFields(T entity, String[] fieldNames)
 			throws CommonException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
-		AssertUtil.notNull(fieldNameList);
+		AssertUtil.notNull(fieldNames);
 
 		OneEntity one = (OneEntity) entity;
 
@@ -368,7 +326,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 				Map<String, OneColumnEntity> columns = one.getColumns();
 
-				for (String fieldname : fieldNameList) {
+				for (String fieldname : fieldNames) {
 
 					if (columns.containsKey(fieldname)) {
 						OneColumnEntity info = columns.get(fieldname);
@@ -387,6 +345,45 @@ public class OneQueryServiceImpl implements QueryService {
 		} catch (Exception ex) {
 			throw new CommonException(ex);
 		}
+	}
+
+	/**
+	 * @see org.yaen.starter.common.data.services.QueryService#selectOneByUniqueFieldNames(org.yaen.starter.common.data.entities.BaseEntity,
+	 *      java.lang.String[])
+	 */
+	@Override
+	public <T extends BaseEntity> T selectOneByUniqueFieldNames(T entity, String[] fieldNames)
+			throws CommonException, DataNotExistsException, DuplicateDataException {
+		AssertUtil.notNull(entity);
+
+		List<Long> rowids = this.selectRowidsByFields(entity, fieldNames);
+
+		// check empty
+		if (rowids == null || rowids.isEmpty()) {
+			throw new DataNotExistsException("data not exists, fieldNames=" + fieldNames);
+		}
+
+		// check duplicate
+		if (rowids.size() > 1) {
+			throw new DuplicateDataException("data id duplicate, fieldNames=" + fieldNames);
+		}
+
+		// get entity
+		List<Long> oneid = new ArrayList<Long>(1);
+		oneid.add(rowids.get(0));
+		List<T> list = this.selectListByRowids(entity, oneid);
+
+		// check empty again for concurrent
+		if (list == null || list.isEmpty()) {
+			throw new DataNotExistsException("data not exists, fieldNames=" + fieldNames);
+		}
+
+		// check duplicate
+		if (list.size() > 1) {
+			throw new DuplicateDataException("data id duplicate, fieldNames=" + fieldNames);
+		}
+
+		return list.get(0);
 	}
 
 	/**

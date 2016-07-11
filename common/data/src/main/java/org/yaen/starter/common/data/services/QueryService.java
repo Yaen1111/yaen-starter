@@ -51,19 +51,6 @@ public interface QueryService {
 			throws CommonException, DataNotExistsException, DuplicateDataException;
 
 	/**
-	 * select one entity by given field name, usually unique key, with triggers, empty or duplicate will throw
-	 * 
-	 * @param entity
-	 * @param fieldName
-	 * @return
-	 * @throws CommonException
-	 * @throws DataNotExistsException
-	 * @throws DuplicateDataException
-	 */
-	public <T extends BaseEntity> T selectOneByUniqueFieldName(T entity, String fieldName)
-			throws CommonException, DataNotExistsException, DuplicateDataException;
-
-	/**
 	 * select value list by given id and field name, no triggers
 	 * 
 	 * @param entity
@@ -83,18 +70,30 @@ public interface QueryService {
 	 * @return
 	 * @throws CommonException
 	 */
-	public <T extends BaseEntity> List<Long> selectRowidsByFieldName(T entity, String fieldName) throws CommonException;
+	public <T extends BaseEntity> List<Long> selectRowidsByField(T entity, String fieldName) throws CommonException;
 
 	/**
 	 * select rowids by field name list, the value is the given value in the entity and use equal, no triggers
 	 * 
 	 * @param entity
-	 * @param fieldNameList
+	 * @param fieldNames
 	 * @return
 	 * @throws CommonException
 	 */
-	public <T extends BaseEntity> List<Long> selectRowidsByFieldNameList(T entity, List<String> fieldNameList)
-			throws CommonException;
+	public <T extends BaseEntity> List<Long> selectRowidsByFields(T entity, String[] fieldNames) throws CommonException;
+
+	/**
+	 * select one entity by given field name, usually unique key, with triggers, empty or duplicate will throw
+	 * 
+	 * @param entity
+	 * @param fieldNames
+	 * @return
+	 * @throws CommonException
+	 * @throws DataNotExistsException
+	 * @throws DuplicateDataException
+	 */
+	public <T extends BaseEntity> T selectOneByUniqueFieldNames(T entity, String[] fieldNames)
+			throws CommonException, DataNotExistsException, DuplicateDataException;
 
 	/**
 	 * select rowids by all none-null field, the value is the given value in the entity, no triggers

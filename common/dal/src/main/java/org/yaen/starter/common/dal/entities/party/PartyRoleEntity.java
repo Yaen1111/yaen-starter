@@ -22,7 +22,7 @@ public class PartyRoleEntity extends TwoEntity {
 	private static final long serialVersionUID = 1743340074473975732L;
 
 	/** the party role type(code) */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String partyRoleType;
 
 }

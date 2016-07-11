@@ -22,7 +22,7 @@ public class RoleAuthEntity extends TwoEntity {
 	private static final long serialVersionUID = -4458934767334916729L;
 
 	/** the auth id, should be long */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String authId;
 
 }

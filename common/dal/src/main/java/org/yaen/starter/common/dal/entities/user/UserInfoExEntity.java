@@ -20,19 +20,19 @@ public class UserInfoExEntity extends TwoEntity {
 	private static final long serialVersionUID = 8955391077702613155L;
 
 	/** the true name of user */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String trueName;
 
 	/** the gender of user */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String gender;
 
 	/** mobile phone */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String mobilePhone;
 
 	/** fixed phone */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String fixedPhone;
 
 	/** email address, only one */
@@ -40,7 +40,7 @@ public class UserInfoExEntity extends TwoEntity {
 	private String email;
 
 	/** idcard type, usually is credential card */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String idcardType;
 
 	/** idcard number */

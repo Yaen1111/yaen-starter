@@ -22,11 +22,11 @@ public class AuthEntity extends TwoEntity {
 	private static final long serialVersionUID = -709733522935110043L;
 
 	/** override the id to be long enough */
-	@OneData(DataType = DataTypes.VARCHAR50, FieldName = "ID")
+	@OneData(DataType = DataTypes.VARCHAR64, FieldName = "ID")
 	protected String id = "";
 
 	/** title */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String title;
 
 	/** description */

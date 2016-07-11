@@ -20,15 +20,15 @@ public class NamedOneEntity extends TwoEntity {
 	private static final long serialVersionUID = 7297317955813307397L;
 
 	/** the name */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String name;
 
 	/** the family */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String family;
 
 	/** the title */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String title;
 
 	/** the description */

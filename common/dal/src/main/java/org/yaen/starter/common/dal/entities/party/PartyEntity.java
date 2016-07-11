@@ -22,11 +22,11 @@ public class PartyEntity extends TwoEntity {
 	private static final long serialVersionUID = -709733522935110043L;
 
 	/** the party type, usually is org/person */
-	@OneData(DataType = DataTypes.VARCHAR20)
+	@OneData(DataType = DataTypes.VARCHAR32)
 	private String partyType;
 
 	/** the reference resource, in some case, we may need the reference to other system */
-	@OneData(DataType = DataTypes.VARCHAR50)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String referenceResource;
 
 }
