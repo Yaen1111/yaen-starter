@@ -20,6 +20,9 @@ public final class DataTypes {
 	/** varchar 1000, for url/path, very-long string */
 	public static final String VARCHAR1000 = "VARCHAR(1000)";
 
+	/** varchar 32, for guid */
+	public static final String VARCHAR32 = "VARCHAR(32)";
+
 	/** varchar 64, for hash, salt */
 	public static final String VARCHAR64 = "VARCHAR(64)";
 
