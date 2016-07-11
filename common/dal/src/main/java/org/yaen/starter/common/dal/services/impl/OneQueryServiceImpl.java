@@ -348,11 +348,11 @@ public class OneQueryServiceImpl implements QueryService {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.data.services.QueryService#selectOneByUniqueFieldNames(org.yaen.starter.common.data.entities.BaseEntity,
+	 * @see org.yaen.starter.common.data.services.QueryService#selectOneByUniqueFields(org.yaen.starter.common.data.entities.BaseEntity,
 	 *      java.lang.String[])
 	 */
 	@Override
-	public <T extends BaseEntity> T selectOneByUniqueFieldNames(T entity, String[] fieldNames)
+	public <T extends BaseEntity> T selectOneByUniqueFields(T entity, String[] fieldNames)
 			throws CommonException, DataNotExistsException, DuplicateDataException {
 		AssertUtil.notNull(entity);
 

@@ -92,7 +92,7 @@ public interface QueryService {
 	 * @throws DataNotExistsException
 	 * @throws DuplicateDataException
 	 */
-	public <T extends BaseEntity> T selectOneByUniqueFieldNames(T entity, String[] fieldNames)
+	public <T extends BaseEntity> T selectOneByUniqueFields(T entity, String[] fieldNames)
 			throws CommonException, DataNotExistsException, DuplicateDataException;
 
 	/**
