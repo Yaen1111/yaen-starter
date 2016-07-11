@@ -51,6 +51,19 @@ public interface QueryService {
 			throws CommonException, DataNotExistsException, DuplicateDataException;
 
 	/**
+	 * select one entity by given field name, usually unique key, with triggers, empty or duplicate will throw
+	 * 
+	 * @param entity
+	 * @param fieldName
+	 * @return
+	 * @throws CommonException
+	 * @throws DataNotExistsException
+	 * @throws DuplicateDataException
+	 */
+	public <T extends BaseEntity> T selectOneByUniqueFieldName(T entity, String fieldName)
+			throws CommonException, DataNotExistsException, DuplicateDataException;
+
+	/**
 	 * select value list by given id and field name, no triggers
 	 * 
 	 * @param entity
