@@ -1,7 +1,5 @@
 package org.yaen.starter.common.integration.clients;
 
-import java.security.NoSuchAlgorithmException;
-
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -19,10 +17,8 @@ public interface WechatClient {
 	 * @param timestamp
 	 * @param nonce
 	 * @return
-	 * @throws NoSuchAlgorithmException
 	 */
-	boolean checkSignature(String token, String signature, String timestamp, String nonce)
-			throws NoSuchAlgorithmException;
+	boolean checkSignature(String token, String signature, String timestamp, String nonce);
 
 	/**
 	 * get access token from wechat server, return json object

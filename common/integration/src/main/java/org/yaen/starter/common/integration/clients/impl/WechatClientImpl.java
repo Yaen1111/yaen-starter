@@ -1,9 +1,8 @@
 package org.yaen.starter.common.integration.clients.impl;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -37,8 +36,7 @@ public class WechatClientImpl implements WechatClient {
 	 *      java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean checkSignature(String token, String signature, String timestamp, String nonce)
-			throws NoSuchAlgorithmException {
+	public boolean checkSignature(String token, String signature, String timestamp, String nonce) {
 		AssertUtil.notBlank(token);
 		AssertUtil.notBlank(signature);
 		AssertUtil.notBlank(timestamp);
@@ -54,11 +52,13 @@ public class WechatClientImpl implements WechatClient {
 			content.append(arr[i]);
 		}
 
-		// do sha-1
-		MessageDigest md = MessageDigest.getInstance("SHA-1");
+		// // do sha-1
+		// MessageDigest md = MessageDigest.getInstance("SHA-1");
+		//
+		// byte[] digest = md.digest(content.toString().getBytes());
+		// String tmpStr = StringUtil.byteToStr(digest);
 
-		byte[] digest = md.digest(content.toString().getBytes());
-		String tmpStr = StringUtil.byteToStr(digest);
+		String tmpStr = DigestUtils.sha1Hex(content.toString());
 
 		// should be same
 		return StringUtil.equals(tmpStr, signature.toUpperCase());
