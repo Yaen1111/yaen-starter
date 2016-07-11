@@ -84,8 +84,6 @@ public class UserServiceImpl implements UserService {
 			// try get user by given username to check duplicate
 			try {
 				queryService.selectOneById(new UserEntity(), username);
-			} catch (DuplicateDataException ex) {
-				throw ex;
 			} catch (DataNotExistsException e) {
 				// demanded result, should be ok
 			}
