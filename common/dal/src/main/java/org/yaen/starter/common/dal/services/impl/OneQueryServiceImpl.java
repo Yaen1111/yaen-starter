@@ -223,6 +223,7 @@ public class OneQueryServiceImpl implements QueryService {
 		// trigger before select, only once is ok
 		if (one.BeforeSelect()) {
 
+			// convert and check each entity
 			List<OneEntity> listone = this.innerSelectListById(one, id);
 
 			List<T> list = new ArrayList<T>(listone.size());
@@ -251,12 +252,12 @@ public class OneQueryServiceImpl implements QueryService {
 
 		// check empty
 		if (list == null || list.isEmpty()) {
-			throw new DataNotExistsException("user not exists, id=" + id);
+			throw new DataNotExistsException("data not exists, id=" + id);
 		}
 
 		// check duplicate
 		if (list.size() > 1) {
-			throw new DuplicateDataException("user id duplicate, id=" + id);
+			throw new DuplicateDataException("data id duplicate, id=" + id);
 		}
 
 		return list.get(0);
