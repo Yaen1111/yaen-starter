@@ -11,7 +11,8 @@ import org.yaen.starter.common.data.exceptions.CommonException;
 public interface TableService {
 
 	/**
-	 * create table if not exists, or alter table if columns differs, using given one entity
+	 * create table if not exists, or alter table if columns differs, using given one entity. but if isAutoTable is set
+	 * to false, do nothing
 	 * 
 	 * @throws CommonException
 	 */

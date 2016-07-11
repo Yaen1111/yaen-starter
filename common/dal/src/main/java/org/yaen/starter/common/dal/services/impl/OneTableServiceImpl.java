@@ -38,7 +38,7 @@ public class OneTableServiceImpl implements TableService {
 	 */
 	@Override
 	public void CreateTable(OneEntity entity) throws CommonException {
-		if (entity == null)
+		if (entity == null || !entity.isAutoTable())
 			return;
 
 		// check cache

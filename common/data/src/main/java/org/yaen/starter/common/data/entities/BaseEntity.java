@@ -37,4 +37,11 @@ public interface BaseEntity extends Serializable {
 	 */
 	void setId(String id);
 
+	/**
+	 * is auto table or not, if true, will auto create table, if false, table is not changed
+	 * 
+	 * @return
+	 */
+	boolean isAutoTable();
+
 }
