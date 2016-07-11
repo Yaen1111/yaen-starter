@@ -88,9 +88,6 @@ public class WechatController {
 		} catch (IllegalArgumentException ex) {
 			log.error("wechat route auth fail with bad parameter");
 			writer.write("bad parameter");
-		} catch (NoSuchAlgorithmException ex) {
-			log.error("SHA-1 can not be found", ex);
-			resp.setStatus(500);
 		} catch (Exception ex) {
 			log.error("wechat doGet error", ex);
 			resp.setStatus(500);
