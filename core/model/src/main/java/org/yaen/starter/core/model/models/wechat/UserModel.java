@@ -45,7 +45,7 @@ public class UserModel extends TwoModel<UserEntity> {
 		// get user by openid + appid
 		try {
 			this.entity = this.proxy.getQueryService().selectOneByUniqueFields(new UserEntity(openId, appId),
-					new String[] { "OPEN_ID", "APP_ID" });
+					new String[] { "openId", "appId" });
 		} catch (CommonException ex) {
 			throw new CoreException("load user failed", ex);
 		}

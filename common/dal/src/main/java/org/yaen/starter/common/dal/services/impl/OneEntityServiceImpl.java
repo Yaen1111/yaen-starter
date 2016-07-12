@@ -3,6 +3,7 @@ package org.yaen.starter.common.dal.services.impl;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.dal.mappers.EntityMapper;
@@ -73,10 +74,11 @@ public class OneEntityServiceImpl implements EntityService {
 	 * 
 	 * @param entity
 	 * @throws NoDataAffectedException
+	 * @throws DuplicateDataException
 	 * @throws CoreException
 	 */
 	protected <T extends OneEntity> void innerInsertEntityByRowid(T entity)
-			throws CommonException, NoDataAffectedException {
+			throws CommonException, NoDataAffectedException, DuplicateDataException {
 		try {
 			// create table if not exists
 			tableService.CreateTable(entity);
@@ -91,9 +93,10 @@ public class OneEntityServiceImpl implements EntityService {
 
 			// id already set into entity and bridged to entity
 
-			// TODO catch duplicate data exception
 		} catch (NoDataAffectedException ex) {
 			throw ex;
+		} catch (DuplicateKeyException ex) {
+			throw new DuplicateDataException("duplicate data", ex);
 		} catch (Exception ex) {
 			throw new CommonException(ex);
 		}
