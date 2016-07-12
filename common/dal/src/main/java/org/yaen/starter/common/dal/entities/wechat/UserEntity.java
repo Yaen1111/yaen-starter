@@ -20,7 +20,7 @@ import lombok.Setter;
 @Setter
 @OneTable(TableName = "ZWX_USER")
 @OneUniqueIndex({ "ID", "OPEN_ID,APP_ID" })
-public class WxUserEntity extends TwoEntity {
+public class UserEntity extends TwoEntity {
 	private static final long serialVersionUID = -4660940072642230728L;
 
 	/** the main wechat openid */
@@ -42,7 +42,7 @@ public class WxUserEntity extends TwoEntity {
 	/**
 	 * empty constructor
 	 */
-	public WxUserEntity() {
+	public UserEntity() {
 		super();
 	}
 
@@ -52,7 +52,7 @@ public class WxUserEntity extends TwoEntity {
 	 * @param openId
 	 * @param appId
 	 */
-	public WxUserEntity(String openId, String appId) {
+	public UserEntity(String openId, String appId) {
 		this();
 
 		this.openId = openId;
