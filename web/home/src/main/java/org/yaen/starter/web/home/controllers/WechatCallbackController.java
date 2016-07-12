@@ -20,14 +20,14 @@ import org.yaen.starter.web.home.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * wechat controller, deals wechat auth/callback
+ * wechat callback controller, deals wechat auth/callback
  * 
  * @author Yaen 2016年5月19日下午2:28:18
  */
 @Slf4j
 @Controller
-@RequestMapping("/wechat")
-public class WechatController {
+@RequestMapping("/wechatcallback")
+public class WechatCallbackController {
 
 	/** the token for verify server response */
 	public static final String WECHAT_TOKEN_PROPERTY = "wechat.token";
