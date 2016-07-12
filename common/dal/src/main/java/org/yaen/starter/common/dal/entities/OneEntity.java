@@ -297,8 +297,8 @@ public abstract class OneEntity implements BaseEntity {
 	public void fillValues(Map<String, Object> values) throws IllegalArgumentException, IllegalAccessException {
 
 		// fill rowid as is not contained in the column list
-		if (values.containsKey("rowid")) {
-			this.setRowid((Long) values.get("rowid"));
+		if (values.containsKey("ROWID")) {
+			this.setRowid((Long) values.get("ROWID"));
 		}
 
 		// get columns if not
