@@ -14,11 +14,12 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.yaen.starter.common.dal.entities.user.UserEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
-import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.user.UserModel;
+import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.services.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ShiroRealm extends AuthorizingRealm {
+
+	@Autowired
+	private ProxyService proxyService;
 
 	@Autowired
 	private UserService userService;
@@ -53,28 +57,26 @@ public class ShiroRealm extends AuthorizingRealm {
 			throw new UnknownAccountException("username is empty");
 		}
 
-		UserModel user = new UserModel(this.userService);
+		UserModel user = new UserModel(this.proxyService, new UserEntity(), this.userService);
 
 		// find user
 		try {
-			user.load(username);
+			user.loadById(username);
 		} catch (CoreException ex) {
 			// other error
 			throw new AccountException("unknown error", ex);
 		} catch (DataNotExistsException ex) {
 			throw new UnknownAccountException();
-		} catch (DuplicateDataException ex) {
-			throw new UnknownAccountException("duplicate account found");
 		}
 
 		// here is ok, create authentication info
 
 		// create principal(user object), the username maybe changed by capital
-		ShiroPrincipal principal = new ShiroPrincipal(user.getUser().getId());
+		ShiroPrincipal principal = new ShiroPrincipal(user.getEntity().getId());
 
 		// create credentials(password hash and salt)
-		ShiroCredentials credentials = new ShiroCredentials(user.getUser().getPasswordHash(),
-				user.getUser().getPasswordSalt());
+		ShiroCredentials credentials = new ShiroCredentials(user.getEntity().getPasswordHash(),
+				user.getEntity().getPasswordSalt());
 
 		// return auth info
 		return new SimpleAuthenticationInfo(principal, credentials, this.getName());

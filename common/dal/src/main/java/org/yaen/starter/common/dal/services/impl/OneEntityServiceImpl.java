@@ -11,6 +11,7 @@ import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
 import org.yaen.starter.common.data.services.EntityService;
@@ -90,6 +91,7 @@ public class OneEntityServiceImpl implements EntityService {
 
 			// id already set into entity and bridged to entity
 
+			// TODO catch duplicate data exception
 		} catch (NoDataAffectedException ex) {
 			throw ex;
 		} catch (Exception ex) {
@@ -189,7 +191,8 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @see org.yaen.starter.common.data.services.EntityService#insertEntityByRowid(org.yaen.starter.common.data.entities.BaseEntity)
 	 */
 	@Override
-	public <T extends BaseEntity> long insertEntityByRowid(T entity) throws CommonException, NoDataAffectedException {
+	public <T extends BaseEntity> long insertEntityByRowid(T entity)
+			throws CommonException, NoDataAffectedException, DuplicateDataException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 

@@ -1,7 +1,6 @@
 package org.yaen.starter.core.model.models;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.util.utils.StringUtil;
 
 import lombok.Getter;
 
@@ -18,24 +17,9 @@ import lombok.Getter;
  */
 public abstract class OneModel {
 
-	/** the version of model, needed in interface call */
+	/** the version of model, can be used in interface call */
 	@Getter
-	private String version;
-
-	/**
-	 * protected constructor
-	 * 
-	 * @param version
-	 */
-	protected OneModel(String version) {
-
-		// set version
-		if (StringUtil.isNotBlank(version)) {
-			this.version = version;
-		} else {
-			this.version = "1.0.0";
-		}
-	}
+	protected String version = "1.0.0";
 
 	/**
 	 * check model status
@@ -49,11 +33,4 @@ public abstract class OneModel {
 	 */
 	public abstract void clear();
 
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return super.toString() + ", version=" + this.version;
-	}
 }

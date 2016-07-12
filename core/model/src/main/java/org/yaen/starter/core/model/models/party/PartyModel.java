@@ -1,10 +1,8 @@
 package org.yaen.starter.core.model.models.party;
 
-import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.core.model.models.OneModel;
-import org.yaen.starter.core.model.services.PartyService;
-
-import lombok.Getter;
+import org.yaen.starter.common.dal.entities.party.PartyEntity;
+import org.yaen.starter.core.model.models.TwoModel;
+import org.yaen.starter.core.model.services.ProxyService;
 
 /**
  * party model
@@ -15,38 +13,14 @@ import lombok.Getter;
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
-public class PartyModel extends OneModel {
-
-	/** the service */
-	@Getter
-	private PartyService service;
+public class PartyModel extends TwoModel<PartyEntity> {
 
 	/**
-	 * construct new model with service
-	 * 
-	 * @param service
+	 * @param proxy
+	 * @param sample
 	 */
-	public PartyModel(PartyService service) {
-		super("1.0.0");
-
-		this.service = service;
+	public PartyModel(ProxyService proxy, PartyEntity sample) {
+		super(proxy, sample);
 	}
 
-	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#check()
-	 */
-	@Override
-	public void check() throws CoreException {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#clear()
-	 */
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-
-	}
 }

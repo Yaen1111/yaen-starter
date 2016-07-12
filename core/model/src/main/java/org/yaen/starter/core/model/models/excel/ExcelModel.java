@@ -20,13 +20,6 @@ import org.yaen.starter.core.model.models.excel.handlers.ExcelHandler;
 public abstract class ExcelModel extends OneModel implements ExcelHandler {
 
 	/**
-	 * empty constructor
-	 */
-	public ExcelModel() {
-		super("1.1.0");
-	}
-
-	/**
 	 * import excel file with user data object, the file should be xls or xlsx
 	 * 
 	 * @param filename

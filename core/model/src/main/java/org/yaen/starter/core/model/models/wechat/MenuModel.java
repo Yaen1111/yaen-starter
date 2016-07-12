@@ -57,7 +57,7 @@ public class MenuModel extends OneModel {
 	 * @param service
 	 */
 	public MenuModel(WechatService service) {
-		super("1.0.0");
+		super();
 
 		this.service = service;
 	}

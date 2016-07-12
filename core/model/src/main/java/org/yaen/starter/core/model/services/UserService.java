@@ -6,9 +6,7 @@ import java.util.Set;
 
 import org.yaen.starter.common.dal.entities.user.RoleEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
-import org.yaen.starter.core.model.models.user.UserModel;
 
 /**
  * user service to handle user model
@@ -16,30 +14,6 @@ import org.yaen.starter.core.model.models.user.UserModel;
  * @author Yaen 2016年7月3日下午1:02:08
  */
 public interface UserService {
-
-	/**
-	 * load user by username(id)
-	 * 
-	 * @param model
-	 * @param username
-	 * @throws CoreException
-	 * @throws DataNotExistsException
-	 * @throws DuplicateDataException
-	 */
-	void loadModel(UserModel model, String username)
-			throws CoreException, DataNotExistsException, DuplicateDataException;
-
-	/**
-	 * register new user by username(id) and password
-	 * <p>
-	 * the password is plain text, the model will hash it
-	 * 
-	 * @param username
-	 * @param password
-	 * @throws CoreException
-	 * @throws DuplicateDataException
-	 */
-	void registerNewUser(String username, String password) throws CoreException, DuplicateDataException;
 
 	/**
 	 * check user credentials

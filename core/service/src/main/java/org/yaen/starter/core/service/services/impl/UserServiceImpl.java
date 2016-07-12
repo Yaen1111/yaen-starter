@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yaen.starter.common.dal.entities.user.RoleAuthEntity;
 import org.yaen.starter.common.dal.entities.user.RoleEntity;
-import org.yaen.starter.common.dal.entities.user.UserEntity;
 import org.yaen.starter.common.dal.entities.user.UserRoleEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
@@ -21,7 +20,6 @@ import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.models.user.UserModel;
 import org.yaen.starter.core.model.services.UserService;
 
 /**
@@ -47,60 +45,6 @@ public class UserServiceImpl implements UserService {
 	 */
 	protected String calculatePasswordHash(String password, String salt) {
 		return password + salt;
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.services.UserService#loadModel(org.yaen.starter.core.model.models.user.UserModel,
-	 *      java.lang.String)
-	 */
-	@Override
-	public void loadModel(UserModel model, String username)
-			throws CoreException, DataNotExistsException, DuplicateDataException {
-		AssertUtil.notNull(model);
-		AssertUtil.notBlank(username);
-
-		// clear
-		model.clear();
-
-		try {
-			// get user by id, only one
-			model.setUser(queryService.selectOneById(new UserEntity(), username));
-		} catch (CommonException ex) {
-			throw new CoreException(ex);
-		}
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.services.UserService#registerNewUser(java.lang.String, java.lang.String)
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void registerNewUser(String username, String password) throws CoreException, DuplicateDataException {
-		AssertUtil.notBlank(username);
-		AssertUtil.notBlank(password);
-
-		try {
-
-			// try get user by given username to check duplicate
-			try {
-				queryService.selectOneById(new UserEntity(), username);
-			} catch (DataNotExistsException e) {
-				// demanded result, should be ok
-			}
-
-			// create entity
-			UserEntity newuser = new UserEntity();
-			newuser.setId(username);
-			newuser.setPasswordHash(this.calculatePasswordHash(password, "salt"));
-
-			// do insert
-			entityService.insertEntityByRowid(newuser);
-
-		} catch (NoDataAffectedException ex) {
-			throw new CoreException(ex);
-		} catch (CommonException ex) {
-			throw new CoreException(ex);
-		}
 	}
 
 	/**
@@ -234,6 +178,8 @@ public class UserServiceImpl implements UserService {
 			throw new CoreException(ex);
 		} catch (CommonException ex) {
 			throw new CoreException(ex);
+		} catch (DuplicateDataException ex) {
+			throw new CoreException(ex);
 		}
 	}
 
@@ -302,6 +248,8 @@ public class UserServiceImpl implements UserService {
 		} catch (NoDataAffectedException ex) {
 			throw new CoreException(ex);
 		} catch (CommonException ex) {
+			throw new CoreException(ex);
+		} catch (DuplicateDataException ex) {
 			throw new CoreException(ex);
 		}
 	}
