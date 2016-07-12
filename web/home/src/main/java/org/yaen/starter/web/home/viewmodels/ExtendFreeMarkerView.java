@@ -22,10 +22,10 @@ public class ExtendFreeMarkerView extends FreeMarkerView {
 	protected void exposeHelpers(Map<String, Object> model, HttpServletRequest request) throws Exception {
 
 		// add base to model
-		model.putIfAbsent("base", request.getContextPath());
+		model.put("base", request.getContextPath());
 
 		// add view to model
-		model.putIfAbsent("view", this.getBeanName());
+		model.put("view", this.getBeanName());
 
 		super.exposeHelpers(model, request);
 	}

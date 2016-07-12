@@ -99,7 +99,7 @@ public class ViewModel implements Model {
 		AssertUtil.notNull(attributes);
 
 		for (Entry<String, ?> entry : attributes.entrySet()) {
-			this.map.putIfAbsent(entry.getKey(), entry.getValue());
+			this.map.put(entry.getKey(), entry.getValue());
 		}
 
 		return this;

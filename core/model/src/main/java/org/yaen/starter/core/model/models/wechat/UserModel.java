@@ -1,6 +1,6 @@
 package org.yaen.starter.core.model.models.wechat;
 
-import org.yaen.starter.common.dal.entities.wechat.UserEntity;
+import org.yaen.starter.common.dal.entities.wechat.WxUserEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
@@ -22,7 +22,7 @@ public class UserModel extends OneModel {
 	private ProxyService service;
 
 	/** the main user entity */
-	private UserEntity user;
+	private WxUserEntity user;
 
 	/**
 	 * construct new model with service
@@ -70,7 +70,7 @@ public class UserModel extends OneModel {
 
 		// get user by openid + appid
 		try {
-			this.user = this.service.getQueryService().selectOneByUniqueFields(new UserEntity(openId, appId),
+			this.user = this.service.getQueryService().selectOneByUniqueFields(new WxUserEntity(openId, appId),
 					new String[] { "OPEN_ID", "APP_ID" });
 		} catch (CommonException ex) {
 			throw new CoreException("load user failed", ex);
