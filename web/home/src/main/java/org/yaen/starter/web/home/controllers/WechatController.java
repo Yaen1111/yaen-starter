@@ -47,23 +47,23 @@ public class WechatController {
 	 * @return
 	 */
 	@RequestMapping(value = "sign", method = RequestMethod.GET)
-	public void sign(HttpServletRequest req, HttpServletResponse resp) {
+	public void sign(HttpServletRequest request, HttpServletResponse response) {
 
 		// get ip
-		String ip = WebUtil.getClientIp(req);
+		String ip = WebUtil.getClientIp(request);
 
 		// the follow is from wechat server
-		String signature = req.getParameter("signature");
-		String timestamp = req.getParameter("timestamp");
-		String nonce = req.getParameter("nonce");
-		String echostr = req.getParameter("echostr");
+		String signature = request.getParameter("signature");
+		String timestamp = request.getParameter("timestamp");
+		String nonce = request.getParameter("nonce");
+		String echostr = request.getParameter("echostr");
 
 		// get token
 		String token = PropertiesUtil.getProperty(WECHAT_TOKEN_PROPERTY);
 
 		// source check from wechat server, return echostr for ok
-		log.debug("wechat:sign:called, ip={}, signature={}, timestamp={}, nonce={}, echostr={}, token={}", ip,
-				signature, timestamp, nonce, echostr, token);
+		log.debug("wechat:sign:called, uri={}, ip={}, signature={}, timestamp={}, nonce={}, echostr={}, token={}",
+				request.getRequestURI(), ip, signature, timestamp, nonce, echostr, token);
 
 		// the writer
 		PrintWriter writer = null;
@@ -71,7 +71,7 @@ public class WechatController {
 		try {
 
 			// direct output
-			writer = resp.getWriter();
+			writer = response.getWriter();
 
 			// check signature, return echostr if pass
 			if (wechatService.checkSignature(token, signature, timestamp, nonce)) {
@@ -87,7 +87,7 @@ public class WechatController {
 			writer.write("bad parameter");
 		} catch (Exception ex) {
 			log.error("wechat:sign:error", ex);
-			resp.setStatus(500);
+			response.setStatus(500);
 		} finally {
 			// close
 			if (writer != null) {
@@ -100,17 +100,17 @@ public class WechatController {
 	/**
 	 * wechat message post, for messages
 	 * 
-	 * @param req
-	 * @param resp
+	 * @param request
+	 * @param response
 	 */
 	@RequestMapping(value = "message", method = RequestMethod.POST)
-	public void message(HttpServletRequest req, HttpServletResponse resp) {
+	public void message(HttpServletRequest request, HttpServletResponse response) {
 
 		// get ip
-		String ip = WebUtil.getClientIp(req);
+		String ip = WebUtil.getClientIp(request);
 
 		// post message call
-		log.debug("wechat:message:called, ip={}", ip);
+		log.debug("wechat:message:called, uri={}, ip={}", request.getRequestURI(), ip);
 
 		// the writer
 		PrintWriter writer = null;
@@ -123,11 +123,11 @@ public class WechatController {
 		try {
 
 			// set encoding to utf-8
-			req.setCharacterEncoding("UTF-8");
-			resp.setCharacterEncoding("UTF-8");
+			request.setCharacterEncoding("UTF-8");
+			response.setCharacterEncoding("UTF-8");
 
 			// get input stream
-			is = req.getInputStream();
+			is = request.getInputStream();
 
 			// parse xml to map
 			requestMap = wechatService.parseXml(is);
@@ -140,11 +140,11 @@ public class WechatController {
 			log.debug("wechat:message:ok, respMessage={}", respMessage);
 
 			// write response
-			writer = resp.getWriter();
+			writer = response.getWriter();
 			writer.write(respMessage);
 		} catch (Exception ex) {
 			log.error("wechat:message:error:", ex);
-			resp.setStatus(500);
+			response.setStatus(500);
 		} finally {
 			// close
 			if (is != null) {
