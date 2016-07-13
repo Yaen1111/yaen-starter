@@ -49,46 +49,44 @@ public class WechatController {
 	@RequestMapping(value = "sign", method = RequestMethod.GET)
 	public void sign(HttpServletRequest req, HttpServletResponse resp) {
 
+		// get ip
+		String ip = WebUtil.getClientIp(req);
+
+		// the follow is from wechat server
+		String signature = req.getParameter("signature");
+		String timestamp = req.getParameter("timestamp");
+		String nonce = req.getParameter("nonce");
+		String echostr = req.getParameter("echostr");
+
+		// get token
+		String token = PropertiesUtil.getProperty(WECHAT_TOKEN_PROPERTY);
+
 		// source check from wechat server, return echostr for ok
-		log.debug("wechat route auth, return echostr for ok, any other for error.");
+		log.debug("wechat:sign:called, ip={}, signature={}, timestamp={}, nonce={}, echostr={}, token={}", ip,
+				signature, timestamp, nonce, echostr, token);
 
 		// the writer
 		PrintWriter writer = null;
 
 		try {
 
-			// the follow is from wechat server
-			String signature = req.getParameter("signature");
-			String timestamp = req.getParameter("timestamp");
-			String nonce = req.getParameter("nonce");
-			String echostr = req.getParameter("echostr");
-
-			// get ip
-			String ip = WebUtil.getClientIp(req);
-
-			// get token
-			String token = PropertiesUtil.getProperty(WECHAT_TOKEN_PROPERTY);
-
-			log.debug("get: ip={}, signature={}, timestamp={}, nonce={}, echostr={}", ip, signature, timestamp, nonce,
-					echostr);
-
 			// direct output
 			writer = resp.getWriter();
 
 			// check signature, return echostr if pass
 			if (wechatService.checkSignature(token, signature, timestamp, nonce)) {
-				log.debug("wechat route auth ok");
+				log.debug("wechat:sign:ok, echostr={}", echostr);
 				writer.write(echostr);
 			} else {
-				log.debug("wechat route auth signature check failed");
-				writer.write("check failed");
+				log.debug("wechat:sign:failed:signature check fail");
+				writer.write("fail");
 			}
 
 		} catch (IllegalArgumentException ex) {
-			log.error("wechat route auth fail with bad parameter");
+			log.error("wechat:sign:failed:bad parameter");
 			writer.write("bad parameter");
 		} catch (Exception ex) {
-			log.error("wechat doGet error", ex);
+			log.error("wechat:sign:error", ex);
 			resp.setStatus(500);
 		} finally {
 			// close
@@ -107,6 +105,12 @@ public class WechatController {
 	 */
 	@RequestMapping(value = "message", method = RequestMethod.POST)
 	public void message(HttpServletRequest req, HttpServletResponse resp) {
+
+		// get ip
+		String ip = WebUtil.getClientIp(req);
+
+		// post message call
+		log.debug("wechat:message:called, ip={}", ip);
 
 		// the writer
 		PrintWriter writer = null;
@@ -128,14 +132,18 @@ public class WechatController {
 			// parse xml to map
 			requestMap = wechatService.parseXml(is);
 
+			log.debug("wechat:message:parseXml, requestmap={}", requestMap);
+
 			// call service to handle request and get response
 			String respMessage = wechatService.handleRequest(requestMap);
+
+			log.debug("wechat:message:ok, respMessage={}", respMessage);
 
 			// write response
 			writer = resp.getWriter();
 			writer.write(respMessage);
 		} catch (Exception ex) {
-			log.error("wechat servlet error:", ex);
+			log.error("wechat:message:error:", ex);
 			resp.setStatus(500);
 		} finally {
 			// close
