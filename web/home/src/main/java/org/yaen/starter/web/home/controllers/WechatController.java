@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.core.model.models.wechat.MessageModel;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.services.WechatService;
+import org.yaen.starter.core.model.utils.WechatPropertiesUtil;
 import org.yaen.starter.web.home.utils.WebUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class WechatController {
 		String echostr = request.getParameter("echostr");
 
 		// get token
-		String token = PropertiesUtil.getProperty("wechat.token");
+		String token = WechatPropertiesUtil.getToken();
 
 		// source check from wechat server, return echostr for ok
 		log.debug("wechat:sign:called, uri={}, ip={}, signature={}, timestamp={}, nonce={}, echostr={}, token={}",

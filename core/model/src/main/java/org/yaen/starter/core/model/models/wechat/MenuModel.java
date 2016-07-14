@@ -8,7 +8,6 @@ import java.util.Map;
 import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.OneModel;
 import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
@@ -18,6 +17,7 @@ import org.yaen.starter.core.model.models.wechat.objects.ComplexButton;
 import org.yaen.starter.core.model.models.wechat.objects.ViewButton;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.services.WechatService;
+import org.yaen.starter.core.model.utils.WechatPropertiesUtil;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -115,7 +115,7 @@ public class MenuModel extends OneModel {
 
 		// load default if not given
 		if (StringUtil.isBlank(this.appId)) {
-			this.appId = PropertiesUtil.getProperty("wechat.appid");
+			this.appId = WechatPropertiesUtil.getAppId();
 		}
 
 		// get menu entity list
@@ -243,7 +243,7 @@ public class MenuModel extends OneModel {
 
 		// load default if not given
 		if (StringUtil.isBlank(this.appId)) {
-			this.appId = PropertiesUtil.getProperty("wechat.appid");
+			this.appId = WechatPropertiesUtil.getAppId();
 		}
 
 		// call service

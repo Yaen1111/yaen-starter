@@ -14,7 +14,6 @@ import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
-import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.wechat.MessageModel;
 import org.yaen.starter.core.model.models.wechat.enums.EventTypes;
@@ -22,6 +21,7 @@ import org.yaen.starter.core.model.models.wechat.enums.MessageTypes;
 import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.services.CacheService;
 import org.yaen.starter.core.model.services.WechatService;
+import org.yaen.starter.core.model.utils.WechatPropertiesUtil;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -59,7 +59,7 @@ public class WechatServiceImpl implements WechatService {
 
 		// load default if not given
 		if (StringUtil.isBlank(appId)) {
-			appId = PropertiesUtil.getProperty("wechat.appid");
+			appId = WechatPropertiesUtil.getAppId();
 		}
 
 		// get token from cache
@@ -69,7 +69,7 @@ public class WechatServiceImpl implements WechatService {
 
 			// secret
 			// TODO
-			String secret = PropertiesUtil.getProperty("wechat.secret");
+			String secret = WechatPropertiesUtil.getSecret();
 
 			// call client
 			JSONObject jsonObject;
