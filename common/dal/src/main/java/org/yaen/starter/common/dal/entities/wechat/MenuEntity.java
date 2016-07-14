@@ -17,13 +17,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @OneTable(TableName = "ZWX_MENU")
-@OneUniqueIndex("ID")
+@OneUniqueIndex({ "ID", "APP_ID" })
 public class MenuEntity extends TwoEntity {
 	private static final long serialVersionUID = -6445208030709771936L;
 
-	/** menu group name */
+	/** menu appid */
 	@OneData(DataType = DataTypes.VARCHAR32)
-	private String groupName;
+	private String appId;
 
 	/** menu level, currently 1 or 2 */
 	@OneData(DataType = DataTypes.INT)

@@ -1,6 +1,9 @@
 package org.yaen.starter.common.integration.clients.impl;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
@@ -19,17 +22,22 @@ import com.alibaba.fastjson.JSONObject;
 @Service
 public class WechatClientImpl implements WechatClient {
 
-	// 获取access_token的接口地址（GET） 限200（次/天）
+	// documents: https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421135319&token=&lang=zh_CN
+
 	/** get access token url (GET), limited to 200/day */
-	public final static String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+	public final static String ACCESS_TOKEN_API = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
-	// 菜单创建（POST） 限100（次/天）
+	/** get user info (GET) */
+	public final static String USER_INFO_API = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
+
+	/** get user info (POST) */
+	public final static String USER_INFO_BATCHGET_API = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=ACCESS_TOKEN";
+
 	/** create menu url (POST), limited to 100/day */
-	public final static String MENU_CREATE_URL = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+	public final static String MENU_CREATE_API = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
 
-	// 图文响应接口（POST） 限100（次/天）
 	/** picture response url (POST), limited to 100/day */
-	public final static String PIC_RESPONSE_URL = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
+	public final static String PIC_RESPONSE_API = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
 
 	/**
 	 * @see org.yaen.starter.common.integration.clients.WechatClient#checkSignature(java.lang.String, java.lang.String,
@@ -71,10 +79,41 @@ public class WechatClientImpl implements WechatClient {
 	public JSONObject getAccessToken(String appid, String appsecret) throws Exception {
 
 		// make url
-		String url = ACCESS_TOKEN_URL.replace("APPID", appid).replace("APPSECRET", appsecret);
+		String url = ACCESS_TOKEN_API.replace("APPID", appid).replace("APPSECRET", appsecret);
 
 		// do https get
 		return HttpUtil.httpsGet(url);
+	}
+
+	/**
+	 * @see org.yaen.starter.common.integration.clients.WechatClient#getUserInfo(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public JSONObject getUserInfo(String accessToken, String openId) throws Exception {
+
+		// make url
+		String url = USER_INFO_API.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
+
+		// do https get
+		return HttpUtil.httpsGet(url);
+	}
+
+	/**
+	 * @see org.yaen.starter.common.integration.clients.WechatClient#getUserInfoBatch(java.lang.String, java.util.List)
+	 */
+	@Override
+	public JSONObject getUserInfoBatch(String accessToken, List<String> openIdList) throws Exception {
+
+		// make url
+		String url = USER_INFO_API.replace("ACCESS_TOKEN", accessToken);
+
+		// make param
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		// TODO
+
+		// do https get
+		return HttpUtil.httpsPost(url, param);
 	}
 
 	/**
@@ -84,10 +123,21 @@ public class WechatClientImpl implements WechatClient {
 	public JSONObject createMenu(String accessToken, String menuJSONString) throws Exception {
 
 		// make url
-		String url = MENU_CREATE_URL.replace("ACCESS_TOKEN", accessToken);
+		String url = MENU_CREATE_API.replace("ACCESS_TOKEN", accessToken);
 
 		// do https post
 		return HttpUtil.httpsPost(url, menuJSONString);
+	}
+
+	public static void main(String[] args) {
+		WechatClientImpl s = new WechatClientImpl();
+		try {
+			// System.out.println(s.getAccessToken("wx67be379381b004de", "af8e086dee051827251454a3e7dc7069"));
+			// sprPi802pRK4-OF5j1qryAvzrXgTE9MztOJrP88eUiZMBssLkVbM5Uknj48UPh0NrGUfYWGPo31AJNI49sRoornebS17_jD3CRvvDqUmS4tW2vZ7SC4q4MJ6N7qGkl8YGRUgAJALWZ
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

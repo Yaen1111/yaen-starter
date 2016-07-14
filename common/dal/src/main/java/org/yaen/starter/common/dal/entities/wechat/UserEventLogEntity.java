@@ -19,17 +19,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @OneTable(TableName = "ZWX_USER_EVENTLOG")
-@OneIndex("OPEN_ID,APP_ID")
+@OneIndex("ID")
 public class UserEventLogEntity extends TwoEntity {
 	private static final long serialVersionUID = -8593679209601430679L;
-
-	/** the main wechat openid */
-	@OneData(DataType = DataTypes.VARCHAR32)
-	private String openId;
-
-	/** the main wechat appid */
-	@OneData(DataType = DataTypes.VARCHAR32)
-	private String appId;
 
 	/** the event type */
 	@OneData(DataType = DataTypes.VARCHAR32)

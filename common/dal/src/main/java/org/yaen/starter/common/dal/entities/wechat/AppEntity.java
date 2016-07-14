@@ -63,6 +63,10 @@ public class AppEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private Date ssid;
 
+	/** the bssid, for wechat-wifi only, currently no use */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private Date bssid;
+
 	/**
 	 * empty constructor
 	 */

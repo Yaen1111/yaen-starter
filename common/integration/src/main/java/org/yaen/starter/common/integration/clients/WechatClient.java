@@ -1,5 +1,7 @@
 package org.yaen.starter.common.integration.clients;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -38,4 +40,24 @@ public interface WechatClient {
 	 * @throws Exception
 	 */
 	JSONObject createMenu(String accessToken, String menuJsonString) throws Exception;
+
+	/**
+	 * get user info by openid
+	 * 
+	 * @param accessToken
+	 * @param openId
+	 * @return
+	 * @throws Exception
+	 */
+	JSONObject getUserInfo(String accessToken, String openId) throws Exception;
+
+	/**
+	 * get user info by batch
+	 * 
+	 * @param accessToken
+	 * @param openIdList
+	 * @return
+	 * @throws Exception
+	 */
+	JSONObject getUserInfoBatch(String accessToken, List<String> openIdList) throws Exception;
 }
