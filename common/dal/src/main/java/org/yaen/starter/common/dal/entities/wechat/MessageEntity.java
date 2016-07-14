@@ -18,6 +18,10 @@ import lombok.Setter;
  * group by msg type, if is event, then group by event type
  * <p>
  * all message is in xml format, only in passive mode, from user to server, and server response to user
+ * <p>
+ * for none-event messages, msgId(+appid) should be unique
+ * <p>
+ * for event messages, FromUserName + CreateTime should be unique
  * 
  * @author Yaen 2016年7月11日下午2:03:46
  */
@@ -25,15 +29,15 @@ import lombok.Setter;
 @Setter
 @OneTable(TableName = "ZWX_MESSAGE")
 @OneUniqueIndex("ID")
-@OneIndex({ "FROM_USER_NAME", "TO_USER_NAME", "MSG_TYPE,EVENT" })
+@OneIndex({ "FROM_USER_NAME", "TO_USER_NAME", "MSG_TYPE,EVENT", "MSG_ID" })
 public class MessageEntity extends TwoEntity {
 	private static final long serialVersionUID = -3762180033509714839L;
 
-	/** to user name, when receive is the appid, when send is openid */
+	/** to user name, when receive is the appid(or developer id for some verify event), when send is openid */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String toUserName;
 
-	/** from user name, when receive is the openid, when send is appid */
+	/** from user name, when receive is the openid (or system for some verify event), when send is appid */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String fromUserName;
 
@@ -44,6 +48,10 @@ public class MessageEntity extends TwoEntity {
 	/** the message type */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String msgType;
+
+	/** for none-event, the message id, should be unique within one appid, origin is int type */
+	@OneData(DataType = DataTypes.BIGINT)
+	private Long msgId;
 
 	/** the event type */
 	@OneData(DataType = DataTypes.VARCHAR32)
@@ -57,6 +65,18 @@ public class MessageEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.VARCHAR64)
 	private String ticket;
 
+	/** for link, the title of the link */
+	@OneData(DataType = DataTypes.VARCHAR64)
+	private String title;
+
+	/** for link, the description of the link */
+	@OneData(DataType = DataTypes.VARCHAR250)
+	private String description;
+
+	/** for text, the message content */
+	@OneData(DataType = DataTypes.VARCHAR1000)
+	private String content;
+
 	/** for image/voice/video/etc, the media id, used to download media */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String mediaId;
@@ -64,14 +84,6 @@ public class MessageEntity extends TwoEntity {
 	/** for video/short video/music, the thumb media id, used to download media */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String thumbMediaId;
-
-	/** for text, the message id, origin is int type */
-	@OneData(DataType = DataTypes.BIGINT)
-	private Long msgId;
-
-	/** for text, the message content */
-	@OneData(DataType = DataTypes.VARCHAR1000)
-	private String content;
 
 	/** for image, the picture url */
 	@OneData(DataType = DataTypes.VARCHAR1000)
@@ -129,14 +141,6 @@ public class MessageEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.DECIMAL, DataSize = 10, ScaleSize = 6)
 	private BigDecimal precision;
 
-	/** for link, the title of the link */
-	@OneData(DataType = DataTypes.VARCHAR64)
-	private String title;
-
-	/** for link, the description of the link */
-	@OneData(DataType = DataTypes.VARCHAR250)
-	private String description;
-
 	/** for link, the url of the link */
 	@OneData(DataType = DataTypes.VARCHAR1000)
 	private String url;
@@ -160,5 +164,33 @@ public class MessageEntity extends TwoEntity {
 	/** for event-wifi connected, the terminal mac, as bssid */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String deviceNo;
+
+	/** for event-xxx_verify_success, the verify expired time */
+	@OneData(DataType = DataTypes.BIGINT)
+	private Long expiredTime;
+
+	/** for event-xxx_verify_fail, fail time */
+	@OneData(DataType = DataTypes.BIGINT)
+	private Long failTime;
+
+	/** for event-xxx_verify_fail, fail reason */
+	@OneData(DataType = DataTypes.VARCHAR64)
+	private String failReason;
+
+	/** for event-poi, the shop owner id */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String uniqId;
+
+	/** for event-poi, the shop id */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String poiId;
+
+	/** for event-poi, succ for ok, fail for error */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String result;
+
+	/** for event-poi, the check result message */
+	@OneData(DataType = DataTypes.VARCHAR64)
+	private String msg;
 
 }
