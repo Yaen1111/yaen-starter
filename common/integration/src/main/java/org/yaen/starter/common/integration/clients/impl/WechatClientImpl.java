@@ -76,7 +76,7 @@ public class WechatClientImpl implements WechatClient {
 	 * @see org.yaen.starter.common.integration.clients.WechatClient#getAccessToken(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public JSONObject getAccessToken(String appid, String appsecret) throws Exception {
+	public String getAccessToken(String appid, String appsecret) throws Exception {
 
 		// make url
 		String url = ACCESS_TOKEN_API.replace("APPID", appid).replace("APPSECRET", appsecret);
@@ -89,7 +89,7 @@ public class WechatClientImpl implements WechatClient {
 	 * @see org.yaen.starter.common.integration.clients.WechatClient#getUserInfo(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public JSONObject getUserInfo(String accessToken, String openId) throws Exception {
+	public String getUserInfo(String accessToken, String openId) throws Exception {
 
 		// make url
 		String url = USER_INFO_API.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
@@ -113,14 +113,14 @@ public class WechatClientImpl implements WechatClient {
 		// TODO
 
 		// do https get
-		return HttpUtil.httpsPost(url, param);
+		return HttpUtil.httpsPostAsJson(url, param);
 	}
 
 	/**
 	 * @see org.yaen.starter.common.integration.clients.WechatClient#createMenu(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public JSONObject createMenu(String accessToken, String menuJSONString) throws Exception {
+	public String createMenu(String accessToken, String menuJSONString) throws Exception {
 
 		// make url
 		String url = MENU_CREATE_API.replace("ACCESS_TOKEN", accessToken);
@@ -129,6 +129,11 @@ public class WechatClientImpl implements WechatClient {
 		return HttpUtil.httpsPost(url, menuJSONString);
 	}
 
+	/**
+	 * static test
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		WechatClientImpl s = new WechatClientImpl();
 		try {

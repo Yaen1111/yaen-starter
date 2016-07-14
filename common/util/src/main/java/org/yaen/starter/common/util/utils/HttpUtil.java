@@ -101,13 +101,14 @@ public class HttpUtil {
 	 * 
 	 * @param requestUrl
 	 * @param requestMethod
-	 * @param jsonString
+	 * @param dataString
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject httpsRequest(String requestUrl, String requestMethod, String jsonString) throws Exception {
-		// the json object
-		JSONObject jsonObject = null;
+	public static String httpsRequest(String requestUrl, String requestMethod, String dataString) throws Exception {
+
+		// the result content
+		StringBuilder sb = new StringBuilder();
 
 		// connections
 		HttpsURLConnection conn = null;
@@ -143,12 +144,12 @@ public class HttpUtil {
 			if (requestMethod.equalsIgnoreCase("GET"))
 				conn.connect();
 
-			// write input if not empty
-			if (StringUtil.isNotBlank(jsonString)) {
+			// write output if not empty
+			if (StringUtil.isNotBlank(dataString)) {
 				OutputStream outputStream = conn.getOutputStream();
 
 				// need utf-8
-				outputStream.write(jsonString.getBytes("UTF-8"));
+				outputStream.write(dataString.getBytes("UTF-8"));
 				outputStream.close();
 			}
 
@@ -157,13 +158,10 @@ public class HttpUtil {
 			inputStreamReader = new InputStreamReader(inputStream, "utf-8");
 			bufferedReader = new BufferedReader(inputStreamReader);
 			String str = null;
-			StringBuilder sb = new StringBuilder();
+
 			while ((str = bufferedReader.readLine()) != null) {
 				sb.append(str);
 			}
-
-			// parse result to json
-			jsonObject = JSONObject.parseObject(sb.toString());
 
 		} finally {
 
@@ -186,7 +184,7 @@ public class HttpUtil {
 			}
 		}
 
-		return jsonObject;
+		return sb.toString();
 	}
 
 	/**
@@ -196,7 +194,7 @@ public class HttpUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject httpsGet(String requestUrl) throws Exception {
+	public static String httpsGet(String requestUrl) throws Exception {
 		return httpsRequest(requestUrl, "GET", null);
 	}
 
@@ -208,26 +206,29 @@ public class HttpUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject httpsPost(String requestUrl, String jsonString) throws Exception {
-		return httpsRequest(requestUrl, "POST", jsonString);
+	public static String httpsPost(String requestUrl, String dataString) throws Exception {
+		return httpsRequest(requestUrl, "POST", dataString);
 	}
 
 	/**
-	 * https post
+	 * https post, treat param as json, result also as json
 	 * 
 	 * @param requestUrl
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
-	public static JSONObject httpsPost(String requestUrl, Map<String, Object> param) throws Exception {
+	public static JSONObject httpsPostAsJson(String requestUrl, Map<String, Object> param) throws Exception {
 		// convert param to json
-		String jsonString = null;
+		String dataString = null;
 		if (param != null && !param.isEmpty()) {
-			jsonString = JSONObject.toJSONString(param);
+			dataString = JSONObject.toJSONString(param);
 		}
 
-		return httpsPost(requestUrl, jsonString);
+		String text = httpsPost(requestUrl, dataString);
+
+		// convert result to json
+		return JSONObject.parseObject(text);
 	}
 
 }

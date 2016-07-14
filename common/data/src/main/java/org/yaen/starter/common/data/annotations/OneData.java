@@ -42,4 +42,11 @@ public @interface OneData {
 	 */
 	int DataSize() default 0;
 
+	/**
+	 * the scale size if need, mainly for decimal type, 0 for not used
+	 * 
+	 * @return
+	 */
+	int ScaleSize() default 0;
+
 }

@@ -29,17 +29,17 @@ public interface WechatClient {
 	 * @param appsecret
 	 * @return
 	 */
-	JSONObject getAccessToken(String appid, String appsecret) throws Exception;
+	String getAccessToken(String appid, String appsecret) throws Exception;
 
 	/**
-	 * create menu, return the result json object
+	 * create menu, return the result json string
 	 * 
 	 * @param accessToken
 	 * @param menuJsonString
 	 * @return
 	 * @throws Exception
 	 */
-	JSONObject createMenu(String accessToken, String menuJsonString) throws Exception;
+	String createMenu(String accessToken, String menuJsonString) throws Exception;
 
 	/**
 	 * get user info by openid
@@ -49,7 +49,7 @@ public interface WechatClient {
 	 * @return
 	 * @throws Exception
 	 */
-	JSONObject getUserInfo(String accessToken, String openId) throws Exception;
+	String getUserInfo(String accessToken, String openId) throws Exception;
 
 	/**
 	 * get user info by batch

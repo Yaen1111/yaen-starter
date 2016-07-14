@@ -168,7 +168,7 @@ public class WechatServiceImpl implements WechatService {
 			// call client
 			JSONObject jsonObject;
 			try {
-				jsonObject = wechatClient.getAccessToken(appid, secret);
+				jsonObject = JSONObject.parseObject(wechatClient.getAccessToken(appid, secret));
 			} catch (Exception ex) {
 				throw new CoreException("get access token error", ex);
 			}
@@ -332,7 +332,7 @@ public class WechatServiceImpl implements WechatService {
 		// call client
 		JSONObject jsonObject;
 		try {
-			jsonObject = wechatClient.createMenu(menu, accessToken.getToken());
+			jsonObject = JSONObject.parseObject(wechatClient.createMenu(menu, accessToken.getToken()));
 		} catch (Exception ex) {
 			throw new CoreException("wechat create menu failed", ex);
 		}

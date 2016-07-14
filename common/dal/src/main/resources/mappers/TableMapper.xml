@@ -25,7 +25,11 @@
 		<foreach collection="columns" index="index" item="info" open="" separator="," close=",">
 			`${info.columnName}`
 			${info.dataType}
-			<if test="info.dataSize !=0">(${info.dataSize})</if>
+			<if test="info.dataSize !=0">
+				(${info.dataSize}
+				<if test="info.scaleSize !=0">,${info.scaleSize}</if>
+				)
+			</if>
 			DEFAULT NULL
 		</foreach>
 		PRIMARY KEY (`ROWID`)
@@ -47,7 +51,11 @@
 			<if test="index == addedFieldName">
 				`${info.columnName}`
 				${info.dataType}
-				<if test="info.dataSize !=0">(${info.dataSize})</if>
+				<if test="info.dataSize !=0">
+					(${info.dataSize}
+					<if test="info.scaleSize !=0">,${info.scaleSize}</if>
+					)
+				</if>
 				DEFAULT NULL
 			</if>
 		</foreach>
@@ -60,7 +68,11 @@
 			<if test="index == modifiedFieldName">
 				`${info.columnName}`
 				${info.dataType}
-				<if test="info.dataSize !=0">(${info.dataSize})</if>
+				<if test="info.dataSize !=0">
+					(${info.dataSize}
+					<if test="info.scaleSize !=0">,${info.scaleSize}</if>
+					)
+				</if>
 			</if>
 		</foreach>
 	</update>

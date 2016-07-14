@@ -20,6 +20,8 @@ public class OneColumnEntity {
 
 	private int dataSize;
 
+	private int scaleSize;
+
 	private Object value;
 
 	private Field field;

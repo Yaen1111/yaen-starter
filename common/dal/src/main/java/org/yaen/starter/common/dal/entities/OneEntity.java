@@ -145,6 +145,7 @@ public abstract class OneEntity implements BaseEntity {
 				info.setValue(field.get(one));
 				info.setDataType(data.DataType());
 				info.setDataSize(data.DataSize());
+				info.setScaleSize(data.ScaleSize());
 				info.setField(field);
 
 				columns.put(field.getName(), info);

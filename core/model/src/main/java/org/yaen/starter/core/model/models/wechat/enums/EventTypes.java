@@ -16,4 +16,13 @@ public final class EventTypes {
 	/** menu be clicked */
 	public static final String EVENT_TYPE_CLICK = "CLICK";
 
+	/** qrcode is scanned(the user is already subscribed, otherwise will fire subscribe event) */
+	public static final String EVENT_TYPE_SCAN = "SCAN";
+
+	/** report location */
+	public static final String EVENT_TYPE_LOCATION = "LOCATION";
+
+	/** wifi connected */
+	public static final String EVENT_TYPE_WIFI_CONNECTED = "WifiConnected";
+
 }
