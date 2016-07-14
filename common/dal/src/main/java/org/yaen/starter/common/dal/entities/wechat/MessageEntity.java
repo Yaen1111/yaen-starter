@@ -15,13 +15,13 @@ import lombok.Setter;
 /**
  * wechat message entity
  * <p>
+ * all message from user or wechat system, to server, and server can response to user
+ * <p>
  * group by msg type, if is event, then group by event type
  * <p>
- * all message is in xml format, only in passive mode, from user to server, and server response to user
+ * for none-event messages, msgId should be unique(in one appid)
  * <p>
- * for none-event messages, msgId(+appid) should be unique
- * <p>
- * for event messages, FromUserName + CreateTime should be unique
+ * for event messages, FromUserName + CreateTime should be unique(in one appid)
  * 
  * @author Yaen 2016年7月11日下午2:03:46
  */
@@ -33,7 +33,7 @@ import lombok.Setter;
 public class MessageEntity extends TwoEntity {
 	private static final long serialVersionUID = -3762180033509714839L;
 
-	/** to user name, when receive is the appid(or developer id for some verify event), when send is openid */
+	/** to user name, when receive is the appid, when send is openid */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String toUserName;
 

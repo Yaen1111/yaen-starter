@@ -40,4 +40,7 @@ public final class MessageTypes {
 	/** news response message */
 	public static final String RESP_MESSAGE_TYPE_NEWS = "news";
 
+	/** response to wechat server, send the given message to customer service */
+	public static final String RESP_MESSAGE_TYPE_TRANSFER_CUSTOMER_SERVICE = "transfer_customer_service";
+
 }

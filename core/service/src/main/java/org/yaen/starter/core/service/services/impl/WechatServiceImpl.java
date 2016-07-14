@@ -18,33 +18,19 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
-import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
-import org.yaen.starter.common.data.objects.NameValue;
-import org.yaen.starter.common.data.objects.NameValueT;
-import org.yaen.starter.common.data.objects.QueryBuilder;
-import org.yaen.starter.common.data.services.EntityService;
-import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.models.wechat.MenuModel;
-import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
 import org.yaen.starter.core.model.models.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.models.wechat.enums.MessageTypes;
 import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.models.wechat.objects.Article;
-import org.yaen.starter.core.model.models.wechat.objects.ClickButton;
-import org.yaen.starter.core.model.models.wechat.objects.ComplexButton;
 import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
 import org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage;
-import org.yaen.starter.core.model.models.wechat.objects.ViewButton;
 import org.yaen.starter.core.model.services.CacheService;
 import org.yaen.starter.core.model.services.WechatService;
 
@@ -65,17 +51,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class WechatServiceImpl implements WechatService {
-	/** top menu(level 1) max count is 3 */
-	public static int WECHAT_MAX_TOP_MENU_COUNT = 3;
-
 	/** access token key in cache */
 	private static String ACCESS_TOKEN_KEY = "WECHAT_ACCESS_TOKEN";
-
-	@Autowired
-	private EntityService entityService;
-
-	@Autowired
-	private QueryService queryService;
 
 	@Autowired
 	private WechatClient wechatClient;
@@ -113,29 +90,6 @@ public class WechatServiceImpl implements WechatService {
 	});
 
 	/**
-	 * get menu list by group name
-	 * 
-	 * @param groupName
-	 * @return
-	 * @throws CoreException
-	 */
-	private List<MenuEntity> getMenuList(String groupName) throws CoreException {
-
-		MenuEntity entity = new MenuEntity();
-
-		try {
-			QueryBuilder qb = new QueryBuilder();
-			qb.getWhereEquals().add(new NameValue("groupName", groupName));
-			qb.getOrders().add(new NameValueT<Boolean>("orders", true));
-
-			List<Long> rowids = this.queryService.selectRowidsByQuery(entity, qb);
-			return this.queryService.selectListByRowids(entity, rowids);
-		} catch (CommonException ex) {
-			throw new CoreException("get menu entity error", ex);
-		}
-	}
-
-	/**
 	 * @see org.yaen.starter.core.model.services.WechatService#checkSignature(java.lang.String, java.lang.String,
 	 *      java.lang.String, java.lang.String)
 	 */
@@ -149,10 +103,10 @@ public class WechatServiceImpl implements WechatService {
 	 * @see org.yaen.starter.core.model.services.WechatService#getAccessToken(java.lang.String)
 	 */
 	@Override
-	public AccessToken getAccessToken(String groupName) throws CoreException {
+	public AccessToken getAccessToken(String appId) throws CoreException {
 
 		// prefix group by . if not empty
-		String group = StringUtil.trimToEmpty(groupName);
+		String group = StringUtil.trimToEmpty(appId);
 		if (!group.isEmpty())
 			group = "." + group;
 
@@ -190,144 +144,13 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#loadMenu(org.yaen.starter.core.model.models.wechat.MenuModel,
-	 *      java.lang.String)
-	 */
-	@Override
-	public void loadMenu(MenuModel model, String groupName) throws CoreException {
-
-		// clear
-		model.clear();
-
-		model.setGroupName(groupName);
-
-		// get all menu entity
-		model.setMenuList(this.getMenuList(groupName));
-
-		// the object has no relation, so make it in temp
-		Map<String, ComplexButton> top = new HashMap<String, ComplexButton>();
-
-		// load all top menu
-		for (MenuEntity entity : model.getMenuList()) {
-			if (entity.getLevel() == 1) {
-				// top level, make complex button
-				ComplexButton btn = new ComplexButton();
-				btn.setName(entity.getTitle());
-				top.put(entity.getId(), btn);
-			}
-		}
-
-		// load all 2nd menu
-		for (MenuEntity entity : model.getMenuList()) {
-			if (entity.getLevel() == 2) {
-				// parent must exists
-				if (top.containsKey(entity.getParentId())) {
-					switch (entity.getType()) {
-					case ButtonTypes.CLICK: {
-						ClickButton btn = new ClickButton();
-						btn.setType(entity.getType());
-						btn.setName(entity.getTitle());
-						btn.setKey(entity.getKey());
-						top.get(entity.getParentId()).getSub_button().add(btn);
-					}
-						break;
-					case ButtonTypes.VIEW: {
-						ViewButton btn = new ViewButton();
-						btn.setType(entity.getType());
-						btn.setName(entity.getTitle());
-						btn.setUrl(entity.getUrl());
-						top.get(entity.getParentId()).getSub_button().add(btn);
-					}
-						break;
-					default:
-						// ignore
-						log.info("unknown menu type, id={}, type={}", entity.getId(), entity.getType());
-						break;
-					}
-				} else {
-					log.info("menu parent not exists, id={}, parentid={}", entity.getId(), entity.getParentId());
-				}
-			}
-		}
-
-		// load all top menu again, put top menu in order and re-make none-parent button
-		for (MenuEntity entity : model.getMenuList()) {
-			if (entity.getLevel() == 1) {
-				// check max size
-				if (model.getButtons().size() >= WECHAT_MAX_TOP_MENU_COUNT) {
-					log.info("menu max size exceed, rest button will be ignored");
-					break;
-				}
-
-				// get btn and check child count
-				ComplexButton topbtn = top.get(entity.getId());
-
-				if (topbtn.getSub_button().size() > 0) {
-					// has sub button
-					model.getButtons().add(topbtn);
-				} else {
-					// no sub button, is normal button
-					switch (entity.getType()) {
-					case ButtonTypes.CLICK: {
-						ClickButton btn = new ClickButton();
-						btn.setType(entity.getType());
-						btn.setName(entity.getTitle());
-						btn.setKey(entity.getKey());
-						model.getButtons().add(btn);
-					}
-						break;
-					case ButtonTypes.VIEW: {
-						ViewButton btn = new ViewButton();
-						btn.setType(entity.getType());
-						btn.setName(entity.getTitle());
-						btn.setUrl(entity.getUrl());
-						model.getButtons().add(btn);
-					}
-						break;
-					default:
-						// ignore
-						log.info("unknown menu type, id={}, type={}", entity.getId(), entity.getType());
-						break;
-					}
-				}
-			}
-		} // for
-
-		// all done
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.services.WechatService#save(org.yaen.starter.core.model.models.wechat.MenuModel)
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void save(MenuModel model) throws CoreException {
-		model.check();
-
-		// get old menu list
-		List<MenuEntity> list = this.getMenuList(model.getGroupName());
-
-		// TODO compare old and new, get diff
-		try {
-			this.entityService.updateEntityByRowid(list.get(0));
-		} catch (NoDataAffectedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CommonException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
 	 * @see org.yaen.starter.core.model.services.WechatService#pushMenu(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void pushMenu(String menu, String groupName) throws CoreException {
+	public void pushMenu(String menu, String appId) throws CoreException {
 
 		// need access token
-		AccessToken accessToken = this.getAccessToken(groupName);
+		AccessToken accessToken = this.getAccessToken(appId);
 
 		// call client
 		JSONObject jsonObject;
