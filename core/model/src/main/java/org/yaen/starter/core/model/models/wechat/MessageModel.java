@@ -258,7 +258,7 @@ public class MessageModel extends TwoModel<MessageEntity> {
 	public String toXml() throws CoreException {
 		this.check();
 
-		// TODO
+		// TODO make xml for all none-null fields in entity
 		xStream.alias("xml", this.getEntity().getClass());
 		return xStream.toXML(this.getEntity());
 	}

@@ -68,7 +68,7 @@ public class WechatServiceImpl implements WechatService {
 		if (accessToken == null) {
 
 			// secret
-			// TODO
+			// TODO get secret for different appid
 			String secret = WechatPropertiesUtil.getSecret();
 
 			// call client
