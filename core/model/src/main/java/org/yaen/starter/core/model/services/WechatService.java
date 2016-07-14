@@ -1,15 +1,10 @@
 package org.yaen.starter.core.model.services;
 
-import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
-import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.core.model.models.wechat.MenuModel;
+import org.yaen.starter.core.model.models.wechat.MessageModel;
 import org.yaen.starter.core.model.models.wechat.objects.AccessToken;
-import org.yaen.starter.core.model.models.wechat.objects.MusicResponseMessage;
-import org.yaen.starter.core.model.models.wechat.objects.NewsResponseMessage;
-import org.yaen.starter.core.model.models.wechat.objects.TextResponseMessage;
 
 /**
  * wechat service
@@ -32,38 +27,6 @@ public interface WechatService {
 			throws NoSuchAlgorithmException;
 
 	/**
-	 * parse xml from input stream
-	 * 
-	 * @param is
-	 * @return
-	 * @throws CoreException
-	 */
-	Map<String, String> parseXml(InputStream is) throws CoreException;
-
-	/**
-	 * convert message to xml
-	 * 
-	 * @return
-	 */
-	String textMessageToXml(TextResponseMessage textResponseMessage);
-
-	/**
-	 * convert music message to xml
-	 * 
-	 * @param musicResponseMessage
-	 * @return
-	 */
-	String musicMessageToXml(MusicResponseMessage musicResponseMessage);
-
-	/**
-	 * convert news message to xml
-	 * 
-	 * @param newsResponseMessage
-	 * @return
-	 */
-	String newsMessageToXml(NewsResponseMessage newsResponseMessage);
-
-	/**
 	 * check the content text is qq face
 	 * 
 	 * @param content
@@ -80,12 +43,12 @@ public interface WechatService {
 	String formatTime(String createTime);
 
 	/**
-	 * handle request
+	 * make response according to the request
 	 * 
-	 * @param requestMap
+	 * @param requestMessage
 	 * @return
 	 */
-	String handleRequest(Map<String, String> requestMap);
+	MessageModel makeResponse(MessageModel requestMessage);
 
 	/**
 	 * get access token of given appid

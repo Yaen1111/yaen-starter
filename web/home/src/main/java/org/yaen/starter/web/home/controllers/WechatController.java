@@ -3,7 +3,6 @@ package org.yaen.starter.web.home.controllers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.yaen.starter.common.util.utils.PropertiesUtil;
+import org.yaen.starter.core.model.models.wechat.MessageModel;
+import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.services.WechatService;
 import org.yaen.starter.web.home.utils.WebUtil;
 
@@ -28,14 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/wechat")
 public class WechatController {
 
-	/** the token for verify server response */
-	public static final String WECHAT_TOKEN_PROPERTY = "wechat.token";
-
-	/** the appid for the wechat platform */
-	public static final String WECHAT_APPID_PROPERTY = "wechat.appid";
-
-	/** the secret for communicate with wechat server */
-	public static final String WECHAT_SECRET_PROPERTY = "wechat.secret";
+	@Autowired
+	private ProxyService proxyService;
 
 	@Autowired
 	private WechatService wechatService;
@@ -59,7 +54,7 @@ public class WechatController {
 		String echostr = request.getParameter("echostr");
 
 		// get token
-		String token = PropertiesUtil.getProperty(WECHAT_TOKEN_PROPERTY);
+		String token = PropertiesUtil.getProperty("wechat.token");
 
 		// source check from wechat server, return echostr for ok
 		log.debug("wechat:sign:called, uri={}, ip={}, signature={}, timestamp={}, nonce={}, echostr={}, token={}",
@@ -117,7 +112,6 @@ public class WechatController {
 
 		// parse input stream as xml
 		InputStream is = null;
-		Map<String, String> requestMap = null;
 
 		// parse input
 		try {
@@ -126,22 +120,23 @@ public class WechatController {
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
 
-			// get input stream
-			is = request.getInputStream();
+			// create model to handle
+			MessageModel requestMessage = new MessageModel(proxyService, wechatService);
 
-			// parse xml to map
-			requestMap = wechatService.parseXml(is);
+			// load xml from input stream
+			requestMessage.loadFromXml(request.getInputStream());
 
-			log.debug("wechat:message:parseXml, requestmap={}", requestMap);
+			// make response
+			MessageModel responseMessage = requestMessage.makeResponse();
 
-			// call service to handle request and get response
-			String respMessage = wechatService.handleRequest(requestMap);
+			// get response as xml string
+			String responseString = responseMessage.toXml();
 
-			log.debug("wechat:message:ok, respMessage={}", respMessage);
+			log.debug("wechat:message:ok, responseMessage={}", responseString);
 
 			// write response
 			writer = response.getWriter();
-			writer.write(respMessage);
+			writer.write(responseString);
 		} catch (Exception ex) {
 			log.error("wechat:message:error:", ex);
 			response.setStatus(500);

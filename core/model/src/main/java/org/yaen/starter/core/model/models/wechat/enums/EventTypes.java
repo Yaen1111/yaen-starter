@@ -16,6 +16,9 @@ public final class EventTypes {
 	/** menu be clicked */
 	public static final String EVENT_TYPE_CLICK = "CLICK";
 
+	/** menu link be clicked */
+	public static final String EVENT_TYPE_VIEW = "VIEW";
+
 	/** qrcode is scanned(the user is already subscribed, otherwise will fire subscribe event) */
 	public static final String EVENT_TYPE_SCAN = "SCAN";
 

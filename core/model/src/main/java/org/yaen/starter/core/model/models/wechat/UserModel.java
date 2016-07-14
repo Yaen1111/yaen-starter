@@ -21,11 +21,12 @@ import org.yaen.starter.core.model.services.ProxyService;
 public class UserModel extends TwoModel<UserEntity> {
 
 	/**
+	 * constructor
+	 * 
 	 * @param proxy
-	 * @param sample
 	 */
-	public UserModel(ProxyService proxy, UserEntity sample) {
-		super(proxy, sample);
+	public UserModel(ProxyService proxy) {
+		super(proxy, new UserEntity());
 	}
 
 	/**

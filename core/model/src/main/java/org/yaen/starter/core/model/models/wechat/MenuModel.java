@@ -57,6 +57,8 @@ public class MenuModel extends OneModel {
 	private List<Button> buttons = new ArrayList<Button>();
 
 	/**
+	 * constructor
+	 * 
 	 * @param proxy
 	 * @param service
 	 */
