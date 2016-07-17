@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * recycle of entity, save only deleted(or updated) value
+ * recycle of entity, save only deleted record
  * 
  * @author Yaen 2016年7月17日下午9:42:06
  */
@@ -21,10 +21,6 @@ import lombok.Setter;
 @Setter
 public class RecycleEntity extends TwoEntity implements OneTableHandler {
 	private static final long serialVersionUID = -2035026481755554959L;
-
-	/** the sql type, see SqlTypes */
-	@OneData(DataType = DataTypes.VARCHAR32, FieldName = "SQL_TYPE")
-	private String sqlType;
 
 	/** the update user name */
 	@OneData(DataType = DataTypes.VARCHAR32, FieldName = "SYS_UUSER")
@@ -34,22 +30,19 @@ public class RecycleEntity extends TwoEntity implements OneTableHandler {
 	@OneData(DataType = DataTypes.VARCHAR250, FieldName = "SYS_UCOMMENT")
 	private String uComment;
 
-	/** the entity deleted(or be updated) */
+	/** the entity deleted */
 	@OneCopy(Prefix = "DELETED_")
 	private BaseEntity deletedEntity;
 
 	/**
 	 * construct a recycle entity, use deep copy for before
 	 * 
-	 * @param sqlType
 	 * @param deletedEntity
 	 */
-	public RecycleEntity(String sqlType, BaseEntity deletedEntity) {
+	public RecycleEntity(BaseEntity deletedEntity) {
 		super();
 
 		AssertUtil.notNull(deletedEntity);
-
-		this.sqlType = sqlType;
 
 		this.deletedEntity = deletedEntity;
 	}
