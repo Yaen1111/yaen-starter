@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.user;
+package org.yaen.starter.core.model.entities.user;
 
 import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;

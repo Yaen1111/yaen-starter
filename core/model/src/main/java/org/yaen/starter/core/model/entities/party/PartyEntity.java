@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.user;
+package org.yaen.starter.core.model.entities.party;
 
 import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;
@@ -10,27 +10,23 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * role object
+ * party main object
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
 @Getter
 @Setter
-@OneTable(TableName = "ZU_ROLE")
+@OneTable(TableName = "ZP_PARTY")
 @OneUniqueIndex("ID")
-public class RoleEntity extends TwoEntity {
+public class PartyEntity extends TwoEntity {
 	private static final long serialVersionUID = -709733522935110043L;
 
-	/** group name */
+	/** the party type, usually is org/person */
 	@OneData(DataType = DataTypes.VARCHAR32)
-	private String groupName;
+	private String partyType;
 
-	/** title */
+	/** the reference resource, in some case, we may need the reference to other system */
 	@OneData(DataType = DataTypes.VARCHAR64)
-	private String title;
-
-	/** description */
-	@OneData(DataType = DataTypes.VARCHAR250)
-	private String description;
+	private String referenceResource;
 
 }

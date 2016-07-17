@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.log;
+package org.yaen.starter.core.model.entities.log;
 
 import org.yaen.starter.common.dal.entities.AnotherEntity;
 import org.yaen.starter.common.dal.entities.TwoEntity;

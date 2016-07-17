@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.wechat;
+package org.yaen.starter.core.model.entities.wechat;
 
 import java.math.BigDecimal;
 

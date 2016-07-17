@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.yaen.starter.common.dal.entities.user.RoleEntity;
+import org.yaen.starter.core.model.entities.user.RoleEntity;
 import org.yaen.starter.core.model.services.UserService;
 
 /**

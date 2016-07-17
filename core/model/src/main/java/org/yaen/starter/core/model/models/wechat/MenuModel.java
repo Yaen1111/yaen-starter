@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.yaen.starter.common.dal.entities.wechat.MenuEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.entities.wechat.MenuEntity;
 import org.yaen.starter.core.model.models.OneModel;
 import org.yaen.starter.core.model.models.wechat.enums.ButtonTypes;
 import org.yaen.starter.core.model.models.wechat.objects.Button;

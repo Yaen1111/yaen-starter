@@ -2,8 +2,8 @@ package org.yaen.starter.core.model.models.user;
 
 import java.util.Set;
 
-import org.yaen.starter.common.dal.entities.user.UserEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.core.model.entities.user.UserEntity;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.services.UserService;

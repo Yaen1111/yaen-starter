@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.ark;
+package org.yaen.starter.core.model.entities.ark;
 
 import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;

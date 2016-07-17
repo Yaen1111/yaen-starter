@@ -9,12 +9,12 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yaen.starter.common.dal.entities.wechat.MessageEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.entities.wechat.MessageEntity;
 import org.yaen.starter.core.model.models.wechat.MessageModel;
 import org.yaen.starter.core.model.models.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.models.wechat.enums.MessageTypes;

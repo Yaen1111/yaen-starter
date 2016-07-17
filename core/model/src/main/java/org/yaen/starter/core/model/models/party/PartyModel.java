@@ -1,6 +1,6 @@
 package org.yaen.starter.core.model.models.party;
 
-import org.yaen.starter.common.dal.entities.party.PartyEntity;
+import org.yaen.starter.core.model.entities.party.PartyEntity;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
 

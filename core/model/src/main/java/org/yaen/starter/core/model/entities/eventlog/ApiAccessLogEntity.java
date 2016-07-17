@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.eventlog;
+package org.yaen.starter.core.model.entities.eventlog;
 
 import java.util.Date;
 

@@ -8,9 +8,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.yaen.starter.common.dal.entities.user.RoleAuthEntity;
-import org.yaen.starter.common.dal.entities.user.RoleEntity;
-import org.yaen.starter.common.dal.entities.user.UserRoleEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
@@ -20,6 +17,9 @@ import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.entities.user.RoleAuthEntity;
+import org.yaen.starter.core.model.entities.user.RoleEntity;
+import org.yaen.starter.core.model.entities.user.UserRoleEntity;
 import org.yaen.starter.core.model.services.UserService;
 
 /**
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.services.UserService#createNewRole(org.yaen.starter.common.dal.entities.user.RoleEntity)
+	 * @see org.yaen.starter.core.model.services.UserService#createNewRole(org.yaen.starter.core.model.entities.user.RoleEntity)
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override

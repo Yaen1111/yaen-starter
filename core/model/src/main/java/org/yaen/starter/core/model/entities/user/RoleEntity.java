@@ -1,37 +1,36 @@
-package org.yaen.starter.common.dal.entities.ark;
+package org.yaen.starter.core.model.entities.user;
 
 import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
+import org.yaen.starter.common.data.annotations.OneUniqueIndex;
 import org.yaen.starter.common.data.enums.DataTypes;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * named one, the objects has name
+ * role object
  * 
- * @author Yaen 2016年1月4日下午8:38:45
+ * @author Yaen 2016年5月17日下午2:28:32
  */
 @Getter
 @Setter
-@OneTable(TableName = "ARK_NAMED_ONE")
-public class NamedOneEntity extends TwoEntity {
-	private static final long serialVersionUID = 7297317955813307397L;
+@OneTable(TableName = "ZU_ROLE")
+@OneUniqueIndex("ID")
+public class RoleEntity extends TwoEntity {
+	private static final long serialVersionUID = -709733522935110043L;
 
-	/** the name */
+	/** group name */
 	@OneData(DataType = DataTypes.VARCHAR32)
-	private String name;
+	private String groupName;
 
-	/** the family */
-	@OneData(DataType = DataTypes.VARCHAR32)
-	private String family;
-
-	/** the title */
+	/** title */
 	@OneData(DataType = DataTypes.VARCHAR64)
 	private String title;
 
-	/** the description */
+	/** description */
 	@OneData(DataType = DataTypes.VARCHAR250)
 	private String description;
+
 }

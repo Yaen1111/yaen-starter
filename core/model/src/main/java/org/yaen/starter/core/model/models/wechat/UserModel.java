@@ -1,7 +1,5 @@
 package org.yaen.starter.core.model.models.wechat;
 
-import org.yaen.starter.common.dal.entities.wechat.UserEntity;
-import org.yaen.starter.common.dal.entities.wechat.UserEventLogEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
@@ -9,6 +7,8 @@ import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
+import org.yaen.starter.core.model.entities.wechat.UserEntity;
+import org.yaen.starter.core.model.entities.wechat.UserEventLogEntity;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.models.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.services.ProxyService;

@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.yaen.starter.common.dal.entities.user.RoleEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
+import org.yaen.starter.core.model.entities.user.RoleEntity;
 
 /**
  * user service to handle user model
