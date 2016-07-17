@@ -34,14 +34,6 @@ public class TwoEntity extends OneEntity {
 	@OneData(DataType = DataTypes.DATETIME, FieldName = "SYS_UDATE")
 	protected Date udate;
 
-	/** the last patch date time of the record */
-	@OneData(DataType = DataTypes.DATETIME, FieldName = "SYS_PDATE")
-	protected Date pdate;
-
-	/** the patch log of the record, should use append */
-	@OneData(DataType = DataTypes.TEXT, FieldName = "SYS_PLOG")
-	protected String plog;
-
 	/**
 	 * @see org.yaen.starter.common.dal.entities.OneEntity#BeforeInsert()
 	 */
