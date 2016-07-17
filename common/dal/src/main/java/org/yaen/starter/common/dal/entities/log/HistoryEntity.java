@@ -13,14 +13,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * recycle of entity, save only deleted record
+ * history of entity, save when changed
  * 
  * @author Yaen 2016年7月17日下午9:42:06
  */
 @Getter
 @Setter
-public class RecycleEntity extends TwoEntity implements OneTableHandler {
-	private static final long serialVersionUID = -2035026481755554959L;
+public class HistoryEntity extends TwoEntity implements OneTableHandler {
+	private static final long serialVersionUID = -1542582451653223830L;
 
 	/** the update user name */
 	@OneData(DataType = DataTypes.VARCHAR32, FieldName = "SYS_UUSER")
@@ -30,21 +30,21 @@ public class RecycleEntity extends TwoEntity implements OneTableHandler {
 	@OneData(DataType = DataTypes.VARCHAR250, FieldName = "SYS_UCOMMENT")
 	private String uComment;
 
-	/** the entity deleted */
-	@OneCopy(Prefix = "DELETED_")
-	private BaseEntity deletedEntity;
+	/** the entity history */
+	@OneCopy(Prefix = "HISTORY_")
+	private BaseEntity historyEntity;
 
 	/**
-	 * construct a recycle entity, use deep copy for before
+	 * construct a history entity, use deep copy for before
 	 * 
-	 * @param deletedEntity
+	 * @param historyEntity
 	 */
-	public RecycleEntity(BaseEntity deletedEntity) {
+	public HistoryEntity(BaseEntity historyEntity) {
 		super();
 
-		AssertUtil.notNull(deletedEntity);
+		AssertUtil.notNull(historyEntity);
 
-		this.deletedEntity = deletedEntity;
+		this.historyEntity = historyEntity;
 	}
 
 	/**
@@ -68,16 +68,16 @@ public class RecycleEntity extends TwoEntity implements OneTableHandler {
 	 */
 	@Override
 	public String getTableName() {
-		// table name is REC_ + container table name
+		// table name is HIS_ + container table name
 		String name = "";
 		try {
-			AnotherEntity another = new AnotherEntity(this.deletedEntity);
+			AnotherEntity another = new AnotherEntity(this.historyEntity);
 			name = another.getTableName();
 		} catch (RuntimeException ex) {
 			name = "UNKNOWN";
 		}
 
-		return "REC_" + name;
+		return "HIS_" + name;
 	}
 
 }
