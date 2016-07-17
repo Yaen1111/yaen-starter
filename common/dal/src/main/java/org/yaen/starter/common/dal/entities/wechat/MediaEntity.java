@@ -1,7 +1,5 @@
 package org.yaen.starter.common.dal.entities.wechat;
 
-import java.math.BigDecimal;
-
 import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneIndex;

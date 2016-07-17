@@ -20,14 +20,14 @@ import org.yaen.starter.web.home.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * wechat callback controller, deals wechat auth/callback
+ * base wechat callback controller, deals wechat auth/callback
  * 
  * @author Yaen 2016年5月19日下午2:28:18
  */
 @Slf4j
 @Controller
 @RequestMapping("/wechat")
-public class WechatController {
+public class BaseWechatController {
 
 	@Autowired
 	private ProxyService proxyService;
