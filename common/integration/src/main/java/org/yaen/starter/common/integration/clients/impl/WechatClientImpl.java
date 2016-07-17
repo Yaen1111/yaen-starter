@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.yaen.starter.common.integration.clients.HttpClient;
 import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.common.util.utils.HttpUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 
 import com.alibaba.fastjson.JSONObject;
@@ -21,6 +22,9 @@ import com.alibaba.fastjson.JSONObject;
  */
 @Service
 public class WechatClientImpl implements WechatClient {
+
+	@Autowired
+	private HttpClient httpClient;
 
 	// documents: https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421135319&token=&lang=zh_CN
 
@@ -82,7 +86,7 @@ public class WechatClientImpl implements WechatClient {
 		String url = ACCESS_TOKEN_API.replace("APPID", appid).replace("APPSECRET", appsecret);
 
 		// do https get
-		return HttpUtil.httpsGet(url);
+		return this.httpClient.httpsGet(url);
 	}
 
 	/**
@@ -95,7 +99,7 @@ public class WechatClientImpl implements WechatClient {
 		String url = USER_INFO_API.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
 
 		// do https get
-		return HttpUtil.httpsGet(url);
+		return this.httpClient.httpsGet(url);
 	}
 
 	/**
@@ -113,7 +117,7 @@ public class WechatClientImpl implements WechatClient {
 		// TODO
 
 		// do https get
-		return HttpUtil.httpsPostAsJson(url, param);
+		return this.httpClient.httpsPostAsJson(url, param);
 	}
 
 	/**
@@ -126,7 +130,7 @@ public class WechatClientImpl implements WechatClient {
 		String url = MENU_CREATE_API.replace("ACCESS_TOKEN", accessToken);
 
 		// do https post
-		return HttpUtil.httpsPost(url, menuJSONString);
+		return this.httpClient.httpsPost(url, menuJSONString);
 	}
 
 	/**

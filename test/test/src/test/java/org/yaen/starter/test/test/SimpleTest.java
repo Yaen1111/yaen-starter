@@ -3,7 +3,8 @@ package org.yaen.starter.test.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.yaen.starter.common.util.utils.HttpUtil;
+import org.yaen.starter.common.integration.clients.HttpClient;
+import org.yaen.starter.common.integration.clients.impl.HttpClientImpl;
 
 /**
  * 
@@ -13,6 +14,8 @@ public class SimpleTest {
 
 	public static void main(String[] args) {
 		// String apiurl = "http://smsapi.c123.cn/OpenPlatform/OpenApi";
+
+		HttpClient httpClient = new HttpClientImpl();
 
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("action", "sendOnce");
@@ -25,7 +28,7 @@ public class SimpleTest {
 		String url = "http://smsapi.c123.cn/OpenPlatform/OpenApi?action=sendOnce&ac=1001@501308820001&authkey=7ED1251EA7D481F70DB1C700B07AE325&cgid=52&c=testsms&m=13750835052";
 
 		try {
-			String content = HttpUtil.httpGet(url);
+			String content = httpClient.httpGet(url);
 			System.out.println(content);
 		} catch (Exception e) {
 			e.printStackTrace();

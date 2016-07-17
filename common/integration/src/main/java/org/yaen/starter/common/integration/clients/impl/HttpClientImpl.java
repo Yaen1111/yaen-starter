@@ -1,4 +1,4 @@
-package org.yaen.starter.common.util.utils;
+package org.yaen.starter.common.integration.clients.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,26 +28,24 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.yaen.starter.common.integration.clients.HttpClient;
 import org.yaen.starter.common.util.contexts.X509AcceptAllTrustManager;
+import org.yaen.starter.common.util.utils.StringUtil;
 
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * http/https post/get util
+ * http/https post/get client
  * 
  * @author Yaen 2016年5月11日下午1:53:39
  */
-public class HttpUtil {
+public class HttpClientImpl implements HttpClient {
 
 	/**
-	 * http get and return result as string
-	 * 
-	 * @param requestUrl
-	 * @return
-	 * @throws IOException
-	 * @throws ParseException
+	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpGet(java.lang.String)
 	 */
-	public static String httpGet(String requestUrl) throws ParseException, IOException {
+	@Override
+	public String httpGet(String requestUrl) throws ParseException, IOException {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpGet httpget = new HttpGet(requestUrl);
@@ -64,14 +62,10 @@ public class HttpUtil {
 	}
 
 	/**
-	 * http post and return result as string
-	 * 
-	 * @param requestUrl
-	 * @param param
-	 * @return
-	 * @throws IOException
+	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpPost(java.lang.String, java.util.Map)
 	 */
-	public static String httpPost(String requestUrl, Map<String, String> param) throws IOException {
+	@Override
+	public String httpPost(String requestUrl, Map<String, String> param) throws IOException {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpPost post = new HttpPost(requestUrl);
@@ -97,15 +91,11 @@ public class HttpUtil {
 	}
 
 	/**
-	 * https request(get/set/head/delete), return response as json. the request url should be https://
-	 * 
-	 * @param requestUrl
-	 * @param requestMethod
-	 * @param dataString
-	 * @return
-	 * @throws Exception
+	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpsRequest(java.lang.String, java.lang.String,
+	 *      java.lang.String)
 	 */
-	public static String httpsRequest(String requestUrl, String requestMethod, String dataString) throws Exception {
+	@Override
+	public String httpsRequest(String requestUrl, String requestMethod, String dataString) throws Exception {
 
 		// the result content
 		StringBuilder sb = new StringBuilder();
@@ -188,44 +178,33 @@ public class HttpUtil {
 	}
 
 	/**
-	 * https get
-	 * 
-	 * @param requestUrl
-	 * @return
-	 * @throws Exception
+	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpsGet(java.lang.String)
 	 */
-	public static String httpsGet(String requestUrl) throws Exception {
-		return httpsRequest(requestUrl, "GET", null);
+	@Override
+	public String httpsGet(String requestUrl) throws Exception {
+		return this.httpsRequest(requestUrl, "GET", null);
 	}
 
 	/**
-	 * https post
-	 * 
-	 * @param requestUrl
-	 * @param param
-	 * @return
-	 * @throws Exception
+	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpsPost(java.lang.String, java.lang.String)
 	 */
-	public static String httpsPost(String requestUrl, String dataString) throws Exception {
-		return httpsRequest(requestUrl, "POST", dataString);
+	@Override
+	public String httpsPost(String requestUrl, String dataString) throws Exception {
+		return this.httpsRequest(requestUrl, "POST", dataString);
 	}
 
 	/**
-	 * https post, treat param as json, result also as json
-	 * 
-	 * @param requestUrl
-	 * @param param
-	 * @return
-	 * @throws Exception
+	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpsPostAsJson(java.lang.String, java.util.Map)
 	 */
-	public static JSONObject httpsPostAsJson(String requestUrl, Map<String, Object> param) throws Exception {
+	@Override
+	public JSONObject httpsPostAsJson(String requestUrl, Map<String, Object> param) throws Exception {
 		// convert param to json
 		String dataString = null;
 		if (param != null && !param.isEmpty()) {
 			dataString = JSONObject.toJSONString(param);
 		}
 
-		String text = httpsPost(requestUrl, dataString);
+		String text = this.httpsPost(requestUrl, dataString);
 
 		// convert result to json
 		return JSONObject.parseObject(text);
