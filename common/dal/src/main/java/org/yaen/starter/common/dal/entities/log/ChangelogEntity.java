@@ -1,4 +1,4 @@
-package org.yaen.starter.common.dal.entities.changelog;
+package org.yaen.starter.common.dal.entities.log;
 
 import org.yaen.starter.common.dal.entities.AnotherEntity;
 import org.yaen.starter.common.dal.entities.TwoEntity;
@@ -8,7 +8,7 @@ import org.yaen.starter.common.data.annotations.OneTableHandler;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.data.enums.SqlTypes;
-import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 
@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * change log of element, save before and after value
+ * change log of entity, save before and after value
  * 
  * @author Yaen 2016年1月4日下午8:40:03
  */
@@ -25,7 +25,7 @@ import lombok.Setter;
 public class ChangelogEntity extends TwoEntity implements OneTableHandler {
 	private static final long serialVersionUID = -606829448983274029L;
 
-	/** the sql type */
+	/** the sql type, see SqlTypes */
 	@OneData(DataType = DataTypes.VARCHAR32, FieldName = "SQL_TYPE")
 	private String sqlType;
 
@@ -51,9 +51,9 @@ public class ChangelogEntity extends TwoEntity implements OneTableHandler {
 	 * @param sqlType
 	 * @param beforeEntity
 	 * @param afterEntity
-	 * @throws CoreException
+	 * @throws CommonException
 	 */
-	public ChangelogEntity(String sqlType, BaseEntity beforeEntity, BaseEntity afterEntity) throws CoreException {
+	public ChangelogEntity(String sqlType, BaseEntity beforeEntity, BaseEntity afterEntity) throws CommonException {
 		super();
 
 		// check param by type
@@ -71,7 +71,7 @@ public class ChangelogEntity extends TwoEntity implements OneTableHandler {
 					"the before and after should be the same entity");
 			break;
 		default:
-			throw new CoreException("unkown or not supported sql type: " + sqlType);
+			throw new CommonException("unkown or not supported sql type: " + sqlType);
 		}
 
 		this.sqlType = sqlType;
