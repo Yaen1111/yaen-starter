@@ -1,4 +1,4 @@
-package org.yaen.starter.web.home.controllers.starter;
+package org.yaen.starter.web.home.controllers;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import org.yaen.starter.web.home.viewmodels.ViewModel;
  */
 @Controller
 @RequestMapping("/starter/dba")
-public class DbaController {
+public class StarterDbaController {
 
 	@Autowired
 	private TableMapper zero;

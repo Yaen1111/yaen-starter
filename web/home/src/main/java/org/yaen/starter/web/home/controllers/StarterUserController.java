@@ -16,7 +16,7 @@ import org.yaen.starter.core.model.services.UserService;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class StarterUserController {
 
 	@Autowired
 	private UserService userService;

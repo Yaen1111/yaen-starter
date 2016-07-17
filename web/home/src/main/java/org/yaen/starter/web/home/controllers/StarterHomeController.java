@@ -15,7 +15,7 @@ import org.yaen.starter.common.util.utils.StringUtil;
  */
 @Controller
 @RequestMapping("/home")
-public class HomeController {
+public class StarterHomeController {
 
 	/**
 	 * index

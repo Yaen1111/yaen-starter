@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 @RequestMapping("/wechat")
-public class BaseWechatController {
+public class StarterWechatController {
 
 	@Autowired
 	private ProxyService proxyService;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/error")
-public class ErrorController {
+public class StarterErrorController {
 
 	/**
 	 * common error
