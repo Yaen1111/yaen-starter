@@ -41,7 +41,7 @@ public class WechatController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "sign", method = RequestMethod.GET)
+	@RequestMapping(value = { "sign", "message" }, method = RequestMethod.GET)
 	public void sign(HttpServletRequest request, HttpServletResponse response) {
 
 		// get ip
