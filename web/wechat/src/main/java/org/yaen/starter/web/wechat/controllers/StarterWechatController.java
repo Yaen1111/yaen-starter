@@ -41,7 +41,7 @@ public class StarterWechatController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = { "sign", "message" }, method = RequestMethod.GET)
+	@RequestMapping(value = "message", method = RequestMethod.GET)
 	public void getPlatformMessage(HttpServletRequest request, HttpServletResponse response) {
 
 		// get ip

@@ -80,93 +80,93 @@ public class UserModel extends TwoModel<UserEntity> {
 			throw new CoreException("create model failed", ex);
 		}
 	}
-
-	/**
-	 * subscribe, here should be subscribed, maybe re-subscribe
-	 * 
-	 * @throws CoreException
-	 */
-	public void subscribe() throws CoreException {
-		this.check();
-
-		try {
-			// update user info, create new event log
-			this.entity.setSubscribeTime(DateUtil.getNow());
-			this.entity.setUnsubscribeTime(null);
-
-			this.proxy.getEntityService().updateEntityByRowid(this.entity);
-
-			// create event log
-			PlatformMessageEntity message = new PlatformMessageEntity();
-			message.setId(this.entity.getId());
-			message.setEventType(EventTypes.EVENT_TYPE_SUBSCRIBE);
-			message.setEventTime(DateUtil.getNow());
-
-			this.proxy.getEntityService().insertEntityByRowid(ev);
-
-		} catch (NoDataAffectedException ex) {
-			throw new CoreException("subscribe failed", ex);
-		} catch (CommonException ex) {
-			throw new CoreException("subscribe failed", ex);
-		} catch (DuplicateDataException ex) {
-			throw new CoreException("subscribe failed", ex);
-		}
-	}
-
-	/**
-	 * unsubscribe, just update user info
-	 * 
-	 * @throws CoreException
-	 */
-	public void unsubscribe() throws CoreException {
-		this.check();
-
-		try {
-			// update user info, create new event log
-			this.entity.setUnsubscribeTime(DateUtil.getNow());
-
-			this.proxy.getEntityService().updateEntityByRowid(this.entity);
-
-			// create event log
-			UserEventLogEntity ev = new UserEventLogEntity();
-			ev.setId(this.entity.getId());
-			ev.setEventType(EventTypes.EVENT_TYPE_UNSUBSCRIBE);
-			ev.setEventTime(DateUtil.getNow());
-
-			this.proxy.getEntityService().insertEntityByRowid(ev);
-
-		} catch (NoDataAffectedException ex) {
-			throw new CoreException("unsubscribe failed", ex);
-		} catch (CommonException ex) {
-			throw new CoreException("unsubscribe failed", ex);
-		} catch (DuplicateDataException ex) {
-			throw new CoreException("unsubscribe failed", ex);
-		}
-	}
-
-	/**
-	 * click menu
-	 * 
-	 * @throws CoreException
-	 */
-	public void clickMenu() throws CoreException {
-		this.check();
-
-		try {
-			// create event log
-			UserEventLogEntity ev = new UserEventLogEntity();
-			ev.setId(this.entity.getId());
-			ev.setEventType(EventTypes.EVENT_TYPE_CLICK);
-			ev.setEventTime(DateUtil.getNow());
-
-			this.proxy.getEntityService().insertEntityByRowid(ev);
-
-		} catch (NoDataAffectedException ex) {
-			throw new CoreException("clickMenu failed", ex);
-		} catch (CommonException ex) {
-			throw new CoreException("clickMenu failed", ex);
-		} catch (DuplicateDataException ex) {
-			throw new CoreException("clickMenu failed", ex);
-		}
-	}
+//
+//	/**
+//	 * subscribe, here should be subscribed, maybe re-subscribe
+//	 * 
+//	 * @throws CoreException
+//	 */
+//	public void subscribe() throws CoreException {
+//		this.check();
+//
+//		try {
+//			// update user info, create new event log
+//			this.entity.setSubscribeTime(DateUtil.getNow());
+//			this.entity.setUnsubscribeTime(null);
+//
+//			this.proxy.getEntityService().updateEntityByRowid(this.entity);
+//
+//			// create event log
+//			PlatformMessageEntity message = new PlatformMessageEntity();
+//			message.setId(this.entity.getId());
+//			message.setEventType(EventTypes.EVENT_TYPE_SUBSCRIBE);
+//			message.setEventTime(DateUtil.getNow());
+//
+//			this.proxy.getEntityService().insertEntityByRowid(ev);
+//
+//		} catch (NoDataAffectedException ex) {
+//			throw new CoreException("subscribe failed", ex);
+//		} catch (CommonException ex) {
+//			throw new CoreException("subscribe failed", ex);
+//		} catch (DuplicateDataException ex) {
+//			throw new CoreException("subscribe failed", ex);
+//		}
+//	}
+//
+//	/**
+//	 * unsubscribe, just update user info
+//	 * 
+//	 * @throws CoreException
+//	 */
+//	public void unsubscribe() throws CoreException {
+//		this.check();
+//
+//		try {
+//			// update user info, create new event log
+//			this.entity.setUnsubscribeTime(DateUtil.getNow());
+//
+//			this.proxy.getEntityService().updateEntityByRowid(this.entity);
+//
+//			// create event log
+//			UserEventLogEntity ev = new UserEventLogEntity();
+//			ev.setId(this.entity.getId());
+//			ev.setEventType(EventTypes.EVENT_TYPE_UNSUBSCRIBE);
+//			ev.setEventTime(DateUtil.getNow());
+//
+//			this.proxy.getEntityService().insertEntityByRowid(ev);
+//
+//		} catch (NoDataAffectedException ex) {
+//			throw new CoreException("unsubscribe failed", ex);
+//		} catch (CommonException ex) {
+//			throw new CoreException("unsubscribe failed", ex);
+//		} catch (DuplicateDataException ex) {
+//			throw new CoreException("unsubscribe failed", ex);
+//		}
+//	}
+//
+//	/**
+//	 * click menu
+//	 * 
+//	 * @throws CoreException
+//	 */
+//	public void clickMenu() throws CoreException {
+//		this.check();
+//
+//		try {
+//			// create event log
+//			UserEventLogEntity ev = new UserEventLogEntity();
+//			ev.setId(this.entity.getId());
+//			ev.setEventType(EventTypes.EVENT_TYPE_CLICK);
+//			ev.setEventTime(DateUtil.getNow());
+//
+//			this.proxy.getEntityService().insertEntityByRowid(ev);
+//
+//		} catch (NoDataAffectedException ex) {
+//			throw new CoreException("clickMenu failed", ex);
+//		} catch (CommonException ex) {
+//			throw new CoreException("clickMenu failed", ex);
+//		} catch (DuplicateDataException ex) {
+//			throw new CoreException("clickMenu failed", ex);
+//		}
+//	}
 }
