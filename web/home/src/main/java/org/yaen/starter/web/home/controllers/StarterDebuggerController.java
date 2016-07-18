@@ -59,6 +59,8 @@ public class StarterDebuggerController {
 				log.debug("debugger:http:error", ex);
 				model.addAttribute("error", ex);
 			}
+		} else {
+			model.addAttribute("result", "please input api");
 		}
 
 		return "debugger/http";
