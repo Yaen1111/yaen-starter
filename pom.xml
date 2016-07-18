@@ -8,11 +8,13 @@
 	<packaging>pom</packaging>
 
 	<name>yaen-starter</name>
-	<description>yaen starter with spring framework 4.2 and jdk 1.8.
+	<description>
+		yaen starter with spring framework 4.2 and jdk 1.8.
 
-all of the starter-*-*.xml is for sample use, the child should set the xml  on there own.
+		all of the starter-*-*.xml is for sample use, the child should set the xml  on there own.
 
-starter focuse on common and core layer, some web layer, no biz layer</description>
+		starter focuse on common and core layer, some web layer, no biz layer
+	</description>
 
 	<modules>
 		<module>common</module>
@@ -35,7 +37,7 @@ starter focuse on common and core layer, some web layer, no biz layer</descripti
 
 	<properties>
 		<!-- environment default to all for starter, as this is jar build, related to properties file -->
-		<env>all</env>
+		<env>starter</env>
 		<yaen-starter.version>1.3.0-SNAPSHOT</yaen-starter.version>
 
 		<!-- jdk version -->
@@ -156,6 +158,16 @@ starter focuse on common and core layer, some web layer, no biz layer</descripti
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-core-model-wechat</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-core-service-wechat</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
 				<artifactId>yaen-starter-biz-shared</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
@@ -167,6 +179,11 @@ starter focuse on common and core layer, some web layer, no biz layer</descripti
 			<dependency>
 				<groupId>org.yaen</groupId>
 				<artifactId>yaen-starter-web-home</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-web-wechat</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 

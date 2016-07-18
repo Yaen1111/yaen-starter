@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.yaen</groupId>
+		<artifactId>yaen-starter-core</artifactId>
+		<version>1.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>yaen-starter-core-service-wechat</artifactId>
+	<name>yaen-starter-core-service-wechat</name>
+
+	<build>
+		<filters>
+			<filter>../../${env}-config.properties</filter>
+		</filters>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.yaen</groupId>
+			<artifactId>yaen-starter-core-model-wechat</artifactId>
+		</dependency>
+	</dependencies>
+	<description>wechat service, for wechat model.</description>
+</project>

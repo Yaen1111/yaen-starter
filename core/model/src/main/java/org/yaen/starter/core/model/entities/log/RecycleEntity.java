@@ -1,13 +1,13 @@
 package org.yaen.starter.core.model.entities.log;
 
 import org.yaen.starter.common.dal.entities.AnotherEntity;
-import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneCopy;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTableHandler;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.enums.DataTypes;
 import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.core.model.entities.TwoEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,7 +48,7 @@ public class RecycleEntity extends TwoEntity implements OneTableHandler {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.dal.entities.TwoEntity#BeforeUpdate()
+	 * @see org.yaen.starter.core.model.entities.TwoEntity#BeforeUpdate()
 	 */
 	@Override
 	public boolean BeforeUpdate() {

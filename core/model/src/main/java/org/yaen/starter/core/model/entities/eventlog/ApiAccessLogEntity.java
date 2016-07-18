@@ -57,7 +57,7 @@ public class ApiAccessLogEntity extends OneEntity {
 	}
 
 	/**
-	 * @see org.yaen.starter.common.dal.entities.TwoEntity#BeforeUpdate()
+	 * @see org.yaen.starter.core.model.entities.TwoEntity#BeforeUpdate()
 	 */
 	@Override
 	public boolean BeforeUpdate() {

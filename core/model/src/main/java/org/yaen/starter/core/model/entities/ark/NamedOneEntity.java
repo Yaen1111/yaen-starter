@@ -1,9 +1,9 @@
 package org.yaen.starter.core.model.entities.ark;
 
-import org.yaen.starter.common.dal.entities.TwoEntity;
 import org.yaen.starter.common.data.annotations.OneData;
 import org.yaen.starter.common.data.annotations.OneTable;
 import org.yaen.starter.common.data.enums.DataTypes;
+import org.yaen.starter.core.model.entities.TwoEntity;
 
 import lombok.Getter;
 import lombok.Setter;

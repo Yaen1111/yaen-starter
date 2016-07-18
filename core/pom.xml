@@ -14,5 +14,7 @@
 	<modules>
 		<module>model</module>
 		<module>service</module>
+		<module>model-wechat</module>
+		<module>service-wechat</module>
 	</modules>
 </project>
