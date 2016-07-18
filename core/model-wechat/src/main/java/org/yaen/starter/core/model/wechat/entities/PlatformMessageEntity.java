@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * wechat message entity
+ * wechat platform message entity
  * <p>
  * all message from user or wechat system, to server, and server can response to user
  * <p>
@@ -28,10 +28,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@OneTable(TableName = "WX_MESSAGE")
+@OneTable(TableName = "WX_PLATFORM_MESSAGE")
 @OneUniqueIndex("ID")
 @OneIndex({ "FROM_USER_NAME", "TO_USER_NAME", "MSG_TYPE,EVENT", "MSG_ID" })
-public class MessageEntity extends TwoEntity {
+public class PlatformMessageEntity extends TwoEntity {
 	private static final long serialVersionUID = -3762180033509714839L;
 
 	/** to user name, when receive is the appid, when send is openid */

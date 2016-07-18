@@ -2,6 +2,8 @@ package org.yaen.starter.core.model.services;
 
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
+import org.yaen.starter.common.integration.clients.HttpClient;
+import org.yaen.starter.common.integration.clients.RedisClient;
 
 /**
  * proxy service for simple model implement
@@ -23,5 +25,19 @@ public interface ProxyService {
 	 * @return
 	 */
 	QueryService getQueryService();
+
+	/**
+	 * get proxy http client
+	 * 
+	 * @return
+	 */
+	HttpClient getHttpClient();
+
+	/**
+	 * get proxy redis client
+	 * 
+	 * @return
+	 */
+	RedisClient getRedisClient();
 
 }

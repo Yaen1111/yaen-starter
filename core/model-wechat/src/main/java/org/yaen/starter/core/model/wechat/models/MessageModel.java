@@ -16,7 +16,7 @@ import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
-import org.yaen.starter.core.model.wechat.entities.MessageEntity;
+import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
 import org.yaen.starter.core.model.wechat.services.WechatService;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Yaen 2016年7月14日下午2:07:17
  */
 @Slf4j
-public class MessageModel extends TwoModel<MessageEntity> {
+public class MessageModel extends TwoModel<PlatformMessageEntity> {
 
 	@Getter
 	private WechatService service;
@@ -77,7 +77,7 @@ public class MessageModel extends TwoModel<MessageEntity> {
 	 * @param service
 	 */
 	public MessageModel(ProxyService proxy, WechatService service) {
-		super(proxy, new MessageEntity());
+		super(proxy, new PlatformMessageEntity());
 
 		this.service = service;
 	}
@@ -121,7 +121,7 @@ public class MessageModel extends TwoModel<MessageEntity> {
 		log.debug("parse xml done, map={}", map);
 
 		// make entity according to the map item
-		MessageEntity msg = new MessageEntity();
+		PlatformMessageEntity msg = new PlatformMessageEntity();
 
 		// main info
 		msg.setFromUserName(map.get("FromUserName"));

@@ -9,32 +9,40 @@ import org.yaen.starter.common.util.utils.PropertiesUtil;
  */
 public class WechatPropertiesUtil {
 
-	public static String getAppId() {
-		return PropertiesUtil.getProperty("wechat.appid");
+	public static String getComponentAppid() {
+		return PropertiesUtil.getProperty("component.appid");
+	}
+
+	public static String getComponentSecret() {
+		return PropertiesUtil.getProperty("component.secret");
+	}
+
+	public static String getAppid() {
+		return PropertiesUtil.getProperty("platform.appid");
 	}
 
 	public static String getSecret() {
-		return PropertiesUtil.getProperty("wechat.secret");
+		return PropertiesUtil.getProperty("platform.secret");
 	}
 
 	public static String getToken() {
-		return PropertiesUtil.getProperty("wechat.token");
+		return PropertiesUtil.getProperty("platform.token");
 	}
 
 	public static String getShopId() {
-		return PropertiesUtil.getProperty("wechat.shopid");
+		return PropertiesUtil.getProperty("platform.shopid");
 	}
 
 	public static String getAuthUrl() {
-		return PropertiesUtil.getProperty("wechat.authurl");
+		return PropertiesUtil.getProperty("platform.authurl");
 	}
 
 	public static String getWifiSSID() {
-		return PropertiesUtil.getProperty("wechat.wifi.ssid");
+		return PropertiesUtil.getProperty("platform.wifi.ssid");
 	}
 
 	public static String getWifiBSSID() {
-		return PropertiesUtil.getProperty("wechat.wifi.bssid");
+		return PropertiesUtil.getProperty("platform.wifi.bssid");
 	}
 
 }

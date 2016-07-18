@@ -15,7 +15,7 @@ import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.CacheService;
-import org.yaen.starter.core.model.wechat.entities.MessageEntity;
+import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
 import org.yaen.starter.core.model.wechat.models.MessageModel;
@@ -59,7 +59,7 @@ public class WechatServiceImpl implements WechatService {
 
 		// load default if not given
 		if (StringUtil.isBlank(appId)) {
-			appId = WechatPropertiesUtil.getAppId();
+			appId = WechatPropertiesUtil.getAppid();
 		}
 
 		// get token from cache
@@ -164,7 +164,7 @@ public class WechatServiceImpl implements WechatService {
 		MessageModel responseMessage = new MessageModel(requestMessage.getProxy(), requestMessage.getService());
 
 		// response as text
-		MessageEntity entity = responseMessage.getEntity();
+		PlatformMessageEntity entity = responseMessage.getEntity();
 		entity.setMsgType(MessageTypes.RESP_MESSAGE_TYPE_TEXT);
 		entity.setToUserName(requestMessage.getEntity().getFromUserName());
 		entity.setFromUserName(requestMessage.getEntity().getToUserName());

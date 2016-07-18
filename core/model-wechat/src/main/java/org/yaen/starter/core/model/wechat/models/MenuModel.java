@@ -115,7 +115,7 @@ public class MenuModel extends OneModel {
 
 		// load default if not given
 		if (StringUtil.isBlank(this.appId)) {
-			this.appId = WechatPropertiesUtil.getAppId();
+			this.appId = WechatPropertiesUtil.getAppid();
 		}
 
 		// get menu entity list
@@ -243,7 +243,7 @@ public class MenuModel extends OneModel {
 
 		// load default if not given
 		if (StringUtil.isBlank(this.appId)) {
-			this.appId = WechatPropertiesUtil.getAppId();
+			this.appId = WechatPropertiesUtil.getAppid();
 		}
 
 		// call service

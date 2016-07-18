@@ -36,6 +36,24 @@ public class TwoEntity extends OneEntity {
 	protected Date udate;
 
 	/**
+	 * empty constructor
+	 */
+	public TwoEntity() {
+		super();
+	}
+
+	/**
+	 * constructor with id
+	 * 
+	 * @param id
+	 */
+	public TwoEntity(String id) {
+		super();
+
+		this.id = id;
+	}
+
+	/**
 	 * @see org.yaen.starter.common.dal.entities.OneEntity#BeforeInsert()
 	 */
 	@Override
