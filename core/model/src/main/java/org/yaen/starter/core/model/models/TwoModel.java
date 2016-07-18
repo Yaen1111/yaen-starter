@@ -23,7 +23,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 	@Getter
 	protected ProxyService proxy;
 
-	/** the sample entity */
+	/** the sample entity, never changed, just for class object */
 	protected T sample;
 
 	/** the main entity */
@@ -41,6 +41,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 
 		this.proxy = proxy;
 		this.sample = sample;
+		this.entity = sample;
 	}
 
 	/**
@@ -110,7 +111,6 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 		} catch (CommonException ex) {
 			throw new CoreException("create model failed", ex);
 		}
-
 	}
 
 	/**
@@ -131,7 +131,6 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 		} catch (CommonException ex) {
 			throw new CoreException("save model failed", ex);
 		}
-
 	}
 
 	/**
@@ -152,7 +151,26 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 		} catch (CommonException ex) {
 			throw new CoreException("delete model failed", ex);
 		}
+	}
 
+	/**
+	 * save new entity
+	 * 
+	 * @param id
+	 * @throws CoreException
+	 * @throws DuplicateDataException
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public void saveNew() throws CoreException, DuplicateDataException {
+		try {
+			// do insert
+			this.proxy.getEntityService().insertEntityByRowid(this.entity);
+
+		} catch (NoDataAffectedException ex) {
+			throw new CoreException("create model failed", ex);
+		} catch (CommonException ex) {
+			throw new CoreException("create model failed", ex);
+		}
 	}
 
 }

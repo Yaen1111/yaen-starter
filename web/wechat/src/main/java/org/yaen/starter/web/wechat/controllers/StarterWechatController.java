@@ -130,7 +130,7 @@ public class StarterWechatController {
 			requestMessage.loadFromXml(is);
 
 			// save message anyway
-			requestMessage.saveById();
+			requestMessage.saveNew();
 
 			// make response, big routine
 			MessageModel responseMessage = requestMessage.makeResponse();
@@ -151,7 +151,7 @@ public class StarterWechatController {
 				writer = response.getWriter();
 				writer.write("error");
 				if (log.isDebugEnabled()) {
-					writer.write(ex.toString());
+					ex.printStackTrace(writer);
 				}
 				writer.close();
 				writer = null;
