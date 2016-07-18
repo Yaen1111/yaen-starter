@@ -18,7 +18,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@OneTable(TableName = "ZWX_APP")
+@OneTable(TableName = "WX_APP")
 @OneUniqueIndex({ "ID", "APP_ID" })
 public class AppEntity extends TwoEntity {
 	private static final long serialVersionUID = 1176918958761154976L;

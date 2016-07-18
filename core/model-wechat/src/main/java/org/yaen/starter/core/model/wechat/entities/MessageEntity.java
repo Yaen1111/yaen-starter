@@ -25,9 +25,10 @@ import lombok.Setter;
  * 
  * @author Yaen 2016年7月11日下午2:03:46
  */
+
 @Getter
 @Setter
-@OneTable(TableName = "ZWX_MESSAGE")
+@OneTable(TableName = "WX_MESSAGE")
 @OneUniqueIndex("ID")
 @OneIndex({ "FROM_USER_NAME", "TO_USER_NAME", "MSG_TYPE,EVENT", "MSG_ID" })
 public class MessageEntity extends TwoEntity {

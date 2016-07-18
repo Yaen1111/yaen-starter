@@ -16,7 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@OneTable(TableName = "ZWX_MENU")
+@OneTable(TableName = "WX_MENU")
 @OneUniqueIndex({ "ID", "APP_ID" })
 public class MenuEntity extends TwoEntity {
 	private static final long serialVersionUID = -6445208030709771936L;

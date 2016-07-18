@@ -9,8 +9,8 @@ import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.entities.MessageEntity;
 import org.yaen.starter.core.model.wechat.entities.UserEntity;
-import org.yaen.starter.core.model.wechat.entities.UserEventLogEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 
 /**
@@ -97,10 +97,10 @@ public class UserModel extends TwoModel<UserEntity> {
 			this.proxy.getEntityService().updateEntityByRowid(this.entity);
 
 			// create event log
-			UserEventLogEntity ev = new UserEventLogEntity();
-			ev.setId(this.entity.getId());
-			ev.setEventType(EventTypes.EVENT_TYPE_SUBSCRIBE);
-			ev.setEventTime(DateUtil.getNow());
+			MessageEntity message = new MessageEntity();
+			message.setId(this.entity.getId());
+			message.setEventType(EventTypes.EVENT_TYPE_SUBSCRIBE);
+			message.setEventTime(DateUtil.getNow());
 
 			this.proxy.getEntityService().insertEntityByRowid(ev);
 

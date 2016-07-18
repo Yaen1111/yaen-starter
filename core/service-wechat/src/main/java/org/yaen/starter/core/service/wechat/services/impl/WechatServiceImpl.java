@@ -160,7 +160,7 @@ public class WechatServiceImpl implements WechatService {
 	public MessageModel makeResponse(MessageModel requestMessage) {
 		AssertUtil.notNull(requestMessage);
 
-		// create new message model
+		// create response message model
 		MessageModel responseMessage = new MessageModel(requestMessage.getProxy(), requestMessage.getService());
 
 		// response as text

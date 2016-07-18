@@ -17,7 +17,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@OneTable(TableName = "ZWX_MEDIA")
+@OneTable(TableName = "WX_MEDIA")
 @OneUniqueIndex("ID")
 @OneIndex({ "MEIDA_ID" })
 public class MediaEntity extends TwoEntity {

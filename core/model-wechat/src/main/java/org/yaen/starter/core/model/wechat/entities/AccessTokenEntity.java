@@ -18,7 +18,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@OneTable(TableName = "ZWX_ACCESS_TOKEN")
+@OneTable(TableName = "WX_ACCESS_TOKEN")
 @OneUniqueIndex({ "ID", "APP_ID" })
 public class AccessTokenEntity extends TwoEntity {
 	private static final long serialVersionUID = 3421207085062757758L;

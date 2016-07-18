@@ -123,10 +123,16 @@ public class StarterWechatController {
 			// create model to handle
 			MessageModel requestMessage = new MessageModel(proxyService, wechatService);
 
-			// load xml from input stream
-			requestMessage.loadFromXml(request.getInputStream());
+			// get input stream
+			is = request.getInputStream();
 
-			// make response
+			// load xml from input stream
+			requestMessage.loadFromXml(is);
+
+			// save message anyway
+			requestMessage.saveById();
+
+			// make response, big routine
 			MessageModel responseMessage = requestMessage.makeResponse();
 
 			// get response as xml string
@@ -137,9 +143,21 @@ public class StarterWechatController {
 			// write response
 			writer = response.getWriter();
 			writer.write(responseString);
+			writer.close();
+			writer = null;
 		} catch (Exception ex) {
 			log.error("wechat:message:error:", ex);
-			response.setStatus(500);
+			try {
+				writer = response.getWriter();
+				writer.write("error");
+				if (log.isDebugEnabled()) {
+					writer.write(ex.toString());
+				}
+				writer.close();
+				writer = null;
+			} catch (IOException ex2) {
+				log.error("close writer error:", ex2);
+			}
 		} finally {
 			// close
 			if (is != null) {

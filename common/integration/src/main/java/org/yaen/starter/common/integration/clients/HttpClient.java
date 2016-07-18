@@ -25,6 +25,15 @@ public interface HttpClient {
 	String httpGet(String requestUrl) throws ParseException, IOException;
 
 	/**
+	 * 
+	 * @param requestUrl
+	 * @param content
+	 * @return
+	 * @throws IOException
+	 */
+	String httpPost(String requestUrl, String content) throws IOException;
+
+	/**
 	 * http post and return result as string
 	 * 
 	 * @param requestUrl

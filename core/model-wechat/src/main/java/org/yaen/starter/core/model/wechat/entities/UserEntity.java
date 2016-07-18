@@ -18,7 +18,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@OneTable(TableName = "ZWX_USER")
+@OneTable(TableName = "WX_USER")
 @OneUniqueIndex({ "ID", "OPEN_ID,APP_ID" })
 public class UserEntity extends TwoEntity {
 	private static final long serialVersionUID = -4660940072642230728L;

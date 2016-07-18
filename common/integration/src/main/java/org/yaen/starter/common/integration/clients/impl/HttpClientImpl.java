@@ -24,6 +24,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -31,6 +32,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.integration.clients.HttpClient;
 import org.yaen.starter.common.util.contexts.X509AcceptAllTrustManager;
+import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 
 import com.alibaba.fastjson.JSONObject;
@@ -48,6 +50,8 @@ public class HttpClientImpl implements HttpClient {
 	 */
 	@Override
 	public String httpGet(String requestUrl) throws ParseException, IOException {
+		AssertUtil.notBlank(requestUrl);
+
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpGet httpget = new HttpGet(requestUrl);
@@ -64,10 +68,38 @@ public class HttpClientImpl implements HttpClient {
 	}
 
 	/**
+	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpPost(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String httpPost(String requestUrl, String content) throws IOException {
+		AssertUtil.notBlank(requestUrl);
+
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		try {
+			HttpPost post = new HttpPost(requestUrl);
+
+			HttpEntity formEntity = new StringEntity(content, "utf-8");
+			post.setEntity(formEntity);
+			HttpResponse response = httpclient.execute(post);
+			InputStream is = response.getEntity().getContent();
+			return StringUtil.inputStream2String(is);
+		} finally {
+			if (httpclient != null) {
+				try {
+					httpclient.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+	}
+
+	/**
 	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpPost(java.lang.String, java.util.Map)
 	 */
 	@Override
 	public String httpPost(String requestUrl, Map<String, String> param) throws IOException {
+		AssertUtil.notBlank(requestUrl);
+
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpPost post = new HttpPost(requestUrl);
@@ -98,6 +130,8 @@ public class HttpClientImpl implements HttpClient {
 	 */
 	@Override
 	public String httpsRequest(String requestUrl, String requestMethod, String dataString) throws Exception {
+		AssertUtil.notBlank(requestUrl);
+		AssertUtil.notBlank(requestMethod);
 
 		// the result content
 		StringBuilder sb = new StringBuilder();
