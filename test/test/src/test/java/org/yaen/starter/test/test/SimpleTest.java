@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.yaen.starter.common.integration.clients.HttpClient;
 import org.yaen.starter.common.integration.clients.impl.HttpClientImpl;
+import org.yaen.starter.common.integration.clients.impl.WechatClientImpl;
 
 /**
  * 
@@ -33,5 +34,15 @@ public class SimpleTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		WechatClientImpl s = new WechatClientImpl();
+		try {
+			System.out.println(s.getAccessToken("wx67be379381b004de", "af8e086dee051827251454a3e7dc7069"));
+			// sprPi802pRK4-OF5j1qryAvzrXgTE9MztOJrP88eUiZMBssLkVbM5Uknj48UPh0NrGUfYWGPo31AJNI49sRoornebS17_jD3CRvvDqUmS4tW2vZ7SC4q4MJ6N7qGkl8YGRUgAJALWZ
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

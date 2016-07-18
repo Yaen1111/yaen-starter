@@ -1,5 +1,6 @@
 package org.yaen.starter.common.integration.clients.impl;
 
+import org.springframework.stereotype.Service;
 import org.yaen.starter.common.integration.clients.RedisClient;
 import org.yaen.starter.common.util.utils.SerializeUtil;
 
@@ -15,6 +16,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  * 
  * @author Yaen 2016年5月19日下午6:42:54
  */
+@Service
 public class RedisClientImpl implements RedisClient {
 
 	/** the jedis pool for injection */

@@ -28,6 +28,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Service;
 import org.yaen.starter.common.integration.clients.HttpClient;
 import org.yaen.starter.common.util.contexts.X509AcceptAllTrustManager;
 import org.yaen.starter.common.util.utils.StringUtil;
@@ -39,6 +40,7 @@ import com.alibaba.fastjson.JSONObject;
  * 
  * @author Yaen 2016年5月11日下午1:53:39
  */
+@Service
 public class HttpClientImpl implements HttpClient {
 
 	/**

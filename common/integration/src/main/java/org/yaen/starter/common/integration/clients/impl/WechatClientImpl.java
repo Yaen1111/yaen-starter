@@ -133,20 +133,4 @@ public class WechatClientImpl implements WechatClient {
 		return this.httpClient.httpsPost(url, menuJSONString);
 	}
 
-	/**
-	 * static test
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		WechatClientImpl s = new WechatClientImpl();
-		try {
-			// System.out.println(s.getAccessToken("wx67be379381b004de", "af8e086dee051827251454a3e7dc7069"));
-			// sprPi802pRK4-OF5j1qryAvzrXgTE9MztOJrP88eUiZMBssLkVbM5Uknj48UPh0NrGUfYWGPo31AJNI49sRoornebS17_jD3CRvvDqUmS4tW2vZ7SC4q4MJ6N7qGkl8YGRUgAJALWZ
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 }
