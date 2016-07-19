@@ -45,7 +45,7 @@ public class SystemCodeEntity extends TwoEntity {
 	private String title;
 
 	/** the description for detail read */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String description;
 
 	/**

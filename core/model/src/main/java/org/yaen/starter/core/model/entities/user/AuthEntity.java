@@ -30,7 +30,7 @@ public class AuthEntity extends TwoEntity {
 	private String title;
 
 	/** description */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String description;
 
 }

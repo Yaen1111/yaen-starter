@@ -32,6 +32,6 @@ public class NamedOneEntity extends TwoEntity {
 	private String title;
 
 	/** the description */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String description;
 }

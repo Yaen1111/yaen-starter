@@ -37,11 +37,11 @@ public class ApiAccessLogEntity extends OneEntity {
 	private String requestMethod;
 
 	/** the request header info */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String requestHeader;
 
 	/** the request param info */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String requestParam;
 
 	/**

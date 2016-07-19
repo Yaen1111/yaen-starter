@@ -13,6 +13,8 @@ import lombok.Setter;
  * wechat component message entity
  * <p>
  * from wechat server to component
+ * <p>
+ * use infoType as type key
  * 
  * @author Yaen 2016年7月18日下午10:12:05
  */
@@ -35,7 +37,19 @@ public class ComponentMessageEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String infoType;
 
-	/** the component verify tichet */
+	/** the authorizer appid */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String authorizerAppid;
+
+	/** the authorization code */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String authorizationCode;
+
+	/** the authorization code expired time */
+	@OneData(DataType = DataTypes.BIGINT)
+	private Long authorizationCodeExpiredTime;
+
+	/** the component verify ticket */
 	@OneData(DataType = DataTypes.VARCHAR64)
 	private String componentVerifyTicket;
 

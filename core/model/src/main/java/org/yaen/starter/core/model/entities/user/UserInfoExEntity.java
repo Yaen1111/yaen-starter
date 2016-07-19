@@ -36,7 +36,7 @@ public class UserInfoExEntity extends TwoEntity {
 	private String fixedPhone;
 
 	/** email address, only one */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String email;
 
 	/** idcard type, usually is credential card */

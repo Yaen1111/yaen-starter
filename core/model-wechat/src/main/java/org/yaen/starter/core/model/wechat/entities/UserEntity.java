@@ -60,7 +60,7 @@ public class UserEntity extends TwoEntity {
 	private String language;
 
 	/** the headimgurl */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String headimgurl;
 
 	/** subscribe time, is the last subscribe time */
@@ -76,7 +76,7 @@ public class UserEntity extends TwoEntity {
 	private String unionId;
 
 	/** the remark, set by platform */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String remark;
 
 	/** the groupId, for old use */

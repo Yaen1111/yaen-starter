@@ -30,7 +30,7 @@ public class PartyAttributeEntity extends TwoEntity {
 	private String attributeGroup;
 
 	/** the attribute value */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String attributeValue;
 
 }

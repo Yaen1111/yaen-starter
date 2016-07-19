@@ -31,12 +31,12 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * the wechat message model, mostly for user request and server response
+ * the wechat platform message model, mostly for user request and server response
  * 
  * @author Yaen 2016年7月14日下午2:07:17
  */
 @Slf4j
-public class MessageModel extends TwoModel<PlatformMessageEntity> {
+public class PlatformMessageModel extends TwoModel<PlatformMessageEntity> {
 
 	@Getter
 	private WechatService service;
@@ -76,7 +76,7 @@ public class MessageModel extends TwoModel<PlatformMessageEntity> {
 	 * @param proxy
 	 * @param service
 	 */
-	public MessageModel(ProxyService proxy, WechatService service) {
+	public PlatformMessageModel(ProxyService proxy, WechatService service) {
 		super(proxy, new PlatformMessageEntity());
 
 		this.service = service;
@@ -242,7 +242,7 @@ public class MessageModel extends TwoModel<PlatformMessageEntity> {
 	 * @return
 	 * @throws CoreException
 	 */
-	public MessageModel makeResponse() throws CoreException {
+	public PlatformMessageModel makeResponse() throws CoreException {
 		this.check();
 
 		// call service, easy to inject different implement

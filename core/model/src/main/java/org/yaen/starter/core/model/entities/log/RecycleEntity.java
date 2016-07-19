@@ -27,7 +27,7 @@ public class RecycleEntity extends TwoEntity implements OneTableHandler {
 	private String uUser;
 
 	/** the update comment */
-	@OneData(DataType = DataTypes.VARCHAR250, FieldName = "SYS_UCOMMENT")
+	@OneData(DataType = DataTypes.VARCHAR256, FieldName = "SYS_UCOMMENT")
 	private String uComment;
 
 	/** the entity deleted */

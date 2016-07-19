@@ -59,7 +59,7 @@ public class PlatformMessageEntity extends TwoEntity {
 	private String event;
 
 	/** the event key, bind to event type, can be any type including url */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String eventKey;
 
 	/** the ticket for qrcode */
@@ -71,11 +71,11 @@ public class PlatformMessageEntity extends TwoEntity {
 	private String title;
 
 	/** for link, the description of the link */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String description;
 
 	/** for text, the message content */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String content;
 
 	/** for image/voice/video/etc, the media id, used to download media */
@@ -87,15 +87,15 @@ public class PlatformMessageEntity extends TwoEntity {
 	private String thumbMediaId;
 
 	/** for image, the picture url */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String picUrl;
 
 	/** for music, the music url */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String musicURL;
 
 	/** for music, the high-quality music url, used in wifi */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String hqMusicUrl;
 
 	/** for news, the count of article, max 10, the first is large image */
@@ -103,7 +103,7 @@ public class PlatformMessageEntity extends TwoEntity {
 	private Integer articleCount;
 
 	/** for news, the content of article, max 10, with list, here just use json */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String articles;
 
 	/** for voice, the format of voice, like amr，speex */
@@ -143,7 +143,7 @@ public class PlatformMessageEntity extends TwoEntity {
 	private BigDecimal precision;
 
 	/** for link, the url of the link */
-	@OneData(DataType = DataTypes.VARCHAR1000)
+	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String url;
 
 	/** for event-wifi connected, connect time, origin is int type */

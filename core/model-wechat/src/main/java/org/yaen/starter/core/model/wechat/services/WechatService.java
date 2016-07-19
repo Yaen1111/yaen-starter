@@ -3,7 +3,7 @@ package org.yaen.starter.core.model.wechat.services;
 import java.security.NoSuchAlgorithmException;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.core.model.wechat.models.MessageModel;
+import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
 import org.yaen.starter.core.model.wechat.objects.AccessToken;
 
 /**
@@ -48,7 +48,7 @@ public interface WechatService {
 	 * @param requestMessage
 	 * @return
 	 */
-	MessageModel makeResponse(MessageModel requestMessage);
+	PlatformMessageModel makeResponse(PlatformMessageModel requestMessage);
 
 	/**
 	 * get access token of given appid

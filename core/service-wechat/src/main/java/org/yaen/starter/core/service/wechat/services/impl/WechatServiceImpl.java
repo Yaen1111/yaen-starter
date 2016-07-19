@@ -18,7 +18,7 @@ import org.yaen.starter.core.model.services.CacheService;
 import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
-import org.yaen.starter.core.model.wechat.models.MessageModel;
+import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
 import org.yaen.starter.core.model.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
@@ -154,14 +154,14 @@ public class WechatServiceImpl implements WechatService {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.wechat.services.WechatService#makeResponse(org.yaen.starter.core.model.wechat.models.MessageModel)
+	 * @see org.yaen.starter.core.model.wechat.services.WechatService#makeResponse(org.yaen.starter.core.model.wechat.models.PlatformMessageModel)
 	 */
 	@Override
-	public MessageModel makeResponse(MessageModel requestMessage) {
+	public PlatformMessageModel makeResponse(PlatformMessageModel requestMessage) {
 		AssertUtil.notNull(requestMessage);
 
 		// create response message model
-		MessageModel responseMessage = new MessageModel(requestMessage.getProxy(), requestMessage.getService());
+		PlatformMessageModel responseMessage = new PlatformMessageModel(requestMessage.getProxy(), requestMessage.getService());
 
 		// response as text
 		PlatformMessageEntity entity = responseMessage.getEntity();

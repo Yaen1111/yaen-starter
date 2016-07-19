@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.yaen.starter.core.model.services.ProxyService;
-import org.yaen.starter.core.model.wechat.models.MessageModel;
+import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
 import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 import org.yaen.starter.web.home.utils.WebUtil;
@@ -125,7 +125,7 @@ public class StarterWechatController {
 			response.setCharacterEncoding("UTF-8");
 
 			// create model to handle
-			MessageModel requestMessage = new MessageModel(proxyService, wechatService);
+			PlatformMessageModel requestMessage = new PlatformMessageModel(proxyService, wechatService);
 
 			// get input stream
 			is = request.getInputStream();
@@ -137,7 +137,7 @@ public class StarterWechatController {
 			requestMessage.saveNew();
 
 			// make response, big routine
-			MessageModel responseMessage = requestMessage.makeResponse();
+			PlatformMessageModel responseMessage = requestMessage.makeResponse();
 
 			// get response as xml string
 			String responseString = responseMessage.toXml();

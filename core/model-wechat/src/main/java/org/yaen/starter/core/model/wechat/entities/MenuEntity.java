@@ -50,11 +50,11 @@ public class MenuEntity extends TwoEntity {
 	private String key;
 
 	/** menu url, will jump to that url */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String url;
 
 	/** description */
-	@OneData(DataType = DataTypes.VARCHAR250)
+	@OneData(DataType = DataTypes.VARCHAR256)
 	private String description;
 
 }

@@ -14,11 +14,17 @@ public final class DataTypes {
 	/** varchar 64, for title, short string, also for hash, salt */
 	public static final String VARCHAR64 = "VARCHAR(64)";
 
-	/** varchar 250, for description, long string */
-	public static final String VARCHAR250 = "VARCHAR(250)";
+	/** varchar 256, for description, long string */
+	public static final String VARCHAR256 = "VARCHAR(256)";
 
-	/** varchar 1000, for url/path, very-long string */
-	public static final String VARCHAR1000 = "VARCHAR(1000)";
+	/** varchar 512, for some code, long string */
+	public static final String VARCHAR512 = "VARCHAR(512)";
+
+	/** varchar 1024, for url/path, very-long string */
+	public static final String VARCHAR1024 = "VARCHAR(1024)";
+
+	/** varchar 4096, for log content, very-long string */
+	public static final String VARCHAR4096 = "VARCHAR(4096)";
 
 	public static final String BIGINT = "BIGINT";
 	public static final String INT = "INT";
