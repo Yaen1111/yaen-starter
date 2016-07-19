@@ -51,8 +51,6 @@ public class ComponentModel extends TwoModel<ComponentEntity> {
 	 * @throws CoreException
 	 */
 	protected JSONObject callAPI(String api, Map<String, Object> param) throws CoreException {
-		final String ERROR_CODE = "errorcode";
-
 		JSONObject json = null;
 		try {
 			json = this.proxy.getHttpClient().httpsPostAsJson(api, param);
@@ -61,8 +59,8 @@ public class ComponentModel extends TwoModel<ComponentEntity> {
 		}
 
 		// check error code
-		if (json.containsKey(ERROR_CODE)) {
-			throw new CoreException("call api return with error code " + json.getLong(ERROR_CODE));
+		if (json.containsKey("errcode")) {
+			throw new CoreException("call api return with error, result=" + json.toJSONString());
 		}
 
 		return json;
