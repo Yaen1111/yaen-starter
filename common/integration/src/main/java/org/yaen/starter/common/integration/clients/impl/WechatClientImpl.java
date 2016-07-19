@@ -44,39 +44,6 @@ public class WechatClientImpl implements WechatClient {
 	public final static String PIC_RESPONSE_API = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
 
 	/**
-	 * @see org.yaen.starter.common.integration.clients.WechatClient#checkSignature(java.lang.String, java.lang.String,
-	 *      java.lang.String, java.lang.String)
-	 */
-	@Override
-	public boolean checkSignature(String token, String signature, String timestamp, String nonce) {
-		AssertUtil.notBlank(token);
-		AssertUtil.notBlank(signature);
-		AssertUtil.notBlank(timestamp);
-		AssertUtil.notBlank(nonce);
-
-		// add token, timestamp, nonce to array, and sort
-		String[] arr = new String[] { token, timestamp, nonce };
-		Arrays.sort(arr);
-
-		// combine together
-		StringBuilder content = new StringBuilder();
-		for (int i = 0; i < arr.length; i++) {
-			content.append(arr[i]);
-		}
-
-		// // do sha-1
-		// MessageDigest md = MessageDigest.getInstance("SHA-1");
-		//
-		// byte[] digest = md.digest(content.toString().getBytes());
-		// String tmpStr = StringUtil.byteToStr(digest);
-
-		String tmpStr = DigestUtils.sha1Hex(content.toString());
-
-		// should be same
-		return StringUtil.equals(tmpStr, signature.toUpperCase());
-	}
-
-	/**
 	 * @see org.yaen.starter.common.integration.clients.WechatClient#getAccessToken(java.lang.String, java.lang.String)
 	 */
 	@Override

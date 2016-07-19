@@ -18,11 +18,11 @@ public class PlatformModel extends OneModel {
 
 	/** the current appid */
 	@Getter
-	private String appid;
+	protected String appid;
 
 	/** the current access token */
 	@Getter
-	private String accessToken;
+	protected String accessToken;
 
 	/**
 	 * empty constructor for main platform
@@ -30,17 +30,6 @@ public class PlatformModel extends OneModel {
 	public PlatformModel() {
 		this.appid = WechatPropertiesUtil.getAppid();
 		this.accessToken = null; // TODO
-	}
-
-	/**
-	 * constructor with access token, mainly used by component platform
-	 * 
-	 * @param appid
-	 * @param accessToken
-	 */
-	public PlatformModel(String appid, String accessToken) {
-		this.appid = appid;
-		this.accessToken = accessToken;
 	}
 
 	/**

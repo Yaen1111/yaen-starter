@@ -24,7 +24,7 @@ import lombok.Getter;
 /**
  * the wechat component model, for 3rd-party open platform
  * <p>
- * the most important different is the method to get access_token
+ * the most important difference is the method to get access_token
  * 
  * @author Yaen 2016年7月18日下午9:28:07
  */
@@ -70,10 +70,9 @@ public class ComponentModel extends TwoModel<ComponentEntity> {
 	 * constructor
 	 * 
 	 * @param proxy
-	 * @param sample
 	 */
-	public ComponentModel(ProxyService proxy, ComponentEntity sample) {
-		super(proxy, sample);
+	public ComponentModel(ProxyService proxy) {
+		super(proxy, new ComponentEntity());
 
 		// get appid
 		this.componentAppid = WechatPropertiesUtil.getComponentAppid();
@@ -358,7 +357,7 @@ public class ComponentModel extends TwoModel<ComponentEntity> {
 	}
 
 	/**
-	 * get platform model from current component by given appid
+	 * get platform component model from current component by given appid
 	 * 
 	 * @param appid
 	 * @return
@@ -366,7 +365,7 @@ public class ComponentModel extends TwoModel<ComponentEntity> {
 	 * @throws DuplicateDataException
 	 * @throws DataNotExistsException
 	 */
-	public PlatformModel getPlatformModel(String appid)
+	public PlatformComponentModel getPlatformModel(String appid)
 			throws CoreException, DataNotExistsException, DuplicateDataException {
 		AssertUtil.notBlank(appid);
 
@@ -460,8 +459,8 @@ public class ComponentModel extends TwoModel<ComponentEntity> {
 			}
 		}
 
-		// create model that is component platform
-		PlatformModel model = new PlatformModel(appid, platform.getAccessToken());
+		// create model that is platform component
+		PlatformComponentModel model = new PlatformComponentModel(appid, platform.getAccessToken());
 
 		return model;
 	}

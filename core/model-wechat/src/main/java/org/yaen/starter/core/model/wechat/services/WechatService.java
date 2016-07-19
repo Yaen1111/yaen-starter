@@ -1,7 +1,5 @@
 package org.yaen.starter.core.model.wechat.services;
 
-import java.security.NoSuchAlgorithmException;
-
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
 import org.yaen.starter.core.model.wechat.objects.AccessToken;
@@ -14,17 +12,16 @@ import org.yaen.starter.core.model.wechat.objects.AccessToken;
 public interface WechatService {
 
 	/**
-	 * check signature
+	 * check signature, return echostr if ok
 	 * 
 	 * @param token
 	 * @param signature
 	 * @param timestamp
 	 * @param nonce
+	 * @param echostr
 	 * @return
-	 * @throws NoSuchAlgorithmException
 	 */
-	boolean checkSignature(String token, String signature, String timestamp, String nonce)
-			throws NoSuchAlgorithmException;
+	String checkSignature(String token, String signature, String timestamp, String nonce, String echostr);
 
 	/**
 	 * check the content text is qq face

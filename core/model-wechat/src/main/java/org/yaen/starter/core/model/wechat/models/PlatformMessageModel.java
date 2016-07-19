@@ -38,6 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PlatformMessageModel extends TwoModel<PlatformMessageEntity> {
 
+	/** if has appid, this is for component-binded platform, otherwise is self */
+	@Getter
+	private String appid;
+
 	@Getter
 	private WechatService service;
 
@@ -71,7 +75,7 @@ public class PlatformMessageModel extends TwoModel<PlatformMessageEntity> {
 	});
 
 	/**
-	 * constructor
+	 * constructor for self
 	 * 
 	 * @param proxy
 	 * @param service
@@ -80,6 +84,18 @@ public class PlatformMessageModel extends TwoModel<PlatformMessageEntity> {
 		super(proxy, new PlatformMessageEntity());
 
 		this.service = service;
+	}
+
+	/**
+	 * constructor for component-binded platform
+	 * 
+	 * @param proxy
+	 * @param service
+	 */
+	public PlatformMessageModel(ProxyService proxy, WechatService service, String appid) {
+		this(proxy, service);
+
+		this.appid = appid;
 	}
 
 	/**

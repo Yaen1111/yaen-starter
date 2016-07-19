@@ -17,6 +17,10 @@ public class WechatPropertiesUtil {
 		return PropertiesUtil.getProperty("component.secret");
 	}
 
+	public static String getComponentToken() {
+		return PropertiesUtil.getProperty("component.token");
+	}
+
 	public static String getAppid() {
 		return PropertiesUtil.getProperty("platform.appid");
 	}

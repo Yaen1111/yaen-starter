@@ -12,17 +12,6 @@ import com.alibaba.fastjson.JSONObject;
 public interface WechatClient {
 
 	/**
-	 * check signature
-	 * 
-	 * @param token
-	 * @param signature
-	 * @param timestamp
-	 * @param nonce
-	 * @return
-	 */
-	boolean checkSignature(String token, String signature, String timestamp, String nonce);
-
-	/**
 	 * get access token from wechat server, return json object
 	 * 
 	 * @param appid

@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.models.ComponentMessageModel;
 import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
 import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
@@ -20,7 +22,13 @@ import org.yaen.starter.web.home.utils.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * base wechat callback controller, deals wechat auth/callback
+ * base wechat callback controller, deals wechat auth/callback, each url need echo check
+ * <p>
+ * platform message: used for normal platform receiving user message
+ * <p>
+ * component message: used for component receiving system message
+ * <p>
+ * component-platform message: used for component receiving binded-platform user message
  * 
  * @author Yaen 2016年5月19日下午2:28:18
  */
@@ -36,16 +44,13 @@ public class StarterWechatController {
 	private WechatService wechatService;
 
 	/**
-	 * platform sign, get, for token check, return echostr for ok, any other for error, no exception
+	 * do check signature, the token maybe changed for platform and component
 	 * 
-	 * @param model
-	 * @return
+	 * @param request
+	 * @param response
+	 * @param token
 	 */
-	@RequestMapping(value = "message", method = RequestMethod.GET)
-	public void getPlatformMessage(HttpServletRequest request, HttpServletResponse response) {
-
-		// get ip
-		String ip = WebUtil.getClientIp(request);
+	protected void doCheckSignature(HttpServletRequest request, HttpServletResponse response, String token) {
 
 		// the follow is from wechat server
 		String signature = request.getParameter("signature");
@@ -53,40 +58,33 @@ public class StarterWechatController {
 		String nonce = request.getParameter("nonce");
 		String echostr = request.getParameter("echostr");
 
-		// get token
-		String token = WechatPropertiesUtil.getToken();
-
 		// source check from wechat server, return echostr for ok
-		log.debug(
-				"wechat:getPlatformMessage:called, uri={}, ip={}, signature={}, timestamp={}, nonce={}, echostr={}, token={}",
-				request.getRequestURI(), ip, signature, timestamp, nonce, echostr, token);
+		log.debug("doCheckSignature, signature={}, timestamp={}, nonce={}, echostr={}", signature, timestamp, nonce,
+				echostr);
 
 		// the writer
 		PrintWriter writer = null;
 
 		try {
-
 			// direct output
 			writer = response.getWriter();
 
-			// check signature, return echostr if pass
-			if (wechatService.checkSignature(token, signature, timestamp, nonce)) {
-				log.debug("wechat:getPlatformMessage:ok, echostr={}", echostr);
-				writer.write(echostr);
-			} else {
-				log.debug("wechat:getPlatformMessage:failed:signature check fail");
-				writer.write("fail");
+			try {
+				// get result
+				String result = wechatService.checkSignature(token, signature, timestamp, nonce, echostr);
+
+				log.debug("doCheckSignature, result={}", result);
+
+				// write result
+				writer.write(result);
+
+			} catch (Exception ex) {
+				log.error("doCheckSignature error", ex);
+				writer.write("system error");
 			}
 
-		} catch (IllegalArgumentException ex) {
-			log.error("wechat:getPlatformMessage:failed:bad parameter");
-			writer.write("bad parameter");
 		} catch (Exception ex) {
-			log.error("wechat:getPlatformMessage:error", ex);
-			writer.write("system error");
-			if (log.isDebugEnabled()) {
-				ex.printStackTrace(writer);
-			}
+			log.error("doCheckSignature writer error", ex);
 		} finally {
 			// close
 			if (writer != null) {
@@ -97,155 +95,226 @@ public class StarterWechatController {
 	}
 
 	/**
-	 * wechat message post, for messages
+	 * platform message, get for token check, post for message data
 	 * 
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "message", method = RequestMethod.POST)
-	public void postPlatformMessage(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping("platform/message")
+	public void platformMessage(HttpServletRequest request, HttpServletResponse response) {
+		// log api
+		log.info("api:wechat:platform:message:called, uri={}, ip={}, method={}", request.getRequestURI(),
+				WebUtil.getClientIp(request), request.getMethod());
 
-		// get ip
-		String ip = WebUtil.getClientIp(request);
+		// check method
+		if (StringUtil.equalsIgnoreCase(request.getMethod(), "GET")) {
+			// do check signature for platform
+			this.doCheckSignature(request, response, WechatPropertiesUtil.getToken());
 
-		// post message call
-		log.debug("wechat:postPlatformMessage:called, uri={}, ip={}", request.getRequestURI(), ip);
+		} else if (StringUtil.equalsIgnoreCase(request.getMethod(), "POST")) {
+			// is message
 
-		// the writer
-		PrintWriter writer = null;
+			// the writer
+			PrintWriter writer = null;
 
-		// parse input stream as xml
-		InputStream is = null;
+			// parse input stream as xml
+			InputStream is = null;
 
-		// parse input
-		try {
-
-			// set encoding to utf-8
-			request.setCharacterEncoding("UTF-8");
-			response.setCharacterEncoding("UTF-8");
-
-			// create model to handle
-			PlatformMessageModel requestMessage = new PlatformMessageModel(proxyService, wechatService);
-
-			// get input stream
-			is = request.getInputStream();
-
-			// load xml from input stream
-			requestMessage.loadFromXml(is);
-
-			// save message anyway
-			requestMessage.saveNew();
-
-			// make response, big routine
-			PlatformMessageModel responseMessage = requestMessage.makeResponse();
-
-			// get response as xml string
-			String responseString = responseMessage.toXml();
-
-			log.debug("wechat:message:ok, responseMessage={}", responseString);
-
-			// write response
-			writer = response.getWriter();
-			writer.write(responseString);
-			writer.close();
-			writer = null;
-		} catch (Exception ex) {
-			log.error("wechat:message:error:", ex);
 			try {
-				writer = response.getWriter();
-				writer.write("error");
-				if (log.isDebugEnabled()) {
-					ex.printStackTrace(writer);
-				}
-				writer.close();
-				writer = null;
-			} catch (IOException ex2) {
-				log.error("close writer error:", ex2);
-			}
-		} finally {
-			// close
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-				}
-				is = null;
-			}
+				// set encoding to utf-8
+				request.setCharacterEncoding("UTF-8");
+				response.setCharacterEncoding("UTF-8");
 
-			if (writer != null) {
-				writer.close();
-				writer = null;
+				// create model to handle
+				PlatformMessageModel requestMessage = new PlatformMessageModel(proxyService, wechatService);
+
+				// get input stream
+				is = request.getInputStream();
+
+				// load xml from input stream
+				requestMessage.loadFromXml(is);
+
+				// save message anyway
+				requestMessage.saveNew();
+
+				// make response, big routine
+				PlatformMessageModel responseMessage = requestMessage.makeResponse();
+
+				// get response as xml string
+				String responseString = responseMessage.toXml();
+
+				// write response
+				writer = response.getWriter();
+				writer.write(responseString);
+
+			} catch (Exception ex) {
+				log.error("api:wechat:platform:message:error", ex);
+			} finally {
+				// close
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException e) {
+					}
+					is = null;
+				}
+
+				if (writer != null) {
+					writer.close();
+					writer = null;
+				}
 			}
-		}
+		} // method == post
+
+		// done, other method is ignored
 	}
 
 	/**
-	 * wechat component message post, mostly for verify tickets
+	 * component message, get for token check, post for verify info
 	 * 
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "cmessage", method = RequestMethod.POST)
-	public void postComponentMessage(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping("component/message")
+	public void componentMessage(HttpServletRequest request, HttpServletResponse response) {
+		// log api
+		log.info("api:wechat:component:message:called, uri={}, ip={}, method={}", request.getRequestURI(),
+				WebUtil.getClientIp(request), request.getMethod());
 
-		// get ip
-		String ip = WebUtil.getClientIp(request);
+		// check method
+		if (StringUtil.equalsIgnoreCase(request.getMethod(), "GET")) {
+			// do check signature for component
+			this.doCheckSignature(request, response, WechatPropertiesUtil.getComponentToken());
 
-		// post message call
-		log.debug("wechat:postComponentMessage:called, uri={}, ip={}", request.getRequestURI(), ip);
+		} else if (StringUtil.equalsIgnoreCase(request.getMethod(), "POST")) {
+			// is message
 
-		// the writer
-		PrintWriter writer = null;
+			// the writer
+			PrintWriter writer = null;
 
-		// parse input stream as xml
-		InputStream is = null;
+			// parse input stream as xml
+			InputStream is = null;
 
-		// parse input
-		try {
-
-			// set encoding to utf-8
-			request.setCharacterEncoding("UTF-8");
-			response.setCharacterEncoding("UTF-8");
-
-			// need decrypt TODO
-
-			// save to message, update component info
-
-			log.debug("wechat:postComponentMessage:ok, responseMessage={}", "");
-
-			// write response
-			writer = response.getWriter();
-			writer.write("success");
-			writer.close();
-			writer = null;
-		} catch (Exception ex) {
-			log.error("wechat:message:error:", ex);
 			try {
-				writer = response.getWriter();
-				writer.write("error");
-				if (log.isDebugEnabled()) {
-					ex.printStackTrace(writer);
-				}
-				writer.close();
-				writer = null;
-			} catch (IOException ex2) {
-				log.error("close writer error:", ex2);
-			}
-		} finally {
-			// close
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-				}
-				is = null;
-			}
+				// set encoding to utf-8
+				request.setCharacterEncoding("UTF-8");
+				response.setCharacterEncoding("UTF-8");
 
-			if (writer != null) {
-				writer.close();
-				writer = null;
+				// create model to handle
+				ComponentMessageModel requestMessage = new ComponentMessageModel(proxyService);
+
+				// get input stream
+				is = request.getInputStream();
+
+				// load xml from input stream
+				requestMessage.loadFromXml(is);
+
+				// save message anyway
+				requestMessage.saveNew();
+
+				// response always is success
+				String responseString = "success";
+
+				// write response
+				writer = response.getWriter();
+				writer.write(responseString);
+
+			} catch (Exception ex) {
+				log.error("api:wechat:component:message:error:", ex);
+			} finally {
+				// close
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException e) {
+					}
+					is = null;
+				}
+
+				if (writer != null) {
+					writer.close();
+					writer = null;
+				}
 			}
-		}
+		} // method == post
+
+		// done, other method is ignored
+	}
+
+	/**
+	 * component-binded platform message, get for token check, post for message data
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("platformcom/{appid}/message")
+	public void platformComponentMessage(@PathVariable("appid") String appid, HttpServletRequest request,
+			HttpServletResponse response) {
+		// log api
+		log.info("api:wechat:complatform:message:called, uri={}, ip={}, method={}", request.getRequestURI(),
+				WebUtil.getClientIp(request), request.getMethod());
+
+		// check method
+		if (StringUtil.equalsIgnoreCase(request.getMethod(), "GET")) {
+			// do check signature for platform
+			this.doCheckSignature(request, response, WechatPropertiesUtil.getComponentToken());
+
+		} else if (StringUtil.equalsIgnoreCase(request.getMethod(), "POST")) {
+			// is message
+
+			// the writer
+			PrintWriter writer = null;
+
+			// parse input stream as xml
+			InputStream is = null;
+
+			try {
+				// set encoding to utf-8
+				request.setCharacterEncoding("UTF-8");
+				response.setCharacterEncoding("UTF-8");
+
+				// create model to handle
+				PlatformMessageModel requestMessage = new PlatformMessageModel(proxyService, wechatService, appid);
+
+				// get input stream
+				is = request.getInputStream();
+
+				// load xml from input stream, need decrypt
+				requestMessage.loadFromXml(is);
+
+				// save message anyway
+				requestMessage.saveNew();
+
+				// make response, big routine
+				PlatformMessageModel responseMessage = requestMessage.makeResponse();
+
+				// get response as xml string
+				String responseString = responseMessage.toXml();
+
+				// write response
+				writer = response.getWriter();
+				writer.write(responseString);
+
+			} catch (Exception ex) {
+				log.error("api:wechat:complatform:message:error", ex);
+			} finally {
+				// close
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException e) {
+					}
+					is = null;
+				}
+
+				if (writer != null) {
+					writer.close();
+					writer = null;
+				}
+			}
+		} // method == post
+
+		// done, other method is ignored
 	}
 
 }

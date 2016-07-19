@@ -1,12 +1,13 @@
 package org.yaen.starter.core.service.wechat.services.impl;
 
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.data.exceptions.CoreException;
@@ -43,12 +44,35 @@ public class WechatServiceImpl implements WechatService {
 
 	/**
 	 * @see org.yaen.starter.core.model.wechat.services.WechatService#checkSignature(java.lang.String, java.lang.String,
-	 *      java.lang.String, java.lang.String)
+	 *      java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public boolean checkSignature(String token, String signature, String timestamp, String nonce)
-			throws NoSuchAlgorithmException {
-		return wechatClient.checkSignature(token, signature, timestamp, nonce);
+	public String checkSignature(String token, String signature, String timestamp, String nonce, String echostr) {
+		AssertUtil.notBlank(token);
+		AssertUtil.notBlank(signature);
+		AssertUtil.notBlank(timestamp);
+		AssertUtil.notBlank(nonce);
+		AssertUtil.notBlank(echostr);
+
+		// add token, timestamp, nonce to array, and sort
+		String[] arr = new String[] { token, timestamp, nonce };
+		Arrays.sort(arr);
+
+		// combine together
+		StringBuilder content = new StringBuilder();
+		for (int i = 0; i < arr.length; i++) {
+			content.append(arr[i]);
+		}
+
+		// do sha-1
+		String tmpStr = DigestUtils.sha1Hex(content.toString());
+
+		// should be same
+		if (StringUtil.equals(tmpStr, signature.toUpperCase())) {
+			return echostr;
+		} else {
+			return "bad parameter";
+		}
 	}
 
 	/**
@@ -161,7 +185,8 @@ public class WechatServiceImpl implements WechatService {
 		AssertUtil.notNull(requestMessage);
 
 		// create response message model
-		PlatformMessageModel responseMessage = new PlatformMessageModel(requestMessage.getProxy(), requestMessage.getService());
+		PlatformMessageModel responseMessage = new PlatformMessageModel(requestMessage.getProxy(),
+				requestMessage.getService());
 
 		// response as text
 		PlatformMessageEntity entity = responseMessage.getEntity();
