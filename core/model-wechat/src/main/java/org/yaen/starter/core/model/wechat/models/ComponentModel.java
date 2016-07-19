@@ -3,6 +3,7 @@ package org.yaen.starter.core.model.wechat.models;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
@@ -28,7 +29,22 @@ import lombok.Getter;
  * 
  * @author Yaen 2016年7月18日下午9:28:07
  */
-public class ComponentModel extends TwoModel<ComponentEntity> {
+public class ComponentModel extends TwoModel {
+
+	/** the typed entity, overrides default entity */
+	@Getter
+	private ComponentEntity entity;
+
+	@Override
+	public OneEntity getDefaultEntity() {
+		return this.entity;
+	}
+
+	@Override
+	public void setDefaultEntity(OneEntity defaultEntity) {
+		this.entity = (ComponentEntity) defaultEntity;
+		super.setDefaultEntity(defaultEntity);
+	}
 
 	/** the appid from config */
 	@Getter

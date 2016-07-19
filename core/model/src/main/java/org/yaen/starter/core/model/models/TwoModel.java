@@ -10,38 +10,38 @@ import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
- * default model implement with proxy service
+ * default model implement with proxy service and default entity
  * 
  * @author Yaen 2016年1月4日下午8:35:55
  */
-public class TwoModel<T extends OneEntity> extends OneModel {
+public class TwoModel extends OneModel {
+
+	/** the default none-typed entity */
+	@Getter
+	@Setter(value = AccessLevel.PROTECTED)
+	private OneEntity defaultEntity;
 
 	/** the proxy */
 	@Getter
 	protected ProxyService proxy;
 
-	/** the sample entity, never changed, just for class object */
-	protected T sample;
-
-	/** the main entity */
-	@Getter
-	protected T entity;
-
 	/**
-	 * constructor with proxy service, with proxy and sample entity
+	 * constructor with proxy service, with proxy
 	 * 
 	 * @param proxy
-	 * @param sample
 	 */
-	public TwoModel(ProxyService proxy, T sample) {
+	public TwoModel(ProxyService proxy, OneEntity defaultEntity) {
 		super();
 
 		this.proxy = proxy;
-		this.sample = sample;
-		this.entity = sample;
+
+		// use overided setter
+		this.setDefaultEntity(defaultEntity);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 	 */
 	@Override
 	public void check() throws CoreException {
-		if (this.entity == null)
+		if (this.defaultEntity == null)
 			throw new CoreException("main entity not loaded");
 	}
 
@@ -58,7 +58,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 	 */
 	@Override
 	public void clear() {
-		this.entity = null;
+		this.defaultEntity = null;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 
 		// get entity
 		try {
-			this.entity = this.proxy.getQueryService().selectOneById(this.sample, id);
+			this.defaultEntity = this.proxy.getQueryService().selectOneById(this.defaultEntity, id);
 		} catch (CommonException ex) {
 			throw new CoreException("load user failed", ex);
 		} catch (DuplicateDataException ex) {
@@ -97,7 +97,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 
 		try {
 			// create new entity
-			OneEntity newentity = this.sample.getClass().newInstance();
+			OneEntity newentity = this.defaultEntity.getClass().newInstance();
 
 			newentity.setId(id);
 
@@ -124,7 +124,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 		this.check();
 
 		try {
-			this.proxy.getEntityService().updateEntityByRowid(this.entity);
+			this.proxy.getEntityService().updateEntityByRowid(this.defaultEntity);
 		} catch (NoDataAffectedException ex) {
 			// no data, means data not exists
 			throw new DataNotExistsException("save model failed", ex);
@@ -144,7 +144,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 		this.check();
 
 		try {
-			this.proxy.getEntityService().deleteEntityByRowid(this.entity);
+			this.proxy.getEntityService().deleteEntityByRowid(this.defaultEntity);
 		} catch (NoDataAffectedException ex) {
 			// no data, means data not exists
 			throw new DataNotExistsException("delete model failed", ex);
@@ -164,7 +164,7 @@ public class TwoModel<T extends OneEntity> extends OneModel {
 	public void saveNew() throws CoreException, DuplicateDataException {
 		try {
 			// do insert
-			this.proxy.getEntityService().insertEntityByRowid(this.entity);
+			this.proxy.getEntityService().insertEntityByRowid(this.defaultEntity);
 
 		} catch (NoDataAffectedException ex) {
 			throw new CoreException("create model failed", ex);

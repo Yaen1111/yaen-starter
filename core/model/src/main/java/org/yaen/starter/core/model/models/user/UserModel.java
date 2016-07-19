@@ -2,6 +2,7 @@ package org.yaen.starter.core.model.models.user;
 
 import java.util.Set;
 
+import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.core.model.entities.user.UserEntity;
 import org.yaen.starter.core.model.models.TwoModel;
@@ -21,7 +22,22 @@ import lombok.Getter;
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
-public class UserModel extends TwoModel<UserEntity> {
+public class UserModel extends TwoModel {
+
+	/** the typed entity, overrides default entity */
+	@Getter
+	private UserEntity entity;
+
+	@Override
+	public OneEntity getDefaultEntity() {
+		return this.entity;
+	}
+
+	@Override
+	public void setDefaultEntity(OneEntity defaultEntity) {
+		this.entity = (UserEntity) defaultEntity;
+		super.setDefaultEntity(defaultEntity);
+	}
 
 	/** the service */
 	@Getter
@@ -35,10 +51,10 @@ public class UserModel extends TwoModel<UserEntity> {
 
 	/**
 	 * @param proxy
-	 * @param sample
+	 * @param service
 	 */
-	public UserModel(ProxyService proxy, UserEntity sample, UserService service) {
-		super(proxy, sample);
+	public UserModel(ProxyService proxy, UserService service) {
+		super(proxy, new UserEntity());
 
 		this.service = service;
 	}

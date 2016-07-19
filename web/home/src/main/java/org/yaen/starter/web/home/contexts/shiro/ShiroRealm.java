@@ -57,7 +57,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			throw new UnknownAccountException("username is empty");
 		}
 
-		UserModel user = new UserModel(this.proxyService, new UserEntity(), this.userService);
+		UserModel user = new UserModel(this.proxyService, this.userService);
 
 		// find user
 		try {

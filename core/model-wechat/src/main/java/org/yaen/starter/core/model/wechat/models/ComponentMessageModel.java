@@ -9,6 +9,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.core.model.models.TwoModel;
@@ -16,6 +17,7 @@ import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.ComponentMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.InfoTypes;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,7 +26,22 @@ import lombok.extern.slf4j.Slf4j;
  * @author Yaen 2016年7月14日下午2:07:17
  */
 @Slf4j
-public class ComponentMessageModel extends TwoModel<ComponentMessageEntity> {
+public class ComponentMessageModel extends TwoModel {
+
+	/** the typed entity, overrides default entity */
+	@Getter
+	private ComponentMessageEntity entity;
+
+	@Override
+	public OneEntity getDefaultEntity() {
+		return this.entity;
+	}
+
+	@Override
+	public void setDefaultEntity(OneEntity defaultEntity) {
+		this.entity = (ComponentMessageEntity) defaultEntity;
+		super.setDefaultEntity(defaultEntity);
+	}
 
 	/**
 	 * constructor

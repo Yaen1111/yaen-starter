@@ -13,14 +13,13 @@ import org.yaen.starter.core.model.services.ProxyService;
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
-public class PartyModel extends TwoModel<PartyEntity> {
+public class PartyModel extends TwoModel {
 
 	/**
 	 * @param proxy
-	 * @param sample
 	 */
-	public PartyModel(ProxyService proxy, PartyEntity sample) {
-		super(proxy, sample);
+	public PartyModel(ProxyService proxy) {
+		super(proxy, new PartyEntity());
 	}
 
 }

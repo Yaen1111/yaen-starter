@@ -11,6 +11,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
@@ -36,7 +37,22 @@ import lombok.extern.slf4j.Slf4j;
  * @author Yaen 2016年7月14日下午2:07:17
  */
 @Slf4j
-public class PlatformMessageModel extends TwoModel<PlatformMessageEntity> {
+public class PlatformMessageModel extends TwoModel {
+
+	/** the typed entity, overrides default entity */
+	@Getter
+	private PlatformMessageEntity entity;
+
+	@Override
+	public OneEntity getDefaultEntity() {
+		return this.entity;
+	}
+
+	@Override
+	public void setDefaultEntity(OneEntity defaultEntity) {
+		this.entity = (PlatformMessageEntity) defaultEntity;
+		super.setDefaultEntity(defaultEntity);
+	}
 
 	/** if has appid, this is for component-binded platform, otherwise is self */
 	@Getter
