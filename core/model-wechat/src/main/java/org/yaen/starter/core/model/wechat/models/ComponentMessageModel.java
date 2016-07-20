@@ -1,6 +1,7 @@
 package org.yaen.starter.core.model.wechat.models;
 
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,14 +48,14 @@ public class ComponentMessageModel extends TwoModel {
 	 * @throws CoreException
 	 */
 	@SuppressWarnings("unchecked")
-	public void loadFromXml(InputStream is) throws CoreException {
-		AssertUtil.notNull(is);
+	public void loadFromXml(Reader reader) throws CoreException {
+		AssertUtil.notNull(reader);
 
 		// make xml reader
-		SAXReader reader = new SAXReader();
+		SAXReader sax_reader = new SAXReader();
 		Document document;
 		try {
-			document = reader.read(is);
+			document = sax_reader.read(reader);
 		} catch (DocumentException ex) {
 			throw new CoreException("read xml from inputstream error", ex);
 		}

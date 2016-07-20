@@ -1,7 +1,9 @@
 package org.yaen.starter.common.util.utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -169,6 +171,24 @@ public class StringUtil extends StringUtils {
 					sb.append(Character.toLowerCase(c));
 				}
 			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * read string
+	 * 
+	 * @param reader
+	 * @return
+	 * @throws IOException
+	 */
+	public static String readString(Reader reader) throws IOException {
+		// reader to string
+		BufferedReader br = new BufferedReader(reader);
+		StringBuilder sb = new StringBuilder();
+		String line = "";
+		while ((line = br.readLine()) != null) {
+			sb.append(line);
 		}
 		return sb.toString();
 	}

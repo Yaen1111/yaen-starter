@@ -105,17 +105,18 @@ public class TwoModel extends OneModel {
 	}
 
 	/**
-	 * constructor with proxy service, with proxy
+	 * constructor with proxy service and entity
 	 * 
 	 * @param proxy
+	 * @param entity
 	 */
-	public TwoModel(ProxyService proxy, OneEntity defaultEntity) {
+	public TwoModel(ProxyService proxy, OneEntity entity) {
 		super();
 
 		this.proxy = proxy;
 
 		// use override setter
-		this.entity = defaultEntity;
+		this.entity = entity;
 	}
 
 	/**

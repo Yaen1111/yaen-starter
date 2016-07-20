@@ -2,10 +2,13 @@ package org.yaen.starter.web.wechat.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringReader;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.stream.util.StreamReaderDelegate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -133,7 +136,7 @@ public class StarterWechatController {
 				is = request.getInputStream();
 
 				// load xml from input stream
-				requestMessage.loadFromXml(is);
+				requestMessage.loadFromXml(new InputStreamReader(is, "UTF-8"));
 
 				// save message anyway
 				requestMessage.saveNew();
@@ -208,7 +211,7 @@ public class StarterWechatController {
 				is = request.getInputStream();
 
 				// load xml from input stream
-				requestMessage.loadFromXml(is);
+				requestMessage.loadFromXml(new InputStreamReader(is, "UTF-8"));
 
 				// save message anyway
 				requestMessage.saveNew();
@@ -252,7 +255,7 @@ public class StarterWechatController {
 	public void platformComponentMessage(@PathVariable("appid") String appid, HttpServletRequest request,
 			HttpServletResponse response) {
 		// log api
-		log.info("api:wechat:complatform:message:called, uri={}, ip={}, method={}", request.getRequestURI(),
+		log.info("api:wechat:platformcom:message:called, uri={}, ip={}, method={}", request.getRequestURI(),
 				WebUtil.getClientIp(request), request.getMethod());
 
 		// check method
@@ -282,23 +285,20 @@ public class StarterWechatController {
 				is = request.getInputStream();
 
 				// load xml from input stream, need decrypt
-				requestMessage.loadFromXml(is);
+				requestMessage.loadFromXml(new InputStreamReader(is, "UTF-8"));
 
 				// save message anyway
 				requestMessage.saveNew();
 
-				// make response, big routine
-				PlatformMessageModel responseMessage = requestMessage.makeResponse();
-
-				// get response as xml string
-				String responseString = responseMessage.toXml();
+				// response set to success?
+				String responseString = "success";
 
 				// write response
 				writer = response.getWriter();
 				writer.write(responseString);
 
 			} catch (Exception ex) {
-				log.error("api:wechat:complatform:message:error", ex);
+				log.error("api:wechat:platformcom:message:error", ex);
 			} finally {
 				// close
 				if (is != null) {
