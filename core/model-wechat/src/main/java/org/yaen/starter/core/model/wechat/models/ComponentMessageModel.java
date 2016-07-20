@@ -26,8 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ComponentMessageModel extends TwoModel {
 
+	@Override
 	public ComponentMessageEntity getEntity() {
-		return (ComponentMessageEntity) this.getDefaultEntity();
+		return (ComponentMessageEntity) super.getEntity();
 	}
 
 	/**

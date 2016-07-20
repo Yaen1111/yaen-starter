@@ -21,9 +21,9 @@ import lombok.Getter;
  */
 public class TwoModel extends OneModel {
 
-	/** the default none-typed entity, child can write new getter to get typed entity */
+	/** the none-typed entity, child can override with sub-typed entity */
 	@Getter
-	private OneEntity defaultEntity;
+	private OneEntity entity;
 
 	/** the proxy */
 	@Getter
@@ -115,7 +115,7 @@ public class TwoModel extends OneModel {
 		this.proxy = proxy;
 
 		// use override setter
-		this.defaultEntity = defaultEntity;
+		this.entity = defaultEntity;
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class TwoModel extends OneModel {
 	public void loadById(String id) throws DataException, CommonException {
 		AssertUtil.notBlank(id);
 
-		this.fillEntityById(this.defaultEntity, id);
+		this.fillEntityById(this.entity, id);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class TwoModel extends OneModel {
 	public void saveNew() throws CoreException, DataException, CommonException {
 		this.check();
 
-		this.insertEntity(this.defaultEntity);
+		this.insertEntity(this.entity);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class TwoModel extends OneModel {
 	public void saveById() throws DataException, CommonException, CoreException {
 		this.check();
 
-		this.updateEntity(this.defaultEntity);
+		this.updateEntity(this.entity);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class TwoModel extends OneModel {
 	public void deleteById() throws CoreException, DataException, CommonException {
 		this.check();
 
-		this.deleteEntity(this.defaultEntity);
+		this.deleteEntity(this.entity);
 	}
 
 }

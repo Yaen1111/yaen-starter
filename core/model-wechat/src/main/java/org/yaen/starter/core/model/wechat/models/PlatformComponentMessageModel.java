@@ -16,6 +16,7 @@ import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.entities.PlatformComponentMessageEntity;
 import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
@@ -37,14 +38,25 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class PlatformComponentMessageModel extends PlatformMessageModel {
+
+	@Override
+	public PlatformComponentMessageEntity getEntity() {
+		return (PlatformComponentMessageEntity) super.getEntity();
+	}
+
+	/** if has appid, this is for component-binded platform, otherwise is self */
+	@Getter
+	private String appid;
+
 	/**
 	 * @param proxy
 	 * @param service
 	 * @param appid
 	 */
 	public PlatformComponentMessageModel(ProxyService proxy, WechatService service, String appid) {
-		super(proxy, service, appid);
-		// TODO Auto-generated constructor stub
+		super(proxy, service);
+
+		this.appid = appid;
 	}
 
 }

@@ -29,8 +29,9 @@ import lombok.Getter;
  */
 public class ComponentModel extends TwoModel {
 
+	@Override
 	public ComponentEntity getEntity() {
-		return (ComponentEntity) this.getDefaultEntity();
+		return (ComponentEntity) super.getEntity();
 	}
 
 	/** the appid from config */

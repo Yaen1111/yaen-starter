@@ -24,8 +24,9 @@ import lombok.Getter;
  */
 public class UserModel extends TwoModel {
 
+	@Override
 	public UserEntity getEntity() {
-		return (UserEntity) this.getDefaultEntity();
+		return (UserEntity) super.getEntity();
 	}
 
 	/** the service */

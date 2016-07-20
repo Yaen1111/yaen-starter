@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.models.ComponentMessageModel;
+import org.yaen.starter.core.model.wechat.models.PlatformComponentMessageModel;
 import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
 import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
@@ -274,7 +275,8 @@ public class StarterWechatController {
 				response.setCharacterEncoding("UTF-8");
 
 				// create model to handle
-				PlatformMessageModel requestMessage = new PlatformMessageModel(proxyService, wechatService, appid);
+				PlatformComponentMessageModel requestMessage = new PlatformComponentMessageModel(proxyService,
+						wechatService, appid);
 
 				// get input stream
 				is = request.getInputStream();

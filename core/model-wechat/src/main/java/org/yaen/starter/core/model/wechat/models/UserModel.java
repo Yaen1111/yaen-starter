@@ -1,19 +1,14 @@
 package org.yaen.starter.core.model.wechat.models;
 
-import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
-import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
-import org.yaen.starter.core.model.wechat.entities.ComponentEntity;
 import org.yaen.starter.core.model.wechat.entities.UserEntity;
-
-import lombok.Getter;
 
 /**
  * the wechat user model, mostly for openid + appid
@@ -22,8 +17,9 @@ import lombok.Getter;
  */
 public class UserModel extends TwoModel {
 
+	@Override
 	public UserEntity getEntity() {
-		return (UserEntity) this.getDefaultEntity();
+		return (UserEntity) super.getEntity();
 	}
 
 	/**
