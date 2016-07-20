@@ -44,12 +44,27 @@ public abstract class BaseMessageModel extends TwoModel {
 		@Override
 		public HierarchicalStreamWriter createWriter(Writer out) {
 			return new PrettyPrintWriter(out) {
-				// 对所有xml节点的转换都增加CDATA标记
-				boolean cdata = true;
+
+				// the cdata flag
+				boolean cdata = false;
 
 				@Override
 				public void startNode(String name, @SuppressWarnings("rawtypes") Class clazz) {
-					super.startNode(name, clazz);
+					// set cdata flag only for string type
+					if (clazz.getName().equals(String.class.getName())) {
+						this.cdata = true;
+					} else {
+						this.cdata = false;
+					}
+
+					// the name should be capital
+					String name2 = name;
+
+					if (name != null && name.length() >= 1) {
+						name2 = name.substring(0, 1).toUpperCase() + name.substring(1);
+					}
+
+					super.startNode(name2, clazz);
 				}
 
 				@Override
