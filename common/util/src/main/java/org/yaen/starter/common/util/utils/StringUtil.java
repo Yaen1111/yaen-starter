@@ -184,7 +184,13 @@ public class StringUtil extends StringUtils {
 	 */
 	public static String readString(Reader reader) throws IOException {
 		// reader to string
-		BufferedReader br = new BufferedReader(reader);
+		BufferedReader br = null;
+		if (reader instanceof BufferedReader) {
+			br = (BufferedReader) reader;
+		} else {
+			br = new BufferedReader(reader);
+		}
+
 		StringBuilder sb = new StringBuilder();
 		String line = "";
 		while ((line = br.readLine()) != null) {

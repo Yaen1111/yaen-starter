@@ -1,14 +1,11 @@
 package org.yaen.starter.web.wechat.controllers;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.StringReader;
+import java.io.Reader;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.stream.util.StreamReaderDelegate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -107,8 +104,8 @@ public class StarterWechatController {
 	@RequestMapping("platform/message")
 	public void platformMessage(HttpServletRequest request, HttpServletResponse response) {
 		// log api
-		log.info("api:wechat:platform:message:called, uri={}, ip={}, method={}", request.getRequestURI(),
-				WebUtil.getClientIp(request), request.getMethod());
+		log.info("api:wechat:platform:message:called, uri={}, ip={}, method={}, querystring={}",
+				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
 
 		// check method
 		if (StringUtil.equalsIgnoreCase(request.getMethod(), "GET")) {
@@ -121,8 +118,8 @@ public class StarterWechatController {
 			// the writer
 			PrintWriter writer = null;
 
-			// parse input stream as xml
-			InputStream is = null;
+			// the body reader
+			Reader reader = null;
 
 			try {
 				// set encoding to utf-8
@@ -133,10 +130,10 @@ public class StarterWechatController {
 				PlatformMessageModel requestMessage = new PlatformMessageModel(proxyService, wechatService);
 
 				// get input stream
-				is = request.getInputStream();
+				reader = request.getReader();
 
 				// load xml from input stream
-				requestMessage.loadFromXml(new InputStreamReader(is, "UTF-8"));
+				requestMessage.loadFromXml(reader);
 
 				// save message anyway
 				requestMessage.saveNew();
@@ -155,12 +152,12 @@ public class StarterWechatController {
 				log.error("api:wechat:platform:message:error", ex);
 			} finally {
 				// close
-				if (is != null) {
+				if (reader != null) {
 					try {
-						is.close();
+						reader.close();
 					} catch (IOException e) {
 					}
-					is = null;
+					reader = null;
 				}
 
 				if (writer != null) {
@@ -182,8 +179,13 @@ public class StarterWechatController {
 	@RequestMapping("component/message")
 	public void componentMessage(HttpServletRequest request, HttpServletResponse response) {
 		// log api
-		log.info("api:wechat:component:message:called, uri={}, ip={}, method={}", request.getRequestURI(),
-				WebUtil.getClientIp(request), request.getMethod());
+		log.info("api:wechat:platform:message:called, uri={}, ip={}, method={}, querystring={}",
+				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
+
+		// log param
+		if (log.isDebugEnabled()) {
+			log.debug("querystring={}", request.getQueryString());
+		}
 
 		// check method
 		if (StringUtil.equalsIgnoreCase(request.getMethod(), "GET")) {
@@ -196,8 +198,8 @@ public class StarterWechatController {
 			// the writer
 			PrintWriter writer = null;
 
-			// parse input stream as xml
-			InputStream is = null;
+			// the body reader
+			Reader reader = null;
 
 			try {
 				// set encoding to utf-8
@@ -207,11 +209,11 @@ public class StarterWechatController {
 				// create model to handle
 				ComponentMessageModel requestMessage = new ComponentMessageModel(proxyService);
 
-				// get input stream
-				is = request.getInputStream();
+				// get reader
+				reader = request.getReader();
 
 				// load xml from input stream
-				requestMessage.loadFromXml(new InputStreamReader(is, "UTF-8"));
+				requestMessage.loadFromXml(reader);
 
 				// save message anyway
 				requestMessage.saveNew();
@@ -227,12 +229,12 @@ public class StarterWechatController {
 				log.error("api:wechat:component:message:error:", ex);
 			} finally {
 				// close
-				if (is != null) {
+				if (reader != null) {
 					try {
-						is.close();
+						reader.close();
 					} catch (IOException e) {
 					}
-					is = null;
+					reader = null;
 				}
 
 				if (writer != null) {
@@ -248,6 +250,7 @@ public class StarterWechatController {
 	/**
 	 * component-binded platform message, get for token check, post for message data
 	 * 
+	 * @param appid
 	 * @param request
 	 * @param response
 	 */
@@ -255,8 +258,13 @@ public class StarterWechatController {
 	public void platformComponentMessage(@PathVariable("appid") String appid, HttpServletRequest request,
 			HttpServletResponse response) {
 		// log api
-		log.info("api:wechat:platformcom:message:called, uri={}, ip={}, method={}", request.getRequestURI(),
-				WebUtil.getClientIp(request), request.getMethod());
+		log.info("api:wechat:platform:message:called, uri={}, ip={}, method={}, querystring={}",
+				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
+
+		// log param
+		if (log.isDebugEnabled()) {
+			log.debug("querystring={}", request.getQueryString());
+		}
 
 		// check method
 		if (StringUtil.equalsIgnoreCase(request.getMethod(), "GET")) {
@@ -269,8 +277,8 @@ public class StarterWechatController {
 			// the writer
 			PrintWriter writer = null;
 
-			// parse input stream as xml
-			InputStream is = null;
+			// the body reader
+			Reader reader = null;
 
 			try {
 				// set encoding to utf-8
@@ -281,11 +289,20 @@ public class StarterWechatController {
 				PlatformComponentMessageModel requestMessage = new PlatformComponentMessageModel(proxyService,
 						wechatService, appid);
 
-				// get input stream
-				is = request.getInputStream();
+				// get reader
+				reader = request.getReader();
+
+				// param for decrypt
+				String msg_signature = request.getParameter("msg_signature");
+				String timestamp = request.getParameter("timestamp");
+				String nonce = request.getParameter("nonce");
+
+				// source check from wechat server, return echostr for ok
+				log.debug("decrypt, appid={}, msg_signature={}, timestamp={}, nonce={}", appid, msg_signature,
+						timestamp, nonce);
 
 				// load xml from input stream, need decrypt
-				requestMessage.loadFromXml(new InputStreamReader(is, "UTF-8"));
+				requestMessage.loadFromXml(reader, msg_signature, timestamp, nonce);
 
 				// save message anyway
 				requestMessage.saveNew();
@@ -301,12 +318,12 @@ public class StarterWechatController {
 				log.error("api:wechat:platformcom:message:error", ex);
 			} finally {
 				// close
-				if (is != null) {
+				if (reader != null) {
 					try {
-						is.close();
+						reader.close();
 					} catch (IOException e) {
 					}
-					is = null;
+					reader = null;
 				}
 
 				if (writer != null) {

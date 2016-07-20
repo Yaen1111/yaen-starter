@@ -37,20 +37,20 @@ public class WechatPropertiesUtil {
 		return PropertiesUtil.getProperty("platform.token");
 	}
 
-	public static String getShopId() {
-		return PropertiesUtil.getProperty("platform.shopid");
-	}
-
 	public static String getAuthUrl() {
 		return PropertiesUtil.getProperty("platform.authurl");
 	}
 
-	public static String getWifiSSID() {
-		return PropertiesUtil.getProperty("platform.wifi.ssid");
+	public static String getWifiShopId() {
+		return PropertiesUtil.getProperty("platform.wifi.shopid");
 	}
 
-	public static String getWifiBSSID() {
-		return PropertiesUtil.getProperty("platform.wifi.bssid");
+	public static String getWifiSecret() {
+		return PropertiesUtil.getProperty("platform.wifi.secret");
+	}
+
+	public static String getWifiSSID() {
+		return PropertiesUtil.getProperty("platform.wifi.ssid");
 	}
 
 }

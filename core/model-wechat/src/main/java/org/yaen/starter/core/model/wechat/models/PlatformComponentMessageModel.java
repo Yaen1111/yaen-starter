@@ -1,7 +1,6 @@
 package org.yaen.starter.core.model.wechat.models;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
@@ -16,7 +15,6 @@ import com.qq.weixin.mp.aes.AesException;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * the wechat platform component message model, mostly for user request and server response
@@ -25,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @author Yaen 2016年7月14日下午2:07:17
  */
-@Slf4j
 public class PlatformComponentMessageModel extends PlatformMessageModel {
 
 	@Override
@@ -49,26 +46,34 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.wechat.models.PlatformMessageModel#loadFromXml(java.io.Reader)
+	 * load from xml with encrpyt
+	 * 
+	 * @param reader
+	 * @param msgSignature
+	 * @param timeStamp
+	 * @param nonce
+	 * @throws CoreException
+	 * @throws AesException
 	 */
-	@Override
-	public void loadFromXml(Reader reader) throws CoreException {
+	public void loadFromXml(Reader reader, String msgSignature, String timeStamp, String nonce)
+			throws CoreException, AesException {
 		// need decrypt
+		String postData;
 		try {
-			String postData = StringUtil.readString(reader);
-
-			WXBizMsgCrypt pc = new WXBizMsgCrypt(WechatPropertiesUtil.getComponentToken(),
-					WechatPropertiesUtil.getComponentSymmetricKey(), this.appid);
-
-			String xml = pc.decryptMsg(msgSignature, timeStamp, nonce, postData);
-
-		} catch (AesException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			postData = StringUtil.readString(reader);
+		} catch (IOException ex) {
+			throw new CoreException("read post data error", ex);
 		}
 
-		// call super to do rest
-		super.loadFromXml(reader);
+		// make crypt
+		WXBizMsgCrypt pc = new WXBizMsgCrypt(WechatPropertiesUtil.getComponentToken(),
+				WechatPropertiesUtil.getComponentSymmetricKey(), this.appid);
+
+		// decrypt entire xml
+		String xml = pc.decryptMsg(msgSignature, timeStamp, nonce, postData);
+
+		// load as normal
+		this.loadFromXml(new StringReader(xml));
 	}
 
 	/**
