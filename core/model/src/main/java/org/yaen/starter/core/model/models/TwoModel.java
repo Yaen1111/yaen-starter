@@ -1,18 +1,18 @@
 package org.yaen.starter.core.model.models;
 
+import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
-import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * default model implement with proxy service and default entity
@@ -21,14 +21,88 @@ import lombok.Setter;
  */
 public class TwoModel extends OneModel {
 
-	/** the default none-typed entity */
+	/** the default none-typed entity, child can write new getter to get typed entity */
 	@Getter
-	@Setter(value = AccessLevel.PROTECTED)
 	private OneEntity defaultEntity;
 
 	/** the proxy */
 	@Getter
 	protected ProxyService proxy;
+
+	/**
+	 * fill by id
+	 * 
+	 * @param entity
+	 * @param id
+	 * @return
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	protected <T extends OneEntity> void fillEntityById(T entity, String id) throws DataException, CommonException {
+
+		// set id to entity
+		entity.setId(id);
+		List<Long> rowids = this.proxy.getQueryService().selectRowidsByField(entity, "id");
+
+		// check empty
+		if (rowids == null || rowids.isEmpty()) {
+			throw new DataNotExistsException("data not exists, id=" + id);
+		}
+
+		// check duplicate
+		if (rowids.size() > 1) {
+			throw new DuplicateDataException("data id duplicate, id=" + id);
+		}
+
+		// fill
+		this.proxy.getEntityService().selectEntityByRowid(entity, rowids.get(0));
+	}
+
+	/**
+	 * select by id
+	 * 
+	 * @param entity
+	 * @param id
+	 * @return
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	protected <T extends OneEntity> T selectEntityById(T entity, String id) throws DataException, CommonException {
+		return this.proxy.getQueryService().selectOneById(entity, id);
+	}
+
+	/**
+	 * insert entity
+	 * 
+	 * @param entity
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	protected void insertEntity(OneEntity entity) throws DataException, CommonException {
+		this.proxy.getEntityService().insertEntityByRowid(entity);
+	}
+
+	/**
+	 * update entity
+	 * 
+	 * @param entity
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	protected void updateEntity(OneEntity entity) throws DataException, CommonException {
+		this.proxy.getEntityService().updateEntityByRowid(entity);
+	}
+
+	/**
+	 * delete entity
+	 * 
+	 * @param entity
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	protected void deleteEntity(OneEntity entity) throws DataException, CommonException {
+		this.proxy.getEntityService().deleteEntityByRowid(entity);
+	}
 
 	/**
 	 * constructor with proxy service, with proxy
@@ -40,8 +114,8 @@ public class TwoModel extends OneModel {
 
 		this.proxy = proxy;
 
-		// use overided setter
-		this.setDefaultEntity(defaultEntity);
+		// use override setter
+		this.defaultEntity = defaultEntity;
 	}
 
 	/**
@@ -49,108 +123,19 @@ public class TwoModel extends OneModel {
 	 */
 	@Override
 	public void check() throws CoreException {
-		if (this.defaultEntity == null)
-			throw new CoreException("main entity not loaded");
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#clear()
-	 */
-	@Override
-	public void clear() {
-		this.defaultEntity = null;
 	}
 
 	/**
 	 * load model entity by id
 	 * 
 	 * @param id
-	 * @throws DataNotExistsException
-	 * @throws CoreException
+	 * @throws CommonException
+	 * @throws DataException
 	 */
-	public void loadById(String id) throws DataNotExistsException, CoreException {
+	public void loadById(String id) throws DataException, CommonException {
 		AssertUtil.notBlank(id);
 
-		// clear first
-		this.clear();
-
-		// get entity
-		try {
-			this.defaultEntity = this.proxy.getQueryService().selectOneById(this.defaultEntity, id);
-		} catch (CommonException ex) {
-			throw new CoreException("load user failed", ex);
-		} catch (DuplicateDataException ex) {
-			throw new CoreException("load user failed", ex);
-		}
-	}
-
-	/**
-	 * create new model with given id only, model is not affected
-	 * 
-	 * @param id
-	 * @throws CoreException
-	 * @throws DuplicateDataException
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	public void createNewById(String id) throws CoreException, DuplicateDataException {
-		AssertUtil.notBlank(id);
-
-		try {
-			// create new entity
-			OneEntity newentity = this.defaultEntity.getClass().newInstance();
-
-			newentity.setId(id);
-
-			// do insert
-			this.proxy.getEntityService().insertEntityByRowid(newentity);
-
-		} catch (InstantiationException | IllegalAccessException ex) {
-			throw new CoreException("create model failed", ex);
-		} catch (NoDataAffectedException ex) {
-			throw new CoreException("create model failed", ex);
-		} catch (CommonException ex) {
-			throw new CoreException("create model failed", ex);
-		}
-	}
-
-	/**
-	 * update model by id
-	 * 
-	 * @throws CoreException
-	 * @throws DataNotExistsException
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	public void saveById() throws CoreException, DataNotExistsException {
-		this.check();
-
-		try {
-			this.proxy.getEntityService().updateEntityByRowid(this.defaultEntity);
-		} catch (NoDataAffectedException ex) {
-			// no data, means data not exists
-			throw new DataNotExistsException("save model failed", ex);
-		} catch (CommonException ex) {
-			throw new CoreException("save model failed", ex);
-		}
-	}
-
-	/**
-	 * delete model by id
-	 * 
-	 * @throws CoreException
-	 * @throws DataNotExistsException
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	public void deleteById() throws CoreException, DataNotExistsException {
-		this.check();
-
-		try {
-			this.proxy.getEntityService().deleteEntityByRowid(this.defaultEntity);
-		} catch (NoDataAffectedException ex) {
-			// no data, means data not exists
-			throw new DataNotExistsException("delete model failed", ex);
-		} catch (CommonException ex) {
-			throw new CoreException("delete model failed", ex);
-		}
+		this.fillEntityById(this.defaultEntity, id);
 	}
 
 	/**
@@ -158,19 +143,43 @@ public class TwoModel extends OneModel {
 	 * 
 	 * @param id
 	 * @throws CoreException
-	 * @throws DuplicateDataException
+	 * @throws CommonException
+	 * @throws DataException
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public void saveNew() throws CoreException, DuplicateDataException {
-		try {
-			// do insert
-			this.proxy.getEntityService().insertEntityByRowid(this.defaultEntity);
+	public void saveNew() throws CoreException, DataException, CommonException {
+		this.check();
 
-		} catch (NoDataAffectedException ex) {
-			throw new CoreException("create model failed", ex);
-		} catch (CommonException ex) {
-			throw new CoreException("create model failed", ex);
-		}
+		this.insertEntity(this.defaultEntity);
+	}
+
+	/**
+	 * update model by id
+	 * 
+	 * @throws CommonException
+	 * @throws DataException
+	 * @throws CoreException
+	 * 
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public void saveById() throws DataException, CommonException, CoreException {
+		this.check();
+
+		this.updateEntity(this.defaultEntity);
+	}
+
+	/**
+	 * delete model by id
+	 * 
+	 * @throws CoreException
+	 * @throws CommonException
+	 * @throws DataException
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteById() throws CoreException, DataException, CommonException {
+		this.check();
+
+		this.deleteEntity(this.defaultEntity);
 	}
 
 }

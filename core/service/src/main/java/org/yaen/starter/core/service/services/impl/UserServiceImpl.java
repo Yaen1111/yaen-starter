@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void createNewRole(RoleEntity role) throws CoreException, DuplicateDataException {
+	public void createNewRole(RoleEntity role) throws CoreException, DataException {
 		AssertUtil.notNull(role);
 		AssertUtil.notBlank(role.getId());
 
@@ -94,10 +95,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * @throws DataException 
 	 * @see org.yaen.starter.core.model.services.UserService#getRoleListAll()
 	 */
 	@Override
-	public List<RoleEntity> getRoleListAll() throws CoreException {
+	public List<RoleEntity> getRoleListAll() throws CoreException, DataException {
 
 		try {
 			RoleEntity role = new RoleEntity();
@@ -113,10 +115,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * @throws DataException 
 	 * @see org.yaen.starter.core.model.services.UserService#getUserRoles(java.lang.String)
 	 */
 	@Override
-	public Set<String> getUserRoles(String username) throws CoreException {
+	public Set<String> getUserRoles(String username) throws CoreException, DataException {
 		AssertUtil.notBlank(username);
 
 		Set<String> role_set = new HashSet<String>();
@@ -136,12 +139,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * @throws DataException 
 	 * @see org.yaen.starter.core.model.services.UserService#assignUserWithNewRoles(java.lang.String,
 	 *      java.util.Collection)
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void assignUserWithNewRoles(String username, Collection<String> roles) throws CoreException {
+	public void assignUserWithNewRoles(String username, Collection<String> roles) throws CoreException, DataException {
 		AssertUtil.notBlank(username);
 		AssertUtil.notNull(roles);
 
@@ -184,10 +188,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * @throws DataException 
 	 * @see org.yaen.starter.core.model.services.UserService#getRoleAuths(java.lang.String)
 	 */
 	@Override
-	public Set<String> getRoleAuths(String roleId) throws CoreException {
+	public Set<String> getRoleAuths(String roleId) throws CoreException, DataException {
 		AssertUtil.notBlank(roleId);
 
 		Set<String> auth_set = new HashSet<String>();
@@ -207,12 +212,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * @throws DataException 
 	 * @see org.yaen.starter.core.model.services.UserService#assignRoleWithNewAuths(java.lang.String,
 	 *      java.util.Collection)
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void assignRoleWithNewAuths(String roleId, Collection<String> auths) throws CoreException {
+	public void assignRoleWithNewAuths(String roleId, Collection<String> auths) throws CoreException, DataException {
 		AssertUtil.notBlank(roleId);
 		AssertUtil.notNull(auths);
 
@@ -255,10 +261,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * @throws DataException 
 	 * @see org.yaen.starter.core.model.services.UserService#getUserAuths(java.lang.String)
 	 */
 	@Override
-	public Set<String> getUserAuths(String username) throws CoreException {
+	public Set<String> getUserAuths(String username) throws CoreException, DataException {
 		AssertUtil.notBlank(username);
 
 		// get all roles

@@ -3,11 +3,9 @@ package org.yaen.starter.core.model.wechat.models;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.DataNotExistsException;
-import org.yaen.starter.common.data.exceptions.DuplicateDataException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
@@ -31,19 +29,8 @@ import lombok.Getter;
  */
 public class ComponentModel extends TwoModel {
 
-	/** the typed entity, overrides default entity */
-	@Getter
-	private ComponentEntity entity;
-
-	@Override
-	public OneEntity getDefaultEntity() {
-		return this.entity;
-	}
-
-	@Override
-	public void setDefaultEntity(OneEntity defaultEntity) {
-		this.entity = (ComponentEntity) defaultEntity;
-		super.setDefaultEntity(defaultEntity);
+	public ComponentEntity getEntity() {
+		return (ComponentEntity) this.getDefaultEntity();
 	}
 
 	/** the appid from config */
@@ -115,9 +102,10 @@ public class ComponentModel extends TwoModel {
 	 * </pre>
 	 * 
 	 * @throws CoreException
-	 * @throws DataNotExistsException
+	 * @throws CommonException
+	 * @throws DataException
 	 */
-	public String getComponentAccessToken() throws CoreException, DataNotExistsException {
+	public String getComponentAccessToken() throws CoreException, DataException, CommonException {
 		final String API = "https://api.weixin.qq.com/cgi-bin/component/api_component_token";
 		final String CACHE_KEY = "component_access_token";
 
@@ -135,9 +123,9 @@ public class ComponentModel extends TwoModel {
 		if (this.componentAccessToken == null) {
 			this.loadById(this.componentAppid);
 
-			String component_access_token = this.entity.getComponentAccessToken();
-			Long create = this.entity.getComponentAccessTokenCreate();
-			Long expirein = this.entity.getComponentAccessTokenExpireIn();
+			String component_access_token = this.getEntity().getComponentAccessToken();
+			Long create = this.getEntity().getComponentAccessTokenCreate();
+			Long expirein = this.getEntity().getComponentAccessTokenExpireIn();
 
 			// db is ok and not out of date
 			if (StringUtil.isNotBlank(component_access_token) && create + expirein / 2 > now) {
@@ -152,7 +140,7 @@ public class ComponentModel extends TwoModel {
 		// try to call api to get new one if null
 		if (this.componentAccessToken == null) {
 			// get ticket, whitch is send by wechat server every 10 minutes
-			String component_verify_ticket = this.entity.getComponentVerifyTicket();
+			String component_verify_ticket = this.getEntity().getComponentVerifyTicket();
 
 			// make param value
 			Map<String, Object> param = new HashMap<String, Object>();
@@ -167,9 +155,9 @@ public class ComponentModel extends TwoModel {
 			String component_access_token = json.getString("component_access_token");
 			Long expires_in = json.getLong("expires_in");
 
-			this.entity.setComponentAccessToken(component_access_token);
-			this.entity.setComponentAccessTokenCreate(now);
-			this.entity.setComponentAccessTokenExpireIn(expires_in);
+			this.getEntity().setComponentAccessToken(component_access_token);
+			this.getEntity().setComponentAccessTokenCreate(now);
+			this.getEntity().setComponentAccessTokenExpireIn(expires_in);
 
 			// set db
 			this.saveById();
@@ -202,9 +190,10 @@ public class ComponentModel extends TwoModel {
 	 * </pre>
 	 * 
 	 * @throws CoreException
-	 * @throws DataNotExistsException
+	 * @throws CommonException
+	 * @throws DataException
 	 */
-	public String getPreAuthCode() throws CoreException, DataNotExistsException {
+	public String getPreAuthCode() throws CoreException, DataException, CommonException {
 		final String API = "https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token=COMPONENT_ACCESS_TOKEN";
 		final String CACHE_KEY = "pre_auth_code";
 
@@ -222,9 +211,9 @@ public class ComponentModel extends TwoModel {
 		if (this.preAuthCode == null) {
 			this.loadById(this.componentAppid);
 
-			String pre_auth_code = this.entity.getPreAuthCode();
-			Long create = this.entity.getPreAuthCodeCreate();
-			Long expirein = this.entity.getPreAuthCodeExpireIn();
+			String pre_auth_code = this.getEntity().getPreAuthCode();
+			Long create = this.getEntity().getPreAuthCodeCreate();
+			Long expirein = this.getEntity().getPreAuthCodeExpireIn();
 
 			// db is ok and not out of date
 			if (StringUtil.isNotBlank(pre_auth_code) && create + expirein / 2 > now) {
@@ -250,9 +239,9 @@ public class ComponentModel extends TwoModel {
 			String pre_auth_code = json.getString("pre_auth_code");
 			Long expires_in = json.getLong("expires_in");
 
-			this.entity.setPreAuthCode(pre_auth_code);
-			this.entity.setPreAuthCodeCreate(now);
-			this.entity.setPreAuthCodeExpireIn(expires_in);
+			this.getEntity().setPreAuthCode(pre_auth_code);
+			this.getEntity().setPreAuthCodeCreate(now);
+			this.getEntity().setPreAuthCodeExpireIn(expires_in);
 
 			// set db
 			this.saveById();
@@ -307,9 +296,11 @@ public class ComponentModel extends TwoModel {
 	 * 
 	 * @param authorizationCode
 	 * @throws CoreException
-	 * @throws DataNotExistsException
+	 * @throws CommonException
+	 * @throws DataException
 	 */
-	public JSONObject getAuthorizationInfoApi(String authorizationCode) throws CoreException, DataNotExistsException {
+	public JSONObject getAuthorizationInfoApi(String authorizationCode)
+			throws CoreException, DataException, CommonException {
 		final String API = "https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=COMPONENT_ACCESS_TOKEN";
 
 		AssertUtil.notBlank(authorizationCode);
@@ -350,10 +341,11 @@ public class ComponentModel extends TwoModel {
 	 * @param appid
 	 * @param refreshToken
 	 * @throws CoreException
-	 * @throws DataNotExistsException
+	 * @throws CommonException
+	 * @throws DataException
 	 */
 	public JSONObject refreshAccessTokenApi(String appid, String refreshToken)
-			throws CoreException, DataNotExistsException {
+			throws CoreException, DataException, CommonException {
 		final String API = "https:// api.weixin.qq.com /cgi-bin/component/api_authorizer_token?component_access_token=COMPONENT_ACCESS_TOKEN";
 
 		AssertUtil.notBlank(appid);
@@ -378,11 +370,10 @@ public class ComponentModel extends TwoModel {
 	 * @param appid
 	 * @return
 	 * @throws CoreException
-	 * @throws DuplicateDataException
-	 * @throws DataNotExistsException
+	 * @throws CommonException
+	 * @throws DataException
 	 */
-	public PlatformComponentModel getPlatformModel(String appid)
-			throws CoreException, DataNotExistsException, DuplicateDataException {
+	public PlatformComponentModel getPlatformModel(String appid) throws CoreException, DataException, CommonException {
 		AssertUtil.notBlank(appid);
 
 		Long now = DateUtil.getNow().getTime();

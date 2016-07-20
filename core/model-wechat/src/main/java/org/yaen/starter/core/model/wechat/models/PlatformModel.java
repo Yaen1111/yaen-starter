@@ -41,13 +41,4 @@ public class PlatformModel extends OneModel {
 			throw new CoreException("accessToken is empty");
 	}
 
-	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#clear()
-	 */
-	@Override
-	public void clear() {
-		this.appid = null;
-		this.accessToken = null;
-	}
-
 }

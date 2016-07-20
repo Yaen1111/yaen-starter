@@ -3,12 +3,14 @@ package org.yaen.starter.core.model.wechat.models;
 import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.entities.ComponentEntity;
 import org.yaen.starter.core.model.wechat.entities.UserEntity;
 
 import lombok.Getter;
@@ -20,19 +22,8 @@ import lombok.Getter;
  */
 public class UserModel extends TwoModel {
 
-	/** the typed entity, overrides default entity */
-	@Getter
-	private UserEntity entity;
-
-	@Override
-	public OneEntity getDefaultEntity() {
-		return this.entity;
-	}
-
-	@Override
-	public void setDefaultEntity(OneEntity defaultEntity) {
-		this.entity = (UserEntity) defaultEntity;
-		super.setDefaultEntity(defaultEntity);
+	public UserEntity getEntity() {
+		return (UserEntity) this.getDefaultEntity();
 	}
 
 	/**
@@ -58,16 +49,11 @@ public class UserModel extends TwoModel {
 		AssertUtil.notBlank(openId);
 		AssertUtil.notBlank(appId);
 
-		// clear first
-		this.clear();
-
 		// get user by openid + appid
-		try {
-			this.entity = this.proxy.getQueryService().selectOneByUniqueFields(new UserEntity(openId, appId),
-					new String[] { "openId", "appId" });
-		} catch (CommonException ex) {
-			throw new CoreException("load user failed", ex);
-		}
+		// TODO
+		// this.entity = this.proxy.getQueryService().selectOneByUniqueFields(new UserEntity(openId, appId),
+		// new String[] { "openId", "appId" });
+
 	}
 
 	/**
@@ -76,26 +62,20 @@ public class UserModel extends TwoModel {
 	 * @param openId
 	 * @param appId
 	 * @throws CoreException
-	 * @throws DuplicateDataException
+	 * @throws CommonException
+	 * @throws DataException
 	 */
-	public void createNewByOpenId(String openId, String appId) throws CoreException, DuplicateDataException {
+	public void createNewByOpenId(String openId, String appId) throws CoreException, DataException, CommonException {
 		AssertUtil.notBlank(openId);
 		AssertUtil.notBlank(appId);
 
-		try {
-			// create new entity
-			UserEntity user = new UserEntity(openId, appId);
+		// create new entity
+		UserEntity user = new UserEntity(openId, appId);
 
-			// do insert
-			this.proxy.getEntityService().insertEntityByRowid(user);
-
-		} catch (NoDataAffectedException ex) {
-			throw new CoreException("create model failed", ex);
-		} catch (CommonException ex) {
-			throw new CoreException("create model failed", ex);
-		}
+		// do insert
+		this.insertEntity(user);
 	}
-	//
+
 	// /**
 	// * subscribe, here should be subscribed, maybe re-subscribe
 	// *

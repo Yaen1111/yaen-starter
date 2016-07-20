@@ -2,8 +2,8 @@ package org.yaen.starter.core.model.models.user;
 
 import java.util.Set;
 
-import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.core.model.entities.user.UserEntity;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
@@ -24,19 +24,8 @@ import lombok.Getter;
  */
 public class UserModel extends TwoModel {
 
-	/** the typed entity, overrides default entity */
-	@Getter
-	private UserEntity entity;
-
-	@Override
-	public OneEntity getDefaultEntity() {
-		return this.entity;
-	}
-
-	@Override
-	public void setDefaultEntity(OneEntity defaultEntity) {
-		this.entity = (UserEntity) defaultEntity;
-		super.setDefaultEntity(defaultEntity);
+	public UserEntity getEntity() {
+		return (UserEntity) this.getDefaultEntity();
 	}
 
 	/** the service */
@@ -60,27 +49,18 @@ public class UserModel extends TwoModel {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#clear()
-	 */
-	@Override
-	public void clear() {
-		super.clear();
-		this.roles = null;
-		this.auths = null;
-	}
-
-	/**
 	 * get roles
 	 * 
 	 * @return
 	 * @throws CoreException
+	 * @throws DataException
 	 */
-	public Set<String> getRoles() throws CoreException {
+	public Set<String> getRoles() throws CoreException, DataException {
 		this.check();
 
 		// call service to get roles if not exists
 		if (this.roles == null || this.roles.isEmpty()) {
-			this.roles = this.service.getUserRoles(this.entity.getId());
+			this.roles = this.service.getUserRoles(this.getEntity().getId());
 		}
 
 		return this.roles;
@@ -91,13 +71,14 @@ public class UserModel extends TwoModel {
 	 * 
 	 * @return
 	 * @throws CoreException
+	 * @throws DataException
 	 */
-	public Set<String> getAuths() throws CoreException {
+	public Set<String> getAuths() throws CoreException, DataException {
 		this.check();
 
 		// call rbac model to get roles if not exists
 		if (this.auths == null || this.auths.isEmpty()) {
-			this.auths = this.service.getUserAuths(this.entity.getId());
+			this.auths = this.service.getUserAuths(this.getEntity().getId());
 		}
 
 		return this.auths;

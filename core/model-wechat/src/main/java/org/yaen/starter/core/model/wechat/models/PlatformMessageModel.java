@@ -17,6 +17,7 @@ import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.entities.ComponentEntity;
 import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
@@ -39,19 +40,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PlatformMessageModel extends TwoModel {
 
-	/** the typed entity, overrides default entity */
-	@Getter
-	private PlatformMessageEntity entity;
-
-	@Override
-	public OneEntity getDefaultEntity() {
-		return this.entity;
-	}
-
-	@Override
-	public void setDefaultEntity(OneEntity defaultEntity) {
-		this.entity = (PlatformMessageEntity) defaultEntity;
-		super.setDefaultEntity(defaultEntity);
+	public PlatformMessageEntity getEntity() {
+		return (PlatformMessageEntity) this.getDefaultEntity();
 	}
 
 	/** if has appid, this is for component-binded platform, otherwise is self */
@@ -124,8 +114,6 @@ public class PlatformMessageModel extends TwoModel {
 	public void loadFromXml(InputStream is) throws CoreException {
 		AssertUtil.notNull(is);
 
-		this.clear();
-
 		// make xml reader
 		SAXReader reader = new SAXReader();
 		Document document;
@@ -153,7 +141,7 @@ public class PlatformMessageModel extends TwoModel {
 		log.debug("parse xml done, map={}", map);
 
 		// make entity according to the map item
-		PlatformMessageEntity msg = new PlatformMessageEntity();
+		PlatformMessageEntity msg = this.getEntity();
 
 		// main info
 		msg.setFromUserName(map.get("FromUserName"));
@@ -264,8 +252,7 @@ public class PlatformMessageModel extends TwoModel {
 			}
 		} // if is event
 
-		// done and copy
-		this.entity = msg;
+		// done
 	}
 
 	/**

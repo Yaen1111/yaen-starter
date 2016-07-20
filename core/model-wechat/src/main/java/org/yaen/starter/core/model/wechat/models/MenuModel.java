@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
+import org.yaen.starter.common.data.exceptions.DataOperationCancelledException;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.OneModel;
 import org.yaen.starter.core.model.services.ProxyService;
@@ -93,24 +95,13 @@ public class MenuModel extends OneModel {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#clear()
-	 */
-	@Override
-	public void clear() {
-		this.appId = null;
-		this.menuList = null;
-		this.buttons.clear();
-	}
-
-	/**
 	 * load menu by appId
 	 * 
 	 * @param appId
 	 * @throws CoreException
+	 * @throws DataException
 	 */
-	public void loadByAppId(String appId) throws CoreException {
-		this.clear();
-
+	public void loadByAppId(String appId) throws CoreException, DataException {
 		this.appId = appId;
 
 		// load default if not given
@@ -237,7 +228,6 @@ public class MenuModel extends OneModel {
 	 * @throws CoreException
 	 */
 	public void pull(String appId) throws CoreException {
-		this.clear();
 
 		this.appId = appId;
 

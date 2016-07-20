@@ -1,5 +1,7 @@
 package org.yaen.starter.common.data.exceptions;
 
+import org.yaen.starter.common.data.enums.SystemCode;
+
 /**
  * no data affected during UPDATE/INSERT/DELETE
  * 
@@ -11,34 +13,16 @@ public class NoDataAffectedException extends DataException {
 	/**
 	 * @param message
 	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
-	 */
-	public NoDataAffectedException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	/**
-	 * @param message
-	 * @param cause
 	 */
 	public NoDataAffectedException(String message, Throwable cause) {
-		super(message, cause);
+		super(SystemCode.E_NO_DATA_AFFECTED.getCode(), message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
 	public NoDataAffectedException(String message) {
-		super(message);
-	}
-
-	/**
-	 * @param cause
-	 */
-	public NoDataAffectedException(Throwable cause) {
-		super(cause);
+		super(SystemCode.E_NO_DATA_AFFECTED.getCode(), message);
 	}
 
 }

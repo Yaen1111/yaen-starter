@@ -1,5 +1,7 @@
 package org.yaen.starter.common.data.exceptions;
 
+import org.yaen.starter.common.data.enums.SystemCode;
+
 /**
  * duplicate data found where is not allowed
  * 
@@ -11,34 +13,16 @@ public class DuplicateDataException extends DataException {
 	/**
 	 * @param message
 	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
-	 */
-	public DuplicateDataException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	/**
-	 * @param message
-	 * @param cause
 	 */
 	public DuplicateDataException(String message, Throwable cause) {
-		super(message, cause);
+		super(SystemCode.E_DUPLICATE_DATA.getCode(), message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
 	public DuplicateDataException(String message) {
-		super(message);
-	}
-
-	/**
-	 * @param cause
-	 */
-	public DuplicateDataException(Throwable cause) {
-		super(cause);
+		super(SystemCode.E_DUPLICATE_DATA.getCode(), message);
 	}
 
 }

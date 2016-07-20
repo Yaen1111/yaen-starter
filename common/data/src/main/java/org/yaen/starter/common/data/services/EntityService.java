@@ -3,6 +3,7 @@ package org.yaen.starter.common.data.services;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.DataOperationCancelledException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 
@@ -20,20 +21,22 @@ public interface EntityService {
 	 * @param rowid
 	 * @throws CommonException
 	 * @throws DataNotExistsException
+	 * @throws DataOperationCancelledException
 	 */
 	public <T extends BaseEntity> void selectEntityByRowid(T entity, long rowid)
-			throws CommonException, DataNotExistsException;
+			throws CommonException, DataNotExistsException, DataOperationCancelledException;
 
 	/**
 	 * insert entity, the rowid is auto-increase
 	 * 
 	 * @param entity
 	 * @throws CommonException
-	 * @throws NoDataAffectedException
+	 * @throws DataOperationCancelledException
 	 * @throws DuplicateDataException
+	 * @throws NoDataAffectedException
 	 */
 	public <T extends BaseEntity> long insertEntityByRowid(T entity)
-			throws CommonException, NoDataAffectedException, DuplicateDataException;
+			throws CommonException, DataOperationCancelledException, NoDataAffectedException, DuplicateDataException;
 
 	/**
 	 * update entity by rowid, this id is also be updated
@@ -41,8 +44,10 @@ public interface EntityService {
 	 * @param entity
 	 * @throws CommonException
 	 * @throws NoDataAffectedException
+	 * @throws DataOperationCancelledException
 	 */
-	public <T extends BaseEntity> void updateEntityByRowid(T entity) throws CommonException, NoDataAffectedException;
+	public <T extends BaseEntity> void updateEntityByRowid(T entity)
+			throws CommonException, NoDataAffectedException, DataOperationCancelledException;
 
 	/**
 	 * delete entity by rowid
@@ -50,8 +55,10 @@ public interface EntityService {
 	 * @param entity
 	 * @throws CommonException
 	 * @throws NoDataAffectedException
+	 * @throws DataOperationCancelledException
 	 */
-	public <T extends BaseEntity> void deleteEntityByRowid(T entity) throws CommonException, NoDataAffectedException;
+	public <T extends BaseEntity> void deleteEntityByRowid(T entity)
+			throws CommonException, NoDataAffectedException, DataOperationCancelledException;
 
 	/**
 	 * try select entity by rowid, return false if not exists

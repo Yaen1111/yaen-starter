@@ -9,7 +9,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.core.model.models.TwoModel;
@@ -17,7 +16,6 @@ import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.ComponentMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.InfoTypes;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -28,19 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ComponentMessageModel extends TwoModel {
 
-	/** the typed entity, overrides default entity */
-	@Getter
-	private ComponentMessageEntity entity;
-
-	@Override
-	public OneEntity getDefaultEntity() {
-		return this.entity;
-	}
-
-	@Override
-	public void setDefaultEntity(OneEntity defaultEntity) {
-		this.entity = (ComponentMessageEntity) defaultEntity;
-		super.setDefaultEntity(defaultEntity);
+	public ComponentMessageEntity getEntity() {
+		return (ComponentMessageEntity) this.getDefaultEntity();
 	}
 
 	/**
@@ -61,8 +48,6 @@ public class ComponentMessageModel extends TwoModel {
 	@SuppressWarnings("unchecked")
 	public void loadFromXml(InputStream is) throws CoreException {
 		AssertUtil.notNull(is);
-
-		this.clear();
 
 		// make xml reader
 		SAXReader reader = new SAXReader();
@@ -90,8 +75,8 @@ public class ComponentMessageModel extends TwoModel {
 		// output map
 		log.debug("parse xml done, map={}", map);
 
-		// make entity according to the map item
-		ComponentMessageEntity msg = new ComponentMessageEntity();
+		// get entity and fill data
+		ComponentMessageEntity msg = this.getEntity();
 
 		// main info
 		msg.setAppid(map.get("AppId"));
@@ -119,8 +104,7 @@ public class ComponentMessageModel extends TwoModel {
 			break;
 		}
 
-		// done and copy
-		this.entity = msg;
+		// done
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.data.exceptions.DuplicateDataException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.core.model.entities.user.RoleEntity;
 
 /**
@@ -30,17 +30,18 @@ public interface UserService {
 	 * 
 	 * @param role
 	 * @throws CoreException
-	 * @throws DuplicateDataException
+	 * @throws DataException 
 	 */
-	void createNewRole(RoleEntity role) throws CoreException, DuplicateDataException;
+	void createNewRole(RoleEntity role) throws CoreException, DataException;
 
 	/**
 	 * select all role list
 	 * 
 	 * @return
 	 * @throws CoreException
+	 * @throws DataException 
 	 */
-	List<RoleEntity> getRoleListAll() throws CoreException;
+	List<RoleEntity> getRoleListAll() throws CoreException, DataException;
 
 	/**
 	 * get user role ids
@@ -48,8 +49,9 @@ public interface UserService {
 	 * @param username
 	 * @return
 	 * @throws CoreException
+	 * @throws DataException 
 	 */
-	Set<String> getUserRoles(String username) throws CoreException;
+	Set<String> getUserRoles(String username) throws CoreException, DataException;
 
 	/**
 	 * assign new roles to user
@@ -57,8 +59,9 @@ public interface UserService {
 	 * @param username
 	 * @param roles
 	 * @throws CoreException
+	 * @throws DataException 
 	 */
-	void assignUserWithNewRoles(String username, Collection<String> roles) throws CoreException;
+	void assignUserWithNewRoles(String username, Collection<String> roles) throws CoreException, DataException;
 
 	/**
 	 * get auth ids for role
@@ -66,8 +69,9 @@ public interface UserService {
 	 * @param roleId
 	 * @return
 	 * @throws CoreException
+	 * @throws DataException 
 	 */
-	Set<String> getRoleAuths(String roleId) throws CoreException;
+	Set<String> getRoleAuths(String roleId) throws CoreException, DataException;
 
 	/**
 	 * assign new auths to role
@@ -75,8 +79,9 @@ public interface UserService {
 	 * @param roleId
 	 * @param auths
 	 * @throws CoreException
+	 * @throws DataException 
 	 */
-	void assignRoleWithNewAuths(String roleId, Collection<String> auths) throws CoreException;
+	void assignRoleWithNewAuths(String roleId, Collection<String> auths) throws CoreException, DataException;
 
 	/**
 	 * get user auth ids
@@ -86,7 +91,8 @@ public interface UserService {
 	 * @param username
 	 * @return
 	 * @throws CoreException
+	 * @throws DataException 
 	 */
-	Set<String> getUserAuths(String username) throws CoreException;
+	Set<String> getUserAuths(String username) throws CoreException, DataException;
 
 }

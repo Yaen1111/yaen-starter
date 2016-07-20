@@ -10,11 +10,10 @@ import org.yaen.starter.common.dal.mappers.EntityMapper;
 import org.yaen.starter.common.dal.services.TableService;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
-import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.DataOperationCancelledException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
-import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.util.utils.AssertUtil;
 
@@ -40,7 +39,8 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @param entity
 	 * @param rowid
 	 * @return
-	 * @throws CoreException
+	 * @throws CommonException
+	 * 
 	 */
 	protected <T extends OneEntity> boolean innerSelectEntityByRowid(T entity, long rowid) throws CommonException {
 		try {
@@ -75,7 +75,7 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @param entity
 	 * @throws NoDataAffectedException
 	 * @throws DuplicateDataException
-	 * @throws CoreException
+	 * @throws CommonException
 	 */
 	protected <T extends OneEntity> void innerInsertEntityByRowid(T entity)
 			throws CommonException, NoDataAffectedException, DuplicateDataException {
@@ -137,7 +137,7 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @param entity
 	 * @return
 	 * @throws NoDataAffectedException
-	 * @throws CoreException
+	 * @throws CommonException
 	 */
 	protected <T extends OneEntity> void innerDeleteEntity(T entity) throws CommonException, NoDataAffectedException {
 		try {
@@ -165,7 +165,7 @@ public class OneEntityServiceImpl implements EntityService {
 	 */
 	@Override
 	public <T extends BaseEntity> void selectEntityByRowid(T entity, long rowid)
-			throws CommonException, DataNotExistsException {
+			throws CommonException, DataNotExistsException, DataOperationCancelledException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
@@ -186,7 +186,7 @@ public class OneEntityServiceImpl implements EntityService {
 
 		} else {
 			// select canceled
-			throw new OperationCancelledCommonException("select cancelled by trigger");
+			throw new DataOperationCancelledException("select cancelled by trigger");
 		}
 	}
 
@@ -195,7 +195,7 @@ public class OneEntityServiceImpl implements EntityService {
 	 */
 	@Override
 	public <T extends BaseEntity> long insertEntityByRowid(T entity)
-			throws CommonException, NoDataAffectedException, DuplicateDataException {
+			throws CommonException, DataOperationCancelledException, NoDataAffectedException, DuplicateDataException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
@@ -214,7 +214,7 @@ public class OneEntityServiceImpl implements EntityService {
 
 		} else {
 			// canceled
-			throw new OperationCancelledCommonException("insert cancelled by trigger");
+			throw new DataOperationCancelledException("insert cancelled by trigger");
 		}
 
 		return entity.getRowid();
@@ -224,7 +224,8 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @see org.yaen.starter.common.data.services.EntityService#updateEntityByRowid(org.yaen.starter.common.data.entities.BaseEntity)
 	 */
 	@Override
-	public <T extends BaseEntity> void updateEntityByRowid(T entity) throws CommonException, NoDataAffectedException {
+	public <T extends BaseEntity> void updateEntityByRowid(T entity)
+			throws CommonException, NoDataAffectedException, DataOperationCancelledException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
@@ -241,7 +242,7 @@ public class OneEntityServiceImpl implements EntityService {
 
 		} else {
 			// canceled
-			throw new OperationCancelledCommonException("update cancelled by trigger");
+			throw new DataOperationCancelledException("update cancelled by trigger");
 		}
 	}
 
@@ -249,7 +250,8 @@ public class OneEntityServiceImpl implements EntityService {
 	 * @see org.yaen.starter.common.data.services.EntityService#deleteEntityByRowid(org.yaen.starter.common.data.entities.BaseEntity)
 	 */
 	@Override
-	public <T extends BaseEntity> void deleteEntityByRowid(T entity) throws CommonException, NoDataAffectedException {
+	public <T extends BaseEntity> void deleteEntityByRowid(T entity)
+			throws CommonException, NoDataAffectedException, DataOperationCancelledException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
@@ -259,14 +261,14 @@ public class OneEntityServiceImpl implements EntityService {
 		if (one.BeforeDelete()) {
 
 			// delete
-			this.innerDeleteEntity((OneEntity) entity);
+			this.innerDeleteEntity(one);
 
 			// trigger
 			one.AfterDelete();
 
 		} else {
 			// canceled
-			throw new OperationCancelledCommonException("delete cancelled by trigger");
+			throw new DataOperationCancelledException("delete cancelled by trigger");
 		}
 	}
 
@@ -281,7 +283,7 @@ public class OneEntityServiceImpl implements EntityService {
 			return true;
 		} catch (DataNotExistsException ex) {
 			return false;
-		} catch (OperationCancelledCommonException ex) {
+		} catch (DataOperationCancelledException ex) {
 			return false;
 		}
 	}

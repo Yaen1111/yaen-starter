@@ -18,7 +18,7 @@ import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
-import org.yaen.starter.common.data.exceptions.OperationCancelledCommonException;
+import org.yaen.starter.common.data.exceptions.DataOperationCancelledException;
 import org.yaen.starter.common.data.objects.QueryBuilder;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.util.utils.AssertUtil;
@@ -180,7 +180,8 @@ public class OneQueryServiceImpl implements QueryService {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends BaseEntity> List<T> selectListByRowids(T entity, List<Long> rowids) throws CommonException {
+	public <T extends BaseEntity> List<T> selectListByRowids(T entity, List<Long> rowids)
+			throws CommonException, DataOperationCancelledException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 		AssertUtil.notNull(rowids);
@@ -204,7 +205,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 		} else {
 			// select canceled
-			throw new OperationCancelledCommonException("select cancelled by trigger");
+			throw new DataOperationCancelledException("select cancelled by trigger");
 		}
 	}
 
@@ -214,7 +215,8 @@ public class OneQueryServiceImpl implements QueryService {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends BaseEntity> List<T> selectListById(T entity, String id) throws CommonException {
+	public <T extends BaseEntity> List<T> selectListById(T entity, String id)
+			throws CommonException, DataOperationCancelledException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 
@@ -237,7 +239,7 @@ public class OneQueryServiceImpl implements QueryService {
 			return list;
 		} else {
 			// select canceled
-			throw new OperationCancelledCommonException("select cancelled by trigger");
+			throw new DataOperationCancelledException("select cancelled by trigger");
 		}
 	}
 
@@ -247,7 +249,7 @@ public class OneQueryServiceImpl implements QueryService {
 	 */
 	@Override
 	public <T extends BaseEntity> T selectOneById(T entity, String id)
-			throws CommonException, DataNotExistsException, DuplicateDataException {
+			throws CommonException, DataNotExistsException, DuplicateDataException, DataOperationCancelledException {
 		List<T> list = this.selectListById(entity, id);
 
 		// check empty
@@ -269,7 +271,7 @@ public class OneQueryServiceImpl implements QueryService {
 	 */
 	@Override
 	public <T extends BaseEntity> List<Object> selectValueListById(T entity, String id, String fieldName)
-			throws CommonException {
+			throws CommonException, DataOperationCancelledException {
 		AssertUtil.notNull(entity);
 		AssertUtil.isInstanceOf(OneEntity.class, entity, "only support OneEntity");
 		AssertUtil.notBlank(fieldName);
@@ -284,7 +286,7 @@ public class OneQueryServiceImpl implements QueryService {
 			return list;
 		} else {
 			// select canceled
-			throw new OperationCancelledCommonException("select cancelled by trigger");
+			throw new DataOperationCancelledException("select cancelled by trigger");
 		}
 	}
 
@@ -353,7 +355,7 @@ public class OneQueryServiceImpl implements QueryService {
 	 */
 	@Override
 	public <T extends BaseEntity> T selectOneByUniqueFields(T entity, String[] fieldNames)
-			throws CommonException, DataNotExistsException, DuplicateDataException {
+			throws CommonException, DataNotExistsException, DuplicateDataException, DataOperationCancelledException {
 		AssertUtil.notNull(entity);
 
 		List<Long> rowids = this.selectRowidsByFields(entity, fieldNames);

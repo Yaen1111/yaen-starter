@@ -1,5 +1,7 @@
 package org.yaen.starter.common.data.exceptions;
 
+import org.yaen.starter.common.data.enums.SystemCode;
+
 /**
  * data not exists
  * 
@@ -11,34 +13,16 @@ public class DataNotExistsException extends DataException {
 	/**
 	 * @param message
 	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
-	 */
-	public DataNotExistsException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	/**
-	 * @param message
-	 * @param cause
 	 */
 	public DataNotExistsException(String message, Throwable cause) {
-		super(message, cause);
+		super(SystemCode.E_DATA_NOT_EXISTS.getCode(), message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
 	public DataNotExistsException(String message) {
-		super(message);
-	}
-
-	/**
-	 * @param cause
-	 */
-	public DataNotExistsException(Throwable cause) {
-		super(cause);
+		super(SystemCode.E_DATA_NOT_EXISTS.getCode(), message);
 	}
 
 }

@@ -28,9 +28,4 @@ public abstract class OneModel {
 	 */
 	public abstract void check() throws CoreException;
 
-	/**
-	 * clear entire content, just as a new model
-	 */
-	public abstract void clear();
-
 }

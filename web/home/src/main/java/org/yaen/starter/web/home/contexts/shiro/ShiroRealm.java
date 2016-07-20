@@ -14,10 +14,11 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.entities.user.UserEntity;
 import org.yaen.starter.core.model.models.user.UserModel;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.services.UserService;
@@ -62,11 +63,12 @@ public class ShiroRealm extends AuthorizingRealm {
 		// find user
 		try {
 			user.loadById(username);
-		} catch (CoreException ex) {
-			// other error
-			throw new AccountException("unknown error", ex);
 		} catch (DataNotExistsException ex) {
 			throw new UnknownAccountException();
+		} catch (DataException ex) {
+			throw new AccountException("unknown error", ex);
+		} catch (CommonException ex) {
+			throw new AccountException("unknown error", ex);
 		}
 
 		// here is ok, create authentication info
@@ -116,6 +118,9 @@ public class ShiroRealm extends AuthorizingRealm {
 
 				return info;
 			} catch (CoreException ex) {
+				log.error("get role auth error", ex);
+				return null;
+			} catch (DataException ex) {
 				log.error("get role auth error", ex);
 				return null;
 			}

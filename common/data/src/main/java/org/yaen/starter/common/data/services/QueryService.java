@@ -5,6 +5,7 @@ import java.util.List;
 import org.yaen.starter.common.data.entities.BaseEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.data.exceptions.DataOperationCancelledException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.data.objects.QueryBuilder;
 
@@ -24,8 +25,10 @@ public interface QueryService {
 	 * @param rowids
 	 * @return
 	 * @throws CommonException
+	 * @throws DataOperationCancelledException
 	 */
-	public <T extends BaseEntity> List<T> selectListByRowids(T entity, List<Long> rowids) throws CommonException;
+	public <T extends BaseEntity> List<T> selectListByRowids(T entity, List<Long> rowids)
+			throws CommonException, DataOperationCancelledException;
 
 	/**
 	 * select entity list by given id, with triggers
@@ -34,8 +37,10 @@ public interface QueryService {
 	 * @param id
 	 * @return
 	 * @throws CommonException
+	 * @throws DataOperationCancelledException
 	 */
-	public <T extends BaseEntity> List<T> selectListById(T entity, String id) throws CommonException;
+	public <T extends BaseEntity> List<T> selectListById(T entity, String id)
+			throws CommonException, DataOperationCancelledException;
 
 	/**
 	 * select one entity by given id, with triggers, empty or duplicate will throw
@@ -46,9 +51,10 @@ public interface QueryService {
 	 * @throws CommonException
 	 * @throws DataNotExistsException
 	 * @throws DuplicateDataException
+	 * @throws DataOperationCancelledException
 	 */
 	public <T extends BaseEntity> T selectOneById(T entity, String id)
-			throws CommonException, DataNotExistsException, DuplicateDataException;
+			throws CommonException, DataNotExistsException, DuplicateDataException, DataOperationCancelledException;
 
 	/**
 	 * select value list by given id and field name, no triggers
@@ -58,9 +64,10 @@ public interface QueryService {
 	 * @param fieldName
 	 * @return
 	 * @throws CommonException
+	 * @throws DataOperationCancelledException
 	 */
 	public <T extends BaseEntity> List<Object> selectValueListById(T entity, String id, String fieldName)
-			throws CommonException;
+			throws CommonException, DataOperationCancelledException;
 
 	/**
 	 * select rowids by field name, the value is the given value in the entity and use equal, no triggers
@@ -91,9 +98,10 @@ public interface QueryService {
 	 * @throws CommonException
 	 * @throws DataNotExistsException
 	 * @throws DuplicateDataException
+	 * @throws DataOperationCancelledException
 	 */
 	public <T extends BaseEntity> T selectOneByUniqueFields(T entity, String[] fieldNames)
-			throws CommonException, DataNotExistsException, DuplicateDataException;
+			throws CommonException, DataNotExistsException, DuplicateDataException, DataOperationCancelledException;
 
 	/**
 	 * select rowids by all none-null field, the value is the given value in the entity, no triggers

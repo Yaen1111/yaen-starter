@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.common.data.exceptions;
 
 /**
@@ -8,39 +5,56 @@ package org.yaen.starter.common.data.exceptions;
  * 
  * @author Yaen 2016年1月13日下午7:31:52
  */
-public class CommonException extends Exception {
+public class CommonException extends StarterException {
 	private static final long serialVersionUID = -3212540352141901386L;
 
 	/**
+	 * constructor with code
+	 * 
+	 * @param code
 	 * @param message
 	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
 	 */
-	public CommonException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
+	public CommonException(Integer code, String message, Throwable cause) {
+		super(code, message, cause);
 	}
 
 	/**
+	 * constructor with code
+	 * 
+	 * @param code
+	 * @param message
+	 */
+	public CommonException(Integer code, String message) {
+		super(code, message);
+	}
+
+	/**
+	 * constructor without code
+	 * 
 	 * @param message
 	 * @param cause
 	 */
 	public CommonException(String message, Throwable cause) {
-		super(message, cause);
+		super(0, message, cause);
 	}
 
 	/**
+	 * constructor without code
+	 * 
 	 * @param message
 	 */
 	public CommonException(String message) {
-		super(message);
+		super(0, message);
 	}
 
 	/**
+	 * constructor without code
+	 * 
 	 * @param cause
 	 */
 	public CommonException(Throwable cause) {
-		super(cause);
+		super(0, null, cause);
 	}
 
 }
