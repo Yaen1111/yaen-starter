@@ -60,7 +60,7 @@ public abstract class BaseMessageModel extends TwoModel {
 					// the name should be capital
 					String name2 = name;
 
-					if (name != null && name.length() >= 1) {
+					if (name != null && name.length() >= 1 && !name.equals("xml")) {
 						name2 = name.substring(0, 1).toUpperCase() + name.substring(1);
 					}
 
