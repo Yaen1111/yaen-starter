@@ -24,7 +24,4 @@ public class BaseResponseMessage {
 	/** message type (text/music/news) */
 	private String msgType;
 
-	/** if flag 0x0001 is set, the received message will be marked */
-	private int funcFlag;
-
 }
