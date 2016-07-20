@@ -49,4 +49,7 @@ public final class EventTypes {
 	/** poi(shop) check notify */
 	public static final String EVENT_TYPE_POI_CHECK_NOTIFY = "poi_check_notify";
 
+	/** template send job finish */
+	public static final String EVENT_TYPE_TEMPLATESENDJOBFINISH = "TEMPLATESENDJOBFINISH";
+
 }

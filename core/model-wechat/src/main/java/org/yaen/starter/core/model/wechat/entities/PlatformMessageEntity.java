@@ -194,4 +194,8 @@ public class PlatformMessageEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.VARCHAR64)
 	private String msg;
 
+	/** for template message, status */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String status;
+
 }

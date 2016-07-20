@@ -15,6 +15,7 @@ import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.objects.Article;
 import org.yaen.starter.core.model.wechat.services.WechatService;
 
 import com.thoughtworks.xstream.XStream;
@@ -60,7 +61,7 @@ public abstract class BaseMessageModel extends TwoModel {
 					// the name should be capital
 					String name2 = name;
 
-					if (name != null && name.length() >= 1 && !name.equals("xml")) {
+					if (name != null && name.length() >= 1 && !name.equals("xml") && !name.equals("item")) {
 						name2 = name.substring(0, 1).toUpperCase() + name.substring(1);
 					}
 
@@ -150,7 +151,12 @@ public abstract class BaseMessageModel extends TwoModel {
 	 */
 	public String toXml(Object msg) {
 		AssertUtil.notNull(msg);
+
+		// alias base xml
 		xStream.alias("xml", msg.getClass());
+
+		// alias item
+		xStream.alias("item", Article.class);
 		return xStream.toXML(msg);
 	}
 
