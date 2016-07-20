@@ -1,8 +1,10 @@
 package org.yaen.starter.test.test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.yaen.starter.common.integration.clients.HttpClient;
 import org.yaen.starter.common.integration.clients.impl.HttpClientImpl;
 import org.yaen.starter.common.integration.clients.impl.WechatClientImpl;
@@ -14,35 +16,23 @@ import org.yaen.starter.common.integration.clients.impl.WechatClientImpl;
 public class SimpleTest {
 
 	public static void main(String[] args) {
-		// String apiurl = "http://smsapi.c123.cn/OpenPlatform/OpenApi";
 
-		HttpClient httpClient = new HttpClientImpl();
+		String token = "HwIfAnIsToken";
+		String timestamp = "1469026233";
+		String nonce = "369228118";
 
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("action", "sendOnce");
-		map.put("ac", "1001@501308820001");
-		map.put("authkey", "7ED1251EA7D481F70DB1C700B07AE325");
-		map.put("m", "15858147890");
-		map.put("c", "test sms");
-		map.put("encode", "utf-8");
+		// add token, timestamp, nonce to array, and sort
+		String[] arr = new String[] { token, timestamp, nonce };
+		Arrays.sort(arr);
 
-		String url = "http://smsapi.c123.cn/OpenPlatform/OpenApi?action=sendOnce&ac=1001@501308820001&authkey=7ED1251EA7D481F70DB1C700B07AE325&cgid=52&c=testsms&m=13750835052";
-
-		try {
-			String content = httpClient.httpGet(url);
-			System.out.println(content);
-		} catch (Exception e) {
-			e.printStackTrace();
+		// combine together
+		StringBuilder content = new StringBuilder();
+		for (int i = 0; i < arr.length; i++) {
+			content.append(arr[i]);
 		}
 
-		WechatClientImpl s = new WechatClientImpl();
-		try {
-			System.out.println(s.getAccessToken("wx67be379381b004de", "af8e086dee051827251454a3e7dc7069"));
-			// sprPi802pRK4-OF5j1qryAvzrXgTE9MztOJrP88eUiZMBssLkVbM5Uknj48UPh0NrGUfYWGPo31AJNI49sRoornebS17_jD3CRvvDqUmS4tW2vZ7SC4q4MJ6N7qGkl8YGRUgAJALWZ
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// do sha-1
+		String tmpStr = DigestUtils.sha1Hex(content.toString());
 
 	}
 }

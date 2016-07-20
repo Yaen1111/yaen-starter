@@ -68,7 +68,7 @@ public class WechatServiceImpl implements WechatService {
 		String tmpStr = DigestUtils.sha1Hex(content.toString());
 
 		// should be same
-		if (StringUtil.equals(tmpStr, signature.toUpperCase())) {
+		if (StringUtil.equalsIgnoreCase(tmpStr, signature)) {
 			return echostr;
 		} else {
 			return "bad parameter";
