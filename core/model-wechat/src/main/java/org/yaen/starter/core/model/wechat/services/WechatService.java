@@ -40,12 +40,12 @@ public interface WechatService {
 	String formatTime(String createTime);
 
 	/**
-	 * make response according to the request
+	 * make response string according to the request
 	 * 
 	 * @param requestMessage
 	 * @return
 	 */
-	PlatformMessageModel makeResponse(PlatformMessageModel requestMessage);
+	String makeResponse(PlatformMessageModel requestMessage);
 
 	/**
 	 * get access token of given appid

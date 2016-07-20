@@ -21,6 +21,7 @@ import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
 import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
 import org.yaen.starter.core.model.wechat.objects.AccessToken;
+import org.yaen.starter.core.model.wechat.objects.TextResponseMessage;
 import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
@@ -181,26 +182,24 @@ public class WechatServiceImpl implements WechatService {
 	 * @see org.yaen.starter.core.model.wechat.services.WechatService#makeResponse(org.yaen.starter.core.model.wechat.models.PlatformMessageModel)
 	 */
 	@Override
-	public PlatformMessageModel makeResponse(PlatformMessageModel requestMessage) {
+	public String makeResponse(PlatformMessageModel requestMessage) {
 		AssertUtil.notNull(requestMessage);
 
-		// create response message model
-		PlatformMessageModel responseMessage = new PlatformMessageModel(requestMessage.getProxy(),
-				requestMessage.getService());
+		PlatformMessageEntity req = requestMessage.getEntity();
 
 		// response as text
-		PlatformMessageEntity entity = responseMessage.getEntity();
-		entity.setMsgType(MessageTypes.RESP_MESSAGE_TYPE_TEXT);
-		entity.setToUserName(requestMessage.getEntity().getFromUserName());
-		entity.setFromUserName(requestMessage.getEntity().getToUserName());
-		entity.setCreateTime(DateUtil.getNow().getTime());
+		TextResponseMessage resp = new TextResponseMessage();
+		resp.setMsgType(MessageTypes.RESP_MESSAGE_TYPE_TEXT);
+		resp.setToUserName(req.getFromUserName());
+		resp.setFromUserName(req.getToUserName());
+		resp.setCreateTime(DateUtil.getNow().getTime());
 
-		String msgType = requestMessage.getEntity().getMsgType();
+		String msgType = req.getMsgType();
 		String respContent = "";
 
 		// 文本消息
 		if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_TEXT)) {
-			respContent = "您发送的是文本消息！";
+			respContent = "您发送的是文本消息:" + req.getContent();
 		}
 		// 图片消息
 		else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_IMAGE)) {
@@ -221,8 +220,8 @@ public class WechatServiceImpl implements WechatService {
 		// 事件推送
 		else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_EVENT)) {
 			// 事件类型
-			String eventType = requestMessage.getEntity().getEvent();
-			String eventKey = requestMessage.getEntity().getEventKey();
+			String eventType = req.getEvent();
+			String eventKey = req.getEventKey();
 
 			// 订阅
 			if (eventType.equals(EventTypes.EVENT_TYPE_SUBSCRIBE)) {
@@ -231,6 +230,7 @@ public class WechatServiceImpl implements WechatService {
 			// 取消订阅
 			else if (eventType.equals(EventTypes.EVENT_TYPE_UNSUBSCRIBE)) {
 				// 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+				respContent = "您已经取消关注！";
 			}
 			// 自定义菜单点击事件
 			else if (eventType.equals(EventTypes.EVENT_TYPE_CLICK)) {
@@ -267,9 +267,10 @@ public class WechatServiceImpl implements WechatService {
 		}
 
 		// set content
-		entity.setContent(respContent);
+		resp.setContent(respContent);
 
-		return responseMessage;
+		// get xml
+		return requestMessage.toXml(resp);
 	}
 
 }

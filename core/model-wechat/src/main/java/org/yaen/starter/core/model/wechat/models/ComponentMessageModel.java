@@ -1,20 +1,14 @@
 package org.yaen.starter.core.model.wechat.models;
 
 import java.io.Reader;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.ComponentMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.InfoTypes;
+import org.yaen.starter.core.model.wechat.services.WechatService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Yaen 2016年7月14日下午2:07:17
  */
 @Slf4j
-public class ComponentMessageModel extends TwoModel {
+public class ComponentMessageModel extends BaseMessageModel {
 
 	@Override
 	public ComponentMessageEntity getEntity() {
@@ -35,9 +29,10 @@ public class ComponentMessageModel extends TwoModel {
 	 * constructor
 	 * 
 	 * @param proxy
+	 * @param service
 	 */
-	public ComponentMessageModel(ProxyService proxy) {
-		super(proxy, new ComponentMessageEntity());
+	public ComponentMessageModel(ProxyService proxy, WechatService service) {
+		super(proxy, service, new ComponentMessageEntity());
 	}
 
 	/**
@@ -46,35 +41,11 @@ public class ComponentMessageModel extends TwoModel {
 	 * @param is
 	 * @throws CoreException
 	 */
-	@SuppressWarnings("unchecked")
 	public void loadFromXml(Reader reader) throws CoreException {
 		AssertUtil.notNull(reader);
 
-		// make xml reader
-		SAXReader sax_reader = new SAXReader();
-		Document document;
-		try {
-			document = sax_reader.read(reader);
-		} catch (DocumentException ex) {
-			throw new CoreException("read xml from inputstream error", ex);
-		}
-
-		// get root
-		Element root = document.getRootElement();
-
-		// get all elements
-		List<Element> elementList = (List<Element>) root.elements();
-
 		// the value map
-		Map<String, String> map = new HashMap<String, String>();
-
-		// add all elements to map
-		for (Element e : elementList) {
-			map.put(e.getName(), e.getText());
-		}
-
-		// output map
-		log.debug("parse xml done, map={}", map);
+		Map<String, String> map = this.getMapFormXml(reader);
 
 		// get entity and fill data
 		ComponentMessageEntity msg = this.getEntity();
@@ -111,6 +82,15 @@ public class ComponentMessageModel extends TwoModel {
 		}
 
 		// done
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.wechat.models.BaseMessageModel#makeResponse()
+	 */
+	@Override
+	public String makeResponse() throws CoreException {
+		// return success anyway
+		return "success";
 	}
 
 }

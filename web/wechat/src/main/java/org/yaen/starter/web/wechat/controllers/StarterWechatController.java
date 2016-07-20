@@ -138,11 +138,8 @@ public class StarterWechatController {
 				// save message anyway
 				requestMessage.saveNew();
 
-				// make response, big routine
-				PlatformMessageModel responseMessage = requestMessage.makeResponse();
-
 				// get response as xml string
-				String responseString = responseMessage.toXml();
+				String responseString = requestMessage.makeResponse();
 
 				// write response
 				writer = response.getWriter();
@@ -207,7 +204,7 @@ public class StarterWechatController {
 				response.setCharacterEncoding("UTF-8");
 
 				// create model to handle
-				ComponentMessageModel requestMessage = new ComponentMessageModel(proxyService);
+				ComponentMessageModel requestMessage = new ComponentMessageModel(proxyService, wechatService);
 
 				// get reader
 				reader = request.getReader();
@@ -307,8 +304,8 @@ public class StarterWechatController {
 				// save message anyway
 				requestMessage.saveNew();
 
-				// response set to success?
-				String responseString = "success";
+				// get response as normal
+				String responseString = requestMessage.makeResponse();
 
 				// write response
 				writer = response.getWriter();
