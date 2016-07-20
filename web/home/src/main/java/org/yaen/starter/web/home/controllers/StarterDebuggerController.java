@@ -40,10 +40,13 @@ public class StarterDebuggerController {
 	 * http client debugger
 	 * 
 	 * @param model
+	 * @param method
+	 * @param api
+	 * @param content
 	 * @return
 	 */
 	@RequestMapping("http")
-	public String http(Model model, String api, String content) {
+	public String http(Model model, String method, String api, String content) {
 
 		model.addAttribute("api", api);
 		model.addAttribute("content", content);
@@ -52,9 +55,14 @@ public class StarterDebuggerController {
 		if (StringUtil.isNotBlank(api)) {
 
 			try {
-				String result = httpClient.httpPost(api, content);
+				if (StringUtil.equalsIgnoreCase(method, "POST")) {
+					String result = httpClient.httpPost(api, content);
+					model.addAttribute("result", result);
+				} else {
+					String result = httpClient.httpGet(api);
+					model.addAttribute("result", result);
+				}
 
-				model.addAttribute("result", result);
 			} catch (IOException ex) {
 				log.debug("debugger:http:error", ex);
 				model.addAttribute("error", ex);

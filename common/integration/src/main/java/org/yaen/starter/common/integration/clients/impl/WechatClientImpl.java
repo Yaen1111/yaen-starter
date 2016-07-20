@@ -1,17 +1,13 @@
 package org.yaen.starter.common.integration.clients.impl;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.integration.clients.HttpClient;
 import org.yaen.starter.common.integration.clients.WechatClient;
-import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.common.util.utils.StringUtil;
 
 import com.alibaba.fastjson.JSONObject;
 

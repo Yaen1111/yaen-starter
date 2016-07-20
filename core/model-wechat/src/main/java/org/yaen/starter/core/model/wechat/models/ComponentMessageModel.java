@@ -1,6 +1,5 @@
 package org.yaen.starter.core.model.wechat.models;
 
-import java.io.InputStream;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +83,11 @@ public class ComponentMessageModel extends TwoModel {
 		msg.setAppid(map.get("AppId"));
 		msg.setCreateTime(Long.parseLong(map.get("CreateTime")));
 		msg.setInfoType(map.get("InfoType"));
+
+		// make switch not null
+		if (msg.getInfoType() == null) {
+			msg.setInfoType("");
+		}
 
 		switch (msg.getInfoType()) {
 		case InfoTypes.COMPONENT_VERIFY_TICKET:

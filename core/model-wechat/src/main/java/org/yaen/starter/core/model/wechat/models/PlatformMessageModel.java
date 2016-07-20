@@ -142,10 +142,20 @@ public class PlatformMessageModel extends TwoModel {
 		msg.setCreateTime(Long.parseLong(map.get("CreateTime")));
 		msg.setMsgType(map.get("MsgType"));
 
+		// make switch not null
+		if (msg.getMsgType() == null) {
+			msg.setMsgType("");
+		}
+
 		if (StringUtil.equals(msg.getMsgType(), MessageTypes.REQ_MESSAGE_TYPE_EVENT)) {
 			// is event, get event and eventkey(maybe null)
 			msg.setEvent(map.get("Event"));
 			msg.setEventKey(map.get("EventKey"));
+
+			// make switch not null
+			if (msg.getEvent() == null) {
+				msg.setEvent("");
+			}
 
 			switch (msg.getEvent()) {
 			case EventTypes.EVENT_TYPE_SUBSCRIBE:
