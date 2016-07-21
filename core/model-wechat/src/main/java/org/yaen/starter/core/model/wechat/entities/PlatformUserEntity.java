@@ -31,9 +31,21 @@ public class PlatformUserEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String appId;
 
+	/** last active time */
+	@OneData(DataType = DataTypes.DATETIME)
+	private Date lastActiveTime;
+
 	/** is subscribed, 1 for subscribed */
 	@OneData(DataType = DataTypes.INT)
 	private Integer subscribe;
+
+	/** subscribe time, is the last subscribe time */
+	@OneData(DataType = DataTypes.DATETIME)
+	private Date subscribeTime;
+
+	/** unsubscribe time */
+	@OneData(DataType = DataTypes.DATETIME)
+	private Date unsubscribeTime;
 
 	/** the nickname, used for identify between appid */
 	@OneData(DataType = DataTypes.VARCHAR64)
@@ -63,14 +75,6 @@ public class PlatformUserEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String headimgurl;
 
-	/** subscribe time, is the last subscribe time */
-	@OneData(DataType = DataTypes.DATETIME)
-	private Date subscribeTime;
-
-	/** unsubscribe time */
-	@OneData(DataType = DataTypes.DATETIME)
-	private Date unsubscribeTime;
-
 	/** the unionId, should bind to developer platform, null in most case */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String unionId;
@@ -86,25 +90,5 @@ public class PlatformUserEntity extends TwoEntity {
 	/** the tagIdList, for tags, like "[128,2]" */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String tagIdList;
-
-	/**
-	 * empty constructor
-	 */
-	public PlatformUserEntity() {
-		super();
-	}
-
-	/**
-	 * constructor with appid and openid
-	 * 
-	 * @param openId
-	 * @param appId
-	 */
-	public PlatformUserEntity(String openId, String appId) {
-		this();
-
-		this.openId = openId;
-		this.appId = appId;
-	}
 
 }

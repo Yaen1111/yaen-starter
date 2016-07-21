@@ -30,7 +30,7 @@ public class AccessTokenEntity extends TwoEntity {
 	// 9Jqm3wJOE2tmkhNFrrRtqFCifCmaUXNBUBMM2DDLJ5RxW5LT6yV64lXcGS1AjBYdNpO2xL-aymeCNpDZR15UlIwqnDfBUHUPEqavLrz9u01g8sqoJFH76WbuohsJA6gvBLWhAHAMWH
 	// TH6V3P5TQgAt8pt_LaOtCVnr1c9-a3XEnvWZa7HupaNk7hHANO1yimB4dTL1hJa0iZClpLHiTWjxN3TwqtRioU7bhA9xPuET_pV4bdpBMgEqcQAZbHL0xkDlAhDMjv79IJNfABAVWA
 	/** the access token, need 512 */
-	@OneData(DataType = DataTypes.VARCHAR, DataSize = 512)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String accessToken;
 
 	/** the access token create time */
@@ -44,23 +44,5 @@ public class AccessTokenEntity extends TwoEntity {
 	/** the access token get time plus expire in to get expire time */
 	@OneData(DataType = DataTypes.DATETIME)
 	private Date expireTime;
-
-	/**
-	 * empty constructor
-	 */
-	public AccessTokenEntity() {
-		super();
-	}
-
-	/**
-	 * constructor with appid
-	 * 
-	 * @param appId
-	 */
-	public AccessTokenEntity(String appId) {
-		this();
-
-		this.appId = appId;
-	}
 
 }

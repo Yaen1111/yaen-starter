@@ -23,8 +23,9 @@ import lombok.Setter;
 public class ComponentEntity extends TwoEntity {
 	private static final long serialVersionUID = -4510666965270467874L;
 
+	// ticket@@@7uUrwcEAJnyKOzNby9vFFaVHPUoi1BEq_EspgoVYYcuHG-cpsMuplS5SJu-xSjBdQ93ih4Mb5hqZFdIT6WRTkg
 	/** the component verify ticket, changes every 10 minutes */
-	@OneData(DataType = DataTypes.VARCHAR64)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String componentVerifyTicket;
 
 	/** the create time, origin is int type */
@@ -32,7 +33,7 @@ public class ComponentEntity extends TwoEntity {
 	private Long componentVerifyTicketCreate;
 
 	/** the component access token, expires in 7200 */
-	@OneData(DataType = DataTypes.VARCHAR64)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String componentAccessToken;
 
 	/** the create time, origin is int type */
@@ -44,7 +45,7 @@ public class ComponentEntity extends TwoEntity {
 	private Long componentAccessTokenExpireIn;
 
 	/** the pre auth code, expires in 600 */
-	@OneData(DataType = DataTypes.VARCHAR64)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String preAuthCode;
 
 	/** the create time, origin is int type */

@@ -63,7 +63,7 @@ public class PlatformMessageEntity extends TwoEntity {
 	private String eventKey;
 
 	/** the ticket for qrcode */
-	@OneData(DataType = DataTypes.VARCHAR64)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String ticket;
 
 	/** for link, the title of the link */
@@ -79,11 +79,11 @@ public class PlatformMessageEntity extends TwoEntity {
 	private String content;
 
 	/** for image/voice/video/etc, the media id, used to download media */
-	@OneData(DataType = DataTypes.VARCHAR32)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String mediaId;
 
 	/** for video/short video/music, the thumb media id, used to download media */
-	@OneData(DataType = DataTypes.VARCHAR32)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String thumbMediaId;
 
 	/** for image, the picture url */
@@ -179,11 +179,11 @@ public class PlatformMessageEntity extends TwoEntity {
 	private String failReason;
 
 	/** for event-poi, the shop owner id */
-	@OneData(DataType = DataTypes.VARCHAR32)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String uniqId;
 
 	/** for event-poi, the shop id */
-	@OneData(DataType = DataTypes.VARCHAR32)
+	@OneData(DataType = DataTypes.VARCHAR64)
 	private String poiId;
 
 	/** for event-poi, succ for ok, fail for error */

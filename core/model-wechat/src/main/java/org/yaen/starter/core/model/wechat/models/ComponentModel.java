@@ -468,7 +468,7 @@ public class ComponentModel extends TwoModel {
 		}
 
 		// create model that is platform component
-		PlatformComponentModel model = new PlatformComponentModel(appid, platform.getAccessToken());
+		PlatformComponentModel model = new PlatformComponentModel(this.proxy, appid, platform.getAccessToken());
 
 		return model;
 	}

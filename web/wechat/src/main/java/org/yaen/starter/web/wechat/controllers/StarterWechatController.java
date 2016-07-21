@@ -3,6 +3,7 @@ package org.yaen.starter.web.wechat.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,11 +12,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.yaen.starter.common.data.exceptions.CommonException;
+import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
+import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.entities.ComponentMessageEntity;
+import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
+import org.yaen.starter.core.model.wechat.entities.PlatformUserEntity;
+import org.yaen.starter.core.model.wechat.enums.EventTypes;
+import org.yaen.starter.core.model.wechat.enums.InfoTypes;
+import org.yaen.starter.core.model.wechat.enums.MessageTypes;
 import org.yaen.starter.core.model.wechat.models.ComponentMessageModel;
+import org.yaen.starter.core.model.wechat.models.ComponentModel;
 import org.yaen.starter.core.model.wechat.models.PlatformComponentMessageModel;
 import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
+import org.yaen.starter.core.model.wechat.models.PlatformModel;
+import org.yaen.starter.core.model.wechat.models.PlatformUserModel;
 import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 import org.yaen.starter.web.home.utils.WebUtil;
@@ -96,6 +111,132 @@ public class StarterWechatController {
 	}
 
 	/**
+	 * process platform message for given appid
+	 * 
+	 * @param appid
+	 * @param requestMessage
+	 * @throws DataException
+	 * @throws CommonException
+	 * @throws CoreException
+	 */
+	protected void processPlatformMessage(String appid, PlatformMessageModel requestMessage)
+			throws DataException, CommonException, CoreException {
+
+		PlatformMessageEntity msg = requestMessage.getEntity();
+		PlatformUserModel puser = null;
+		PlatformUserEntity user = null;
+		Date now = DateUtil.getNow();
+
+		if (StringUtil.isNotBlank(msg.getFromUserName())) {
+			// has user info
+			puser = new PlatformUserModel(this.proxyService);
+
+			// try get one, if not exists, create one
+			try {
+				puser.loadByOpenId(msg.getFromUserName(), appid);
+			} catch (DataNotExistsException ex) {
+				// no data, create one
+				puser.saveNew();
+			}
+
+			// get user entity
+			user = puser.getEntity();
+
+			// set last active time
+			user.setLastActiveTime(DateUtil.getNow());
+		}
+
+		// check event
+		if (StringUtil.equals(msg.getMsgType(), MessageTypes.REQ_MESSAGE_TYPE_EVENT) && msg.getEvent() != null) {
+			switch (msg.getEvent()) {
+			case EventTypes.EVENT_TYPE_SUBSCRIBE:
+				// user subscribe
+				user.setSubscribe(1);
+				user.setSubscribeTime(now);
+				break;
+			case EventTypes.EVENT_TYPE_UNSUBSCRIBE:
+				// user unsubscribe
+				user.setSubscribe(0);
+				user.setUnsubscribeTime(now);
+				break;
+			default:
+				// ignore others
+				break;
+			}
+		}
+
+		// update user
+		if (puser != null) {
+			puser.saveById();
+		}
+	}
+
+	/**
+	 * process component message
+	 * 
+	 * @param requestMessage
+	 * @throws DataException
+	 * @throws CommonException
+	 * @throws CoreException
+	 */
+	protected void processComponentMessage(ComponentMessageModel requestMessage)
+			throws DataException, CommonException, CoreException {
+
+		ComponentMessageEntity msg = requestMessage.getEntity();
+
+		if (msg.getInfoType() != null) {
+			switch (msg.getInfoType()) {
+			case InfoTypes.COMPONENT_VERIFY_TICKET:
+			// verify ticket, update component
+			{
+				ComponentModel component = new ComponentModel(this.proxyService);
+
+				// try get one, if not exists, create one
+				try {
+					component.loadById(WechatPropertiesUtil.getComponentAppid());
+				} catch (DataNotExistsException ex) {
+					// no data, create one
+					component.saveNew();
+				}
+
+				// set ticket
+				component.getEntity().setComponentVerifyTicket(msg.getComponentVerifyTicket());
+				component.getEntity().setComponentVerifyTicketCreate(msg.getCreateTime());
+
+				// save
+				component.saveById();
+			}
+				break;
+			case InfoTypes.AUTHORIZED:
+			case InfoTypes.UPDATEAUTHORIZED:
+			// platform auth with auth code
+			{
+				PlatformModel platform = new PlatformModel(this.proxyService);
+
+				// try get one, if not exists, create one
+				try {
+					platform.loadById(msg.getAuthorizerAppid());
+				} catch (DataNotExistsException ex) {
+					// no data, create one
+					platform.saveNew();
+				}
+
+				// set ticket
+				platform.getEntity().setAuthorizationCode(msg.getAuthorizationCode());
+				platform.getEntity().setAuthorizationCodeExpiredTime(msg.getAuthorizationCodeExpiredTime());
+
+				// save
+				platform.saveById();
+			}
+				break;
+			default:
+				// ignore others
+				break;
+			}
+		}
+	}
+
+	/**
 	 * platform message, get for token check, post for message data
 	 * 
 	 * @param request
@@ -137,6 +278,9 @@ public class StarterWechatController {
 
 				// save message anyway
 				requestMessage.saveNew();
+
+				// process message
+				this.processPlatformMessage(WechatPropertiesUtil.getAppid(), requestMessage);
 
 				// get response as xml string
 				String responseString = requestMessage.makeResponse();
@@ -215,6 +359,9 @@ public class StarterWechatController {
 				// save message anyway
 				requestMessage.saveNew();
 
+				// set component/platform info according to message
+				this.processComponentMessage(requestMessage);
+
 				// response always is success
 				String responseString = "success";
 
@@ -258,11 +405,6 @@ public class StarterWechatController {
 		log.info("api:wechat:platformcom:message:called, uri={}, ip={}, method={}, querystring={}",
 				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
 
-		// log param
-		if (log.isDebugEnabled()) {
-			log.debug("querystring={}", request.getQueryString());
-		}
-
 		// check method
 		if (StringUtil.equalsIgnoreCase(request.getMethod(), "GET")) {
 			// do check signature for platform
@@ -300,6 +442,9 @@ public class StarterWechatController {
 				// save message anyway
 				requestMessage.saveNew();
 
+				// process message
+				this.processPlatformMessage(appid, requestMessage);
+
 				// get response as normal
 				String responseString = requestMessage.makeResponse();
 
@@ -327,6 +472,34 @@ public class StarterWechatController {
 		} // method == post
 
 		// done, other method is ignored
+	}
+
+	/**
+	 * component-binded platform auth callback
+	 * 
+	 * <pre>
+	 * the auth page is :
+	 * https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=xxxx&pre_auth_code=xxxxx&redirect_uri=xxxx
+	 * </pre>
+	 * 
+	 * <pre>
+	 * when done, the redirect_uri will be called with auth_code
+	 * </pre>
+	 * 
+	 * @param component_appid
+	 * @param auth_code
+	 * @param expires_in
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping("platformcom/auth")
+	public void platformComponentAuth(String component_appid, String auth_code, String expires_in,
+			HttpServletRequest request, HttpServletResponse response) {
+		// log api
+		log.info("api:wechat:platformcom:message:called, uri={}, ip={}, method={}, querystring={}",
+				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
+
+		// here we can call api to get platform component access token?
 	}
 
 }

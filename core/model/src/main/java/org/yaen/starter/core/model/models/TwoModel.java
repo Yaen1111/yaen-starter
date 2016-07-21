@@ -33,25 +33,23 @@ public class TwoModel extends OneModel {
 	 * fill by id
 	 * 
 	 * @param entity
-	 * @param id
 	 * @return
 	 * @throws DataException
 	 * @throws CommonException
 	 */
-	protected <T extends OneEntity> void fillEntityById(T entity, String id) throws DataException, CommonException {
+	protected <T extends OneEntity> void fillEntityById(T entity) throws DataException, CommonException {
 
-		// set id to entity
-		entity.setId(id);
+		// get row ids
 		List<Long> rowids = this.proxy.getQueryService().selectRowidsByField(entity, "id");
 
 		// check empty
 		if (rowids == null || rowids.isEmpty()) {
-			throw new DataNotExistsException("data not exists, id=" + id);
+			throw new DataNotExistsException("data not exists, id=" + entity.getId());
 		}
 
 		// check duplicate
 		if (rowids.size() > 1) {
-			throw new DuplicateDataException("data id duplicate, id=" + id);
+			throw new DuplicateDataException("data id duplicate, id=" + entity.getId());
 		}
 
 		// fill
@@ -164,7 +162,9 @@ public class TwoModel extends OneModel {
 	public void loadById(String id) throws DataException, CommonException {
 		AssertUtil.notBlank(id);
 
-		this.fillEntityById(this.entity, id);
+		// set id to entity
+		entity.setId(id);
+		this.fillEntityById(this.entity);
 	}
 
 	/**

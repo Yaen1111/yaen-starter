@@ -42,7 +42,7 @@ public class ComponentMessageEntity extends TwoEntity {
 	private String authorizerAppid;
 
 	/** the authorization code */
-	@OneData(DataType = DataTypes.VARCHAR32)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String authorizationCode;
 
 	/** the authorization code expired time */
@@ -50,7 +50,7 @@ public class ComponentMessageEntity extends TwoEntity {
 	private Long authorizationCodeExpiredTime;
 
 	/** the component verify ticket */
-	@OneData(DataType = DataTypes.VARCHAR64)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String componentVerifyTicket;
 
 }

@@ -1,8 +1,8 @@
 package org.yaen.starter.core.model.wechat.models;
 
-import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.models.OneModel;
+import org.yaen.starter.core.model.models.TwoModel;
+import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.entities.PlatformEntity;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
 import lombok.Getter;
@@ -14,31 +14,42 @@ import lombok.Getter;
  * 
  * @author Yaen 2016年7月18日下午9:28:01
  */
-public class PlatformModel extends OneModel {
+public class PlatformModel extends TwoModel {
+
+	@Override
+	public PlatformEntity getEntity() {
+		return (PlatformEntity) super.getEntity();
+	}
 
 	/** the current appid */
 	@Getter
 	protected String appid;
 
 	/** the current access token */
-	@Getter
+	// @Getter
 	protected String accessToken;
 
 	/**
-	 * empty constructor for main platform
+	 * constructor for normal platform
+	 * 
+	 * @param proxy
 	 */
-	public PlatformModel() {
+	public PlatformModel(ProxyService proxy) {
+		super(proxy, new PlatformEntity());
+
 		this.appid = WechatPropertiesUtil.getAppid();
-		this.accessToken = null; // TODO
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#check()
+	 * getter for accessToken
+	 * 
+	 * @return
 	 */
-	@Override
-	public void check() throws CoreException {
-		if (StringUtil.isBlank(this.accessToken))
-			throw new CoreException("accessToken is empty");
+	public String getAccessToken() {
+		if (this.accessToken == null) {
+			// get access token
+		}
+		return this.accessToken;
 	}
 
 }

@@ -32,7 +32,7 @@ public class PlatformEntity extends TwoEntity {
 	private Long authorizationCodeExpiredTime;
 
 	/** the access token for component */
-	@OneData(DataType = DataTypes.VARCHAR32)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String accessToken;
 
 	/** the create time, origin is int type */
@@ -44,7 +44,7 @@ public class PlatformEntity extends TwoEntity {
 	private Long accessTokenExpireIn;
 
 	/** the refresh token for component */
-	@OneData(DataType = DataTypes.VARCHAR32)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String refreshToken;
 
 	/** the create time */
@@ -52,7 +52,7 @@ public class PlatformEntity extends TwoEntity {
 	private Long refreshTokenCreate;
 
 	/** the func scope category, current 1-15, comma separated */
-	@OneData(DataType = DataTypes.VARCHAR256)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String funcscopeCategory;
 
 }
