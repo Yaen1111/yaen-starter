@@ -162,6 +162,12 @@ public abstract class BaseMessageModel extends TwoModel {
 			// get all string data
 			String str = StringUtil.readString(reader);
 
+			// log content
+			if (log.isDebugEnabled()) {
+				log.debug("decrypt xml content: ", str);
+				log.debug("decrypt param : token={}, aeskey={}, appid={}", token, aesKey, appid);
+			}
+
 			// make cryptor
 			WXBizMsgCrypt pc = new WXBizMsgCrypt(token, aesKey, appid);
 
