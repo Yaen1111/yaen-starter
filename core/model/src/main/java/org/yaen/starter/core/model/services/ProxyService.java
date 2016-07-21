@@ -3,7 +3,6 @@ package org.yaen.starter.core.model.services;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.HttpClient;
-import org.yaen.starter.common.integration.clients.RedisClient;
 
 /**
  * proxy service for simple model implement
@@ -34,10 +33,10 @@ public interface ProxyService {
 	HttpClient getHttpClient();
 
 	/**
-	 * get proxy redis client
+	 * get proxy cache service
 	 * 
 	 * @return
 	 */
-	RedisClient getRedisClient();
+	CacheService getCacheService();
 
 }

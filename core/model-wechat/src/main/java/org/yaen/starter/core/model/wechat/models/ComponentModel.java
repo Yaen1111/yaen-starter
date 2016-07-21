@@ -14,6 +14,7 @@ import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.ComponentEntity;
 import org.yaen.starter.core.model.wechat.entities.PlatformEntity;
+import org.yaen.starter.core.model.wechat.utils.WechatJsonUtil;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
 import com.alibaba.fastjson.JSONObject;
@@ -54,7 +55,7 @@ public class ComponentModel extends TwoModel {
 	 * @return
 	 * @throws CoreException
 	 */
-	protected JSONObject callAPI(String api, Map<String, Object> param) throws CoreException {
+	protected JSONObject callApiPost(String api, Map<String, Object> param) throws CoreException {
 		JSONObject json = null;
 		try {
 			json = this.proxy.getHttpClient().httpsPostAsJson(api, param);
@@ -62,10 +63,8 @@ public class ComponentModel extends TwoModel {
 			throw new CoreException("call api failed", ex);
 		}
 
-		// check error code
-		if (json.containsKey("errcode")) {
-			throw new CoreException("call api return with error, result=" + json.toJSONString());
-		}
+		// check error
+		WechatJsonUtil.checkErrCode(json);
 
 		return json;
 	}
@@ -114,7 +113,7 @@ public class ComponentModel extends TwoModel {
 
 		// try to get from cache if null
 		if (this.componentAccessToken == null) {
-			String component_access_token = (String) this.proxy.getRedisClient().getObjectByKey(CACHE_KEY);
+			String component_access_token = this.readCache(CACHE_KEY);
 			if (StringUtil.isNotBlank(component_access_token)) {
 				this.componentAccessToken = component_access_token;
 			}
@@ -131,8 +130,7 @@ public class ComponentModel extends TwoModel {
 			// db is ok and not out of date
 			if (StringUtil.isNotBlank(component_access_token) && create + expirein / 2 > now) {
 				// set cache
-				this.proxy.getRedisClient().saveObjectByKey(CACHE_KEY, component_access_token,
-						(int) (now - create - expirein / 2));
+				this.writeCache(CACHE_KEY, component_access_token, (int) (now - create - expirein / 2));
 				// set member
 				this.componentAccessToken = component_access_token;
 			}
@@ -150,7 +148,7 @@ public class ComponentModel extends TwoModel {
 			param.put("component_verify_ticket", component_verify_ticket);
 
 			// call api
-			JSONObject json = this.callAPI(API, param);
+			JSONObject json = this.callApiPost(API, param);
 
 			// get result value
 			String component_access_token = json.getString("component_access_token");
@@ -163,7 +161,7 @@ public class ComponentModel extends TwoModel {
 			// set db
 			this.saveById();
 			// set cache
-			this.proxy.getRedisClient().saveObjectByKey(CACHE_KEY, component_access_token, expires_in.intValue());
+			this.writeCache(CACHE_KEY, component_access_token, expires_in.intValue());
 			// set member
 			this.componentAccessToken = component_access_token;
 		}
@@ -202,7 +200,7 @@ public class ComponentModel extends TwoModel {
 
 		// try to get from cache if null
 		if (this.preAuthCode == null) {
-			String pre_auth_code = (String) this.proxy.getRedisClient().getObjectByKey(CACHE_KEY);
+			String pre_auth_code = this.readCache(CACHE_KEY);
 			if (StringUtil.isNotBlank(pre_auth_code)) {
 				this.preAuthCode = pre_auth_code;
 			}
@@ -219,8 +217,7 @@ public class ComponentModel extends TwoModel {
 			// db is ok and not out of date
 			if (StringUtil.isNotBlank(pre_auth_code) && create + expirein / 2 > now) {
 				// set cache
-				this.proxy.getRedisClient().saveObjectByKey(CACHE_KEY, pre_auth_code,
-						(int) (now - create - expirein / 2));
+				this.writeCache(CACHE_KEY, pre_auth_code, (int) (now - create - expirein / 2));
 				// set member
 				this.preAuthCode = pre_auth_code;
 			}
@@ -233,7 +230,7 @@ public class ComponentModel extends TwoModel {
 			param.put("component_appid", this.componentAppid);
 
 			// call api
-			JSONObject json = this.callAPI(API.replace("COMPONENT_ACCESS_TOKEN", this.getComponentAccessToken()),
+			JSONObject json = this.callApiPost(API.replace("COMPONENT_ACCESS_TOKEN", this.getComponentAccessToken()),
 					param);
 
 			// get result value
@@ -247,7 +244,7 @@ public class ComponentModel extends TwoModel {
 			// set db
 			this.saveById();
 			// set cache
-			this.proxy.getRedisClient().saveObjectByKey(CACHE_KEY, pre_auth_code, expires_in.intValue());
+			this.writeCache(CACHE_KEY, pre_auth_code, expires_in.intValue());
 			// set member
 			this.preAuthCode = pre_auth_code;
 		}
@@ -312,7 +309,8 @@ public class ComponentModel extends TwoModel {
 		param.put("authorization_code", authorizationCode);
 
 		// call api
-		JSONObject json = this.callAPI(API.replace("COMPONENT_ACCESS_TOKEN", this.getComponentAccessToken()), param);
+		JSONObject json = this.callApiPost(API.replace("COMPONENT_ACCESS_TOKEN", this.getComponentAccessToken()),
+				param);
 
 		// done
 		return json;
@@ -359,14 +357,15 @@ public class ComponentModel extends TwoModel {
 		param.put("authorizer_refresh_token", refreshToken);
 
 		// call api
-		JSONObject json = this.callAPI(API.replace("COMPONENT_ACCESS_TOKEN", this.getComponentAccessToken()), param);
+		JSONObject json = this.callApiPost(API.replace("COMPONENT_ACCESS_TOKEN", this.getComponentAccessToken()),
+				param);
 
 		// done
 		return json;
 	}
 
 	/**
-	 * get platform component model from current component by given appid
+	 * get platform model from current component by given appid, maybe self platform or platform component
 	 * 
 	 * @param appid
 	 * @return
@@ -374,8 +373,13 @@ public class ComponentModel extends TwoModel {
 	 * @throws CommonException
 	 * @throws DataException
 	 */
-	public PlatformComponentModel getPlatformModel(String appid) throws CoreException, DataException, CommonException {
+	public PlatformModel getPlatformModel(String appid) throws CoreException, DataException, CommonException {
 		AssertUtil.notBlank(appid);
+
+		// if the appid is self, just return new platform
+		if (StringUtil.equals(appid, WechatPropertiesUtil.getAppid())) {
+			return new PlatformModel(this.proxy);
+		}
 
 		Long now = DateUtil.getNow().getTime();
 

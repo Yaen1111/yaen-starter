@@ -3,7 +3,6 @@ package org.yaen.starter.web.wechat.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -125,7 +124,7 @@ public class StarterWechatController {
 		PlatformMessageEntity msg = requestMessage.getEntity();
 		PlatformUserModel puser = null;
 		PlatformUserEntity user = null;
-		Date now = DateUtil.getNow();
+		Long now = DateUtil.getNow().getTime();
 
 		if (StringUtil.isNotBlank(msg.getFromUserName())) {
 			// has user info
@@ -496,10 +495,12 @@ public class StarterWechatController {
 	public void platformComponentAuth(String component_appid, String auth_code, String expires_in,
 			HttpServletRequest request, HttpServletResponse response) {
 		// log api
-		log.info("api:wechat:platformcom:message:called, uri={}, ip={}, method={}, querystring={}",
+		log.info("api:wechat:platformcom:auth:called, uri={}, ip={}, method={}, querystring={}",
 				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
 
 		// here we can call api to get platform component access token?
+		log.info("api:wechat:platformcom:auth  component_appid={}, auth_code={}, expires_in={}", component_appid,
+				auth_code, expires_in);
 	}
 
 }

@@ -40,12 +40,12 @@ public class PlatformUserEntity extends TwoEntity {
 	private Integer subscribe;
 
 	/** subscribe time, is the last subscribe time */
-	@OneData(DataType = DataTypes.DATETIME)
-	private Date subscribeTime;
+	@OneData(DataType = DataTypes.BIGINT)
+	private Long subscribeTime;
 
 	/** unsubscribe time */
-	@OneData(DataType = DataTypes.DATETIME)
-	private Date unsubscribeTime;
+	@OneData(DataType = DataTypes.BIGINT)
+	private Long unsubscribeTime;
 
 	/** the nickname, used for identify between appid */
 	@OneData(DataType = DataTypes.VARCHAR64)

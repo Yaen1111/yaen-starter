@@ -21,6 +21,8 @@ public class PlatformComponentModel extends PlatformModel {
 
 		this.appid = appid;
 		this.accessToken = accessToken;
+
+		this.host = false;
 	}
 
 }

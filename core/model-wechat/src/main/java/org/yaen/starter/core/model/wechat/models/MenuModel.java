@@ -211,44 +211,4 @@ public class MenuModel extends OneModel {
 		// all done
 	}
 
-	/**
-	 * save menu to db
-	 * 
-	 * @throws CoreException
-	 */
-	public void save() throws CoreException {
-		// TODO
-	}
-
-	/**
-	 * pull menu from server
-	 * 
-	 * @param appId
-	 * @throws CoreException
-	 */
-	public void pull(String appId) throws CoreException {
-
-		this.appId = appId;
-
-		// load default if not given
-		if (StringUtil.isBlank(this.appId)) {
-			this.appId = WechatPropertiesUtil.getAppid();
-		}
-
-		// call service
-		// TODO
-	}
-
-	/**
-	 * push menu to server
-	 * 
-	 * @throws CoreException
-	 */
-	public void push() throws CoreException {
-		this.check();
-
-		// call service
-		this.service.pushMenu(this.getJsonMenu(), this.appId);
-	}
-
 }

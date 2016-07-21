@@ -1,13 +1,8 @@
 package org.yaen.starter.test.test;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.yaen.starter.common.integration.clients.HttpClient;
-import org.yaen.starter.common.integration.clients.impl.HttpClientImpl;
-import org.yaen.starter.common.integration.clients.impl.WechatClientImpl;
 
 /**
  * 
@@ -34,5 +29,6 @@ public class SimpleTest {
 		// do sha-1
 		String tmpStr = DigestUtils.sha1Hex(content.toString());
 
+		System.out.println(tmpStr);
 	}
 }

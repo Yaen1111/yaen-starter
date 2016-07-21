@@ -1,12 +1,14 @@
 package org.yaen.starter.core.model.wechat.models;
 
 import org.yaen.starter.common.data.exceptions.CommonException;
-import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.common.util.utils.ParseUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.PlatformUserEntity;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * the wechat user model, mostly for openid + appid
@@ -48,9 +50,29 @@ public class PlatformUserModel extends TwoModel {
 		this.fillEntityByUniqueFields(this.getEntity(), new String[] { "openId", "appId" });
 	}
 
-	public void readUserInfo() throws CoreException {
-		this.check();
+	/**
+	 * read user info from json, which is from api
+	 * 
+	 * @param json
+	 */
+	public void readUserInfo(JSONObject json) {
+		AssertUtil.notNull(json);
 
+		PlatformUserEntity user = this.getEntity();
+
+		user.setSubscribe(ParseUtil.tryParseInt(json.getString("subscribe"), 0));
+		user.setNickname(json.getString("nickname"));
+		user.setSex(ParseUtil.tryParseInt(json.getString("sex"), 0));
+		user.setLanguage(json.getString("language"));
+		user.setCity(json.getString("city"));
+		user.setProvince(json.getString("province"));
+		user.setCountry(json.getString("country"));
+		user.setHeadimgurl(json.getString("headimgurl"));
+		user.setSubscribeTime(ParseUtil.tryParseLong(json.getString("subscribe_time"), 0L));
+		user.setUnionId(json.getString("unionid"));
+		user.setRemark(json.getString("remark"));
+		user.setGroupId(ParseUtil.tryParseInt(json.getString("groupid"), 0));
+		user.setTagIdList(json.getString("tagid_list"));
 	}
 
 }

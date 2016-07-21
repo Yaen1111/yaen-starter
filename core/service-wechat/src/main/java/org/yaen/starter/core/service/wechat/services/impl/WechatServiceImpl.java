@@ -1,31 +1,18 @@
 package org.yaen.starter.core.service.wechat.services.impl;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yaen.starter.common.data.exceptions.CoreException;
-import org.yaen.starter.common.integration.clients.WechatClient;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.services.CacheService;
 import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
 import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
-import org.yaen.starter.core.model.wechat.objects.AccessToken;
 import org.yaen.starter.core.model.wechat.objects.TextResponseMessage;
 import org.yaen.starter.core.model.wechat.services.WechatService;
-import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
-
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * wechat service implement
@@ -34,14 +21,6 @@ import com.alibaba.fastjson.JSONObject;
  */
 @Service
 public class WechatServiceImpl implements WechatService {
-	/** cache key of access token */
-	private static String CACHE_KEY_ACCESS_TOKEN = "WECHAT_ACCESS_TOKEN:";
-
-	@Autowired
-	private WechatClient wechatClient;
-
-	@Autowired
-	private CacheService cacheService;
 
 	/**
 	 * @see org.yaen.starter.core.model.wechat.services.WechatService#checkSignature(java.lang.String, java.lang.String,
@@ -74,108 +53,6 @@ public class WechatServiceImpl implements WechatService {
 		} else {
 			return "bad parameter";
 		}
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.wechat.services.WechatService#getAccessToken(java.lang.String)
-	 */
-	@Override
-	public AccessToken getAccessToken(String appId) throws CoreException {
-
-		// load default if not given
-		if (StringUtil.isBlank(appId)) {
-			appId = WechatPropertiesUtil.getAppid();
-		}
-
-		// get token from cache
-		AccessToken accessToken = (AccessToken) this.cacheService.get(CACHE_KEY_ACCESS_TOKEN + appId);
-
-		if (accessToken == null) {
-
-			// secret
-			// TODO get secret for different appid
-			String secret = WechatPropertiesUtil.getSecret();
-
-			// call client
-			JSONObject jsonObject;
-			try {
-				jsonObject = JSONObject.parseObject(wechatClient.getAccessToken(appId, secret));
-			} catch (Exception ex) {
-				throw new CoreException("get access token error", ex);
-			}
-
-			// check result
-			if (jsonObject == null) {
-				throw new CoreException("wechat get access token failed");
-			}
-
-			// set token
-			accessToken = new AccessToken();
-			accessToken.setToken(jsonObject.getString("access_token"));
-			accessToken.setExpiresIn(jsonObject.getIntValue("expires_in"));
-
-			this.cacheService.set(CACHE_KEY_ACCESS_TOKEN + appId, accessToken, accessToken.getExpiresIn());
-		}
-
-		return accessToken;
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.wechat.services.WechatService#pushMenu(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void pushMenu(String menu, String appId) throws CoreException {
-
-		// need access token
-		AccessToken accessToken = this.getAccessToken(appId);
-
-		// call client
-		JSONObject jsonObject;
-		try {
-			jsonObject = JSONObject.parseObject(wechatClient.createMenu(menu, accessToken.getToken()));
-		} catch (Exception ex) {
-			throw new CoreException("wechat create menu failed", ex);
-		}
-
-		// check result
-		if (jsonObject == null) {
-			throw new CoreException("wechat create menu return null");
-		} else {
-			// check err code
-			int errcode = jsonObject.getIntValue("errcode");
-			if (errcode != 0) {
-				throw new CoreException(
-						"create menu failed, errcode=" + errcode + ", errmsg=" + jsonObject.getString("errmsg"));
-			}
-		}
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.wechat.services.WechatService#isQqFace(java.lang.String)
-	 */
-	@Override
-	public boolean isQqFace(String content) {
-		boolean result = false;
-
-		// 判断QQ表情的正则表达式
-		String qqfaceRegex = "/::\\)|/::~|/::B|/::\\||/:8-\\)|/::<|/::$|/::X|/::Z|/::'\\(|/::-\\||/::@|/::P|/::D|/::O|/::\\(|/::\\+|/:--b|/::Q|/::T|/:,@P|/:,@-D|/::d|/:,@o|/::g|/:\\|-\\)|/::!|/::L|/::>|/::,@|/:,@f|/::-S|/:\\?|/:,@x|/:,@@|/::8|/:,@!|/:!!!|/:xx|/:bye|/:wipe|/:dig|/:handclap|/:&-\\(|/:B-\\)|/:<@|/:@>|/::-O|/:>-\\||/:P-\\(|/::'\\||/:X-\\)|/::\\*|/:@x|/:8\\*|/:pd|/:<W>|/:beer|/:basketb|/:oo|/:coffee|/:eat|/:pig|/:rose|/:fade|/:showlove|/:heart|/:break|/:cake|/:li|/:bome|/:kn|/:footb|/:ladybug|/:shit|/:moon|/:sun|/:gift|/:hug|/:strong|/:weak|/:share|/:v|/:@\\)|/:jj|/:@@|/:bad|/:lvu|/:no|/:ok|/:love|/:<L>|/:jump|/:shake|/:<O>|/:circle|/:kotow|/:turn|/:skip|/:oY|/:#-0|/:hiphot|/:kiss|/:<&|/:&>";
-		Pattern p = Pattern.compile(qqfaceRegex);
-		Matcher m = p.matcher(content);
-		if (m.matches()) {
-			result = true;
-		}
-		return result;
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.wechat.services.WechatService#formatTime(java.lang.String)
-	 */
-	@Override
-	public String formatTime(String createTime) {
-		// 将微信传入的CreateTime转换成long类型，再乘以1000
-		long msgCreateTime = Long.parseLong(createTime) * 1000L;
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		return format.format(new Date(msgCreateTime));
 	}
 
 	/**

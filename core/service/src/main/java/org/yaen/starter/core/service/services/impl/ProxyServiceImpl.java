@@ -1,12 +1,11 @@
 package org.yaen.starter.core.service.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.yaen.starter.common.data.services.EntityService;
 import org.yaen.starter.common.data.services.QueryService;
 import org.yaen.starter.common.integration.clients.HttpClient;
-import org.yaen.starter.common.integration.clients.RedisClient;
+import org.yaen.starter.core.model.services.CacheService;
 import org.yaen.starter.core.model.services.ProxyService;
 
 import lombok.Getter;
@@ -33,7 +32,6 @@ public class ProxyServiceImpl implements ProxyService {
 
 	@Getter
 	@Autowired
-	@Qualifier("generalCacheClient")
-	private RedisClient redisClient;
+	private CacheService cacheService;
 
 }

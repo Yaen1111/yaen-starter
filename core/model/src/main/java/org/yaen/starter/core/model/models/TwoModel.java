@@ -131,6 +131,27 @@ public class TwoModel extends OneModel {
 	}
 
 	/**
+	 * read cache by key
+	 * 
+	 * @param key
+	 * @return
+	 */
+	protected String readCache(String key) {
+		return (String) this.proxy.getCacheService().get(key);
+	}
+
+	/**
+	 * write cache by key
+	 * 
+	 * @param key
+	 * @param value
+	 * @param expire
+	 */
+	protected void writeCache(String key, String value, int expire) {
+		this.proxy.getCacheService().set(key, value, expire);
+	}
+
+	/**
 	 * constructor with proxy service and entity
 	 * 
 	 * @param proxy
