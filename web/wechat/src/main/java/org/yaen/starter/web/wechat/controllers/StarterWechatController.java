@@ -179,11 +179,6 @@ public class StarterWechatController {
 		log.info("api:wechat:component:message:called, uri={}, ip={}, method={}, querystring={}",
 				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
 
-		// log param
-		if (log.isDebugEnabled()) {
-			log.debug("querystring={}", request.getQueryString());
-		}
-
 		// check method
 		if (StringUtil.equalsIgnoreCase(request.getMethod(), "GET")) {
 			// do check signature for component
