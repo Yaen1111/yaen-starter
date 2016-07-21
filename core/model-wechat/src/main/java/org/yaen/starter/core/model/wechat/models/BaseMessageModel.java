@@ -164,7 +164,7 @@ public abstract class BaseMessageModel extends TwoModel {
 
 			// log content
 			if (log.isDebugEnabled()) {
-				log.debug("decrypt xml content: ", str);
+				log.debug("decrypt xml content: {}", str);
 				log.debug("decrypt param : token={}, aeskey={}, appid={}", token, aesKey, appid);
 			}
 
