@@ -176,7 +176,7 @@ public class StarterWechatController {
 	@RequestMapping("component/message")
 	public void componentMessage(HttpServletRequest request, HttpServletResponse response) {
 		// log api
-		log.info("api:wechat:platform:message:called, uri={}, ip={}, method={}, querystring={}",
+		log.info("api:wechat:component:message:called, uri={}, ip={}, method={}, querystring={}",
 				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
 
 		// log param
@@ -260,7 +260,7 @@ public class StarterWechatController {
 	public void platformComponentMessage(@PathVariable("appid") String appid, HttpServletRequest request,
 			HttpServletResponse response) {
 		// log api
-		log.info("api:wechat:platform:message:called, uri={}, ip={}, method={}, querystring={}",
+		log.info("api:wechat:platformcom:message:called, uri={}, ip={}, method={}, querystring={}",
 				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
 
 		// log param
