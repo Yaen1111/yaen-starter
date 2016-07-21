@@ -5,10 +5,14 @@ import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.common.util.utils.ParseUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.ComponentMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.InfoTypes;
 import org.yaen.starter.core.model.wechat.services.WechatService;
+import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
+
+import com.qq.weixin.mp.aes.AesException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,23 +40,39 @@ public class ComponentMessageModel extends BaseMessageModel {
 	}
 
 	/**
-	 * parse from xml in input stream
+	 * load from xml with decrpyt
 	 * 
-	 * @param is
+	 * @param reader
+	 * @param msgSignature
+	 * @param timeStamp
+	 * @param nonce
 	 * @throws CoreException
 	 */
-	public void loadFromXml(Reader reader) throws CoreException {
+	public void loadFromXml(Reader reader, String msgSignature, String timeStamp, String nonce) throws CoreException {
 		AssertUtil.notNull(reader);
 
 		// the value map
-		Map<String, String> map = this.getMapFormXml(reader);
+		Map<String, String> map = null;
+
+		try {
+			// decrypt
+			Reader reader2 = this.decryptXmlReader(reader, WechatPropertiesUtil.getComponentAppid(),
+					WechatPropertiesUtil.getComponentToken(), WechatPropertiesUtil.getComponentAesKey(), msgSignature,
+					timeStamp, nonce);
+
+			// get map
+			map = this.getMapFormXml(reader2);
+
+		} catch (AesException ex) {
+			throw new CoreException("aes error", ex);
+		}
 
 		// get entity and fill data
 		ComponentMessageEntity msg = this.getEntity();
 
 		// main info
 		msg.setAppid(map.get("AppId"));
-		msg.setCreateTime(Long.parseLong(map.get("CreateTime")));
+		msg.setCreateTime(ParseUtil.tryParseLong(map.get("CreateTime"), 0L));
 		msg.setInfoType(map.get("InfoType"));
 
 		// make switch not null
@@ -70,7 +90,7 @@ public class ComponentMessageModel extends BaseMessageModel {
 			// authorized ok
 			msg.setAuthorizerAppid(map.get("AuthorizerAppid"));
 			msg.setComponentVerifyTicket(map.get("AuthorizationCode"));
-			msg.setAuthorizationCodeExpiredTime(Long.parseLong(map.get("AuthorizationCodeExpiredTime")));
+			msg.setAuthorizationCodeExpiredTime(ParseUtil.tryParseLong(map.get("AuthorizationCodeExpiredTime"), 0L));
 			break;
 		case InfoTypes.UNAUTHORIZED:
 			// authorize canceled/expired

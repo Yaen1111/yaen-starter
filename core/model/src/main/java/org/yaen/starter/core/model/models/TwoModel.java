@@ -59,6 +59,34 @@ public class TwoModel extends OneModel {
 	}
 
 	/**
+	 * fill entity by unique fields, the value is set in the entity
+	 * 
+	 * @param entity
+	 * @param fields
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	protected <T extends OneEntity> void fillEntityByUniqueFields(T entity, String[] fields)
+			throws DataException, CommonException {
+
+		// get row ids
+		List<Long> rowids = this.proxy.getQueryService().selectRowidsByFields(entity, fields);
+
+		// check empty
+		if (rowids == null || rowids.isEmpty()) {
+			throw new DataNotExistsException("data not exists with given fields");
+		}
+
+		// check duplicate
+		if (rowids.size() > 1) {
+			throw new DuplicateDataException("duplicate data found with given fields");
+		}
+
+		// fill
+		this.proxy.getEntityService().selectEntityByRowid(entity, rowids.get(0));
+	}
+
+	/**
 	 * select by id
 	 * 
 	 * @param entity
@@ -142,7 +170,6 @@ public class TwoModel extends OneModel {
 	/**
 	 * save new entity
 	 * 
-	 * @param id
 	 * @throws CoreException
 	 * @throws CommonException
 	 * @throws DataException

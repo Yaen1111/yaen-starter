@@ -209,8 +209,13 @@ public class StarterWechatController {
 				// get reader
 				reader = request.getReader();
 
-				// load xml from input stream
-				requestMessage.loadFromXml(reader);
+				// param for decrypt
+				String msg_signature = request.getParameter("msg_signature");
+				String timestamp = request.getParameter("timestamp");
+				String nonce = request.getParameter("nonce");
+
+				// load xml from input stream, need decrypt
+				requestMessage.loadFromXml(reader, msg_signature, timestamp, nonce);
 
 				// save message anyway
 				requestMessage.saveNew();
@@ -293,10 +298,6 @@ public class StarterWechatController {
 				String msg_signature = request.getParameter("msg_signature");
 				String timestamp = request.getParameter("timestamp");
 				String nonce = request.getParameter("nonce");
-
-				// source check from wechat server, return echostr for ok
-				log.debug("decrypt, appid={}, msg_signature={}, timestamp={}, nonce={}", appid, msg_signature,
-						timestamp, nonce);
 
 				// load xml from input stream, need decrypt
 				requestMessage.loadFromXml(reader, msg_signature, timestamp, nonce);

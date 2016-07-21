@@ -8,7 +8,7 @@ import org.yaen.starter.common.data.exceptions.DuplicateDataException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
-import org.yaen.starter.core.model.wechat.entities.UserEntity;
+import org.yaen.starter.core.model.wechat.entities.PlatformUserEntity;
 
 /**
  * the wechat user model, mostly for openid + appid
@@ -18,8 +18,8 @@ import org.yaen.starter.core.model.wechat.entities.UserEntity;
 public class UserModel extends TwoModel {
 
 	@Override
-	public UserEntity getEntity() {
-		return (UserEntity) super.getEntity();
+	public PlatformUserEntity getEntity() {
+		return (PlatformUserEntity) super.getEntity();
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class UserModel extends TwoModel {
 	 * @param proxy
 	 */
 	public UserModel(ProxyService proxy) {
-		super(proxy, new UserEntity());
+		super(proxy, new PlatformUserEntity());
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class UserModel extends TwoModel {
 		AssertUtil.notBlank(appId);
 
 		// create new entity
-		UserEntity user = new UserEntity(openId, appId);
+		PlatformUserEntity user = new PlatformUserEntity(openId, appId);
 
 		// do insert
 		this.insertEntity(user);

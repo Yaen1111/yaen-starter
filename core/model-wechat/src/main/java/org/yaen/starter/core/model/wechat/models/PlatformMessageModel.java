@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.common.util.utils.ParseUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
@@ -67,7 +68,7 @@ public class PlatformMessageModel extends BaseMessageModel {
 		// main info
 		msg.setFromUserName(map.get("FromUserName"));
 		msg.setToUserName(map.get("ToUserName"));
-		msg.setCreateTime(Long.parseLong(map.get("CreateTime")));
+		msg.setCreateTime(ParseUtil.tryParseLong(map.get("CreateTime"), 0L));
 		msg.setMsgType(map.get("MsgType"));
 
 		// make switch not null
@@ -108,8 +109,8 @@ public class PlatformMessageModel extends BaseMessageModel {
 				break;
 			case EventTypes.EVENT_TYPE_WIFI_CONNECTED:
 				// wifi connected
-				msg.setConnectTime(Long.parseLong(map.get("ConnectTime")));
-				msg.setExpireTime(Long.parseLong(map.get("ExpireTime")));
+				msg.setConnectTime(ParseUtil.tryParseLong(map.get("ConnectTime"), 0L));
+				msg.setExpireTime(ParseUtil.tryParseLong(map.get("ExpireTime"), 0L));
 				msg.setVendorId(map.get("VendorId"));
 				msg.setShopId(map.get("ShopId"));
 				msg.setDeviceNo(map.get("DeviceNo"));
@@ -119,12 +120,12 @@ public class PlatformMessageModel extends BaseMessageModel {
 			case EventTypes.EVENT_TYPE_ANNUAL_RENEW:
 			case EventTypes.EVENT_TYPE_VERIFY_EXPIRED:
 				// xxx verify success/anual renew/expired
-				msg.setExpiredTime(Long.parseLong(map.get("ExpiredTime")));
+				msg.setExpiredTime(ParseUtil.tryParseLong(map.get("ExpiredTime"), 0L));
 				break;
 			case EventTypes.EVENT_TYPE_QUALIFICATION_VERIFY_FAIL:
 			case EventTypes.EVENT_TYPE_NAMING_VERIFY_FAIL:
 				// xxx verify fail
-				msg.setFailTime(Long.parseLong(map.get("FailTime")));
+				msg.setFailTime(ParseUtil.tryParseLong(map.get("FailTime"), 0L));
 				msg.setFailReason(map.get("FailReason"));
 				break;
 			case EventTypes.EVENT_TYPE_POI_CHECK_NOTIFY:
@@ -143,7 +144,7 @@ public class PlatformMessageModel extends BaseMessageModel {
 			}
 		} else {
 			// normal message
-			msg.setMsgId(Long.parseLong(map.get("MsgId")));
+			msg.setMsgId(ParseUtil.tryParseLong(map.get("MsgId"), 0L));
 
 			switch (msg.getMsgType()) {
 			case MessageTypes.REQ_MESSAGE_TYPE_TEXT:
@@ -171,7 +172,7 @@ public class PlatformMessageModel extends BaseMessageModel {
 				// location
 				msg.setLocationX(new BigDecimal(map.get("Location_X")));
 				msg.setLocationY(new BigDecimal(map.get("Location_Y")));
-				msg.setScale(Integer.parseInt(map.get("Scale")));
+				msg.setScale(ParseUtil.tryParseInt(map.get("Scale"), 0));
 				msg.setLabel(map.get("Label"));
 				break;
 			case MessageTypes.REQ_MESSAGE_TYPE_LINK:

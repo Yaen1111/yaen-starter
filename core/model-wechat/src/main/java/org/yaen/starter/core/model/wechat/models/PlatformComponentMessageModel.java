@@ -1,10 +1,9 @@
 package org.yaen.starter.core.model.wechat.models;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
@@ -35,9 +34,6 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 	@Getter
 	private String appid;
 
-	/** the cryptor */
-	private WXBizMsgCrypt pc;
-
 	/**
 	 * @param proxy
 	 * @param service
@@ -50,7 +46,7 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 	}
 
 	/**
-	 * load from xml with encrpyt
+	 * load from xml with decrpyt
 	 * 
 	 * @param reader
 	 * @param msgSignature
@@ -59,34 +55,20 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 	 * @throws CoreException
 	 * @throws AesException
 	 */
-	public void loadFromXml(Reader reader, String msgSignature, String timeStamp, String nonce)
-			throws CoreException, AesException {
-		// need decrypt
-		String postData;
-		try {
-			postData = StringUtil.readString(reader);
-		} catch (IOException ex) {
-			throw new CoreException("read post data error", ex);
-		}
+	public void loadFromXml(Reader reader, String msgSignature, String timeStamp, String nonce) throws CoreException {
+		AssertUtil.notNull(reader);
 
 		try {
-
-			// make crypt
-			if (this.pc == null) {
-				this.pc = new WXBizMsgCrypt(WechatPropertiesUtil.getComponentToken(),
-						WechatPropertiesUtil.getComponentSymmetricKey(), this.appid);
-			}
-
-			// decrypt entire xml
-			String xml = pc.decryptMsg(msgSignature, timeStamp, nonce, postData);
+			// decrypt
+			Reader reader2 = this.decryptXmlReader(reader, this.appid, WechatPropertiesUtil.getComponentToken(),
+					WechatPropertiesUtil.getComponentAesKey(), msgSignature, timeStamp, nonce);
 
 			// load as normal
-			this.loadFromXml(new StringReader(xml));
+			this.loadFromXml(reader2);
 
 		} catch (AesException ex) {
 			throw new CoreException("aes error", ex);
 		}
-
 	}
 
 	/**
@@ -97,13 +79,11 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 		String resp = super.makeResponse();
 		try {
 			// make crypt
-			if (this.pc == null) {
-				this.pc = new WXBizMsgCrypt(WechatPropertiesUtil.getComponentToken(),
-						WechatPropertiesUtil.getComponentSymmetricKey(), this.appid);
-			}
+			WXBizMsgCrypt pc = new WXBizMsgCrypt(WechatPropertiesUtil.getComponentToken(),
+					WechatPropertiesUtil.getComponentAesKey(), this.appid);
 
 			// need encrypt
-			return this.pc.encryptMsg(resp, StringUtil.toString(DateUtil.getNow().getTime()),
+			return pc.encryptMsg(resp, StringUtil.toString(DateUtil.getNow().getTime()),
 					StringUtil.toString(Math.random() * 10000));
 
 		} catch (AesException ex) {

@@ -1,6 +1,8 @@
 package org.yaen.starter.core.model.wechat.models;
 
+import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +15,14 @@ import org.dom4j.io.SAXReader;
 import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.objects.Article;
 import org.yaen.starter.core.model.wechat.services.WechatService;
 
+import com.qq.weixin.mp.aes.AesException;
+import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
@@ -96,7 +101,7 @@ public abstract class BaseMessageModel extends TwoModel {
 	}
 
 	/**
-	 * get map from xml reader
+	 * private get map from xml reader
 	 * 
 	 * @param reader
 	 * @return
@@ -134,6 +139,40 @@ public abstract class BaseMessageModel extends TwoModel {
 		}
 
 		return map;
+	}
+
+	/**
+	 * decrypt xml reader
+	 * 
+	 * @param reader
+	 * @param appid
+	 * @param token
+	 * @param aesKey
+	 * @param msgSignature
+	 * @param timeStamp
+	 * @param nonce
+	 * @return
+	 * @throws CoreException
+	 * @throws AesException
+	 */
+	protected Reader decryptXmlReader(Reader reader, String appid, String token, String aesKey, String msgSignature,
+			String timeStamp, String nonce) throws CoreException, AesException {
+
+		try {
+			// get all string data
+			String str = StringUtil.readString(reader);
+
+			// make cryptor
+			WXBizMsgCrypt pc = new WXBizMsgCrypt(token, aesKey, appid);
+
+			// decrypt entire xml
+			String xml = pc.decryptMsg(msgSignature, timeStamp, nonce, str);
+
+			return new StringReader(xml);
+
+		} catch (IOException ex) {
+			throw new CoreException("read data error", ex);
+		}
 	}
 
 	/**

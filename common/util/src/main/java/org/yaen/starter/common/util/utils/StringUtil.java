@@ -76,6 +76,38 @@ public class StringUtil extends StringUtils {
 	}
 
 	/**
+	 * to short mac, 3c:dd:03:4f:34:ac will be changed to 3CDD034F34AC
+	 * <p>
+	 * revert of toLongMac(s)
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String toShortMac(String s) {
+		return StringUtil.trimToEmpty(s).replace(":", "").toUpperCase();
+	}
+
+	/**
+	 * to long mac, 3CDD034F34AC will be changed to 3c:dd:03:4f:34:ac
+	 * <p>
+	 * revert of toShortMac(s)
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String toLongMac(String s) {
+		String s2 = StringUtil.trimToEmpty(s).toLowerCase();
+
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < s2.length() - 1; i += 2) {
+			sb.append(s2.substring(i, 2)).append(":");
+		}
+
+		return sb.toString();
+	}
+
+	/**
 	 * convert byte array to HEX str, like 0,1,2,3 = 00010203, 200,255 = CDFF
 	 * 
 	 * @param byteArray

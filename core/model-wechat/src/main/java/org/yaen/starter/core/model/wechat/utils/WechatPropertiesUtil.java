@@ -21,8 +21,8 @@ public class WechatPropertiesUtil {
 		return PropertiesUtil.getProperty("component.token");
 	}
 
-	public static String getComponentSymmetricKey() {
-		return PropertiesUtil.getProperty("component.symmetric_key");
+	public static String getComponentAesKey() {
+		return PropertiesUtil.getProperty("component.aeskey");
 	}
 
 	public static String getAppid() {
