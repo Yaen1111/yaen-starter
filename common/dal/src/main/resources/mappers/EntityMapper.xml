@@ -12,7 +12,7 @@
 		WHERE `ROWID` = #{rowid}
 	</select>
 
-	<insert id="insertByRowid" useGeneratedKeys="true" keyProperty="id" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
+	<insert id="insertByRowid" useGeneratedKeys="true" keyProperty="rowid" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		INSERT INTO `${tableName}`
 		(
 		`ROWID`
