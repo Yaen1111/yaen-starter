@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.yaen.starter.common.data.exceptions.CommonException;
@@ -16,6 +17,7 @@ import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.util.utils.DateUtil;
+import org.yaen.starter.common.util.utils.PropertiesUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.ComponentMessageEntity;
@@ -474,6 +476,43 @@ public class StarterWechatController {
 	}
 
 	/**
+	 * preauth page for other platform to bind with component
+	 * 
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("platformcom/preauth.html")
+	public String preAuth(Model model, HttpServletRequest request) {
+		// log api
+		log.info("api:wechat:platformcom:preauth.html:called, uri={}, ip={}, method={}, querystring={}",
+				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
+
+		final String API = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=COMPONENT_APPID&pre_auth_code=PRE_AUTH_CODE&redirect_uri=REDIRECT_URI";
+
+		try {
+
+			// need component model
+			ComponentModel component = new ComponentModel(this.proxyService);
+
+			model.addAttribute("preauth",
+					API.replace("COMPONENT_APPID", component.getComponentAppid())
+							.replace("PRE_AUTH_CODE", component.getPreAuthCode())
+							.replace("REDIRECT_URI", PropertiesUtil.getProperty("api.platformcom.auth")));
+
+		} catch (DataNotExistsException ex) {
+			log.error("api:wechat:platformcom:preauth.html: component not exist", ex);
+			model.addAttribute("error", ex);
+		} catch (Exception ex) {
+			log.error("api:wechat:platformcom:preauth.html:error", ex);
+			model.addAttribute("error", ex);
+		}
+
+		// show page
+		return "wechat/preauth";
+	}
+
+	/**
 	 * component-binded platform auth callback
 	 * 
 	 * <pre>
@@ -490,17 +529,21 @@ public class StarterWechatController {
 	 * @param expires_in
 	 * @param request
 	 * @param response
+	 * @return
 	 */
-	@RequestMapping("platformcom/auth")
-	public void platformComponentAuth(String component_appid, String auth_code, String expires_in,
+	@RequestMapping("platformcom/auth.html")
+	public String platformComponentAuth(String component_appid, String auth_code, String expires_in,
 			HttpServletRequest request, HttpServletResponse response) {
 		// log api
-		log.info("api:wechat:platformcom:auth:called, uri={}, ip={}, method={}, querystring={}",
+		log.info("api:wechat:platformcom:auth.html:called, uri={}, ip={}, method={}, querystring={}",
 				request.getRequestURI(), WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
 
 		// here we can call api to get platform component access token?
 		log.info("api:wechat:platformcom:auth  component_appid={}, auth_code={}, expires_in={}", component_appid,
 				auth_code, expires_in);
+
+		// show page
+		return "wechat/auth";
 	}
 
 }

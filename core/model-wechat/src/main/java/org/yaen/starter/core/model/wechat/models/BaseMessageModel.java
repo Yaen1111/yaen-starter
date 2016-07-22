@@ -163,7 +163,8 @@ public abstract class BaseMessageModel extends TwoModel {
 			String str = StringUtil.readString(reader);
 
 			if (log.isDebugEnabled()) {
-				log.debug("decrypt xml content before decrypt: {}", str);
+				log.debug("decrypt xml content before decrypt: ");
+				log.debug(str);
 			}
 
 			// make cryptor
@@ -173,7 +174,8 @@ public abstract class BaseMessageModel extends TwoModel {
 			String xml = pc.decryptMsg(msgSignature, timeStamp, nonce, str);
 
 			if (log.isDebugEnabled()) {
-				log.debug("decrypt xml content after decrypt: {}", xml);
+				log.debug("decrypt xml content after decrypt: ");
+				log.debug(xml);
 			}
 
 			return new StringReader(xml);

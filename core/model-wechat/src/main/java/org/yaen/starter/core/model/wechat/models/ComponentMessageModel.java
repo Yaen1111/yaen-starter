@@ -89,7 +89,7 @@ public class ComponentMessageModel extends BaseMessageModel {
 		case InfoTypes.UPDATEAUTHORIZED:
 			// authorized ok
 			msg.setAuthorizerAppid(map.get("AuthorizerAppid"));
-			msg.setComponentVerifyTicket(map.get("AuthorizationCode"));
+			msg.setAuthorizationCode(map.get("AuthorizationCode"));
 			msg.setAuthorizationCodeExpiredTime(ParseUtil.tryParseLong(map.get("AuthorizationCodeExpiredTime"), 0L));
 			break;
 		case InfoTypes.UNAUTHORIZED:

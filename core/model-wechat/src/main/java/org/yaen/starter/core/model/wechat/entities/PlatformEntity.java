@@ -24,7 +24,7 @@ public class PlatformEntity extends TwoEntity {
 	private static final long serialVersionUID = 1176918958761154976L;
 
 	/** the authorization code */
-	@OneData(DataType = DataTypes.VARCHAR32)
+	@OneData(DataType = DataTypes.VARCHAR512)
 	private String authorizationCode;
 
 	/** the authorization code expired time */
