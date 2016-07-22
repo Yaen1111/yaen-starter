@@ -84,7 +84,7 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 
 			// need encrypt
 			return pc.encryptMsg(resp, StringUtil.toString(DateUtil.getNow().getTime()),
-					StringUtil.toString(Math.random() * 10000));
+					StringUtil.toString(Math.round(Math.random() * 1000000)));
 
 		} catch (AesException ex) {
 			throw new CoreException("aes error", ex);

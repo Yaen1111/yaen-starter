@@ -163,19 +163,17 @@ public abstract class BaseMessageModel extends TwoModel {
 			String str = StringUtil.readString(reader);
 
 			if (log.isDebugEnabled()) {
-				log.debug("decrypt xml content before decrypt: ");
-				log.debug(str);
+				log.debug("decrypt xml content before decrypt: \n{}", str);
 			}
 
-			// make cryptor
+			// make crypto
 			WXBizMsgCrypt pc = new WXBizMsgCrypt(token, aesKey, appid);
 
 			// decrypt entire xml
 			String xml = pc.decryptMsg(msgSignature, timeStamp, nonce, str);
 
 			if (log.isDebugEnabled()) {
-				log.debug("decrypt xml content after decrypt: ");
-				log.debug(xml);
+				log.debug("decrypt xml content after decrypt: \n{}", xml);
 			}
 
 			return new StringReader(xml);

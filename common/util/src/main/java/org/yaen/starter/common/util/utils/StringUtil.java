@@ -22,6 +22,9 @@ public class StringUtil extends StringUtils {
 	/** the camel upper case separator */
 	public static final char CAMEL_SEPERATOR_CHAR = '_';
 
+	/** the new line separator */
+	public static final char NEW_LINE = '\n';
+
 	/**
 	 * s1 like s2, null = empty = "  "
 	 * 
@@ -224,8 +227,15 @@ public class StringUtil extends StringUtils {
 		}
 
 		StringBuilder sb = new StringBuilder();
-		String line = "";
+		String line = null;
+		boolean first = true;
 		while ((line = br.readLine()) != null) {
+			if (first) {
+				first = true;
+			} else {
+				sb.append(NEW_LINE);
+			}
+
 			sb.append(line);
 		}
 		return sb.toString();
