@@ -238,6 +238,57 @@ public class StarterWechatController {
 	}
 
 	/**
+	 * process platform component message, mainly for subscribe
+	 * 
+	 * @param appid
+	 * @param requestMessage
+	 * @throws DataException
+	 * @throws CommonException
+	 * @throws CoreException
+	 */
+	protected void processPlatformComponentMessage(String appid, PlatformMessageModel requestMessage)
+			throws DataException, CommonException, CoreException {
+		// get entity
+		PlatformMessageEntity msg = requestMessage.getEntity();
+
+		// check event
+		if (StringUtil.equals(msg.getMsgType(), MessageTypes.REQ_MESSAGE_TYPE_EVENT)
+				&& StringUtil.equals(msg.getEvent(), EventTypes.EVENT_TYPE_SUBSCRIBE)) {
+			// is subscribe
+
+			PlatformUserModel puser = null;
+			PlatformUserEntity user = null;
+			Long now = DateUtil.getNow().getTime();
+
+			puser = new PlatformUserModel(this.proxyService);
+
+			// try get one, if not exists, create one
+			try {
+				puser.loadByOpenId(msg.getFromUserName(), appid);
+			} catch (DataNotExistsException ex) {
+				// no data, create one
+				puser.saveNew();
+			}
+
+			// get user entity
+			user = puser.getEntity();
+
+			// set last active time
+			user.setLastActiveTime(DateUtil.getNow());
+
+			// update user
+			if (puser != null) {
+				puser.saveById();
+			}
+
+		} else {
+			// as normal
+			this.processPlatformMessage(appid, requestMessage);
+		}
+
+	}
+
+	/**
 	 * platform message, get for token check, post for message data
 	 * 
 	 * @param request
@@ -531,7 +582,7 @@ public class StarterWechatController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("platformcom/auth.html")
+	@RequestMapping({ "platformcom/auth.html", "platformcom/auth" })
 	public String platformComponentAuth(String component_appid, String auth_code, String expires_in,
 			HttpServletRequest request, HttpServletResponse response) {
 		// log api
