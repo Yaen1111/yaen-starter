@@ -2,14 +2,16 @@ package org.yaen.starter.web.home.contexts.shiro;
 
 import java.io.Serializable;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * shiro user info
  * 
  * @author Yaen 2016年5月19日下午6:42:54
  */
-@Data
+@Getter
+@Setter
 public class ShiroCredentials implements Serializable {
 	private static final long serialVersionUID = 2591810641949952332L;
 
