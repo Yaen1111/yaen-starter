@@ -4,15 +4,11 @@ import java.io.Reader;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.common.util.utils.DateUtil;
-import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.PlatformComponentMessageEntity;
-import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
 import com.qq.weixin.mp.aes.AesException;
-import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 
 import lombok.Getter;
 
@@ -36,11 +32,10 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 
 	/**
 	 * @param proxy
-	 * @param service
 	 * @param appid
 	 */
-	public PlatformComponentMessageModel(ProxyService proxy, WechatService service, String appid) {
-		super(proxy, service, new PlatformComponentMessageEntity());
+	public PlatformComponentMessageModel(ProxyService proxy, String appid) {
+		super(proxy, new PlatformComponentMessageEntity());
 
 		this.appid = appid;
 	}
@@ -65,26 +60,6 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 
 			// load as normal
 			this.loadFromXml(reader2);
-
-		} catch (AesException ex) {
-			throw new CoreException("aes error", ex);
-		}
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.wechat.models.PlatformMessageModel#makeResponse()
-	 */
-	@Override
-	public String makeResponse() throws CoreException {
-		String resp = super.makeResponse();
-		try {
-			// make crypt
-			WXBizMsgCrypt pc = new WXBizMsgCrypt(WechatPropertiesUtil.getComponentToken(),
-					WechatPropertiesUtil.getComponentAesKey(), this.appid);
-
-			// need encrypt
-			return pc.encryptMsg(resp, StringUtil.toString(DateUtil.getNow().getTime()),
-					StringUtil.toString(Math.round(Math.random() * 1000000)));
 
 		} catch (AesException ex) {
 			throw new CoreException("aes error", ex);

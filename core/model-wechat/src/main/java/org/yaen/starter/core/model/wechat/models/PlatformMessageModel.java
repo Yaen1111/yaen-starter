@@ -12,7 +12,6 @@ import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.PlatformMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
-import org.yaen.starter.core.model.wechat.services.WechatService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,21 +32,19 @@ public class PlatformMessageModel extends BaseMessageModel {
 	 * constructor for child
 	 * 
 	 * @param proxy
-	 * @param service
 	 * @param entity
 	 */
-	protected PlatformMessageModel(ProxyService proxy, WechatService service, PlatformMessageEntity entity) {
-		super(proxy, service, entity);
+	protected PlatformMessageModel(ProxyService proxy, PlatformMessageEntity entity) {
+		super(proxy, entity);
 	}
 
 	/**
 	 * constructor for self
 	 * 
 	 * @param proxy
-	 * @param service
 	 */
-	public PlatformMessageModel(ProxyService proxy, WechatService service) {
-		this(proxy, service, new PlatformMessageEntity());
+	public PlatformMessageModel(ProxyService proxy) {
+		this(proxy, new PlatformMessageEntity());
 	}
 
 	/**
@@ -188,20 +185,6 @@ public class PlatformMessageModel extends BaseMessageModel {
 		} // if is event
 
 		// done
-	}
-
-	/**
-	 * make response according to the content
-	 * 
-	 * @return
-	 * @throws CoreException
-	 */
-	@Override
-	public String makeResponse() throws CoreException {
-		this.check();
-
-		// call service, easy to inject different implement
-		return this.service.makeResponse(this);
 	}
 
 }

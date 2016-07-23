@@ -19,7 +19,6 @@ import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.objects.Article;
-import org.yaen.starter.core.model.wechat.services.WechatService;
 
 import com.qq.weixin.mp.aes.AesException;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
@@ -29,7 +28,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -39,9 +37,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class BaseMessageModel extends TwoModel {
-
-	@Getter
-	protected WechatService service;
 
 	/**
 	 * extend xstream to support cdata
@@ -94,10 +89,8 @@ public abstract class BaseMessageModel extends TwoModel {
 	 * @param service
 	 * @param entity
 	 */
-	protected BaseMessageModel(ProxyService proxy, WechatService service, OneEntity entity) {
+	protected BaseMessageModel(ProxyService proxy, OneEntity entity) {
 		super(proxy, entity);
-
-		this.service = service;
 	}
 
 	/**
@@ -182,14 +175,6 @@ public abstract class BaseMessageModel extends TwoModel {
 			throw new CoreException("read data error", ex);
 		}
 	}
-
-	/**
-	 * make response according to the content
-	 * 
-	 * @return
-	 * @throws CoreException
-	 */
-	public abstract String makeResponse() throws CoreException;
 
 	/**
 	 * convert the message object to xml

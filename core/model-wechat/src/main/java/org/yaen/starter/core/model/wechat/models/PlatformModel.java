@@ -1,5 +1,8 @@
 package org.yaen.starter.core.model.wechat.models;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CommonException;
@@ -128,7 +131,7 @@ public class PlatformModel extends TwoModel {
 
 		// try to load from db if null
 		if (this.accessToken == null) {
-			this.loadById(this.appid);
+			this.loadOrCreateById(this.appid);
 
 			String access_token = this.getEntity().getAccessToken();
 			Long create = this.getEntity().getAccessTokenCreate();
@@ -187,4 +190,115 @@ public class PlatformModel extends TwoModel {
 		return this.callApiGet(API.replace("ACCESS_TOKEN", this.getAccessToken()).replace("OPENID", openId));
 	}
 
+	/**
+	 * send custom message, only for service account
+	 * 
+	 * @param openid
+	 * @param param
+	 * @return
+	 * @throws CoreException
+	 * @throws CommonException
+	 * @throws DataException
+	 */
+	public JSONObject sendCustomMessage(String openid, Map<String, Object> param)
+			throws CoreException, DataException, CommonException {
+		final String API = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
+
+		return this.callApiPost(API.replace("ACCESS_TOKEN", this.getAccessToken()), param);
+	}
+
+	/**
+	 * send text message
+	 * 
+	 * <pre>
+	 * {
+	 * "touser":"OPENID",
+	 * "msgtype":"text",
+	 * "text":
+	 * {
+	 *      "content":"Hello World"
+	 * }
+	 * }
+	 * </pre>
+	 * 
+	 * @param openid
+	 * @param content
+	 * @return
+	 * @throws CommonException
+	 * @throws DataException
+	 * @throws CoreException
+	 */
+	public JSONObject sendCustomTextMessage(String openid, String content)
+			throws CoreException, DataException, CommonException {
+		// make param
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("touser", openid);
+		param.put("msgtype", "text");
+
+		Map<String, Object> item = new HashMap<String, Object>();
+		item.put("content", content);
+		param.put("text", item);
+
+		return this.sendCustomMessage(openid, param);
+	}
+
+	/**
+	 * send news message
+	 * 
+	 * <pre>
+	 * {
+	 *     "touser":"OPENID",
+	 *     "msgtype":"news",
+	 *     "news":{
+	 *         "articles": [
+	 *          {
+	 *              "title":"Happy Day",
+	 *              "description":"Is Really A Happy Day",
+	 *              "url":"URL",
+	 *             "picurl":"PIC_URL"
+	 *          },
+	 *          {
+	 *              "title":"Happy Day",
+	 *              "description":"Is Really A Happy Day",
+	 *              "url":"URL",
+	 *              "picurl":"PIC_URL"
+	 *          }
+	 *          ]
+	 *    }
+	 * }
+	 * </pre>
+	 * 
+	 * @param openid
+	 * @param title
+	 * @param description
+	 * @param url
+	 * @param picurl
+	 * @return
+	 * @throws CommonException
+	 * @throws DataException
+	 * @throws CoreException
+	 */
+	public JSONObject sendCustomNewsMessage(String openid, String title, String description, String url, String picurl)
+			throws CoreException, DataException, CommonException {
+		// make param
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("touser", openid);
+		param.put("msgtype", "news");
+
+		Map<String, Object> item = new HashMap<String, Object>();
+		item.put("title", title);
+		item.put("description", description);
+		item.put("url", url);
+		item.put("picurl", picurl);
+
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		list.add(item);
+
+		Map<String, Object> articles = new HashMap<String, Object>();
+		articles.put("articles", list);
+
+		param.put("news", articles);
+
+		return this.sendCustomMessage(openid, param);
+	}
 }

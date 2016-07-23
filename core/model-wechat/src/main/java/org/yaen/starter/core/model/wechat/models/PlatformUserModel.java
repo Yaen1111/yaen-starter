@@ -2,6 +2,7 @@ package org.yaen.starter.core.model.wechat.models;
 
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.DataException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.ParseUtil;
 import org.yaen.starter.core.model.models.TwoModel;
@@ -32,22 +33,28 @@ public class PlatformUserModel extends TwoModel {
 	}
 
 	/**
-	 * load user by openid + appid
+	 * load user by openid + appid, if not exits, create one
 	 * 
 	 * @param openId
 	 * @param appId
 	 * @throws CommonException
 	 * @throws DataException
 	 */
-	public void loadByOpenId(String openId, String appId) throws DataException, CommonException {
+	public void loadOrCreateByOpenId(String openId, String appId) throws DataException, CommonException {
 		AssertUtil.notBlank(openId);
 		AssertUtil.notBlank(appId);
 
-		// set
-		this.getEntity().setOpenId(openId);
-		this.getEntity().setAppId(appId);
-
-		this.fillEntityByUniqueFields(this.getEntity(), new String[] { "openId", "appId" });
+		try {
+			// set info
+			this.getEntity().setOpenId(openId);
+			this.getEntity().setAppId(appId);
+			this.fillEntityByUniqueFields(this.getEntity(), new String[] { "openId", "appId" });
+		} catch (DataNotExistsException ex) {
+			// set info again
+			this.getEntity().setOpenId(openId);
+			this.getEntity().setAppId(appId);
+			this.insertEntity(this.getEntity());
+		}
 	}
 
 	/**

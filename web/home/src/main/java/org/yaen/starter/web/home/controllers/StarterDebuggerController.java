@@ -2,12 +2,15 @@ package org.yaen.starter.web.home.controllers;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.yaen.starter.common.integration.clients.HttpClient;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.web.home.utils.WebUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,16 +40,37 @@ public class StarterDebuggerController {
 	}
 
 	/**
+	 * a debug api, can be anything, only useable on debug mode
+	 * 
+	 * @param model
+	 * @param request
+	 */
+	@RequestMapping("debug")
+	public String debug(Model model, HttpServletRequest request) {
+		if (log.isDebugEnabled()) {
+			// log api
+			log.info("api:debugger:debug:called, uri={}, ip={}, method={}, querystring={}", request.getRequestURI(),
+					WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
+		}
+
+		return "debugger/debug";
+	}
+
+	/**
 	 * http client debugger
 	 * 
 	 * @param model
 	 * @param method
 	 * @param api
 	 * @param content
+	 * @param request
 	 * @return
 	 */
 	@RequestMapping("http")
-	public String http(Model model, String method, String api, String content) {
+	public String http(Model model, String method, String api, String content, HttpServletRequest request) {
+		// log api
+		log.info("api:debugger:http:called, uri={}, ip={}, method={}, querystring={}", request.getRequestURI(),
+				WebUtil.getClientIp(request), request.getMethod(), request.getQueryString());
 
 		model.addAttribute("api", api);
 		model.addAttribute("content", content);

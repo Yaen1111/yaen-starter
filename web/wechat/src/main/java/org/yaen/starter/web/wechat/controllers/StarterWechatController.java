@@ -3,10 +3,12 @@ package org.yaen.starter.web.wechat.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +34,12 @@ import org.yaen.starter.core.model.wechat.models.PlatformComponentMessageModel;
 import org.yaen.starter.core.model.wechat.models.PlatformMessageModel;
 import org.yaen.starter.core.model.wechat.models.PlatformModel;
 import org.yaen.starter.core.model.wechat.models.PlatformUserModel;
-import org.yaen.starter.core.model.wechat.services.WechatService;
+import org.yaen.starter.core.model.wechat.objects.TextResponseMessage;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 import org.yaen.starter.web.home.utils.WebUtil;
+
+import com.qq.weixin.mp.aes.AesException;
+import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,9 +61,6 @@ public class StarterWechatController {
 
 	@Autowired
 	private ProxyService proxyService;
-
-	@Autowired
-	private WechatService wechatService;
 
 	/**
 	 * do check signature, the token maybe changed for platform and component
@@ -86,19 +88,35 @@ public class StarterWechatController {
 			// direct output
 			writer = response.getWriter();
 
-			try {
-				// get result
-				String result = wechatService.checkSignature(token, signature, timestamp, nonce, echostr);
+			String result = "signature fail";
 
-				log.debug("doCheckSignature, result={}", result);
+			if (StringUtil.isBlank(token) || StringUtil.isBlank(signature) || StringUtil.isBlank(timestamp)
+					|| StringUtil.isBlank(nonce) || StringUtil.isBlank(echostr)) {
+				result = "bad parameter";
+			} else {
+				// add token, timestamp, nonce to array, and sort
+				String[] arr = new String[] { token, timestamp, nonce };
+				Arrays.sort(arr);
 
-				// write result
-				writer.write(result);
+				// combine together
+				StringBuilder content = new StringBuilder();
+				for (int i = 0; i < arr.length; i++) {
+					content.append(arr[i]);
+				}
 
-			} catch (Exception ex) {
-				log.error("doCheckSignature error", ex);
-				writer.write("system error");
+				// do sha-1
+				String tmpStr = DigestUtils.sha1Hex(content.toString());
+
+				// should be same
+				if (StringUtil.equalsIgnoreCase(tmpStr, signature)) {
+					result = echostr;
+				}
 			}
+
+			log.debug("doCheckSignature, result={}", result);
+
+			// write result
+			writer.write(result);
 
 		} catch (Exception ex) {
 			log.error("doCheckSignature writer error", ex);
@@ -112,7 +130,7 @@ public class StarterWechatController {
 	}
 
 	/**
-	 * process platform message for given appid
+	 * process platform message for given appid, give response message
 	 * 
 	 * @param appid
 	 * @param requestMessage
@@ -123,6 +141,7 @@ public class StarterWechatController {
 	protected void processPlatformMessage(String appid, PlatformMessageModel requestMessage)
 			throws DataException, CommonException, CoreException {
 
+		// save message and related
 		PlatformMessageEntity msg = requestMessage.getEntity();
 		PlatformUserModel puser = null;
 		PlatformUserEntity user = null;
@@ -133,12 +152,7 @@ public class StarterWechatController {
 			puser = new PlatformUserModel(this.proxyService);
 
 			// try get one, if not exists, create one
-			try {
-				puser.loadByOpenId(msg.getFromUserName(), appid);
-			} catch (DataNotExistsException ex) {
-				// no data, create one
-				puser.saveNew();
-			}
+			puser.loadOrCreateByOpenId(msg.getFromUserName(), appid);
 
 			// get user entity
 			user = puser.getEntity();
@@ -173,6 +187,102 @@ public class StarterWechatController {
 	}
 
 	/**
+	 * make response to message
+	 * 
+	 * @param requestMessage
+	 * @return
+	 */
+	protected String responsePlatformMessage(PlatformMessageModel requestMessage) {
+
+		PlatformMessageEntity msg = requestMessage.getEntity();
+
+		// response as text
+		TextResponseMessage resp = new TextResponseMessage();
+		resp.setMsgType(MessageTypes.RESP_MESSAGE_TYPE_TEXT);
+		resp.setToUserName(msg.getFromUserName());
+		resp.setFromUserName(msg.getToUserName());
+		resp.setCreateTime(DateUtil.getNow().getTime());
+
+		String msgType = msg.getMsgType();
+		String respContent = "";
+
+		// 文本消息
+		if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_TEXT)) {
+			respContent = "您发送的是文本消息:" + msg.getContent();
+		}
+		// 图片消息
+		else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_IMAGE)) {
+			respContent = "您发送的是图片消息！";
+		}
+		// 地理位置消息
+		else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_LOCATION)) {
+			respContent = "您发送的是地理位置消息！";
+		}
+		// 链接消息
+		else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_LINK)) {
+			respContent = "您发送的是链接消息！";
+		}
+		// 音频消息
+		else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_VOICE)) {
+			respContent = "您发送的是音频消息！";
+		}
+		// 事件推送
+		else if (msgType.equals(MessageTypes.REQ_MESSAGE_TYPE_EVENT)) {
+			// 事件类型
+			String eventType = msg.getEvent();
+			String eventKey = msg.getEventKey();
+
+			// 订阅
+			if (eventType.equals(EventTypes.EVENT_TYPE_SUBSCRIBE)) {
+				respContent = "谢谢您的关注！";
+			}
+			// 取消订阅
+			else if (eventType.equals(EventTypes.EVENT_TYPE_UNSUBSCRIBE)) {
+				// 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+				respContent = "您已经取消关注！";
+			}
+			// 自定义菜单点击事件
+			else if (eventType.equals(EventTypes.EVENT_TYPE_CLICK)) {
+				// 事件KEY值，与创建自定义菜单时指定的KEY值对应
+
+				if (eventKey.equals("11")) {
+					respContent = "天气预报菜单项被点击！";
+				} else if (eventKey.equals("12")) {
+					respContent = "公交查询菜单项被点击！";
+				} else if (eventKey.equals("13")) {
+					respContent = "周边搜索菜单项被点击！";
+				} else if (eventKey.equals("14")) {
+					respContent = "历史上的今天菜单项被点击！";
+				} else if (eventKey.equals("21")) {
+					respContent = "歌曲点播菜单项被点击！";
+				} else if (eventKey.equals("22")) {
+					respContent = "经典游戏菜单项被点击！";
+				} else if (eventKey.equals("23")) {
+					respContent = "美女电台菜单项被点击！";
+				} else if (eventKey.equals("24")) {
+					respContent = "人脸识别菜单项被点击！";
+				} else if (eventKey.equals("25")) {
+					respContent = "聊天唠嗑菜单项被点击！";
+				} else if (eventKey.equals("31")) {
+					respContent = "Q友圈菜单项被点击！";
+				} else if (eventKey.equals("32")) {
+					respContent = "电影排行榜菜单项被点击！";
+				} else if (eventKey.equals("33")) {
+					respContent = "幽默笑话菜单项被点击！";
+				} else {
+					respContent = "menu clicked key=" + eventKey;
+				}
+			}
+		}
+
+		// set content
+		resp.setContent(respContent);
+
+		// get xml
+		return requestMessage.toXml(resp);
+	}
+
+	/**
 	 * process component message
 	 * 
 	 * @param requestMessage
@@ -193,12 +303,7 @@ public class StarterWechatController {
 				ComponentModel component = new ComponentModel(this.proxyService);
 
 				// try get one, if not exists, create one
-				try {
-					component.loadById(WechatPropertiesUtil.getComponentAppid());
-				} catch (DataNotExistsException ex) {
-					// no data, create one
-					component.saveNew();
-				}
+				component.loadOrCreateById(WechatPropertiesUtil.getComponentAppid());
 
 				// set ticket
 				component.getEntity().setComponentVerifyTicket(msg.getComponentVerifyTicket());
@@ -215,12 +320,7 @@ public class StarterWechatController {
 				PlatformModel platform = new PlatformModel(this.proxyService);
 
 				// try get one, if not exists, create one
-				try {
-					platform.loadById(msg.getAuthorizerAppid());
-				} catch (DataNotExistsException ex) {
-					// no data, create one
-					platform.saveNew();
-				}
+				platform.loadOrCreateById(msg.getAuthorizerAppid());
 
 				// set ticket
 				platform.getEntity().setAuthorizationCode(msg.getAuthorizationCode());
@@ -238,6 +338,16 @@ public class StarterWechatController {
 	}
 
 	/**
+	 * response component message, just success is ok
+	 * 
+	 * @param requestMessage
+	 * @return
+	 */
+	protected String responseComponentMessage(ComponentMessageModel requestMessage) {
+		return "success";
+	}
+
+	/**
 	 * process platform component message, base just bridge to processPlatformMessage
 	 * 
 	 * @param appid
@@ -250,6 +360,31 @@ public class StarterWechatController {
 			throws DataException, CommonException, CoreException {
 		// just as normal platform
 		this.processPlatformMessage(appid, requestMessage);
+	}
+
+	/**
+	 * response platform component message
+	 * 
+	 * @param appid
+	 * @param requestMessage
+	 * @return
+	 * @throws CoreException
+	 */
+	protected String responsePlatformComponentMessage(String appid, PlatformMessageModel requestMessage)
+			throws CoreException {
+		String resp = this.responsePlatformMessage(requestMessage);
+		try {
+			// make crypt
+			WXBizMsgCrypt pc = new WXBizMsgCrypt(WechatPropertiesUtil.getComponentToken(),
+					WechatPropertiesUtil.getComponentAesKey(), appid);
+
+			// need encrypt
+			return pc.encryptMsg(resp, StringUtil.toString(DateUtil.getNow().getTime()),
+					StringUtil.toString(Math.round(Math.random() * 1000000)));
+
+		} catch (AesException ex) {
+			throw new CoreException("aes error", ex);
+		}
 	}
 
 	/**
@@ -284,7 +419,7 @@ public class StarterWechatController {
 				response.setCharacterEncoding("UTF-8");
 
 				// create model to handle
-				PlatformMessageModel requestMessage = new PlatformMessageModel(proxyService, wechatService);
+				PlatformMessageModel requestMessage = new PlatformMessageModel(proxyService);
 
 				// get input stream
 				reader = request.getReader();
@@ -299,7 +434,7 @@ public class StarterWechatController {
 				this.processPlatformMessage(WechatPropertiesUtil.getAppid(), requestMessage);
 
 				// get response as xml string
-				String responseString = requestMessage.makeResponse();
+				String responseString = this.responsePlatformMessage(requestMessage);
 
 				// write response
 				writer = response.getWriter();
@@ -359,7 +494,7 @@ public class StarterWechatController {
 				response.setCharacterEncoding("UTF-8");
 
 				// create model to handle
-				ComponentMessageModel requestMessage = new ComponentMessageModel(proxyService, wechatService);
+				ComponentMessageModel requestMessage = new ComponentMessageModel(proxyService);
 
 				// get reader
 				reader = request.getReader();
@@ -379,7 +514,7 @@ public class StarterWechatController {
 				this.processComponentMessage(requestMessage);
 
 				// response always is success
-				String responseString = "success";
+				String responseString = this.responseComponentMessage(requestMessage);
 
 				// write response
 				writer = response.getWriter();
@@ -441,8 +576,7 @@ public class StarterWechatController {
 				response.setCharacterEncoding("UTF-8");
 
 				// create model to handle
-				PlatformComponentMessageModel requestMessage = new PlatformComponentMessageModel(proxyService,
-						wechatService, appid);
+				PlatformComponentMessageModel requestMessage = new PlatformComponentMessageModel(proxyService, appid);
 
 				// get reader
 				reader = request.getReader();
@@ -462,7 +596,7 @@ public class StarterWechatController {
 				this.processPlatformComponentMessage(appid, requestMessage);
 
 				// get response as normal
-				String responseString = requestMessage.makeResponse();
+				String responseString = this.responsePlatformComponentMessage(appid, requestMessage);
 
 				// write response
 				writer = response.getWriter();

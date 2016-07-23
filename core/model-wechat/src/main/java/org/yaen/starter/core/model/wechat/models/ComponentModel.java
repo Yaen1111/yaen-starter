@@ -121,7 +121,7 @@ public class ComponentModel extends TwoModel {
 
 		// try to load from db if null
 		if (this.componentAccessToken == null) {
-			this.loadById(this.componentAppid);
+			this.loadOrCreateById(this.componentAppid);
 
 			String component_access_token = this.getEntity().getComponentAccessToken();
 			Long create = this.getEntity().getComponentAccessTokenCreate();
@@ -208,7 +208,7 @@ public class ComponentModel extends TwoModel {
 
 		// try to load from db if null
 		if (this.preAuthCode == null) {
-			this.loadById(this.componentAppid);
+			this.loadOrCreateById(this.componentAppid);
 
 			String pre_auth_code = this.getEntity().getPreAuthCode();
 			Long create = this.getEntity().getPreAuthCodeCreate();

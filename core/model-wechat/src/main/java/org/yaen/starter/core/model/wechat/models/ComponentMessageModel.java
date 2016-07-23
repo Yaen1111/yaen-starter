@@ -9,7 +9,6 @@ import org.yaen.starter.common.util.utils.ParseUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.ComponentMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.InfoTypes;
-import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
 import com.qq.weixin.mp.aes.AesException;
@@ -33,10 +32,9 @@ public class ComponentMessageModel extends BaseMessageModel {
 	 * constructor
 	 * 
 	 * @param proxy
-	 * @param service
 	 */
-	public ComponentMessageModel(ProxyService proxy, WechatService service) {
-		super(proxy, service, new ComponentMessageEntity());
+	public ComponentMessageModel(ProxyService proxy) {
+		super(proxy, new ComponentMessageEntity());
 	}
 
 	/**
@@ -102,15 +100,6 @@ public class ComponentMessageModel extends BaseMessageModel {
 		}
 
 		// done
-	}
-
-	/**
-	 * @see org.yaen.starter.core.model.wechat.models.BaseMessageModel#makeResponse()
-	 */
-	@Override
-	public String makeResponse() throws CoreException {
-		// return success anyway
-		return "success";
 	}
 
 }

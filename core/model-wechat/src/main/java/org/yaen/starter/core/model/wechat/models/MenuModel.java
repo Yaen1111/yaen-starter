@@ -17,7 +17,6 @@ import org.yaen.starter.core.model.wechat.objects.Button;
 import org.yaen.starter.core.model.wechat.objects.ClickButton;
 import org.yaen.starter.core.model.wechat.objects.ComplexButton;
 import org.yaen.starter.core.model.wechat.objects.ViewButton;
-import org.yaen.starter.core.model.wechat.services.WechatService;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
 import com.alibaba.fastjson.JSONObject;
@@ -40,9 +39,6 @@ public class MenuModel extends OneModel {
 	@Getter
 	private ProxyService proxy;
 
-	@Getter
-	private WechatService service;
-
 	/** the appid */
 	@Getter
 	@Setter
@@ -61,14 +57,11 @@ public class MenuModel extends OneModel {
 	 * constructor
 	 * 
 	 * @param proxy
-	 * @param service
 	 */
-	public MenuModel(ProxyService proxy, WechatService service) {
+	public MenuModel(ProxyService proxy) {
 		super();
 
 		this.proxy = proxy;
-
-		this.service = service;
 	}
 
 	/**

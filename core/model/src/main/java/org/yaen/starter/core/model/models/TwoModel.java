@@ -184,8 +184,29 @@ public class TwoModel extends OneModel {
 		AssertUtil.notBlank(id);
 
 		// set id to entity
-		entity.setId(id);
+		this.entity.setId(id);
 		this.fillEntityById(this.entity);
+	}
+
+	/**
+	 * load by id, if not exists, create new one
+	 * 
+	 * @param id
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	public void loadOrCreateById(String id) throws DataException, CommonException {
+		AssertUtil.notBlank(id);
+
+		try {
+			// set id to entity
+			this.entity.setId(id);
+			this.fillEntityById(this.entity);
+		} catch (DataNotExistsException ex) {
+			// set id to entity again
+			this.entity.setId(id);
+			this.insertEntity(this.entity);
+		}
 	}
 
 	/**

@@ -31,6 +31,10 @@ public class PlatformUserEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String appId;
 
+	/** the last bind terminal userid */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String lastTerminalUserId;
+
 	/** last active time */
 	@OneData(DataType = DataTypes.DATETIME)
 	private Date lastActiveTime;
