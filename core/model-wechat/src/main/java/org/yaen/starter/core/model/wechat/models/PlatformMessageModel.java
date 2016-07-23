@@ -135,6 +135,7 @@ public class PlatformMessageModel extends BaseMessageModel {
 			case EventTypes.EVENT_TYPE_TEMPLATESENDJOBFINISH:
 				// send template message job finish
 				msg.setStatus(map.get("Status"));
+				break;
 			default:
 				log.error("unknown event type: {}", msg.getEvent());
 				break;
