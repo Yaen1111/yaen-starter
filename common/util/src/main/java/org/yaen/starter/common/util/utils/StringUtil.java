@@ -103,8 +103,15 @@ public class StringUtil extends StringUtils {
 
 		StringBuilder sb = new StringBuilder();
 
+		boolean first = true;
+
 		for (int i = 0; i < s2.length() - 1; i += 2) {
-			sb.append(s2.substring(i, 2)).append(":");
+			if (first) {
+				first = false;
+			} else {
+				sb.append(":");
+			}
+			sb.append(s2.substring(i, i + 2));
 		}
 
 		return sb.toString();

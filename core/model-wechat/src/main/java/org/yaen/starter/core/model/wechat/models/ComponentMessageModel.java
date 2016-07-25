@@ -1,6 +1,8 @@
 package org.yaen.starter.core.model.wechat.models;
 
+import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CommonException;
@@ -8,6 +10,7 @@ import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.ParseUtil;
+import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.ComponentMessageEntity;
 import org.yaen.starter.core.model.wechat.enums.InfoTypes;
@@ -55,16 +58,20 @@ public class ComponentMessageModel extends BaseMessageModel {
 		Map<String, String> map = null;
 
 		try {
+			String xml = StringUtil.readString(reader);
+
 			// decrypt
-			Reader reader2 = this.decryptXmlReader(reader, WechatPropertiesUtil.getComponentAppid(),
+			String resp = this.decryptXmlReader(xml, WechatPropertiesUtil.getComponentAppid(),
 					WechatPropertiesUtil.getComponentToken(), WechatPropertiesUtil.getComponentAesKey(), msgSignature,
 					timeStamp, nonce);
 
 			// get map
-			map = this.getMapFormXml(reader2);
+			map = this.getMapFormXml(new StringReader(resp));
 
 		} catch (AesException ex) {
 			throw new CoreException("aes error", ex);
+		} catch (IOException ex) {
+			throw new CoreException("read request body error", ex);
 		}
 
 		// get entity and fill data

@@ -1,8 +1,6 @@
 package org.yaen.starter.core.model.wechat.models;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +15,7 @@ import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.util.utils.AssertUtil;
+import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
@@ -39,6 +38,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class BaseMessageModel extends TwoModel {
+
+	private WXBizMsgCrypt pc;
 
 	/**
 	 * extend xstream to support cdata
@@ -137,6 +138,34 @@ public abstract class BaseMessageModel extends TwoModel {
 	}
 
 	/**
+	 * encrypt xml content
+	 * 
+	 * @param xml
+	 * @param appid
+	 * @param token
+	 * @param aesKey
+	 * @return
+	 * @throws AesException
+	 */
+	protected String encryptXml(String xml, String appid, String token, String aesKey) throws AesException {
+
+		log.debug("encrypt xml content before decrypt: \n{}", xml);
+
+		// make crypto if not
+		if (this.pc == null) {
+			this.pc = new WXBizMsgCrypt(token, aesKey, appid);
+		}
+
+		// encrypt
+		String resp = this.pc.encryptMsg(xml, StringUtil.toString(DateUtil.getNow().getTime()),
+				StringUtil.toString(Math.round(Math.random() * 1000000)));
+
+		log.debug("encrypt xml content after decrypt: \n{}", resp);
+
+		return resp;
+	}
+
+	/**
 	 * decrypt xml reader
 	 * 
 	 * @param reader
@@ -150,32 +179,23 @@ public abstract class BaseMessageModel extends TwoModel {
 	 * @throws CoreException
 	 * @throws AesException
 	 */
-	protected Reader decryptXmlReader(Reader reader, String appid, String token, String aesKey, String msgSignature,
+	protected String decryptXmlReader(String xml, String appid, String token, String aesKey, String msgSignature,
 			String timeStamp, String nonce) throws CoreException, AesException {
 
-		try {
-			// get all string data
-			String str = StringUtil.readString(reader);
+		log.debug("decrypt xml content before decrypt: \n{}", xml);
 
-			if (log.isDebugEnabled()) {
-				log.debug("decrypt xml content before decrypt: \n{}", str);
-			}
-
-			// make crypto
-			WXBizMsgCrypt pc = new WXBizMsgCrypt(token, aesKey, appid);
-
-			// decrypt entire xml
-			String xml = pc.decryptMsg(msgSignature, timeStamp, nonce, str);
-
-			if (log.isDebugEnabled()) {
-				log.debug("decrypt xml content after decrypt: \n{}", xml);
-			}
-
-			return new StringReader(xml);
-
-		} catch (IOException ex) {
-			throw new CoreException("read data error", ex);
+		// make crypto if not
+		if (this.pc == null) {
+			this.pc = new WXBizMsgCrypt(token, aesKey, appid);
 		}
+
+		// decrypt entire xml
+		String resp = this.pc.decryptMsg(msgSignature, timeStamp, nonce, xml);
+
+		log.debug("decrypt xml content after decrypt: \n{}", resp);
+
+		return resp;
+
 	}
 
 	/**

@@ -1,17 +1,17 @@
 package org.yaen.starter.core.model.wechat.models;
 
+import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.util.utils.AssertUtil;
-import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.services.ProxyService;
 import org.yaen.starter.core.model.wechat.entities.PlatformComponentMessageEntity;
 import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
 import com.qq.weixin.mp.aes.AesException;
-import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 
 import lombok.Getter;
 
@@ -44,7 +44,7 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 	}
 
 	/**
-	 * load from xml with decrpyt
+	 * load from xml with decrypt
 	 * 
 	 * @param reader
 	 * @param msgSignature
@@ -57,15 +57,19 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 		AssertUtil.notNull(reader);
 
 		try {
+			String xml = StringUtil.readString(reader);
+
 			// decrypt
-			Reader reader2 = this.decryptXmlReader(reader, this.appid, WechatPropertiesUtil.getComponentToken(),
+			String resp = this.decryptXmlReader(xml, this.appid, WechatPropertiesUtil.getComponentToken(),
 					WechatPropertiesUtil.getComponentAesKey(), msgSignature, timeStamp, nonce);
 
 			// load as normal
-			this.loadFromXml(reader2);
+			this.loadFromXml(new StringReader(resp));
 
 		} catch (AesException ex) {
 			throw new CoreException("aes error", ex);
+		} catch (IOException ex) {
+			throw new CoreException("read from request body error", ex);
 		}
 	}
 
@@ -79,14 +83,10 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 
 		// need encrypt
 		try {
-			// make crypt
-			WXBizMsgCrypt pc = new WXBizMsgCrypt(WechatPropertiesUtil.getComponentToken(),
-					WechatPropertiesUtil.getComponentAesKey(), appid);
+			String resp2 = this.encryptXml(resp, this.appid, WechatPropertiesUtil.getComponentToken(),
+					WechatPropertiesUtil.getComponentAesKey());
 
-			// need encrypt
-			return pc.encryptMsg(resp, StringUtil.toString(DateUtil.getNow().getTime()),
-					StringUtil.toString(Math.round(Math.random() * 1000000)));
-
+			return resp2;
 		} catch (AesException ex) {
 			throw new CoreException("aes error", ex);
 		}
