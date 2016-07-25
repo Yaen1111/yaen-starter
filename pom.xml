@@ -181,11 +181,6 @@
 				<artifactId>yaen-starter-web-home</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-web-wechat</artifactId>
-				<version>${yaen-starter.version}</version>
-			</dependency>
 
 			<!-- Spring -->
 			<dependency>

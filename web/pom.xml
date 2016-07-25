@@ -13,7 +13,6 @@
 
 	<modules>
 		<module>home</module>
-		<module>wechat</module>
 	</modules>
 
 	<dependencies>

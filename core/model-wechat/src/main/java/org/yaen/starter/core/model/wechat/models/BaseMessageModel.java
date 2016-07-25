@@ -13,7 +13,9 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.yaen.starter.common.dal.entities.OneEntity;
+import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.TwoModel;
@@ -175,6 +177,26 @@ public abstract class BaseMessageModel extends TwoModel {
 			throw new CoreException("read data error", ex);
 		}
 	}
+
+	/**
+	 * do process message, need appid, as the message maybe send to component
+	 * 
+	 * @param appid
+	 * @throws DataException
+	 * @throws CommonException
+	 * @throws CoreException
+	 */
+	public abstract void processMessage(String appid) throws DataException, CommonException, CoreException;
+
+	/**
+	 * make response message, return success if no message need to be response
+	 * 
+	 * @return
+	 * @throws DataException
+	 * @throws CommonException
+	 * @throws CoreException
+	 */
+	public abstract String makeResponse() throws DataException, CommonException, CoreException;
 
 	/**
 	 * convert the message object to xml

@@ -3,7 +3,9 @@ package org.yaen.starter.core.model.wechat.models;
 import java.io.Reader;
 import java.util.Map;
 
+import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.ParseUtil;
 import org.yaen.starter.core.model.services.ProxyService;
@@ -100,6 +102,64 @@ public class ComponentMessageModel extends BaseMessageModel {
 		}
 
 		// done
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.wechat.models.BaseMessageModel#processMessage(java.lang.String)
+	 */
+	@Override
+	public void processMessage(String appid) throws DataException, CommonException, CoreException {
+
+		ComponentMessageEntity msg = this.getEntity();
+
+		if (msg.getInfoType() != null) {
+			switch (msg.getInfoType()) {
+			case InfoTypes.COMPONENT_VERIFY_TICKET:
+			// verify ticket, update component
+			{
+				ComponentModel component = new ComponentModel(this.proxy);
+
+				// try get one, if not exists, create one
+				component.loadOrCreateById(WechatPropertiesUtil.getComponentAppid());
+
+				// set ticket
+				component.getEntity().setComponentVerifyTicket(msg.getComponentVerifyTicket());
+				component.getEntity().setComponentVerifyTicketCreate(msg.getCreateTime());
+
+				// save
+				component.saveById();
+			}
+				break;
+			case InfoTypes.AUTHORIZED:
+			case InfoTypes.UPDATEAUTHORIZED:
+			// platform auth with auth code
+			{
+				PlatformModel platform = new PlatformModel(this.proxy);
+
+				// try get one, if not exists, create one
+				platform.loadOrCreateById(msg.getAuthorizerAppid());
+
+				// set ticket
+				platform.getEntity().setAuthorizationCode(msg.getAuthorizationCode());
+				platform.getEntity().setAuthorizationCodeExpiredTime(msg.getAuthorizationCodeExpiredTime());
+
+				// save
+				platform.saveById();
+			}
+				break;
+			default:
+				// ignore others
+				break;
+			}
+		}
+	}
+
+	/**
+	 * @see org.yaen.starter.core.model.wechat.models.BaseMessageModel#makeResponse()
+	 */
+	@Override
+	public String makeResponse() throws DataException, CommonException, CoreException {
+		return "success";
 	}
 
 }
