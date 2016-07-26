@@ -2,6 +2,7 @@ package org.yaen.starter.core.model.wechat.models;
 
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CommonException;
@@ -203,7 +204,8 @@ public class PlatformMessageModel extends BaseMessageModel {
 		PlatformMessageEntity msg = this.getEntity();
 		PlatformUserModel puser = null;
 		PlatformUserEntity user = null;
-		Long now = DateUtil.getNow().getTime();
+
+		Date now = DateUtil.getNow();
 
 		if (StringUtil.isNotBlank(msg.getFromUserName())) {
 			// has user info
@@ -216,7 +218,7 @@ public class PlatformMessageModel extends BaseMessageModel {
 			user = puser.getEntity();
 
 			// set last active time
-			user.setLastActiveTime(DateUtil.getNow());
+			user.setLastActiveTime(now);
 		}
 
 		// check event
@@ -225,12 +227,12 @@ public class PlatformMessageModel extends BaseMessageModel {
 			case EventTypes.EVENT_TYPE_SUBSCRIBE:
 				// user subscribe
 				user.setSubscribe(1);
-				user.setSubscribeTime(now);
+				user.setSubscribeTime(now.getTime());
 				break;
 			case EventTypes.EVENT_TYPE_UNSUBSCRIBE:
 				// user unsubscribe
 				user.setSubscribe(0);
-				user.setUnsubscribeTime(now);
+				user.setUnsubscribeTime(now.getTime());
 				break;
 			default:
 				// ignore others
