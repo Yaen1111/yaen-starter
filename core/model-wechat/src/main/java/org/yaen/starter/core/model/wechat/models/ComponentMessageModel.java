@@ -61,7 +61,7 @@ public class ComponentMessageModel extends BaseMessageModel {
 			String xml = StringUtil.readString(reader);
 
 			// decrypt
-			String resp = this.decryptXmlReader(xml, WechatPropertiesUtil.getComponentAppid(),
+			String resp = this.decryptXml(xml, WechatPropertiesUtil.getComponentAppid(),
 					WechatPropertiesUtil.getComponentToken(), WechatPropertiesUtil.getComponentAesKey(), msgSignature,
 					timeStamp, nonce);
 

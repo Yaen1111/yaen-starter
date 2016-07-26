@@ -60,8 +60,9 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 			String xml = StringUtil.readString(reader);
 
 			// decrypt
-			String resp = this.decryptXmlReader(xml, this.appid, WechatPropertiesUtil.getComponentToken(),
-					WechatPropertiesUtil.getComponentAesKey(), msgSignature, timeStamp, nonce);
+			String resp = this.decryptXml(xml, WechatPropertiesUtil.getComponentAppid(),
+					WechatPropertiesUtil.getComponentToken(), WechatPropertiesUtil.getComponentAesKey(), msgSignature,
+					timeStamp, nonce);
 
 			// load as normal
 			this.loadFromXml(new StringReader(resp));
@@ -83,8 +84,8 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 
 		// need encrypt
 		try {
-			String resp2 = this.encryptXml(resp, this.appid, WechatPropertiesUtil.getComponentToken(),
-					WechatPropertiesUtil.getComponentAesKey());
+			String resp2 = this.encryptXml(resp, WechatPropertiesUtil.getComponentAppid(),
+					WechatPropertiesUtil.getComponentToken(), WechatPropertiesUtil.getComponentAesKey());
 
 			return resp2;
 		} catch (AesException ex) {

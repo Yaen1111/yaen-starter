@@ -178,7 +178,7 @@ public class WXBizMsgCrypt {
 		}
 
 		String xmlContent;
-		// String from_appid;
+		String from_appid;
 		try {
 			// 去除补位字符
 			byte[] bytes = PKCS7Encoder.decode(original);
@@ -189,7 +189,7 @@ public class WXBizMsgCrypt {
 			int xmlLength = recoverNetworkBytesOrder(networkOrder);
 
 			xmlContent = new String(Arrays.copyOfRange(bytes, 20, 20 + xmlLength), CHARSET);
-			// from_appid = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length), CHARSET);
+			from_appid = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length), CHARSET);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AesException(AesException.IllegalBuffer);
@@ -197,9 +197,9 @@ public class WXBizMsgCrypt {
 
 		// appid不相同的情况
 		// 如果为第三方平台，则会不同，不能做这个判断
-		// if (!from_appid.equals(appId)) {
-		// throw new AesException(AesException.ValidateAppidError);
-		// }
+		if (!from_appid.equals(appId)) {
+			//throw new AesException(AesException.ValidateAppidError);
+		}
 		return xmlContent;
 
 	}

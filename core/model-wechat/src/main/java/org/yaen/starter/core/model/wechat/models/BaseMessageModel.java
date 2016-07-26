@@ -40,8 +40,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class BaseMessageModel extends TwoModel {
 
-	private WXBizMsgCrypt pc;
-
 	/**
 	 * extend xstream to support cdata
 	 */
@@ -155,13 +153,11 @@ public abstract class BaseMessageModel extends TwoModel {
 		Date now = DateUtil.getNow();
 		Long nowtime = now.getTime() / 1000;
 
-		// make crypto if not
-		if (this.pc == null) {
-			this.pc = new WXBizMsgCrypt(token, aesKey, appid);
-		}
+		// make crypto
+		WXBizMsgCrypt pc = new WXBizMsgCrypt(token, aesKey, appid);
 
 		// encrypt
-		String resp = this.pc.encryptMsg(xml, StringUtil.toString(nowtime),
+		String resp = pc.encryptMsg(xml, StringUtil.toString(nowtime),
 				StringUtil.toString(Math.round(Math.random() * 1000000)));
 
 		log.debug("encrypt xml content after decrypt: \n{}", resp);
@@ -170,9 +166,9 @@ public abstract class BaseMessageModel extends TwoModel {
 	}
 
 	/**
-	 * decrypt xml reader
+	 * decrypt xml
 	 * 
-	 * @param reader
+	 * @param xml
 	 * @param appid
 	 * @param token
 	 * @param aesKey
@@ -183,18 +179,16 @@ public abstract class BaseMessageModel extends TwoModel {
 	 * @throws CoreException
 	 * @throws AesException
 	 */
-	protected String decryptXmlReader(String xml, String appid, String token, String aesKey, String msgSignature,
+	protected String decryptXml(String xml, String appid, String token, String aesKey, String msgSignature,
 			String timeStamp, String nonce) throws CoreException, AesException {
 
 		log.debug("decrypt xml content before decrypt: \n{}", xml);
 
-		// make crypto if not
-		if (this.pc == null) {
-			this.pc = new WXBizMsgCrypt(token, aesKey, appid);
-		}
+		// make crypto
+		WXBizMsgCrypt pc = new WXBizMsgCrypt(token, aesKey, appid);
 
 		// decrypt entire xml
-		String resp = this.pc.decryptMsg(msgSignature, timeStamp, nonce, xml);
+		String resp = pc.decryptMsg(msgSignature, timeStamp, nonce, xml);
 
 		log.debug("decrypt xml content after decrypt: \n{}", resp);
 
