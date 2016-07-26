@@ -138,6 +138,9 @@ public abstract class BaseMessageModel extends TwoModel {
 
 	/**
 	 * encrypt xml content
+	 * <p>
+	 * appid is the host appid(home platform for platform only, component for all binded platform), DO NOT use
+	 * platform-component appid
 	 * 
 	 * @param xml
 	 * @param appid
@@ -167,6 +170,9 @@ public abstract class BaseMessageModel extends TwoModel {
 
 	/**
 	 * decrypt xml
+	 * <p>
+	 * appid is the host appid(home platform for platform only, component for all binded platform), DO NOT use
+	 * platform-component appid
 	 * 
 	 * @param xml
 	 * @param appid
