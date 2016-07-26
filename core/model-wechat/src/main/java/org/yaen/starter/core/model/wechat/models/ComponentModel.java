@@ -1,5 +1,6 @@
 package org.yaen.starter.core.model.wechat.models;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,7 +110,8 @@ public class ComponentModel extends TwoModel {
 		final String API = "https://api.weixin.qq.com/cgi-bin/component/api_component_token";
 		final String CACHE_KEY = "component_access_token";
 
-		Long now = DateUtil.getNow().getTime();
+		Date now = DateUtil.getNow();
+		Long nowtime = now.getTime() / 1000;
 
 		// try to get from cache if null
 		if (this.componentAccessToken == null) {
@@ -128,9 +130,9 @@ public class ComponentModel extends TwoModel {
 			Long expirein = this.getEntity().getComponentAccessTokenExpireIn();
 
 			// db is ok and not out of date
-			if (StringUtil.isNotBlank(component_access_token) && create + expirein / 2 > now) {
+			if (StringUtil.isNotBlank(component_access_token) && create + expirein / 2 > nowtime) {
 				// set cache
-				this.writeCache(CACHE_KEY, component_access_token, (int) (now - create - expirein / 2));
+				this.writeCache(CACHE_KEY, component_access_token, (int) (nowtime - create - expirein / 2));
 				// set member
 				this.componentAccessToken = component_access_token;
 			}
@@ -155,7 +157,7 @@ public class ComponentModel extends TwoModel {
 			Long expires_in = json.getLong("expires_in");
 
 			this.getEntity().setComponentAccessToken(component_access_token);
-			this.getEntity().setComponentAccessTokenCreate(now);
+			this.getEntity().setComponentAccessTokenCreate(nowtime);
 			this.getEntity().setComponentAccessTokenExpireIn(expires_in);
 
 			// set db
@@ -196,7 +198,8 @@ public class ComponentModel extends TwoModel {
 		final String API = "https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token=COMPONENT_ACCESS_TOKEN";
 		final String CACHE_KEY = "pre_auth_code";
 
-		Long now = DateUtil.getNow().getTime();
+		Date now = DateUtil.getNow();
+		Long nowtime = now.getTime() / 1000;
 
 		// try to get from cache if null
 		if (this.preAuthCode == null) {
@@ -215,9 +218,9 @@ public class ComponentModel extends TwoModel {
 			Long expirein = this.getEntity().getPreAuthCodeExpireIn();
 
 			// db is ok and not out of date
-			if (StringUtil.isNotBlank(pre_auth_code) && create + expirein / 2 > now) {
+			if (StringUtil.isNotBlank(pre_auth_code) && create + expirein / 2 > nowtime) {
 				// set cache
-				this.writeCache(CACHE_KEY, pre_auth_code, (int) (now - create - expirein / 2));
+				this.writeCache(CACHE_KEY, pre_auth_code, (int) (nowtime - create - expirein / 2));
 				// set member
 				this.preAuthCode = pre_auth_code;
 			}
@@ -238,7 +241,7 @@ public class ComponentModel extends TwoModel {
 			Long expires_in = json.getLong("expires_in");
 
 			this.getEntity().setPreAuthCode(pre_auth_code);
-			this.getEntity().setPreAuthCodeCreate(now);
+			this.getEntity().setPreAuthCodeCreate(nowtime);
 			this.getEntity().setPreAuthCodeExpireIn(expires_in);
 
 			// set db
@@ -381,7 +384,8 @@ public class ComponentModel extends TwoModel {
 			return new PlatformModel(this.proxy);
 		}
 
-		Long now = DateUtil.getNow().getTime();
+		Date now = DateUtil.getNow();
+		Long nowtime = now.getTime() / 1000;
 
 		// find platform from db
 		PlatformEntity platform = null;
@@ -395,7 +399,7 @@ public class ComponentModel extends TwoModel {
 		if (StringUtil.isBlank(platform.getRefreshToken())) {
 			// get refresh token, need auth code
 			if (StringUtil.isBlank(platform.getAuthorizationCode())
-					|| platform.getAuthorizationCodeExpiredTime() <= now) {
+					|| platform.getAuthorizationCodeExpiredTime() <= nowtime) {
 				throw new CoreException(
 						"the platform has no refresh token nor authorization code(or expired), must be re-authorized. appid="
 								+ appid);
@@ -414,10 +418,10 @@ public class ComponentModel extends TwoModel {
 
 			// set to entity
 			platform.setAccessToken(json.getString("authorizer_access_token"));
-			platform.setAccessTokenCreate(now);
+			platform.setAccessTokenCreate(nowtime);
 			platform.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
 			platform.setRefreshToken(json.getString("authorizer_refresh_token"));
-			platform.setRefreshTokenCreate(now);
+			platform.setRefreshTokenCreate(nowtime);
 
 			// make func scope list
 			// JSONArray arr = json.getJSONArray("func_info");
@@ -437,7 +441,7 @@ public class ComponentModel extends TwoModel {
 
 		// need to get access token, if null, call api to get new one, if expired, call api to refresh
 		if (StringUtil.isBlank(platform.getAccessToken())
-				|| platform.getAccessTokenCreate() + platform.getAccessTokenExpireIn() / 2 <= now) {
+				|| platform.getAccessTokenCreate() + platform.getAccessTokenExpireIn() / 2 <= nowtime) {
 
 			// need refresh token
 			if (StringUtil.isBlank(platform.getRefreshToken())) {
@@ -451,14 +455,14 @@ public class ComponentModel extends TwoModel {
 
 			// set to entity
 			platform.setAccessToken(json.getString("authorizer_access_token"));
-			platform.setAccessTokenCreate(now);
+			platform.setAccessTokenCreate(nowtime);
 			platform.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
 
 			// change refresh token if different
 			String refresh_token = json.getString("authorizer_refresh_token");
 			if (!StringUtil.equals(refresh_token, platform.getRefreshToken())) {
 				platform.setRefreshToken(json.getString("authorizer_refresh_token"));
-				platform.setRefreshTokenCreate(now);
+				platform.setRefreshTokenCreate(nowtime);
 			}
 
 			// save to db

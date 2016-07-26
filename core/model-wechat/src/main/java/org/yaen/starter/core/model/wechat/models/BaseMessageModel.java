@@ -2,6 +2,7 @@ package org.yaen.starter.core.model.wechat.models;
 
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,13 +152,16 @@ public abstract class BaseMessageModel extends TwoModel {
 
 		log.debug("encrypt xml content before decrypt: \n{}", xml);
 
+		Date now = DateUtil.getNow();
+		Long nowtime = now.getTime() / 1000;
+
 		// make crypto if not
 		if (this.pc == null) {
 			this.pc = new WXBizMsgCrypt(token, aesKey, appid);
 		}
 
 		// encrypt
-		String resp = this.pc.encryptMsg(xml, StringUtil.toString(DateUtil.getNow().getTime()),
+		String resp = this.pc.encryptMsg(xml, StringUtil.toString(nowtime),
 				StringUtil.toString(Math.round(Math.random() * 1000000)));
 
 		log.debug("encrypt xml content after decrypt: \n{}", resp);

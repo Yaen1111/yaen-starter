@@ -1,6 +1,7 @@
 package org.yaen.starter.core.model.wechat.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,7 +118,8 @@ public class PlatformModel extends TwoModel {
 		final String API = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 		final String CACHE_KEY = "platform_access_token";
 
-		Long now = DateUtil.getNow().getTime();
+		Date now = DateUtil.getNow();
+		Long nowtime = now.getTime() / 1000;
 
 		// get access token for self
 
@@ -138,9 +140,9 @@ public class PlatformModel extends TwoModel {
 			Long expirein = this.getEntity().getAccessTokenExpireIn();
 
 			// db is ok and not out of date
-			if (StringUtil.isNotBlank(access_token) && create + expirein / 2 > now) {
+			if (StringUtil.isNotBlank(access_token) && create + expirein / 2 > nowtime) {
 				// set cache
-				this.writeCache(CACHE_KEY, access_token, (int) (now - create - expirein / 2));
+				this.writeCache(CACHE_KEY, access_token, (int) (nowtime - create - expirein / 2));
 				// set member
 				this.accessToken = access_token;
 			}
@@ -158,7 +160,7 @@ public class PlatformModel extends TwoModel {
 			Long expires_in = json.getLong("expires_in");
 
 			this.getEntity().setAccessToken(access_token);
-			this.getEntity().setAccessTokenCreate(now);
+			this.getEntity().setAccessTokenCreate(nowtime);
 			this.getEntity().setAccessTokenExpireIn(expires_in);
 
 			// set db

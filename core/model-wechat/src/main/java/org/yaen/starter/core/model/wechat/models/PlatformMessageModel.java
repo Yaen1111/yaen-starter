@@ -206,6 +206,7 @@ public class PlatformMessageModel extends BaseMessageModel {
 		PlatformUserEntity user = null;
 
 		Date now = DateUtil.getNow();
+		Long nowtime = now.getTime() / 1000;
 
 		if (StringUtil.isNotBlank(msg.getFromUserName())) {
 			// has user info
@@ -227,12 +228,12 @@ public class PlatformMessageModel extends BaseMessageModel {
 			case EventTypes.EVENT_TYPE_SUBSCRIBE:
 				// user subscribe
 				user.setSubscribe(1);
-				user.setSubscribeTime(now.getTime());
+				user.setSubscribeTime(nowtime);
 				break;
 			case EventTypes.EVENT_TYPE_UNSUBSCRIBE:
 				// user unsubscribe
 				user.setSubscribe(0);
-				user.setUnsubscribeTime(now.getTime());
+				user.setUnsubscribeTime(nowtime);
 				break;
 			default:
 				// ignore others
@@ -254,12 +255,15 @@ public class PlatformMessageModel extends BaseMessageModel {
 
 		PlatformMessageEntity msg = this.getEntity();
 
+		Date now = DateUtil.getNow();
+		Long nowtime = now.getTime() / 1000;
+
 		// response as text
 		TextResponseMessage resp = new TextResponseMessage();
 		resp.setMsgType(MessageTypes.RESP_MESSAGE_TYPE_TEXT);
 		resp.setToUserName(msg.getFromUserName());
 		resp.setFromUserName(msg.getToUserName());
-		resp.setCreateTime(DateUtil.getNow().getTime());
+		resp.setCreateTime(nowtime);
 
 		String msgType = msg.getMsgType();
 		String respContent = "";
