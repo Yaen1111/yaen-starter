@@ -20,6 +20,7 @@ import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 import com.alibaba.fastjson.JSONObject;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * the wechat component model, for 3rd-party open platform
@@ -28,6 +29,7 @@ import lombok.Getter;
  * 
  * @author Yaen 2016年7月18日下午9:28:07
  */
+@Slf4j
 public class ComponentModel extends TwoModel {
 
 	@Override
@@ -58,7 +60,12 @@ public class ComponentModel extends TwoModel {
 	protected JSONObject callApiPost(String api, Map<String, Object> param) throws CoreException {
 		JSONObject json = null;
 		try {
+			log.debug("callApiPost, api={}, param={}", api, param);
+
 			json = this.proxy.getHttpClient().httpsPostAsJson(api, param);
+
+			log.debug("callApiPost, result={}", json);
+
 		} catch (Exception ex) {
 			throw new CoreException("call api failed", ex);
 		}
