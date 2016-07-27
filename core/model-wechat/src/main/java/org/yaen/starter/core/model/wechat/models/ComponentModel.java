@@ -7,7 +7,6 @@ import java.util.Map;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
-import org.yaen.starter.common.data.exceptions.NoDataAffectedException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
@@ -388,25 +387,22 @@ public class ComponentModel extends TwoModel {
 		Long nowtime = now.getTime() / 1000;
 
 		// find platform from db
-		PlatformEntity platform = null;
-		try {
-			platform = this.proxy.getQueryService().selectOneById(new PlatformEntity(), appid);
-		} catch (CommonException ex) {
-			throw new CoreException("get platform entity failed", ex);
-		}
+		PlatformEntity platformEntity = new PlatformEntity();
+		platformEntity.setId(appid);
+		this.fillEntityById(platformEntity);
 
 		// need refresh token, if null, call api to get one
-		if (StringUtil.isBlank(platform.getRefreshToken())) {
+		if (StringUtil.isBlank(platformEntity.getRefreshToken())) {
 			// get refresh token, need auth code
-			if (StringUtil.isBlank(platform.getAuthorizationCode())
-					|| platform.getAuthorizationCodeExpiredTime() <= nowtime) {
+			if (StringUtil.isBlank(platformEntity.getAuthorizationCode())
+					|| platformEntity.getAuthorizationCodeExpiredTime() <= nowtime) {
 				throw new CoreException(
 						"the platform has no refresh token nor authorization code(or expired), must be re-authorized. appid="
 								+ appid);
 			}
 
 			// call api to get auth code
-			JSONObject json = this.getAuthorizationInfoApi(platform.getAuthorizationCode());
+			JSONObject json = this.getAuthorizationInfoApi(platformEntity.getAuthorizationCode());
 
 			// check appid
 			String authorizer_appid = json.getString("authorizer_appid");
@@ -417,11 +413,11 @@ public class ComponentModel extends TwoModel {
 			}
 
 			// set to entity
-			platform.setAccessToken(json.getString("authorizer_access_token"));
-			platform.setAccessTokenCreate(nowtime);
-			platform.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
-			platform.setRefreshToken(json.getString("authorizer_refresh_token"));
-			platform.setRefreshTokenCreate(nowtime);
+			platformEntity.setAccessToken(json.getString("authorizer_access_token"));
+			platformEntity.setAccessTokenCreate(nowtime);
+			platformEntity.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
+			platformEntity.setRefreshToken(json.getString("authorizer_refresh_token"));
+			platformEntity.setRefreshTokenCreate(nowtime);
 
 			// make func scope list
 			// JSONArray arr = json.getJSONArray("func_info");
@@ -430,53 +426,42 @@ public class ComponentModel extends TwoModel {
 			// }
 
 			// save to db
-			try {
-				this.proxy.getEntityService().updateEntityByRowid(platform);
-			} catch (NoDataAffectedException ex) {
-				throw new CoreException("save platform entity failed", ex);
-			} catch (CommonException ex) {
-				throw new CoreException("save platform entity failed", ex);
-			}
+			this.updateEntity(platformEntity);
 		}
 
 		// need to get access token, if null, call api to get new one, if expired, call api to refresh
-		if (StringUtil.isBlank(platform.getAccessToken())
-				|| platform.getAccessTokenCreate() + platform.getAccessTokenExpireIn() / 2 <= nowtime) {
+		if (StringUtil.isBlank(platformEntity.getAccessToken())
+				|| platformEntity.getAccessTokenCreate() + platformEntity.getAccessTokenExpireIn() / 2 <= nowtime) {
 
 			// need refresh token
-			if (StringUtil.isBlank(platform.getRefreshToken())) {
+			if (StringUtil.isBlank(platformEntity.getRefreshToken())) {
 				throw new CoreException(
 						"the platform has access token nor refresh token(or expired), must be re-authorized. appid="
 								+ appid);
 			}
 
 			// call api to refresh token
-			JSONObject json = this.refreshAccessTokenApi(appid, platform.getRefreshToken());
+			JSONObject json = this.refreshAccessTokenApi(appid, platformEntity.getRefreshToken());
 
 			// set to entity
-			platform.setAccessToken(json.getString("authorizer_access_token"));
-			platform.setAccessTokenCreate(nowtime);
-			platform.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
+			platformEntity.setAccessToken(json.getString("authorizer_access_token"));
+			platformEntity.setAccessTokenCreate(nowtime);
+			platformEntity.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
 
-			// change refresh token if different
+			// change refresh token if different and not null
 			String refresh_token = json.getString("authorizer_refresh_token");
-			if (!StringUtil.equals(refresh_token, platform.getRefreshToken())) {
-				platform.setRefreshToken(json.getString("authorizer_refresh_token"));
-				platform.setRefreshTokenCreate(nowtime);
+			if (StringUtil.isNotBlank(refresh_token)
+					&& !StringUtil.equals(refresh_token, platformEntity.getRefreshToken())) {
+				platformEntity.setRefreshToken(refresh_token);
+				platformEntity.setRefreshTokenCreate(nowtime);
 			}
 
 			// save to db
-			try {
-				this.proxy.getEntityService().updateEntityByRowid(platform);
-			} catch (NoDataAffectedException ex) {
-				throw new CoreException("save platform entity failed", ex);
-			} catch (CommonException ex) {
-				throw new CoreException("save platform entity failed", ex);
-			}
+			this.updateEntity(platformEntity);
 		}
 
 		// create model that is platform component
-		PlatformComponentModel model = new PlatformComponentModel(this.proxy, appid, platform.getAccessToken());
+		PlatformComponentModel model = new PlatformComponentModel(this.proxy, appid, platformEntity.getAccessToken());
 
 		return model;
 	}

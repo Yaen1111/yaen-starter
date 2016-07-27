@@ -115,7 +115,7 @@ public class ComponentMessageModel extends BaseMessageModel {
 	 * @see org.yaen.starter.core.model.wechat.models.BaseMessageModel#processMessage(java.lang.String)
 	 */
 	@Override
-	public void processMessage(String appid) throws DataException, CommonException, CoreException {
+	public void processMessage(String appid_notused) throws DataException, CommonException, CoreException {
 
 		ComponentMessageEntity msg = this.getEntity();
 
@@ -146,12 +146,16 @@ public class ComponentMessageModel extends BaseMessageModel {
 				// try get one, if not exists, create one
 				platform.loadOrCreateById(msg.getAuthorizerAppid());
 
-				// set ticket
+				// set auth code
 				platform.getEntity().setAuthorizationCode(msg.getAuthorizationCode());
 				platform.getEntity().setAuthorizationCodeExpiredTime(msg.getAuthorizationCodeExpiredTime());
 
 				// save
 				platform.saveById();
+
+				// test get platform all info
+				ComponentModel component = new ComponentModel(this.proxy);
+				component.getPlatformModel(platform.getEntity().getId());
 			}
 				break;
 			default:
