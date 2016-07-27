@@ -356,7 +356,7 @@ public class ComponentModel extends TwoModel {
 	 */
 	public JSONObject refreshAccessTokenApi(String appid, String refreshToken)
 			throws CoreException, DataException, CommonException {
-		final String API = "https:// api.weixin.qq.com /cgi-bin/component/api_authorizer_token?component_access_token=COMPONENT_ACCESS_TOKEN";
+		final String API = "https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=COMPONENT_ACCESS_TOKEN";
 
 		AssertUtil.notBlank(appid);
 		AssertUtil.notBlank(refreshToken);
