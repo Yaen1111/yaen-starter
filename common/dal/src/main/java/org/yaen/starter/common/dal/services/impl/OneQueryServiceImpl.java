@@ -321,7 +321,8 @@ public class OneQueryServiceImpl implements QueryService {
 
 			// set table name
 			query.setTableName(one.getTableName());
-
+			query.setRowkey(one.getRowkey());
+			
 			// make columns
 			{
 				Map<String, Object> query_columns = new HashMap<String, Object>();
@@ -407,7 +408,8 @@ public class OneQueryServiceImpl implements QueryService {
 
 			// set table name
 			query.setTableName(one.getTableName());
-
+			query.setRowkey(one.getRowkey());
+			
 			// make columns
 			{
 				Map<String, Object> query_columns = new HashMap<String, Object>();
@@ -453,9 +455,10 @@ public class OneQueryServiceImpl implements QueryService {
 
 			// make event model
 			QueryEntity query = new QueryEntity();
-
+			
 			// set table name
 			query.setTableName(one.getTableName());
+			query.setRowkey(one.getRowkey());
 
 			// set where clause
 			query.setWhereClause(whereClause);
@@ -489,6 +492,7 @@ public class OneQueryServiceImpl implements QueryService {
 
 			// set table name
 			query.setTableName(one.getTableName());
+			query.setRowkey(one.getRowkey());
 
 			// call mapper
 			return queryMapper.selectRowidsByAll(query);
@@ -521,7 +525,8 @@ public class OneQueryServiceImpl implements QueryService {
 
 			// set table name
 			query.setTableName(one.getTableName());
-
+			query.setRowkey(one.getRowkey());
+			
 			// set where if not empty
 			if (!queryBuilder.getWhereEquals().isEmpty()) {
 				throw new CommonException("not implemented");

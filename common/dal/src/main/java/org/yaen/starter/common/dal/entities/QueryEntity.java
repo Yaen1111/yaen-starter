@@ -14,6 +14,8 @@ import lombok.Setter;
 @Setter
 public class QueryEntity {
 
+	private String rowkey;
+
 	private long rowid;
 
 	private String id;
