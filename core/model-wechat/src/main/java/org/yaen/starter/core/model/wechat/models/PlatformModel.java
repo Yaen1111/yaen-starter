@@ -43,11 +43,7 @@ public class PlatformModel extends TwoModel {
 
 	/** the current access token */
 	// @Getter
-	protected String accessToken;
-
-	/** is host or ad */
-	@Getter
-	protected boolean host;
+	private String accessToken;
 
 	/**
 	 * call api and check result
@@ -106,16 +102,25 @@ public class PlatformModel extends TwoModel {
 	}
 
 	/**
+	 * constructor for child platform
+	 * 
+	 * @param proxy
+	 * @param entity
+	 */
+	protected PlatformModel(ProxyService proxy, PlatformEntity entity, String appid, String accessToken) {
+		super(proxy, entity);
+
+		this.appid = appid;
+		this.accessToken = accessToken;
+	}
+
+	/**
 	 * constructor for normal platform
 	 * 
 	 * @param proxy
 	 */
 	public PlatformModel(ProxyService proxy) {
-		super(proxy, new PlatformEntity());
-
-		this.appid = WechatPropertiesUtil.getAppid();
-
-		this.host = true;
+		this(proxy, new PlatformEntity(), WechatPropertiesUtil.getAppid(), null);
 	}
 
 	/**

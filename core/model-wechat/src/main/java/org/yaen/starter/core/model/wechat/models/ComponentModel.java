@@ -8,6 +8,7 @@ import java.util.Map;
 import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
+import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
 import org.yaen.starter.common.util.utils.ParseUtil;
@@ -460,12 +461,17 @@ public class ComponentModel extends TwoModel {
 		Date now = DateUtil.getNow();
 		Long nowtime = now.getTime() / 1000;
 
-		// find temp platform from db
-		PlatformModel tempPlatform = new PlatformModel(this.proxy);
-		tempPlatform.loadOrCreateById(appid);
-
 		// get entity
-		PlatformEntity platform_entity = tempPlatform.getEntity();
+		PlatformEntity platform_entity = new PlatformEntity();
+
+		// select or create
+		try {
+			platform_entity.setId(appid);
+			this.fillEntityById(platform_entity);
+		} catch (DataNotExistsException ex) {
+			platform_entity.setId(appid);
+			this.insertEntity(platform_entity);
+		}
 
 		// set auth code if given
 		if (StringUtil.isNotBlank(auth_code)) {
@@ -521,9 +527,6 @@ public class ComponentModel extends TwoModel {
 			// for(int i = 0; i<arr.size() ;i++){
 			// arr.getJSONObject(0);
 			// }
-
-			// save to db
-			tempPlatform.saveById();
 		}
 
 		// need to get access token, if null, call api to get new one, if expired, call api to refresh
@@ -552,9 +555,6 @@ public class ComponentModel extends TwoModel {
 				platform_entity.setRefreshToken(refresh_token);
 				platform_entity.setRefreshTokenCreate(nowtime);
 			}
-
-			// save to db
-			tempPlatform.saveById();
 		}
 
 		// last, if platform username or nickname is empty, get info from server
@@ -578,17 +578,18 @@ public class ComponentModel extends TwoModel {
 
 				platform_entity.setBusinessInfo(authorizer_info.getJSONObject("business_info").toString());
 
-				// save to db
-				tempPlatform.saveById();
-
 			} catch (Exception ex) {
 				// not main function, just catch all
 				log.warn("getAuthorizerInfoApi failed", ex);
 			}
 		}
 
+		// save entity to db
+		this.updateEntity(platform_entity);
+
 		// create model that is platform component
-		PlatformComponentModel model = new PlatformComponentModel(this.proxy, appid, platform_entity.getAccessToken());
+		PlatformComponentModel model = new PlatformComponentModel(this.proxy, platform_entity, appid,
+				platform_entity.getAccessToken());
 
 		return model;
 	}

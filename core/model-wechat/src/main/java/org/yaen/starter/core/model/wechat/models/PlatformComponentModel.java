@@ -1,6 +1,7 @@
 package org.yaen.starter.core.model.wechat.models;
 
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.wechat.entities.PlatformEntity;
 
 /**
  * the wechat platform binded with component model(single use, will not refresh cache)
@@ -16,13 +17,8 @@ public class PlatformComponentModel extends PlatformModel {
 	 * @param appid
 	 * @param accessToken
 	 */
-	public PlatformComponentModel(ProxyService proxy, String appid, String accessToken) {
-		super(proxy);
-
-		this.appid = appid;
-		this.accessToken = accessToken;
-
-		this.host = false;
+	public PlatformComponentModel(ProxyService proxy, PlatformEntity entity, String appid, String accessToken) {
+		super(proxy, entity, appid, accessToken);
 	}
 
 }
