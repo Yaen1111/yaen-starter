@@ -413,8 +413,11 @@ public class ComponentModel extends TwoModel {
 			// call api to get auth code
 			JSONObject json = this.getAuthorizationInfoApi(platformEntity.getAuthorizationCode());
 
+			// get root info
+			JSONObject info = json.getJSONObject("authorization_info");
+
 			// check appid
-			String authorizer_appid = json.getString("authorizer_appid");
+			String authorizer_appid = info.getString("authorizer_appid");
 			if (!StringUtil.equals(authorizer_appid, appid)) {
 				throw new CoreException(
 						"the auth code of appid is not same with the given appid, maybe authcode assign error, please check and re-authorize. "
@@ -422,10 +425,10 @@ public class ComponentModel extends TwoModel {
 			}
 
 			// set to entity
-			platformEntity.setAccessToken(json.getString("authorizer_access_token"));
+			platformEntity.setAccessToken(info.getString("authorizer_access_token"));
 			platformEntity.setAccessTokenCreate(nowtime);
-			platformEntity.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
-			platformEntity.setRefreshToken(json.getString("authorizer_refresh_token"));
+			platformEntity.setAccessTokenExpireIn(Long.parseLong(info.getString("expires_in")));
+			platformEntity.setRefreshToken(info.getString("authorizer_refresh_token"));
 			platformEntity.setRefreshTokenCreate(nowtime);
 
 			// make func scope list
