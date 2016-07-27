@@ -23,6 +23,34 @@ import lombok.Setter;
 public class PlatformEntity extends TwoEntity {
 	private static final long serialVersionUID = 1176918958761154976L;
 
+	/** the username of the platform */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String userName;
+
+	/** the user-defined name, maybe null */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String alias;
+
+	/** the nickname of the platform */
+	@OneData(DataType = DataTypes.VARCHAR64)
+	private String nickName;
+
+	/** the head img url */
+	@OneData(DataType = DataTypes.VARCHAR1024)
+	private String headImg;
+
+	/** the service type info, see ServiceTypes */
+	@OneData(DataType = DataTypes.INT)
+	private Integer serviceTypeInfo;
+
+	/** the verify type info, see VerifyTypes */
+	@OneData(DataType = DataTypes.INT)
+	private Integer verifyTypeInfo;
+
+	/** the qrcode url */
+	@OneData(DataType = DataTypes.VARCHAR1024)
+	private String qrcodeUrl;
+
 	/** the authorization code */
 	@OneData(DataType = DataTypes.VARCHAR512)
 	private String authorizationCode;
@@ -51,8 +79,12 @@ public class PlatformEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.BIGINT)
 	private Long refreshTokenCreate;
 
-	/** the func scope category, current 1-15, comma separated */
+	/** the business info, may contain open_store,open_scan,open_pay,open_card,open_shake, and more, just json string */
 	@OneData(DataType = DataTypes.VARCHAR512)
-	private String funcscopeCategory;
+	private String businessInfo;
+
+	/** the func info, current 1-15, comma separated */
+	@OneData(DataType = DataTypes.VARCHAR512)
+	private String funcInfo;
 
 }

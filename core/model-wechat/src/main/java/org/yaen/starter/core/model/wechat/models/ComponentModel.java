@@ -376,16 +376,62 @@ public class ComponentModel extends TwoModel {
 	}
 
 	/**
-	 * get platform model from current component by given appid, maybe self platform or platform component
+	 * step 6: get authorizer_info (the platform binded to the component)
+	 * 
+	 * <pre>
+	 * request post body:
+	 * {
+	 * "component_appid":"appid_value" ,
+	 * "authorizer_appid": "auth_appid_value" 
+	 * }
+	 * </pre>
+	 * 
+	 * <pre>
+	 * response body:
+	 * {
+	 * "authorizer_info": {
+	 * "nick_name": "微信SDK Demo Special", 
+	 * "head_img": "http://wx.qlogo.cn/mmopen/GPyw0pGicibl5Eda4GmSSbTguhjg9LZjumHmVjybjiaQXnE9XrXEts6ny9Uv4Fk6hOScWRDibq1fI0WOkSaAjaecNTict3n6EjJaC/0", 
+	 * "service_type_info": { "id": 2 }, 
+	 * "verify_type_info": { "id": 0 },
+	 * "user_name":"gh_eb5e3a772040",
+	 * "business_info": {"open_store": 0, "open_scan": 0, "open_pay": 0, "open_card": 0, "open_shake": 0},
+	 * "alias":"paytest01"
+	 * }, 
+	 * "qrcode_url":"URL",    
+	 * "authorization_info": {
+	 * "appid": "wxf8b4f85f3a794e77", 
+	 * "func_info": [
+	 * { "funcscope_category": { "id": 1 } }, 
+	 * { "funcscope_category": { "id": 2 } }, 
+	 * { "funcscope_category": { "id": 3 } }
+	 * ]
+	 * }
+	 * }
+	 * </pre>
 	 * 
 	 * @param appid
 	 * @return
-	 * @throws CoreException
-	 * @throws DataException
 	 * @throws CommonException
+	 * @throws DataException
+	 * @throws CoreException
 	 */
-	public PlatformModel getPlatformModel(String appid) throws CoreException, DataException, CommonException {
-		return this.getPlatformModel(appid, null, null, null);
+	public JSONObject getAuthorizerInfoApi(String appid) throws CoreException, DataException, CommonException {
+		final String API = "https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_info?component_access_token=COMPONENT_ACCESS_TOKEN";
+
+		AssertUtil.notBlank(appid);
+
+		// make param value
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("component_appid", this.componentAppid);
+		param.put("authorizer_appid", appid);
+
+		// call api
+		JSONObject json = this.callApiPost(API.replace("COMPONENT_ACCESS_TOKEN", this.getComponentAccessToken()),
+				param);
+
+		// done
+		return json;
 	}
 
 	/**
@@ -511,10 +557,53 @@ public class ComponentModel extends TwoModel {
 			tempPlatform.saveById();
 		}
 
+		// last, if platform username or nickname is empty, get info from server
+		if (StringUtil.isBlank(platform_entity.getUserName()) || StringUtil.isBlank(platform_entity.getNickName())) {
+			try {
+				// get info and save to db
+				JSONObject json = this.getAuthorizerInfoApi(appid);
+
+				JSONObject authorizer_info = json.getJSONObject("authorizer_info");
+				platform_entity.setUserName(authorizer_info.getString("user_name"));
+				platform_entity.setNickName(authorizer_info.getString("nick_name"));
+				platform_entity.setHeadImg(authorizer_info.getString("head_img"));
+				platform_entity.setAlias(authorizer_info.getString("alias"));
+				platform_entity.setQrcodeUrl(authorizer_info.getString("qrcode_url"));
+
+				JSONObject service_type_info = authorizer_info.getJSONObject("service_type_info");
+				platform_entity.setServiceTypeInfo(service_type_info.getInteger("id"));
+
+				JSONObject verify_type_info = authorizer_info.getJSONObject("verify_type_info");
+				platform_entity.setVerifyTypeInfo(verify_type_info.getInteger("id"));
+
+				platform_entity.setBusinessInfo(authorizer_info.getJSONObject("business_info").toString());
+
+				// save to db
+				tempPlatform.saveById();
+
+			} catch (Exception ex) {
+				// not main function, just catch all
+				log.warn("getAuthorizerInfoApi failed", ex);
+			}
+		}
+
 		// create model that is platform component
 		PlatformComponentModel model = new PlatformComponentModel(this.proxy, appid, platform_entity.getAccessToken());
 
 		return model;
+	}
+
+	/**
+	 * get platform model from current component by given appid, maybe self platform or platform component
+	 * 
+	 * @param appid
+	 * @return
+	 * @throws CoreException
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	public PlatformModel getPlatformModel(String appid) throws CoreException, DataException, CommonException {
+		return this.getPlatformModel(appid, null, null, null);
 	}
 
 	/**
