@@ -13,8 +13,6 @@ import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
 import com.qq.weixin.mp.aes.AesException;
 
-import lombok.Getter;
-
 /**
  * the wechat platform component message model, mostly for user request and server response
  * <p>
@@ -29,10 +27,6 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 		return (PlatformComponentMessageEntity) super.getEntity();
 	}
 
-	/** if has appid, this is for component-binded platform, otherwise is self */
-	@Getter
-	private String appid;
-
 	/**
 	 * @param proxy
 	 * @param appid
@@ -40,6 +34,7 @@ public class PlatformComponentMessageModel extends PlatformMessageModel {
 	public PlatformComponentMessageModel(ProxyService proxy, String appid) {
 		super(proxy, new PlatformComponentMessageEntity());
 
+		// set appid to platform
 		this.appid = appid;
 	}
 

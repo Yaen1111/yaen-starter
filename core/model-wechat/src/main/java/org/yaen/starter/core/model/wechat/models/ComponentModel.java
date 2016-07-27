@@ -386,10 +386,12 @@ public class ComponentModel extends TwoModel {
 		Date now = DateUtil.getNow();
 		Long nowtime = now.getTime() / 1000;
 
-		// find platform from db
-		PlatformEntity platformEntity = new PlatformEntity();
-		platformEntity.setId(appid);
-		this.fillEntityById(platformEntity);
+		// find temp platform from db
+		PlatformModel tempPlatform = new PlatformModel(this.proxy);
+		tempPlatform.loadOrCreateById(appid);
+
+		// get entity
+		PlatformEntity platformEntity = tempPlatform.getEntity();
 
 		// need refresh token, if null, call api to get one
 		if (StringUtil.isBlank(platformEntity.getRefreshToken())) {
@@ -426,7 +428,7 @@ public class ComponentModel extends TwoModel {
 			// }
 
 			// save to db
-			this.updateEntity(platformEntity);
+			tempPlatform.saveById();
 		}
 
 		// need to get access token, if null, call api to get new one, if expired, call api to refresh
@@ -457,7 +459,7 @@ public class ComponentModel extends TwoModel {
 			}
 
 			// save to db
-			this.updateEntity(platformEntity);
+			tempPlatform.saveById();
 		}
 
 		// create model that is platform component

@@ -34,11 +34,18 @@ import lombok.Setter;
 public class PlatformMessageEntity extends TwoEntity {
 	private static final long serialVersionUID = -3762180033509714839L;
 
-	/** to user name, when receive is the appid, when send is openid */
+	/** the appid of the platform, here is just save */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String appid;
+
+	/** to user name, when receive is the app user name(not appid), when send is openid */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String toUserName;
 
-	/** from user name, when receive is the openid (or system for some verify event), when send is appid */
+	/**
+	 * from user name, when receive is the openid (or system for some verify event), when send is app username (not
+	 * appid)
+	 */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String fromUserName;
 

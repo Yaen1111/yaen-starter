@@ -30,6 +30,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -39,6 +40,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class BaseMessageModel extends TwoModel {
+
+	/** the default appid of the message, just used for log */
+	@Getter
+	protected String appid;
 
 	/**
 	 * extend xstream to support cdata

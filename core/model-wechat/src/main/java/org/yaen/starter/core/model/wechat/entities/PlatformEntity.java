@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @OneTable(TableName = "WX_PLATFORM")
-@OneUniqueIndex({ "ID" })
+@OneUniqueIndex({ "ID", })
 public class PlatformEntity extends TwoEntity {
 	private static final long serialVersionUID = 1176918958761154976L;
 

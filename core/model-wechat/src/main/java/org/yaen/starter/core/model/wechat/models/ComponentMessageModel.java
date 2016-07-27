@@ -40,6 +40,9 @@ public class ComponentMessageModel extends BaseMessageModel {
 	 */
 	public ComponentMessageModel(ProxyService proxy) {
 		super(proxy, new ComponentMessageEntity());
+
+		// set default component appid, acturally not used for component message
+		this.appid = WechatPropertiesUtil.getComponentAppid();
 	}
 
 	/**

@@ -18,6 +18,7 @@ import org.yaen.starter.core.model.wechat.entities.PlatformUserEntity;
 import org.yaen.starter.core.model.wechat.enums.EventTypes;
 import org.yaen.starter.core.model.wechat.enums.MessageTypes;
 import org.yaen.starter.core.model.wechat.objects.TextResponseMessage;
+import org.yaen.starter.core.model.wechat.utils.WechatPropertiesUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +43,9 @@ public class PlatformMessageModel extends BaseMessageModel {
 	 */
 	protected PlatformMessageModel(ProxyService proxy, PlatformMessageEntity entity) {
 		super(proxy, entity);
+
+		// set default appid
+		this.appid = WechatPropertiesUtil.getAppid();
 	}
 
 	/**
@@ -69,6 +73,7 @@ public class PlatformMessageModel extends BaseMessageModel {
 		PlatformMessageEntity msg = this.getEntity();
 
 		// main info
+		msg.setAppid(this.appid);
 		msg.setFromUserName(map.get("FromUserName"));
 		msg.setToUserName(map.get("ToUserName"));
 		msg.setCreateTime(ParseUtil.tryParseLong(map.get("CreateTime"), 0L));
