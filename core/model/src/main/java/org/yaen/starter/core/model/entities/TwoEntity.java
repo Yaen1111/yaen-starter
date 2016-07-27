@@ -15,8 +15,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * another entity(persistent object) which can contain another object, which must implement BaseEntity and have an "id"
- * field of type long
+ * two entity (follow of one entity), can be base entity suitable in most case
  * 
  * @author Yaen 2016年1月6日下午7:57:22
  */

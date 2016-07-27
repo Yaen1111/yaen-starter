@@ -14,6 +14,11 @@ import java.io.Serializable;
 public interface BaseEntity extends Serializable {
 
 	/**
+	 * get the primary key column name of rowid, usually is ROWID
+	 */
+	String getRowkey();
+
+	/**
 	 * get the primary key of rowid
 	 */
 	long getRowid();

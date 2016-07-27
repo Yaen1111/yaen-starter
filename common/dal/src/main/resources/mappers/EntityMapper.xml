@@ -4,18 +4,18 @@
 
 	<select id="selectByRowid" resultType="java.util.HashMap" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		SELECT
-		`ROWID`
+		`${rowkey}` AS `ROWID`
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
 			`${info.columnName}`
 		</foreach>
 		FROM `${tableName}`
-		WHERE `ROWID` = #{rowid}
+		WHERE `${rowkey}` = #{rowid}
 	</select>
 
 	<insert id="insertByRowid" useGeneratedKeys="true" keyProperty="rowid" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		INSERT INTO `${tableName}`
 		(
-		`ROWID`
+		`${rowkey}`
 		<foreach collection="columns" index="index" item="info" open="," separator="," close="">
 			`${info.columnName}`
 		</foreach>
@@ -36,12 +36,12 @@
 			`${info.columnName}` =
 			#{info.value}
 		</foreach>
-		WHERE `ROWID` = #{rowid}
+		WHERE `${rowkey}` = #{rowid}
 	</update>
 
 	<delete id="deleteByRowid" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		DELETE FROM `${tableName}`
-		WHERE `ROWID` = #{rowid}
+		WHERE `${rowkey}` = #{rowid}
 	</delete>
 
 </mapper>

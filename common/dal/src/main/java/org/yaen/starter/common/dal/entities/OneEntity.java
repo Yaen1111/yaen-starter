@@ -33,6 +33,10 @@ public abstract class OneEntity implements BaseEntity {
 	/** the actual entity, maybe self */
 	protected BaseEntity entity;
 
+	/** the primary key column name, default to ROWID */
+	@Getter
+	protected String rowkey = "ROWID";
+
 	/** the primary key */
 	@Getter
 	@Setter

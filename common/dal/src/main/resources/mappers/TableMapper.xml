@@ -21,7 +21,7 @@
 	<update id="createTable" parameterType="org.yaen.starter.common.dal.entities.OneEntity">
 		CREATE TABLE `${tableName}`
 		(
-		`ROWID` bigint(20) NOT NULL AUTO_INCREMENT,
+		`${rowkey}` bigint(20) NOT NULL AUTO_INCREMENT,
 		<foreach collection="columns" index="index" item="info" open="" separator="," close=",">
 			`${info.columnName}`
 			${info.dataType}
@@ -32,7 +32,7 @@
 			</if>
 			DEFAULT NULL
 		</foreach>
-		PRIMARY KEY (`ROWID`)
+		PRIMARY KEY (`${rowkey}`)
 		<foreach collection="uniqueIndexes" index="index" item="info" open="," separator="," close="">
 			UNIQUE INDEX
 			(${info})
