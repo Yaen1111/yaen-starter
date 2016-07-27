@@ -2,6 +2,7 @@ package org.yaen.starter.core.model.wechat.models;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.yaen.starter.common.data.exceptions.CommonException;
@@ -9,6 +10,7 @@ import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.util.utils.AssertUtil;
 import org.yaen.starter.common.util.utils.DateUtil;
+import org.yaen.starter.common.util.utils.ParseUtil;
 import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
@@ -379,10 +381,29 @@ public class ComponentModel extends TwoModel {
 	 * @param appid
 	 * @return
 	 * @throws CoreException
+	 * @throws DataException
+	 * @throws CommonException
+	 */
+	public PlatformModel getPlatformModel(String appid) throws CoreException, DataException, CommonException {
+		return this.getPlatformModel(appid, null, null, null);
+	}
+
+	/**
+	 * get platform model from current component by given appid, maybe self platform or platform component
+	 * <p>
+	 * if authInfo not set, will get from server if need
+	 * 
+	 * @param appid
+	 * @param authInfo
+	 * @param auth_code
+	 * @param expires_in
+	 * @return
+	 * @throws CoreException
 	 * @throws CommonException
 	 * @throws DataException
 	 */
-	public PlatformModel getPlatformModel(String appid) throws CoreException, DataException, CommonException {
+	public PlatformModel getPlatformModel(String appid, JSONObject authInfo, String auth_code, String expires_in)
+			throws CoreException, DataException, CommonException {
 		AssertUtil.notBlank(appid);
 
 		// if the appid is self, just return new platform
@@ -398,23 +419,41 @@ public class ComponentModel extends TwoModel {
 		tempPlatform.loadOrCreateById(appid);
 
 		// get entity
-		PlatformEntity platformEntity = tempPlatform.getEntity();
+		PlatformEntity platform_entity = tempPlatform.getEntity();
+
+		// set auth code if given
+		if (StringUtil.isNotBlank(auth_code)) {
+			platform_entity.setAuthorizationCode(auth_code);
+			platform_entity.setAuthorizationCodeExpiredTime(nowtime + ParseUtil.tryParseLong(expires_in, 7200L));
+
+			// unset refresh token
+			platform_entity.setRefreshToken(null);
+		}
+
+		// the local auth info
+		JSONObject auth_info = authInfo;
 
 		// need refresh token, if null, call api to get one
-		if (StringUtil.isBlank(platformEntity.getRefreshToken())) {
+		if (StringUtil.isBlank(platform_entity.getRefreshToken())) {
 			// get refresh token, need auth code
-			if (StringUtil.isBlank(platformEntity.getAuthorizationCode())
-					|| platformEntity.getAuthorizationCodeExpiredTime() <= nowtime) {
+			if (StringUtil.isBlank(platform_entity.getAuthorizationCode())
+					|| platform_entity.getAuthorizationCodeExpiredTime() <= nowtime) {
 				throw new CoreException(
 						"the platform has no refresh token nor authorization code(or expired), must be re-authorized. appid="
 								+ appid);
 			}
 
 			// call api to get auth code
-			JSONObject json = this.getAuthorizationInfoApi(platformEntity.getAuthorizationCode());
+			if (auth_info == null) {
+				auth_info = this.getAuthorizationInfoApi(platform_entity.getAuthorizationCode());
+			}
 
+		}
+
+		// update by auth info, given or new get
+		if (auth_info != null) {
 			// get root info
-			JSONObject info = json.getJSONObject("authorization_info");
+			JSONObject info = auth_info.getJSONObject("authorization_info");
 
 			// check appid
 			String authorizer_appid = info.getString("authorizer_appid");
@@ -425,11 +464,11 @@ public class ComponentModel extends TwoModel {
 			}
 
 			// set to entity
-			platformEntity.setAccessToken(info.getString("authorizer_access_token"));
-			platformEntity.setAccessTokenCreate(nowtime);
-			platformEntity.setAccessTokenExpireIn(Long.parseLong(info.getString("expires_in")));
-			platformEntity.setRefreshToken(info.getString("authorizer_refresh_token"));
-			platformEntity.setRefreshTokenCreate(nowtime);
+			platform_entity.setAccessToken(info.getString("authorizer_access_token"));
+			platform_entity.setAccessTokenCreate(nowtime);
+			platform_entity.setAccessTokenExpireIn(Long.parseLong(info.getString("expires_in")));
+			platform_entity.setRefreshToken(info.getString("authorizer_refresh_token"));
+			platform_entity.setRefreshTokenCreate(nowtime);
 
 			// make func scope list
 			// JSONArray arr = json.getJSONArray("func_info");
@@ -442,30 +481,30 @@ public class ComponentModel extends TwoModel {
 		}
 
 		// need to get access token, if null, call api to get new one, if expired, call api to refresh
-		if (StringUtil.isBlank(platformEntity.getAccessToken())
-				|| platformEntity.getAccessTokenCreate() + platformEntity.getAccessTokenExpireIn() / 2 <= nowtime) {
+		if (StringUtil.isBlank(platform_entity.getAccessToken())
+				|| platform_entity.getAccessTokenCreate() + platform_entity.getAccessTokenExpireIn() / 2 <= nowtime) {
 
 			// need refresh token
-			if (StringUtil.isBlank(platformEntity.getRefreshToken())) {
+			if (StringUtil.isBlank(platform_entity.getRefreshToken())) {
 				throw new CoreException(
 						"the platform has access token nor refresh token(or expired), must be re-authorized. appid="
 								+ appid);
 			}
 
 			// call api to refresh token
-			JSONObject json = this.refreshAccessTokenApi(appid, platformEntity.getRefreshToken());
+			JSONObject json = this.refreshAccessTokenApi(appid, platform_entity.getRefreshToken());
 
 			// set to entity
-			platformEntity.setAccessToken(json.getString("authorizer_access_token"));
-			platformEntity.setAccessTokenCreate(nowtime);
-			platformEntity.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
+			platform_entity.setAccessToken(json.getString("authorizer_access_token"));
+			platform_entity.setAccessTokenCreate(nowtime);
+			platform_entity.setAccessTokenExpireIn(Long.parseLong(json.getString("expires_in")));
 
 			// change refresh token if different and not null
 			String refresh_token = json.getString("authorizer_refresh_token");
 			if (StringUtil.isNotBlank(refresh_token)
-					&& !StringUtil.equals(refresh_token, platformEntity.getRefreshToken())) {
-				platformEntity.setRefreshToken(refresh_token);
-				platformEntity.setRefreshTokenCreate(nowtime);
+					&& !StringUtil.equals(refresh_token, platform_entity.getRefreshToken())) {
+				platform_entity.setRefreshToken(refresh_token);
+				platform_entity.setRefreshTokenCreate(nowtime);
 			}
 
 			// save to db
@@ -473,9 +512,59 @@ public class ComponentModel extends TwoModel {
 		}
 
 		// create model that is platform component
-		PlatformComponentModel model = new PlatformComponentModel(this.proxy, appid, platformEntity.getAccessToken());
+		PlatformComponentModel model = new PlatformComponentModel(this.proxy, appid, platform_entity.getAccessToken());
 
 		return model;
+	}
+
+	/**
+	 * get platform by auth code when the platform do re-auth, can get appid by auth code, return platform
+	 * 
+	 * @param auth_code
+	 * @param expires_in
+	 * @return
+	 * @throws CommonException
+	 * @throws DataException
+	 * @throws CoreException
+	 */
+	public PlatformModel getPlatformModelByAuthCode(String auth_code, String expires_in)
+			throws CoreException, DataException, CommonException {
+
+		// get app info by auth code
+		JSONObject auth_info = this.getAuthorizationInfoApi(auth_code);
+
+		// get root info
+		JSONObject info = auth_info.getJSONObject("authorization_info");
+
+		// get appid
+		String authorizer_appid = info.getString("authorizer_appid");
+
+		return this.getPlatformModel(authorizer_appid, auth_info, auth_code, expires_in);
+	}
+
+	/**
+	 * mainly for background work, touch for all platform for refresh ( maybe no need refresh)
+	 * 
+	 * @throws CommonException
+	 */
+	public void touchAllPlatform() throws CommonException {
+		PlatformEntity platform_entity = new PlatformEntity();
+
+		// get all platform entity
+		List<Long> rowids = this.proxy.getQueryService().selectRowidsByAll(platform_entity);
+
+		if (rowids != null) {
+			for (Long rowid : rowids) {
+				if (this.proxy.getEntityService().trySelectEntityByRowid(platform_entity, rowid)) {
+					// touch item and ignore any error
+					try {
+						this.getPlatformModel(platform_entity.getId());
+					} catch (Exception ex) {
+						log.warn("touchAllPlatform item failed, id={}, ex={}", platform_entity.getId(), ex);
+					}
+				}
+			} // for
+		}
 	}
 
 }
