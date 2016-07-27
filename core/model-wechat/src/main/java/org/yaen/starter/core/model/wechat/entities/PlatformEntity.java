@@ -47,7 +47,7 @@ public class PlatformEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.INT)
 	private Integer verifyTypeInfo;
 
-	/** the qrcode url */
+	/** the qrcode url, just for sample, can not be referred */
 	@OneData(DataType = DataTypes.VARCHAR1024)
 	private String qrcodeUrl;
 
