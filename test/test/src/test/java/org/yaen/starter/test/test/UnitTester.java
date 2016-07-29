@@ -17,7 +17,7 @@ import org.springframework.test.context.web.ServletTestExecutionListener;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({ ServletTestExecutionListener.class, DirtiesContextBeforeModesTestExecutionListener.class,
 		DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class })
-@ContextConfiguration(locations = { "classpath:/spring/test-test.xml" })
+@ContextConfiguration(locations = { "classpath:/spring/starter-test-test.xml" })
 public abstract class UnitTester {
 
 }

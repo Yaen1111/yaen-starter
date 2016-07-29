@@ -181,6 +181,16 @@
 				<artifactId>yaen-starter-web-home</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-test-test</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-test-tool</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
 
 			<!-- Spring -->
 			<dependency>

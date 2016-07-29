@@ -20,6 +20,5 @@
 	<import resource="classpath*:/spring/starter-common-*.xml" />
 	<import resource="classpath*:/spring/starter-core-*.xml" />
 	<import resource="classpath*:/spring/starter-biz-*.xml" />
-	<import resource="classpath*:/spring/starter-test-tool.xml" />
 
 </beans>
