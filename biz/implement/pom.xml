@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-biz-implement</artifactId>
 	<name>yaen-starter-biz-implement</name>
+	<description>biz implement for facade, only for facade !!</description>
 
 	<build>
 		<filters>

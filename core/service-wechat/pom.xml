@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-core-service-wechat</artifactId>
 	<name>yaen-starter-core-service-wechat</name>
+	<description>wechat service, for wechat model.</description>
 
 	<build>
 		<filters>
@@ -22,5 +23,4 @@
 			<artifactId>yaen-starter-core-model-wechat</artifactId>
 		</dependency>
 	</dependencies>
-	<description>wechat service, for wechat model.</description>
 </project>

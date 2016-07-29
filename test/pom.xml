@@ -10,6 +10,7 @@
 	<artifactId>yaen-starter-test</artifactId>
 	<packaging>pom</packaging>
 	<name>yaen-starter-test</name>
+	<description>test layer, will not be included in final package.</description>
 
 	<modules>
 		<module>test</module>

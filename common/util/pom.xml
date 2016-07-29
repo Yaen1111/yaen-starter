@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-common-util</artifactId>
 	<name>yaen-starter-common-util</name>
+	<description>common utils which has no context, or simple context for basic usage. whole system except common-data dependent on this.</description>
 
 	<build>
 		<filters>

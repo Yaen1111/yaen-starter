@@ -10,6 +10,7 @@
 	<artifactId>yaen-starter-web</artifactId>
 	<packaging>pom</packaging>
 	<name>yaen-starter-web</name>
+	<description>web layer, only common tool/object/inspector, no controllers</description>
 
 	<modules>
 		<module>home</module>

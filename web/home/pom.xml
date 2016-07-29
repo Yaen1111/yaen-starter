@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-web-home</artifactId>
 	<name>yaen-starter-web-home</name>
+	<description>web home base object, NO CONTROLLER!!! the implement package should make own controller and inject desired model service bean or instance new model to fulfill the DDD design.</description>
 
 	<dependencies>
 		<dependency>

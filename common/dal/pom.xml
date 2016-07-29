@@ -10,6 +10,7 @@
 	<artifactId>yaen-starter-common-dal</artifactId>
 	<packaging>jar</packaging>
 	<name>yaen-starter-common-dal</name>
+	<description>data-access-layer, here mainly use One-Entity to  deal with data access</description>
 
 	<build>
 		<filters>

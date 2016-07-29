@@ -10,6 +10,7 @@
 	<artifactId>yaen-starter-common-data</artifactId>
 	<packaging>jar</packaging>
 	<name>yaen-starter-common-data</name>
+	<description>basic data package, no dependance, can  be used alone, mainly for common data type, interface, exception</description>
 
 	<build>
 		<filters>

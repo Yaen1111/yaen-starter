@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-test-test</artifactId>
 	<name>yaen-starter-test-test</name>
+	<description>unit test with spring, need UnitTester</description>
 
 	<build>
 		<filters>

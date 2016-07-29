@@ -10,6 +10,8 @@
 	<artifactId>yaen-starter-common</artifactId>
 	<packaging>pom</packaging>
 	<name>yaen-starter-common</name>
+	<description>common layer, the base of the whole project.</description>
+
 	<modules>
 		<module>data</module>
 		<module>util</module>

@@ -10,6 +10,7 @@
 	<artifactId>yaen-starter-core</artifactId>
 	<packaging>pom</packaging>
 	<name>yaen-starter-core</name>
+	<description>core layer, domain layer, main logical operation.</description>
 
 	<modules>
 		<module>model</module>

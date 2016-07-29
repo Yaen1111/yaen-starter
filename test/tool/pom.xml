@@ -9,7 +9,7 @@
 
 	<artifactId>yaen-starter-test-tool</artifactId>
 	<name>yaen-starter-test-tool</name>
-	<description>stand alone tool, should not be contained in release version, just  for coding purpose</description>
+	<description>stand alone tool, should not be contained in release version, just  for coding purpose.</description>
 
 	<build>
 		<filters>

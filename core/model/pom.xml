@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-core-model</artifactId>
 	<name>yaen-starter-core-model</name>
+	<description>core model in prototype mode, many model sets here, need  service as construct parameter, and later need no  service reference.</description>
 
 	<build>
 		<filters>
@@ -26,5 +27,4 @@
 			<artifactId>yaen-starter-common-integration</artifactId>
 		</dependency>
 	</dependencies>
-	<description>core model, many model sets here, with service inteface, use ServiceLoader to get service implement and use in  model. model  do not need service.</description>
 </project>

@@ -10,6 +10,7 @@
 	<artifactId>yaen-starter-biz</artifactId>
 	<packaging>pom</packaging>
 	<name>yaen-starter-biz</name>
+	<description>biz layer, mostly for biz logical, but starter use core as main logical.</description>
 
 	<modules>
 		<module>shared</module>

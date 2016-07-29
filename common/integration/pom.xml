@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-common-integration</artifactId>
 	<name>yaen-starter-common-integration</name>
+	<description>integration layer which calls other system, including http/https, dubbo server,  gateway, payfront, etc.</description>
 
 	<build>
 		<filters>

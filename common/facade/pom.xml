@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-common-facade</artifactId>
 	<name>yaen-starter-common-facade</name>
+	<description>facade interface, implement is biz-implement</description>
 
 	<build>
 		<filters>

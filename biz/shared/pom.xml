@@ -9,6 +9,7 @@
 
 	<artifactId>yaen-starter-biz-shared</artifactId>
 	<name>yaen-starter-biz-shared</name>
+	<description>biz shared common implement. for starter, most biz logical is in core model/service layer.</description>
 
 	<build>
 		<filters>
