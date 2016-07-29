@@ -1,7 +1,5 @@
 package org.yaen.starter.test.test;
 
-import org.yaen.starter.test.test.tester.UnitTester;
-
 /**
  * 
  * @author Yaen 2015年12月15日下午1:00:19
