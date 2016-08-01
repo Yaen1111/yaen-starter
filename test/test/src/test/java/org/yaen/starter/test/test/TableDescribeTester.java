@@ -13,7 +13,7 @@ import org.yaen.starter.common.data.exceptions.CoreException;
  * 
  * @author Yaen 2016年5月23日下午4:50:16
  */
-public class TableDescribeTester extends UnitTester {
+public class TableDescribeTester extends StarterUnitTester {
 
 	@Autowired
 	private TableMapper zero;

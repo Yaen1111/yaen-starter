@@ -4,7 +4,7 @@ package org.yaen.starter.test.test;
  * 
  * @author Yaen 2015年12月15日下午1:00:19
  */
-public class AllTester extends UnitTester {
+public class AllTester extends StarterUnitTester {
 
 	@org.junit.BeforeClass
 	public static void BeforeClass() {

@@ -18,6 +18,6 @@ import org.springframework.test.context.web.ServletTestExecutionListener;
 @TestExecutionListeners({ ServletTestExecutionListener.class, DirtiesContextBeforeModesTestExecutionListener.class,
 		DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class })
 @ContextConfiguration(locations = { "classpath:/spring/starter-test-test.xml" })
-public abstract class UnitTester {
+public abstract class StarterUnitTester {
 
 }
