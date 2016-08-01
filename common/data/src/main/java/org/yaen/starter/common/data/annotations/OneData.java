@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.yaen.starter.common.data.annotations;
 
 import java.lang.annotation.Documented;
