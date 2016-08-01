@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 import org.yaen.starter.common.dal.entities.OneEntity;
 import org.yaen.starter.common.data.exceptions.CommonException;
-import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.data.exceptions.DuplicateDataException;
@@ -167,13 +166,6 @@ public class TwoModel extends OneModel {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#check()
-	 */
-	@Override
-	public void check() throws CoreException {
-	}
-
-	/**
 	 * load model entity by id
 	 * 
 	 * @param id
@@ -212,14 +204,11 @@ public class TwoModel extends OneModel {
 	/**
 	 * save new entity
 	 * 
-	 * @throws CoreException
 	 * @throws CommonException
 	 * @throws DataException
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public void saveNew() throws CoreException, DataException, CommonException {
-		this.check();
-
+	public void saveNew() throws DataException, CommonException {
 		this.insertEntity(this.entity);
 	}
 
@@ -228,27 +217,20 @@ public class TwoModel extends OneModel {
 	 * 
 	 * @throws CommonException
 	 * @throws DataException
-	 * @throws CoreException
-	 * 
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public void saveById() throws DataException, CommonException, CoreException {
-		this.check();
-
+	public void saveById() throws DataException, CommonException {
 		this.updateEntity(this.entity);
 	}
 
 	/**
 	 * delete model by id
 	 * 
-	 * @throws CoreException
 	 * @throws CommonException
 	 * @throws DataException
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public void deleteById() throws CoreException, DataException, CommonException {
-		this.check();
-
+	public void deleteById() throws DataException, CommonException {
 		this.deleteEntity(this.entity);
 	}
 

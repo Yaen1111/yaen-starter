@@ -1,7 +1,5 @@
 package org.yaen.starter.core.model.models;
 
-import org.yaen.starter.common.data.exceptions.CoreException;
-
 import lombok.Getter;
 
 /**
@@ -20,12 +18,5 @@ public abstract class OneModel {
 	/** the version of model, can be used in interface call */
 	@Getter
 	protected String version = "1.0.0";
-
-	/**
-	 * check model status
-	 * 
-	 * @throws CoreException
-	 */
-	public abstract void check() throws CoreException;
 
 }

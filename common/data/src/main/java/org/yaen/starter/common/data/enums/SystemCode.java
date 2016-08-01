@@ -11,7 +11,7 @@ import lombok.Getter;
  * <pre>
  * format: ABCCDD
  * A: code type, E8 = error, W4 = warning, M2 = message, T1 = type enum, "X" = special code
- * B: system type, 0 = default, 1 = data, 2 = common, 3 = core, 4 = biz, 5 = web, 9 = user define
+ * B: system type, 0 = default, 1 = data, 2 = common, 3 = core, 4 = biz, 5 = web, 8 = test, 9 = user define
  * CC: code group
  * DD: code item
  * </pre>
@@ -51,6 +51,13 @@ public enum SystemCode {
 
 	/** error:general:common */
 	E_COMMON(820000, "COMMON ERROR"),
+
+	/**
+	 * test error
+	 */
+
+	/** error:general:test */
+	E_TEST(880000, "TEST ERROR"),
 
 	/**
 	 * Waring

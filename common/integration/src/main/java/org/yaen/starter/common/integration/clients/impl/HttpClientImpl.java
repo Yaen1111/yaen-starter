@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,6 @@ import javax.net.ssl.TrustManager;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -49,7 +49,7 @@ public class HttpClientImpl implements HttpClient {
 	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpGet(java.lang.String)
 	 */
 	@Override
-	public String httpGet(String requestUrl) throws ParseException, IOException {
+	public String httpGet(String requestUrl) throws IOException {
 		AssertUtil.notBlank(requestUrl);
 
 		CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -71,14 +71,14 @@ public class HttpClientImpl implements HttpClient {
 	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpPost(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String httpPost(String requestUrl, String content) throws IOException {
+	public String httpPost(String requestUrl, String dataString) throws IOException {
 		AssertUtil.notBlank(requestUrl);
 
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
 			HttpPost post = new HttpPost(requestUrl);
 
-			HttpEntity formEntity = new StringEntity(content, "utf-8");
+			HttpEntity formEntity = new StringEntity(dataString, "utf-8");
 			post.setEntity(formEntity);
 			HttpResponse response = httpclient.execute(post);
 			InputStream is = response.getEntity().getContent();
@@ -125,11 +125,14 @@ public class HttpClientImpl implements HttpClient {
 	}
 
 	/**
+	 * @throws GeneralSecurityException
+	 * @throws IOException
 	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpsRequest(java.lang.String, java.lang.String,
 	 *      java.lang.String)
 	 */
 	@Override
-	public String httpsRequest(String requestUrl, String requestMethod, String dataString) throws Exception {
+	public String httpsRequest(String requestUrl, String requestMethod, String dataString)
+			throws GeneralSecurityException, IOException {
 		AssertUtil.notBlank(requestUrl);
 		AssertUtil.notBlank(requestMethod);
 
@@ -217,7 +220,7 @@ public class HttpClientImpl implements HttpClient {
 	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpsGet(java.lang.String)
 	 */
 	@Override
-	public String httpsGet(String requestUrl) throws Exception {
+	public String httpsGet(String requestUrl) throws GeneralSecurityException, IOException {
 		return this.httpsRequest(requestUrl, "GET", null);
 	}
 
@@ -225,7 +228,7 @@ public class HttpClientImpl implements HttpClient {
 	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpsPost(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String httpsPost(String requestUrl, String dataString) throws Exception {
+	public String httpsPost(String requestUrl, String dataString) throws GeneralSecurityException, IOException {
 		return this.httpsRequest(requestUrl, "POST", dataString);
 	}
 
@@ -233,7 +236,8 @@ public class HttpClientImpl implements HttpClient {
 	 * @see org.yaen.starter.common.integration.clients.HttpClient#httpsPostAsJson(java.lang.String, java.util.Map)
 	 */
 	@Override
-	public JSONObject httpsPostAsJson(String requestUrl, Map<String, Object> param) throws Exception {
+	public JSONObject httpsPostAsJson(String requestUrl, Map<String, Object> param)
+			throws GeneralSecurityException, IOException {
 		// convert param to json
 		String dataString = null;
 		if (param != null && !param.isEmpty()) {

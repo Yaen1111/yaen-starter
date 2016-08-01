@@ -1,9 +1,8 @@
 package org.yaen.starter.common.integration.clients;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Map;
-
-import org.apache.http.ParseException;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -19,19 +18,18 @@ public interface HttpClient {
 	 * 
 	 * @param requestUrl
 	 * @return
-	 * @throws ParseException
 	 * @throws IOException
 	 */
-	String httpGet(String requestUrl) throws ParseException, IOException;
+	String httpGet(String requestUrl) throws IOException;
 
 	/**
 	 * 
 	 * @param requestUrl
-	 * @param content
+	 * @param dataString
 	 * @return
 	 * @throws IOException
 	 */
-	String httpPost(String requestUrl, String content) throws IOException;
+	String httpPost(String requestUrl, String dataString) throws IOException;
 
 	/**
 	 * http post and return result as string
@@ -50,18 +48,21 @@ public interface HttpClient {
 	 * @param requestMethod
 	 * @param dataString
 	 * @return
-	 * @throws Exception
+	 * @throws IOException
+	 * @throws GeneralSecurityException
 	 */
-	String httpsRequest(String requestUrl, String requestMethod, String dataString) throws Exception;
+	String httpsRequest(String requestUrl, String requestMethod, String dataString)
+			throws GeneralSecurityException, IOException;
 
 	/**
 	 * https get
 	 * 
 	 * @param requestUrl
 	 * @return
-	 * @throws Exception
+	 * @throws IOException
+	 * @throws GeneralSecurityException
 	 */
-	String httpsGet(String requestUrl) throws Exception;
+	String httpsGet(String requestUrl) throws GeneralSecurityException, IOException;
 
 	/**
 	 * https post
@@ -69,9 +70,10 @@ public interface HttpClient {
 	 * @param requestUrl
 	 * @param dataString
 	 * @return
-	 * @throws Exception
+	 * @throws IOException
+	 * @throws GeneralSecurityException
 	 */
-	String httpsPost(String requestUrl, String dataString) throws Exception;
+	String httpsPost(String requestUrl, String dataString) throws GeneralSecurityException, IOException;
 
 	/**
 	 * https post, treat param as json, result also as json
@@ -79,8 +81,10 @@ public interface HttpClient {
 	 * @param requestUrl
 	 * @param param
 	 * @return
-	 * @throws Exception
+	 * @throws IOException
+	 * @throws GeneralSecurityException
 	 */
-	JSONObject httpsPostAsJson(String requestUrl, Map<String, Object> param) throws Exception;
+	JSONObject httpsPostAsJson(String requestUrl, Map<String, Object> param)
+			throws GeneralSecurityException, IOException;
 
 }

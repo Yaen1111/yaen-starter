@@ -57,8 +57,6 @@ public class UserModel extends TwoModel {
 	 * @throws DataException
 	 */
 	public Set<String> getRoles() throws CoreException, DataException {
-		this.check();
-
 		// call service to get roles if not exists
 		if (this.roles == null || this.roles.isEmpty()) {
 			this.roles = this.service.getUserRoles(this.getEntity().getId());
@@ -75,8 +73,6 @@ public class UserModel extends TwoModel {
 	 * @throws DataException
 	 */
 	public Set<String> getAuths() throws CoreException, DataException {
-		this.check();
-
 		// call rbac model to get roles if not exists
 		if (this.auths == null || this.auths.isEmpty()) {
 			this.auths = this.service.getUserAuths(this.getEntity().getId());

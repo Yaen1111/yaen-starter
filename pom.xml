@@ -157,7 +157,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-core-service-wechat</artifactId>
+				<artifactId>yaen-starter-core-model-autotest</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>

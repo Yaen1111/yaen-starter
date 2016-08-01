@@ -78,15 +78,6 @@ public class MenuModel extends OneModel {
 	}
 
 	/**
-	 * @see org.yaen.starter.core.model.models.OneModel#check()
-	 */
-	@Override
-	public void check() throws CoreException {
-		if (this.menuList == null)
-			throw new CoreException("model not loaded");
-	}
-
-	/**
 	 * load menu by appId
 	 * 
 	 * @param appId
