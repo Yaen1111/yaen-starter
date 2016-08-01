@@ -2,6 +2,7 @@ package org.yaen.starter.core.model.autotest.models;
 
 import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.TestException;
+import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.autotest.entities.AutoTestCaseEntity;
 import org.yaen.starter.core.model.autotest.entities.AutoTestResultEntity;
 import org.yaen.starter.core.model.models.TwoModel;
@@ -90,14 +91,19 @@ public abstract class BaseAutoTestModel extends TwoModel {
 		try {
 			AutoTestResultEntity result = new AutoTestResultEntity();
 			result.setTestCaseId(this.getEntity().getId());
+			result.setTestResponse(StringUtil.toString(resp, 4096));
+
 			if (testok) {
 				result.setTestResult("OK");
 			} else if (lastex != null) {
 				result.setTestResult("EXCEPTION");
-				result.setTestResultMessage(lastex.toString());
+				result.setTestResultMessage(StringUtil.toString(lastex, 256));
 			} else {
 				result.setTestResult("NOT MATCH");
 			}
+
+			// save result
+			this.insertEntity(result);
 
 		} catch (Exception ex) {
 			throw new TestException("fatal error during write result log", ex);

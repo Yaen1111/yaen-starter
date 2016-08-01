@@ -976,6 +976,31 @@
 				</excludes>
 			</resource>
 		</resources>
+		<testResources>
+			<!-- resources with filter -->
+			<testResource>
+				<filtering>true</filtering>
+				<directory>src/test/resources</directory>
+				<includes>
+					<include>spring/**/*.*</include>
+					<include>logback.xml</include>
+					<include>common.properties</include>
+				</includes>
+			</testResource>
+			<!-- resources without filter -->
+			<testResource>
+				<filtering>false</filtering>
+				<directory>src/test/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+				<excludes>
+					<exclude>spring/**/*.*</exclude>
+					<exclude>logback.xml</exclude>
+					<exclude>common.properties</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
 		<pluginManagement>
 			<plugins>
 				<plugin>

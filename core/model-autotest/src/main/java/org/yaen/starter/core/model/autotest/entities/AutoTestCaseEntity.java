@@ -25,6 +25,10 @@ public class AutoTestCaseEntity extends TwoEntity {
 	@OneData(DataType = DataTypes.VARCHAR64)
 	private String title;
 
+	/** the test group, used to group test case */
+	@OneData(DataType = DataTypes.VARCHAR32)
+	private String testGroup;
+
 	/** the test type, mainly used to determine test model, see TestTypes */
 	@OneData(DataType = DataTypes.VARCHAR32)
 	private String testType;
