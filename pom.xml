@@ -1057,25 +1057,6 @@
 						<warName>${project.name}-${env}-${project.version}</warName>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.tomcat.maven</groupId>
-					<artifactId>tomcat7-maven-plugin</artifactId>
-					<version>2.2</version>
-					<configuration>
-						<url>http://localhost:8080/manager/html</url>
-						<server>tomcat7</server>
-						<scanIntervalSeconds>10</scanIntervalSeconds>
-						<webapp>
-							<contextPath>/${project.artifactId}</contextPath>
-						</webapp>
-						<connectors>
-							<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-								<port>8080</port>
-								<maxIdleTime>60000</maxIdleTime>
-							</connector>
-						</connectors>
-					</configuration>
-				</plugin>
 				<!-- test插件, 仅测试名称为*Test的类,使用支持分组测试的surefire-junit47 driver -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
