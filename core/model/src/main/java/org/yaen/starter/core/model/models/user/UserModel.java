@@ -1,24 +1,17 @@
 package org.yaen.starter.core.model.models.user;
 
-import java.util.Set;
-
-import org.yaen.starter.common.data.exceptions.CoreException;
+import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.DataException;
+import org.yaen.starter.common.util.utils.StringUtil;
 import org.yaen.starter.core.model.entities.user.UserEntity;
+import org.yaen.starter.core.model.entities.user.UserInfoExEntity;
 import org.yaen.starter.core.model.models.TwoModel;
 import org.yaen.starter.core.model.services.ProxyService;
-import org.yaen.starter.core.model.services.UserService;
-
-import lombok.Getter;
 
 /**
  * user model
  * <p>
- * user with rbac(Role-Based Access Control).
- * <p>
- * is made up with user, role, auth, user-role, role-auth, extends user-auth and groups
- * <p>
- * especially suitable for authorization
+ * with extend user extend info
  * 
  * @author Yaen 2016年5月17日下午2:28:32
  */
@@ -29,56 +22,66 @@ public class UserModel extends TwoModel {
 		return (UserEntity) super.getEntity();
 	}
 
-	/** the service */
-	@Getter
-	private UserService service;
+	/** get the user extend info */
+	// @Getter
+	private UserInfoExEntity userInfoEx;
 
-	/** the role id list */
-	private Set<String> roles;
-
-	/** the auth id list */
-	private Set<String> auths;
+	/**
+	 * calculate password hash with given salt
+	 * 
+	 * @param password
+	 * @param salt
+	 * @return
+	 */
+	protected String calculatePasswordHash(String password, String salt) {
+		return password + salt;
+	}
 
 	/**
 	 * @param proxy
-	 * @param service
 	 */
-	public UserModel(ProxyService proxy, UserService service) {
+	public UserModel(ProxyService proxy) {
 		super(proxy, new UserEntity());
-
-		this.service = service;
 	}
 
 	/**
-	 * get roles
+	 * get user extend info
 	 * 
 	 * @return
-	 * @throws CoreException
+	 * @throws CommonException
 	 * @throws DataException
 	 */
-	public Set<String> getRoles() throws CoreException, DataException {
-		// call service to get roles if not exists
-		if (this.roles == null || this.roles.isEmpty()) {
-			this.roles = this.service.getUserRoles(this.getEntity().getId());
-		}
+	public UserInfoExEntity getUserInfoEx() throws DataException, CommonException {
+		if (this.userInfoEx == null) {
+			if (StringUtil.isNotBlank(this.getEntity().getId())) {
+				UserInfoExEntity info = new UserInfoExEntity();
+				info.setId(this.getEntity().getId());
+				this.fillEntityById(info);
 
-		return this.roles;
+				// set to member
+				this.userInfoEx = info;
+			}
+		}
+		return userInfoEx;
 	}
 
 	/**
-	 * get auths
+	 * check user credentials
 	 * 
+	 * @param password
+	 * @param passwordHash
+	 * @param passwordSalt
 	 * @return
-	 * @throws CoreException
-	 * @throws DataException
 	 */
-	public Set<String> getAuths() throws CoreException, DataException {
-		// call rbac model to get roles if not exists
-		if (this.auths == null || this.auths.isEmpty()) {
-			this.auths = this.service.getUserAuths(this.getEntity().getId());
-		}
+	public boolean checkUserCredentials(String password, String passwordHash, String passwordSalt) {
 
-		return this.auths;
+		// TODO here may set the last login time
+
+		// calculate hash
+		String hash = this.calculatePasswordHash(password, passwordSalt);
+
+		// check hash, just same
+		return StringUtil.equals(hash, passwordHash);
 	}
 
 }

@@ -15,13 +15,12 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.yaen.starter.common.data.exceptions.CommonException;
-import org.yaen.starter.common.data.exceptions.CoreException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.util.utils.StringUtil;
+import org.yaen.starter.core.model.models.user.RbacModel;
 import org.yaen.starter.core.model.models.user.UserModel;
 import org.yaen.starter.core.model.services.ProxyService;
-import org.yaen.starter.core.model.services.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,9 +36,6 @@ public class ShiroRealm extends AuthorizingRealm {
 
 	@Autowired
 	private ProxyService proxyService;
-
-	@Autowired
-	private UserService userService;
 
 	/**
 	 * get user info only, no password check, throw exception if user not found
@@ -58,7 +54,7 @@ public class ShiroRealm extends AuthorizingRealm {
 			throw new UnknownAccountException("username is empty");
 		}
 
-		UserModel user = new UserModel(this.proxyService, this.userService);
+		UserModel user = new UserModel(this.proxyService);
 
 		// find user
 		try {
@@ -97,9 +93,15 @@ public class ShiroRealm extends AuthorizingRealm {
 		if (principal != null) {
 
 			try {
+				String userId = principal.getUsername();
+
+				RbacModel rbac = new RbacModel(this.proxyService);
+
+				rbac.loadById(userId);
+
 				// get user roles
-				Set<String> roles = this.userService.getUserRoles(principal.getUsername());
-				Set<String> auths = this.userService.getUserAuths(principal.getUsername());
+				Set<String> roles = rbac.getRoles();
+				Set<String> auths = rbac.getAuths();
 
 				// simple
 				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
@@ -113,11 +115,11 @@ public class ShiroRealm extends AuthorizingRealm {
 				// get all permissions of all roles, this may use cache
 				info.addStringPermissions(auths);
 
-				log.debug("get user roles, user={}, roles={}", principal.getUsername(), roles);
-				log.debug("get user auths, user={}, auths={}", principal.getUsername(), auths);
+				log.debug("get user roles, user={}, roles={}", userId, roles);
+				log.debug("get user auths, user={}, auths={}", userId, auths);
 
 				return info;
-			} catch (CoreException ex) {
+			} catch (CommonException ex) {
 				log.error("get role auth error", ex);
 				return null;
 			} catch (DataException ex) {
