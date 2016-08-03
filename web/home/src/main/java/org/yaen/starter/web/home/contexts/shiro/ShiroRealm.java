@@ -18,9 +18,9 @@ import org.yaen.starter.common.data.exceptions.CommonException;
 import org.yaen.starter.common.data.exceptions.DataException;
 import org.yaen.starter.common.data.exceptions.DataNotExistsException;
 import org.yaen.starter.common.util.utils.StringUtil;
-import org.yaen.starter.core.model.models.user.RbacModel;
-import org.yaen.starter.core.model.models.user.UserModel;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.user.models.RbacModel;
+import org.yaen.starter.core.model.user.models.UserModel;
 
 import lombok.extern.slf4j.Slf4j;
 

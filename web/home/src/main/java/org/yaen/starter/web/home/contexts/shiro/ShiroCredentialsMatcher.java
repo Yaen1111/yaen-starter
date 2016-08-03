@@ -5,8 +5,8 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.yaen.starter.core.model.models.user.UserModel;
 import org.yaen.starter.core.model.services.ProxyService;
+import org.yaen.starter.core.model.user.models.UserModel;
 
 /**
  * credentials matcher, used to check password
