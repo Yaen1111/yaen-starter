@@ -44,6 +44,8 @@ public enum SystemCode {
 	E_NO_DATA_AFFECTED(810003, "NO DATA AFFECTED"),
 	/** data operation cancelled */
 	E_DATA_OPERATION_CANCELLED(810004, "DATA OPERATION CANCELLED"),
+	/** data type unknown */
+	E_DATA_TYPE_UNKNOWN(810005, "DATA TYPE UNKNOWN"),
 
 	/**
 	 * common exception
