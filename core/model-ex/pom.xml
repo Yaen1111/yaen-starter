@@ -7,9 +7,9 @@
 		<version>1.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>yaen-starter-core-model-autotest</artifactId>
-	<name>yaen-starter-core-model-autotest</name>
-	<description>autotest model, used for auto test(with known result).</description>
+	<artifactId>yaen-starter-core-model-ex</artifactId>
+	<name>yaen-starter-core-model-ex</name>
+	<description>ex model, additional to core model.</description>
 
 	<build>
 		<filters>

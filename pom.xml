@@ -152,12 +152,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-core-model-wechat</artifactId>
+				<artifactId>yaen-starter-core-model-ex</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-core-model-autotest</artifactId>
+				<artifactId>yaen-starter-core-model-wechat</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>

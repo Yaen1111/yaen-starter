@@ -15,7 +15,7 @@
 	<modules>
 		<module>model</module>
 		<module>service</module>
+		<module>model-ex</module>
 		<module>model-wechat</module>
-		<module>model-autotest</module>
 	</modules>
 </project>
