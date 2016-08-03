@@ -35,14 +35,15 @@ public class BatchAutoTestModel extends TwoModel {
 	private List<AutoTestCaseEntity> entityList = new ArrayList<AutoTestCaseEntity>();
 
 	/**
-	 * make test model according to test case entity, prepare to be overrided
+	 * make test model according to test case entity, prepare to be override
 	 * 
-	 * @param test
+	 * @param entity
 	 * @return
 	 * @throws DataTypeUnknownException
 	 */
-	protected BaseAutoTestModel makeTestModel(AutoTestCaseEntity test) throws DataTypeUnknownException {
-		String test_type = test.getTestType();
+	protected BaseAutoTestModel makeTestModel(AutoTestCaseEntity entity) throws DataTypeUnknownException {
+		// get type for switch, should not be null
+		String test_type = entity.getTestType();
 		if (test_type == null)
 			test_type = "";
 
@@ -51,7 +52,7 @@ public class BatchAutoTestModel extends TwoModel {
 		case TestTypes.TEST_HTTPS_GET:
 		case TestTypes.TEST_HTTP_POST:
 		case TestTypes.TEST_HTTPS_POST:
-			return new HttpAutoTestModel(this.proxy);
+			return new HttpAutoTestModel(this.proxy, entity);
 		default:
 			throw new DataTypeUnknownException("unknown type " + test_type);
 		}

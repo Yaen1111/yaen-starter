@@ -20,8 +20,8 @@ public class DateUtil {
 	/** yyyy-MM-dd HH:mm:ss */
 	public static final String DATETIME_FMT = "yyyy-MM-dd HH:mm:ss";
 
-	/** yyyyMMddHHmmssS */
-	public static final String DATETIME_FMT_COMPACT = "yyyyMMddHHmmssSS";
+	/** yyyyMMddHHmmss */
+	public static final String DATETIME_FMT_COMPACT = "yyyyMMddHHmmss";
 
 	/** HH:mm:ss */
 	public static final String TIME_FMT = "HH:mm:ss";
@@ -98,10 +98,9 @@ public class DateUtil {
 	}
 
 	/**
-	 * 讲当前日期返回，格式：yyyyMMddHHmmssS
-	 *
-	 * @author bb-he
-	 * @return String 日期字符串
+	 * format data as sequence
+	 * 
+	 * @return
 	 */
 	public static String formatDateSeq() {
 

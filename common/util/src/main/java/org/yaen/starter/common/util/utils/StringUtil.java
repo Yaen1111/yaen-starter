@@ -51,7 +51,7 @@ public class StringUtil extends StringUtils {
 	}
 
 	/**
-	 * any type to string with max length
+	 * any type to string, and cut to max length, minus means cut from right
 	 * 
 	 * @param o
 	 * @param length
@@ -59,11 +59,19 @@ public class StringUtil extends StringUtils {
 	 */
 	public static String toString(Object o, int length) {
 		String str = StringUtil.toString(o);
-		if (str.length() > length) {
-			return str.substring(0, length);
+		if (length == 0) {
+			// do nothing
+		} else if (length > 0) {
+			if (str.length() > length) {
+				str = str.substring(0, length);
+			}
 		} else {
-			return str;
+			int len = 0 - length;
+			if (str.length() > len) {
+				str = str.substring(str.length() - len);
+			}
 		}
+		return str;
 	}
 
 	/**

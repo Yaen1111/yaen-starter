@@ -17,6 +17,16 @@ import org.yaen.starter.core.model.services.ProxyService;
 public class HttpAutoTestModel extends BaseAutoTestModel {
 
 	/**
+	 * constructor with given entity
+	 * 
+	 * @param proxy
+	 * @param entity
+	 */
+	public HttpAutoTestModel(ProxyService proxy, AutoTestCaseEntity entity) {
+		super(proxy, entity);
+	}
+
+	/**
 	 * empty constructor
 	 * 
 	 * @param proxy

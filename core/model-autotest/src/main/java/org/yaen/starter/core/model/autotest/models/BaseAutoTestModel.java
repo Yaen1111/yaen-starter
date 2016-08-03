@@ -30,6 +30,13 @@ public abstract class BaseAutoTestModel extends TwoModel {
 	 * @param proxy
 	 * @param entity
 	 */
+	protected BaseAutoTestModel(ProxyService proxy, AutoTestCaseEntity entity) {
+		super(proxy, entity);
+	}
+
+	/**
+	 * @param proxy
+	 */
 	protected BaseAutoTestModel(ProxyService proxy) {
 		super(proxy, new AutoTestCaseEntity());
 	}
