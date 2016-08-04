@@ -94,7 +94,7 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public void clear() throws CacheException {
-		// TODO
+		// TODO but no way
 	}
 
 	@Override
@@ -106,13 +106,13 @@ public class ShiroRedisCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public Set<K> keys() {
-		// TODO
+		// TODO but no way
 		return null;
 	}
 
 	@Override
 	public Collection<V> values() {
-		// TODO
+		// TODO but no way
 		return null;
 	}
 

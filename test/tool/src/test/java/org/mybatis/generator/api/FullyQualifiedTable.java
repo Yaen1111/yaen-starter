@@ -320,7 +320,7 @@ public class FullyQualifiedTable {
             sb.append(domainObjectSubPackage);
         }
 
-        // TODO - strip characters that are not valid in package names
+        // TODO2 - strip characters that are not valid in package names
         return sb.toString();
     }
 

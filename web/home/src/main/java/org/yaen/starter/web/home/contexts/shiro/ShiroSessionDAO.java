@@ -96,7 +96,7 @@ public class ShiroSessionDAO extends AbstractSessionDAO {
 	 */
 	@Override
 	public Collection<Session> getActiveSessions() {
-		// TODO
+		// TODO but no way
 		return null;
 	}
 
