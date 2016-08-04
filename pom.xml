@@ -152,7 +152,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-core-model-ex</artifactId>
+				<artifactId>yaen-starter-core-model-one</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
