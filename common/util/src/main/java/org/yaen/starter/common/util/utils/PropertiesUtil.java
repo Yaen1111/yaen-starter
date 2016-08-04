@@ -1,6 +1,7 @@
 package org.yaen.starter.common.util.utils;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 import org.springframework.core.io.ClassPathResource;
@@ -8,7 +9,7 @@ import org.springframework.core.io.ClassPathResource;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * get properties from file in runtime
+ * get properties from file in runtime, in utf-8
  * <p>
  * use context with injection is better?
  * 
@@ -29,7 +30,8 @@ public class PropertiesUtil {
 		properties = new Properties();
 		String propertiesfilename = "";
 		try {
-			properties.load((new ClassPathResource(PROPERTIES_FILENAME)).getInputStream());
+			properties.load(
+					new InputStreamReader((new ClassPathResource(PROPERTIES_FILENAME)).getInputStream(), "UTF-8"));
 		} catch (IOException ex) {
 			log.error("can not load properties file {}", propertiesfilename);
 			log.error("exception is ", ex);
