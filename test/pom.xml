@@ -13,7 +13,6 @@
 	<description>test layer, will not be included in final package.</description>
 
 	<modules>
-		<module>test</module>
 		<module>tool</module>
 	</modules>
 

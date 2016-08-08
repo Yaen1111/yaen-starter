@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.yaen</groupId>
+		<artifactId>yaen-starter-common</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<artifactId>yaen-starter-common-tool</artifactId>
+	<name>yaen-starter-common-tool</name>
+	<description>stand alone tool, should not be contained in release version, just for coding purpose.</description>
+
+	<build>
+		<filters>
+			<filter>../../${env}-config.properties</filter>
+		</filters>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.yaen</groupId>
+			<artifactId>yaen-starter-common-util</artifactId>
+		</dependency>
+	</dependencies>
+</project>

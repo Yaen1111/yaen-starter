@@ -17,11 +17,4 @@
 		</filters>
 	</build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.yaen</groupId>
-			<artifactId>yaen-starter-biz-implement</artifactId>
-		</dependency>
-
-	</dependencies>
 </project>

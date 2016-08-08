@@ -13,9 +13,7 @@
 	<modules>
 		<module>common</module>
 		<module>core</module>
-		<module>biz</module>
 		<module>web</module>
-		<module>test</module>
 	</modules>
 
 	<distributionManagement>
@@ -122,6 +120,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
+				<artifactId>yaen-starter-common-util</artifactId>
+				<version>${yaen-starter.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.yaen</groupId>
 				<artifactId>yaen-starter-common-facade</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
@@ -132,12 +135,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-common-util</artifactId>
+				<artifactId>yaen-starter-common-dal</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-common-dal</artifactId>
+				<artifactId>yaen-starter-common-tool</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 			<dependency>
@@ -162,27 +165,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-biz-shared</artifactId>
-				<version>${yaen-starter.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-biz-implement</artifactId>
-				<version>${yaen-starter.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.yaen</groupId>
 				<artifactId>yaen-starter-web-home</artifactId>
-				<version>${yaen-starter.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-test-test</artifactId>
-				<version>${yaen-starter.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.yaen</groupId>
-				<artifactId>yaen-starter-test-tool</artifactId>
 				<version>${yaen-starter.version}</version>
 			</dependency>
 

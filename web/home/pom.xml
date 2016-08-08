@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.yaen</groupId>
-			<artifactId>yaen-starter-biz-shared</artifactId>
+			<artifactId>yaen-starter-core-service</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.yaen</groupId>
